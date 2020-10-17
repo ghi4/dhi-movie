@@ -3,11 +3,10 @@ package com.dhimas.dhiflix.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dhimas.dhiflix.data.MovieEntity
+import com.dhimas.dhiflix.utils.DummyData
 
 class HomeViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
+    fun getMovies(): ArrayList<MovieEntity> = DummyData.generateDummyMovies()
 }
