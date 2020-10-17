@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.ui.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,7 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
             with(itemView){
                 tv_title.text = movie.title
                 tv_release_year.text = movie.releaseYear
+                Log.d("Kucing", "Content: ${movie.title} + ${movie.releaseYear}")
             }
         }
     }

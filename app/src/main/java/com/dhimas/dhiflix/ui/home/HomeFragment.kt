@@ -4,17 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
-
-    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -34,7 +30,7 @@ class HomeFragment : Fragment() {
             val movieAdapter = MovieAdapter()
             movieAdapter.setMovies(movies)
 
-            rv_movie.layoutManager = LinearLayoutManager(context)
+            rv_movie.layoutManager = GridLayoutManager(context, 3)
             rv_movie.hasFixedSize()
             rv_movie.adapter = movieAdapter
         }
