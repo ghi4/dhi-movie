@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
@@ -29,7 +31,12 @@ class HomeFragment : Fragment() {
             val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
             val movies = viewModel.getMovies()
 
+            val movieAdapter = MovieAdapter()
+            movieAdapter.setMovies(movies)
 
+            rv_movie.layoutManager = LinearLayoutManager(context)
+            rv_movie.hasFixedSize()
+            rv_movie.adapter = movieAdapter
         }
     }
 }
