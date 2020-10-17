@@ -3,4 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="content_description_movie_poster">Movie poster</string>
+    <string name="poster_example_title">Welcome to Sudden Death</string>
+    <string name="poster_example_release_year">2019</string>
 </resources>
