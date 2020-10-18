@@ -7,4 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="black_little">#222222</color>
+
+    <!-- dhiFlix color -->
+    <color name="title_red">#F14D4D</color>
 </resources>

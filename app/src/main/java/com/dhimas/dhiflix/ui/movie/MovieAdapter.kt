@@ -1,11 +1,14 @@
 package com.dhimas.dhiflix.ui.movie
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.MovieEntity
+import com.dhimas.dhiflix.ui.detail.DetailActivity
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
 class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
@@ -36,7 +39,19 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
             with(itemView){
                 tv_title.text = movie.title
                 tv_release_year.text = movie.releaseYear
+
+                Picasso.get()
+                    .load(movie.posterPath!!)
+                    .resize(200, 300)
+                    .into(iv_poster)
+
+                itemView.setOnClickListener{
+                    val intent = Intent(context, DetailActivity::class.java)
+                    intent.putExtra("movie_key", movie)
+                    context.startActivity(intent)
+                }
             }
         }
     }
+
 }
