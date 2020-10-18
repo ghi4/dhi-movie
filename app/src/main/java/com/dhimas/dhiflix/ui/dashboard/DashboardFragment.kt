@@ -8,11 +8,11 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 class DashboardFragment : Fragment() {
-
-    private lateinit var dashboardViewModel: DashboardViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -25,7 +25,17 @@ class DashboardFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val viewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
+        if(activity != null){
+            val viewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
+            val series = viewModel.getSeries()
+
+            val adapter = SeriesAdapter()
+            adapter.setSeries(series)
+
+            rv_series.layoutManager = GridLayoutManager(context, 3)
+            rv_series.hasFixedSize()
+            rv_series.adapter = adapter
+        }
 
     }
 }
