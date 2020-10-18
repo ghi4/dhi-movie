@@ -37,7 +37,6 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
             with(itemView){
                 tv_title.text = movie.title
                 tv_release_year.text = movie.releaseYear
-                Log.d("Kucing", "Content: ${movie.title} + ${movie.releaseYear}")
             }
         }
     }
