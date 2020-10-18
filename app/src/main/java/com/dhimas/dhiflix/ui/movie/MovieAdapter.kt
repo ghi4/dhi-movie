@@ -1,6 +1,5 @@
-package com.dhimas.dhiflix.ui.home
+package com.dhimas.dhiflix.ui.movie
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package com.dhimas.dhiflix.ui.home
+package com.dhimas.dhiflix.ui.movie
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : Fragment() {
+class MovieFragment : Fragment() {
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -24,7 +24,7 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         if (activity != null){
-            val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+            val viewModel = ViewModelProvider(this).get(MovieViewModel::class.java)
             val movies = viewModel.getMovies()
 
             val movieAdapter = MovieAdapter()

@@ -1,4 +1,4 @@
-package com.dhimas.dhiflix.ui.dashboard
+package com.dhimas.dhiflix.ui.series
 
 import android.view.LayoutInflater
 import android.view.View

@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.dhimas.dhiflix.ui.home.HomeFragment"
+        android:name="com.dhimas.dhiflix.ui.movie.MovieFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.dhimas.dhiflix.ui.dashboard.DashboardFragment"
+        android:name="com.dhimas.dhiflix.ui.series.SeriesFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
