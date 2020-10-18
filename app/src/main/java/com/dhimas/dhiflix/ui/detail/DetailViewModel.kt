@@ -2,13 +2,11 @@ package com.dhimas.dhiflix.ui.detail
 
 import androidx.lifecycle.ViewModel
 import com.dhimas.dhiflix.data.MovieEntity
+import com.dhimas.dhiflix.utils.DummyData
 
 class DetailViewModel: ViewModel() {
-    private var movieEntity = MovieEntity()
 
-    fun setMovie(movieEntity: MovieEntity){
-        this.movieEntity = movieEntity
-    }
+    fun getMovie() = DummyData.generateDummyMovies()
 
-    fun getMovie() = this.movieEntity
+    fun getSeries() = DummyData.generateDummySeries()
 }
