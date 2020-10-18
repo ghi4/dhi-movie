@@ -6,4 +6,7 @@
     <string name="content_description_movie_poster">Movie poster</string>
     <string name="poster_example_title">Welcome to Sudden Death</string>
     <string name="poster_example_release_year">2019</string>
+    <string name="movie_example_overview">Overview text here</string>
+    <string name="overview">Overview</string>
+    <string name="content_description_movie_backdrop">Movie backdrop</string>
 </resources>
