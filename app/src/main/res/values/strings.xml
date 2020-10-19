@@ -9,4 +9,7 @@
     <string name="movie_example_overview">Overview text here</string>
     <string name="overview">Overview</string>
     <string name="content_description_movie_backdrop">Movie backdrop</string>
+    <string name="nav_movie">Movie</string>
+    <string name="nav_series">Series</string>
+    <string name="nav_favorite">Favorite</string>
 </resources>
