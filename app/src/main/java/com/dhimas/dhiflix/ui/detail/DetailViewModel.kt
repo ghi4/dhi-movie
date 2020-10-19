@@ -6,7 +6,17 @@ import com.dhimas.dhiflix.utils.DummyData
 
 class DetailViewModel: ViewModel() {
 
-    fun getMovie() = DummyData.generateDummyMovies()
+    fun getMovieButExclude(movieEntity: MovieEntity): ArrayList<MovieEntity> {
+        val movies = DummyData.generateDummyMovies()
+        movies.removeAll(listOf(movieEntity))
 
-    fun getSeries() = DummyData.generateDummySeries()
+        return movies
+    }
+
+    fun getSeriesButExclude(movieEntity: MovieEntity): ArrayList<MovieEntity> {
+        val series = DummyData.generateDummySeries()
+        series.removeAll(listOf(movieEntity))
+
+        return series
+    }
 }
