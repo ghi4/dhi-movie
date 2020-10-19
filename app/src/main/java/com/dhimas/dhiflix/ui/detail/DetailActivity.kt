@@ -2,7 +2,6 @@ package com.dhimas.dhiflix.ui.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.GridLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
@@ -11,11 +10,19 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : AppCompatActivity() {
+
+    companion object{
+        const val EXTRA_MOVIE_ENTITY = "extra_movie_entity"
+        const val EXTRA_MESSAGE = "extra_message"
+        const val EXTRA_FROM_MOVIES = "extra_from_movies"
+        const val EXTRA_FROM_SERIES = "extra_from_series"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        val movieEntity = intent.getParcelableExtra<MovieEntity>("movie_key")
+        val movieEntity = intent.getParcelableExtra<MovieEntity>(EXTRA_MOVIE_ENTITY)
 
         if(movieEntity != null){
             tv_detail_title.text = movieEntity.title
@@ -45,10 +52,16 @@ class DetailActivity : AppCompatActivity() {
                 .into(iv_detail_poster)
 
             val viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
-            val movies = viewModel.getMovie()
 
             val detailAdapter = DetailAdapter()
-            detailAdapter.setMovies(movies)
+
+            if(intent.extras!!.containsKey(EXTRA_FROM_MOVIES)){
+                val movies = viewModel.getMovieButExclude(movieEntity)
+                detailAdapter.setMovies(movies)
+            }else if(intent.extras!!.containsKey(EXTRA_FROM_SERIES)){
+                val movies = viewModel.getSeriesButExclude(movieEntity)
+                detailAdapter.setMovies(movies)
+            }
 
             val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             rv_other_movie.layoutManager = layoutManager
