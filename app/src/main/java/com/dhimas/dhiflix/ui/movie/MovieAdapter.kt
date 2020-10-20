@@ -20,8 +20,8 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     }
 
     override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
+        parent: ViewGroup,
+        viewType: Int
     ): MovieViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
         return MovieViewHolder(view)
@@ -44,11 +44,11 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 val posterTargetHeight = 300
 
                 Picasso.get()
-                        .load(movie.posterPath!!)
-                        .resize(posterTargetWidth, posterTargetHeight)
-                        .error(R.drawable.image_error_2_3)
-                        .placeholder(R.drawable.placeholder_2_3)
-                        .into(iv_poster)
+                    .load(movie.posterPath!!)
+                    .resize(posterTargetWidth, posterTargetHeight)
+                    .error(R.drawable.image_error_2_3)
+                    .placeholder(R.drawable.placeholder_2_3)
+                    .into(iv_poster)
 
                 itemView.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)

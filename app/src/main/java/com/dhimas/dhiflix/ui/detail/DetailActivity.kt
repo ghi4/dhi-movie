@@ -40,30 +40,29 @@ class DetailActivity : AppCompatActivity() {
             val backdropTargetHeight = 450
 
             Picasso.get()
-                    .load(showEntity.backdropPath!!)
-                    .placeholder(R.drawable.image_placeholder)
-                    .error(R.drawable.image_error)
-                    .resize(backdropTargetWidth, backdropTargetHeight)
-                    .into(iv_detail_backdrop)
+                .load(showEntity.backdropPath!!)
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_error)
+                .resize(backdropTargetWidth, backdropTargetHeight)
+                .into(iv_detail_backdrop)
 
             //For poster image
             val posterTargetWidth = 200
             val posterTargetHeight = 300
 
             Picasso.get()
-                    .load(showEntity.posterPath!!)
-                    .placeholder(R.drawable.placeholder_2_3)
-                    .error(R.drawable.image_error_2_3)
-                    .resize(posterTargetWidth, posterTargetHeight)
-                    .into(iv_detail_poster)
+                .load(showEntity.posterPath!!)
+                .placeholder(R.drawable.placeholder_2_3)
+                .error(R.drawable.image_error_2_3)
+                .resize(posterTargetWidth, posterTargetHeight)
+                .into(iv_detail_poster)
 
             val detailAdapter = DetailAdapter()
 
             if (intent.extras!!.containsKey(EXTRA_FROM_MOVIES)) {
                 val movies = viewModel.getMovieButExclude(showEntity)
                 detailAdapter.setMovies(movies, EXTRA_FROM_MOVIES)
-            }
-            else if (intent.extras!!.containsKey(EXTRA_FROM_SERIES)) {
+            } else if (intent.extras!!.containsKey(EXTRA_FROM_SERIES)) {
                 val movies = viewModel.getSeriesButExclude(showEntity)
                 detailAdapter.setMovies(movies, EXTRA_FROM_SERIES)
             }

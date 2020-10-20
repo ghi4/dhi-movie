@@ -23,7 +23,7 @@
     <style name="SplashPage" parent="Theme.Design.NoActionBar">
         <item name="android:background">@color/black_little</item>
     </style>
-    
+
     <style name="ScrollViewDetailPage">
         <item name="android:background">@color/dark_blue</item>
     </style>

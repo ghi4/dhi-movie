@@ -21,7 +21,8 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie_horizontal, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_movie_horizontal, parent, false)
         return DetailViewHolder(view)
     }
 
@@ -39,11 +40,11 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                 val posterTargetHeight = 300
 
                 Picasso.get()
-                        .load(showEntity.posterPath!!)
-                        .resize(posterTargetWidth, posterTargetHeight)
-                        .error(R.drawable.image_error_2_3)
-                        .placeholder(R.drawable.placeholder_2_3)
-                        .into(iv_poster_horizontal)
+                    .load(showEntity.posterPath!!)
+                    .resize(posterTargetWidth, posterTargetHeight)
+                    .error(R.drawable.image_error_2_3)
+                    .placeholder(R.drawable.placeholder_2_3)
+                    .into(iv_poster_horizontal)
 
                 cv_poster_horizontal.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)

@@ -41,11 +41,11 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
                 val posterTargetHeight = 300
 
                 Picasso.get()
-                        .load(series.posterPath!!)
-                        .resize(posterTargetWidth, posterTargetHeight)
-                        .error(R.drawable.image_error_2_3)
-                        .placeholder(R.drawable.placeholder_2_3)
-                        .into(iv_poster)
+                    .load(series.posterPath!!)
+                    .resize(posterTargetWidth, posterTargetHeight)
+                    .error(R.drawable.image_error_2_3)
+                    .placeholder(R.drawable.placeholder_2_3)
+                    .into(iv_poster)
 
                 cv_poster.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)

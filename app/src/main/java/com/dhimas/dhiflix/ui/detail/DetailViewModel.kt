@@ -9,11 +9,11 @@ class DetailViewModel : ViewModel() {
     private var movieList = ArrayList<ShowEntity>()
     private var seriesList = ArrayList<ShowEntity>()
 
-    fun getShowEntityByTitle(title: String): ShowEntity{
+    fun getShowEntityByTitle(title: String): ShowEntity {
 
         //Load data when showDetail is empty
         //Data not load again when phone rotating
-        if(showDetail.title.isNullOrEmpty()){
+        if (showDetail.title.isNullOrEmpty()) {
             val movies = DummyData.generateDummyMovies()
             val series = DummyData.generateDummySeries()
             val showList = ArrayList<ShowEntity>()
@@ -33,7 +33,7 @@ class DetailViewModel : ViewModel() {
 
         //Load data when movieList is empty
         //Data not load again when phone rotating
-        if(movieList.isEmpty()){
+        if (movieList.isEmpty()) {
             val movies = DummyData.generateDummyMovies()
             movies.removeAll(listOf(showEntity))
 
@@ -47,7 +47,7 @@ class DetailViewModel : ViewModel() {
 
         //Load data when seriesList is empty
         //Data not load again when phone rotating
-        if(seriesList.isEmpty()){
+        if (seriesList.isEmpty()) {
             val series = DummyData.generateDummySeries()
             series.removeAll(listOf(showEntity))
 
