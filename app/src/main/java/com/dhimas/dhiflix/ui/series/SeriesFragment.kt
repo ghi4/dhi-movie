@@ -23,7 +23,7 @@ class SeriesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if(activity != null){
+        if (activity != null) {
             val viewModel = ViewModelProvider(this).get(SeriesViewModel::class.java)
             val series = viewModel.getSeries()
 

@@ -1,12 +1,7 @@
 package com.dhimas.dhiflix.ui.main
 
-import android.graphics.Color
 import android.os.Bundle
-import android.text.Html
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -26,9 +21,9 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_movie, R.id.navigation_series, R.id.navigation_notifications
-            )
+                setOf(
+                        R.id.navigation_movie, R.id.navigation_series
+                )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

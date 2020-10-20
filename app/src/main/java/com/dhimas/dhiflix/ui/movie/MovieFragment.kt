@@ -23,7 +23,7 @@ class MovieFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (activity != null){
+        if (activity != null) {
             val viewModel = ViewModelProvider(this).get(MovieViewModel::class.java)
             val movies = viewModel.getMovies()
 

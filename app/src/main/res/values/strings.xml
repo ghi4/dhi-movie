@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">dhiFlix</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="content_description_movie_poster">Movie poster</string>
     <string name="poster_example_title">Welcome to Sudden Death</string>
     <string name="poster_example_release_year">2019</string>
@@ -11,5 +8,6 @@
     <string name="content_description_movie_backdrop">Movie backdrop</string>
     <string name="nav_movie">Movie</string>
     <string name="nav_series">Series</string>
-    <string name="nav_favorite">Favorite</string>
+    <string name="maybe_you_re_interested">Maybe you\'re interested</string>
+    <string name="splash_logo">Splash Logo</string>
 </resources>

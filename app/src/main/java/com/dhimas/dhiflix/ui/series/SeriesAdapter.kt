@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.MovieEntity
+import com.dhimas.dhiflix.data.ShowEntity
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class SeriesAdapter: RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
-    private val seriesList = ArrayList<MovieEntity>()
+class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
+    private val seriesList = ArrayList<ShowEntity>()
 
-    fun setSeries(series: ArrayList<MovieEntity>){
+    fun setSeries(series: ArrayList<ShowEntity>) {
         this.seriesList.clear()
         this.seriesList.addAll(series)
     }
@@ -31,23 +31,30 @@ class SeriesAdapter: RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
 
     override fun getItemCount(): Int = seriesList.size
 
-    class SeriesViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        fun bind(series: MovieEntity){
-            with(itemView){
+    class SeriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(series: ShowEntity) {
+            with(itemView) {
                 tv_title.text = series.title
                 tv_release_year.text = series.releaseYear
 
+                val posterTargetWidth = 200
+                val posterTargetHeight = 300
+
                 Picasso.get()
                         .load(series.posterPath!!)
-                        .resize(200,300)
+                        .resize(posterTargetWidth, posterTargetHeight)
                         .error(R.drawable.image_error_2_3)
                         .placeholder(R.drawable.placeholder_2_3)
                         .into(iv_poster)
 
-                cv_poster.setOnClickListener{
+                cv_poster.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_MOVIE_ENTITY, series)
-                    intent.putExtra(DetailActivity.EXTRA_FROM_SERIES, DetailActivity.EXTRA_MESSAGE)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TITLE, series.title)
+
+                    //Used for checking if the show entity is from series page
+                    //Sending empty value because I use key for checking without read the data
+                    intent.putExtra(DetailActivity.EXTRA_FROM_SERIES, "")
+
                     context.startActivity(intent)
                 }
             }

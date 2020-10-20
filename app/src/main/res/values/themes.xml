@@ -16,7 +16,15 @@
         <item name="bottomNavigationStyle">@color/black_little</item>
     </style>
 
-    <style name="Theme.Detail.Page" parent="Theme.DhiFlix">
+    <style name="Theme.DetailPage" parent="Theme.DhiFlix">
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="SplashPage" parent="Theme.Design.NoActionBar">
+        <item name="android:background">@color/black_little</item>
+    </style>
+    
+    <style name="ScrollViewDetailPage">
+        <item name="android:background">@color/dark_blue</item>
     </style>
 </resources>

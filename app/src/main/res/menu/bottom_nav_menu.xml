@@ -11,9 +11,4 @@
         android:icon="@drawable/ic_baseline_tv_24"
         android:title="@string/nav_series" />
 
-    <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_baseline_star_24"
-        android:title="@string/nav_favorite" />
-
 </menu>
