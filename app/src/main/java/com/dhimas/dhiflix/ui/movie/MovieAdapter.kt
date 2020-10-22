@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.ShowEntity
+import com.dhimas.dhiflix.data.source.local.ShowEntity
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*

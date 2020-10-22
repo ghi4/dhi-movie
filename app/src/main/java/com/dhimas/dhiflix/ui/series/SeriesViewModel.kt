@@ -1,7 +1,7 @@
 package com.dhimas.dhiflix.ui.series
 
 import androidx.lifecycle.ViewModel
-import com.dhimas.dhiflix.data.ShowEntity
+import com.dhimas.dhiflix.data.source.local.ShowEntity
 import com.dhimas.dhiflix.utils.DummyData
 
 class SeriesViewModel : ViewModel() {
