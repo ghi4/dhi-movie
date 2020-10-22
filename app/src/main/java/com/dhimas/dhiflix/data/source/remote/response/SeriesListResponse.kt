@@ -2,9 +2,7 @@ package com.dhimas.dhiflix.data.source.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-class ShowListResponse {
-
+data class SeriesListResponse (
     @SerializedName("results")
-    val showList: List<ShowResponse>? = null
-
-}
+    val seriesList: List<SeriesResponse>? = null
+)

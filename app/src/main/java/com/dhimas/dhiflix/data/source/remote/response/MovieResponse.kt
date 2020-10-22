@@ -5,8 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class ShowResponse(
-
+data class MovieResponse(
         @SerializedName("id")
         var show_id: String,
 

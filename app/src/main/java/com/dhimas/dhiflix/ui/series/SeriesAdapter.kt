@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.ShowEntity
+import com.dhimas.dhiflix.data.source.local.ShowEntity
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
@@ -41,7 +41,7 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
                 val posterTargetHeight = 300
 
                 Picasso.get()
-                    .load(series.posterPath!!)
+                    .load("https://image.tmdb.org/t/p/w500" + series.posterPath!!)
                     .resize(posterTargetWidth, posterTargetHeight)
                     .error(R.drawable.image_error_2_3)
                     .placeholder(R.drawable.placeholder_2_3)
@@ -49,11 +49,11 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
 
                 cv_poster.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_TITLE, series.title)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, series.id)
 
                     //Used for checking if the show entity is from series page
                     //Sending empty value because I use key for checking without read the data
-                    intent.putExtra(DetailActivity.EXTRA_FROM_SERIES, "")
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, DetailActivity.EXTRA_FROM_SERIES)
 
                     context.startActivity(intent)
                 }

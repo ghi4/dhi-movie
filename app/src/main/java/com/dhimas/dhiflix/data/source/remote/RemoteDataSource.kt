@@ -1,9 +1,12 @@
 package com.dhimas.dhiflix.data.source.remote
 
 import android.util.Log
-import com.dhimas.dhiflix.data.source.remote.response.ShowListResponse
-import com.dhimas.dhiflix.data.source.remote.response.ShowResponse
+import com.dhimas.dhiflix.data.source.remote.response.MovieListResponse
+import com.dhimas.dhiflix.data.source.remote.response.MovieResponse
+import com.dhimas.dhiflix.data.source.remote.response.SeriesListResponse
+import com.dhimas.dhiflix.data.source.remote.response.SeriesResponse
 import com.dhimas.dhiflix.data.source.remote.retrofit.RetrofitInterface
+import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,18 +27,20 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
     fun getMovieList(callback: LoadMovieListCallback){
         val call = retrofitService.getMovieList()
 
-        call.enqueue(object : Callback<ShowListResponse>{
+        EspressoIdlingResource.increment()
+        call.enqueue(object : Callback<MovieListResponse>{
             override fun onResponse(
-                call: Call<ShowListResponse>,
-                response: Response<ShowListResponse>
+                call: Call<MovieListResponse>,
+                response: Response<MovieListResponse>
             ) {
                 if(response.isSuccessful){
                     val movieListResponse = response.body()?.showList
-                    callback.onMovieListReceived(movieListResponse as ArrayList<ShowResponse>)
+                    callback.onMovieListReceived(movieListResponse as ArrayList<MovieResponse>)
+                    EspressoIdlingResource.decrement()
                 }
             }
 
-            override fun onFailure(call: Call<ShowListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
                 Log.d("Throwable", t.message.toString())
             }
 
@@ -45,16 +50,18 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
     fun getSeriesList(callback: LoadSeriesListCallback){
         val call = retrofitService.getSeriesList()
 
-        call.enqueue(object : Callback<ShowListResponse>{
+        EspressoIdlingResource.increment()
+        call.enqueue(object : Callback<SeriesListResponse>{
             override fun onResponse(
-                call: Call<ShowListResponse>,
-                response: Response<ShowListResponse>
+                call: Call<SeriesListResponse>,
+                response: Response<SeriesListResponse>
             ) {
-                val seriesListResponse = response.body()?.showList
-                callback.onSeriesListReceived(seriesListResponse as ArrayList<ShowResponse>)
+                val seriesListResponse = response.body()?.seriesList
+                callback.onSeriesListReceived(seriesListResponse as ArrayList<SeriesResponse>)
+                EspressoIdlingResource.decrement()
             }
 
-            override fun onFailure(call: Call<ShowListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<SeriesListResponse>, t: Throwable) {
                 Log.d("Throwable", t.message.toString())
             }
 
@@ -64,50 +71,53 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
     fun getMovieDetail(movie_id: String, callback: LoadMovieDetailCallback){
         val call = retrofitService.getMovieDetail(movie_id)
 
-        call.enqueue(object : Callback<ShowResponse>{
-            override fun onResponse(call: Call<ShowResponse>, response: Response<ShowResponse>) {
+        EspressoIdlingResource.increment()
+        call.enqueue(object : Callback<MovieResponse>{
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 if(response.isSuccessful){
                     val movieResponse = response.body()
-                    callback.onMovieDetailReceived(movieResponse as ShowResponse)
+                    callback.onMovieDetailReceived(movieResponse as MovieResponse)
+                    EspressoIdlingResource.decrement()
                 }
             }
 
-            override fun onFailure(call: Call<ShowResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                 Log.d("Throwable", t.message.toString())
             }
-
         })
     }
 
     fun getSeriesDetail(series_id: String, callback: LoadSeriesDetailCallback){
         val call = retrofitService.getSeriesDetail(series_id)
 
-        call.enqueue(object : Callback<ShowResponse>{
-            override fun onResponse(call: Call<ShowResponse>, response: Response<ShowResponse>) {
+        EspressoIdlingResource.increment()
+        call.enqueue(object : Callback<SeriesResponse>{
+            override fun onResponse(call: Call<SeriesResponse>, response: Response<SeriesResponse>) {
                 val seriesResponse = response.body()
-                callback.onSeriesDetailReceived(seriesResponse as ShowResponse)
+                callback.onSeriesDetailReceived(seriesResponse as SeriesResponse)
+                EspressoIdlingResource.decrement()
             }
 
-            override fun onFailure(call: Call<ShowResponse>, t: Throwable) {
-                Log.d("THrowable", t.message.toString())
+            override fun onFailure(call: Call<SeriesResponse>, t: Throwable) {
+                Log.d("Throwable", t.message.toString())
             }
 
         })
     }
 
     interface LoadMovieListCallback {
-        fun onMovieListReceived(movieListResponse: ArrayList<ShowResponse>)
+        fun onMovieListReceived(movieListResponse: ArrayList<MovieResponse>)
     }
 
     interface LoadSeriesListCallback {
-        fun onSeriesListReceived(seriesListResponse: ArrayList<ShowResponse>)
+        fun onSeriesListReceived(seriesListResponse: ArrayList<SeriesResponse>)
     }
 
     interface LoadMovieDetailCallback {
-        fun onMovieDetailReceived(movieDetailResponse: ShowResponse)
+        fun onMovieDetailReceived(movieDetailResponse: MovieResponse)
     }
 
     interface LoadSeriesDetailCallback {
-        fun onSeriesDetailReceived(seriesDetailResponse: ShowResponse)
+        fun onSeriesDetailReceived(seriesDetailResponse: SeriesResponse)
     }
 }

@@ -44,7 +44,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 val posterTargetHeight = 300
 
                 Picasso.get()
-                    .load(movie.posterPath!!)
+                    .load("https://image.tmdb.org/t/p/w500" + movie.posterPath!!)
                     .resize(posterTargetWidth, posterTargetHeight)
                     .error(R.drawable.image_error_2_3)
                     .placeholder(R.drawable.placeholder_2_3)
@@ -52,11 +52,11 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
                 itemView.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_TITLE, movie.title)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, movie.id)
 
                     //Used for checking if the show entity is from movie page
                     //Sending empty value because I use key for checking without read the data
-                    intent.putExtra(DetailActivity.EXTRA_FROM_MOVIES, "")
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, DetailActivity.EXTRA_FROM_MOVIES)
 
                     context.startActivity(intent)
                 }

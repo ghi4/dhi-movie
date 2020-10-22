@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dhimas.dhiflix.data.source.local.ShowEntity
 import com.dhimas.dhiflix.data.source.remote.RemoteDataSource
-import com.dhimas.dhiflix.data.source.remote.response.ShowResponse
+import com.dhimas.dhiflix.data.source.remote.response.MovieResponse
+import com.dhimas.dhiflix.data.source.remote.response.SeriesResponse
 
 class ShowRepository private constructor(private val remoteDataSource: RemoteDataSource): ShowDataSource{
 
@@ -22,7 +23,7 @@ class ShowRepository private constructor(private val remoteDataSource: RemoteDat
         val movieListResult = MutableLiveData<List<ShowEntity>>()
 
         remoteDataSource.getMovieList(object : RemoteDataSource.LoadMovieListCallback{
-            override fun onMovieListReceived(movieListResponse: java.util.ArrayList<ShowResponse>) {
+            override fun onMovieListReceived(movieListResponse: java.util.ArrayList<MovieResponse>) {
                 val movieList = ArrayList<ShowEntity>()
 
                 for(response in movieListResponse){
@@ -49,13 +50,15 @@ class ShowRepository private constructor(private val remoteDataSource: RemoteDat
         val movieDetailResult = MutableLiveData<ShowEntity>()
 
         remoteDataSource.getMovieDetail(movie_id, object : RemoteDataSource.LoadMovieDetailCallback{
-            val movieDetail = ShowEntity()
-            override fun onMovieDetailReceived(movieDetailResponse: ShowResponse) {
-                movieDetail.id = movieDetailResponse.show_id
-                movieDetail.title = movieDetailResponse.title
-                movieDetail.overview = movieDetailResponse.overview
-                movieDetail.posterPath = movieDetailResponse.posterPath
-                movieDetail.backdropPath = movieDetailResponse.backdropPath
+            override fun onMovieDetailReceived(movieDetailResponse: MovieResponse) {
+                val movieDetail = ShowEntity(
+                    movieDetailResponse.show_id,
+                    movieDetailResponse.title,
+                    movieDetailResponse.releaseDate,
+                    movieDetailResponse.overview,
+                    movieDetailResponse.posterPath,
+                    movieDetailResponse.backdropPath
+                )
 
                 movieDetailResult.postValue(movieDetail)
             }
@@ -68,13 +71,13 @@ class ShowRepository private constructor(private val remoteDataSource: RemoteDat
         val seriesListResult = MutableLiveData<List<ShowEntity>>()
 
         remoteDataSource.getSeriesList(object : RemoteDataSource.LoadSeriesListCallback{
-            override fun onSeriesListReceived(seriesListResponse: java.util.ArrayList<ShowResponse>) {
+            override fun onSeriesListReceived(seriesListResponse: java.util.ArrayList<SeriesResponse>) {
                 val seriesList = ArrayList<ShowEntity>()
 
                 for(response in seriesListResponse){
                     val series = ShowEntity(
-                            response.show_id,
-                            response.title,
+                            response.series_id,
+                            response.name,
                             response.releaseDate,
                             response.overview,
                             response.posterPath,
@@ -94,10 +97,10 @@ class ShowRepository private constructor(private val remoteDataSource: RemoteDat
         val seriesDetailResult = MutableLiveData<ShowEntity>()
 
         remoteDataSource.getSeriesDetail(series_id, object : RemoteDataSource.LoadSeriesDetailCallback{
-            override fun onSeriesDetailReceived(seriesDetailResponse: ShowResponse) {
+            override fun onSeriesDetailReceived(seriesDetailResponse: SeriesResponse) {
                 val seriesEntity = ShowEntity(
-                        seriesDetailResponse.show_id,
-                        seriesDetailResponse.title,
+                        seriesDetailResponse.series_id,
+                        seriesDetailResponse.name,
                         seriesDetailResponse.releaseDate,
                         seriesDetailResponse.overview,
                         seriesDetailResponse.posterPath,
