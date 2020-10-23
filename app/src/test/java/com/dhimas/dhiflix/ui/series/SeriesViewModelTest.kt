@@ -1,44 +1,57 @@
 package com.dhimas.dhiflix.ui.series
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.dhimas.dhiflix.data.ShowRepository
+import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.utils.DummyData
+import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.junit.MockitoJUnitRunner
 
-internal class SeriesViewModelTest : Spek({
-//    describe("A SeriesViewModel") {
-//        val seriesViewModel by memoized { SeriesViewModel() }
-//
-//        it("Should not null or empty") {
-//            assertNotEquals(true, seriesViewModel.getSeries().isNullOrEmpty())
-//        }
-//
-//        it("Should have 12 item") {
-//            assertEquals(12, seriesViewModel.getSeries().size)
-//        }
-//
-//        describe("Series Entity") {
-//            val seriesEntity by memoized { seriesViewModel.getSeries()[0] }
-//
-//            it("Title should not null or empty") {
-//                assertNotEquals(true, seriesEntity.title.isNullOrEmpty())
-//            }
-//
-//            it("ReleaseYear should not null or empty") {
-//                assertNotEquals(true, seriesEntity.releaseYear.isNullOrEmpty())
-//            }
-//
-//            it("Overview should not null or empty") {
-//                assertNotEquals(true, seriesEntity.overview.isNullOrEmpty())
-//            }
-//
-//            it("PosterPath should not null") {
-//                assertNotEquals(null, seriesEntity.posterPath)
-//            }
-//
-//            it("BackdropPath should not null") {
-//                assertNotEquals(null, seriesEntity.backdropPath)
-//            }
-//        }
-//    }
-})
+@RunWith(MockitoJUnitRunner::class)
+internal class SeriesViewModelTest {
+
+    private lateinit var viewModel: SeriesViewModel
+
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Mock
+    private lateinit var seriesRepository: ShowRepository
+
+    @Mock
+    private lateinit var observer: Observer<List<ShowEntity>>
+
+    @Before
+    fun setUp() {
+        viewModel = SeriesViewModel(seriesRepository)
+    }
+
+    @Test
+    fun getSeriesList() {
+        val dummySeries = DummyData.generateDummySeries()
+        val series = MutableLiveData<List<ShowEntity>>()
+        series.value = dummySeries
+
+        `when`(seriesRepository.getSeriesList()).thenReturn(series)
+
+        val seriesEntity = viewModel.getSeries().value
+        verify(seriesRepository).getSeriesList()
+
+        assertNotNull(seriesEntity)
+        assertEquals(12, seriesEntity?.size)
+
+        viewModel.getSeries().observeForever(observer)
+        verify(observer).onChanged(dummySeries)
+
+    }
+}

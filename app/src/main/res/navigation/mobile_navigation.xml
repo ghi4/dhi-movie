@@ -7,11 +7,11 @@
     <fragment
         android:id="@+id/navigation_movie"
         android:name="com.dhimas.dhiflix.ui.movie.MovieFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_movie" />
 
     <fragment
         android:id="@+id/navigation_series"
         android:name="com.dhimas.dhiflix.ui.series.SeriesFragment"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_series" />
 
 </navigation>

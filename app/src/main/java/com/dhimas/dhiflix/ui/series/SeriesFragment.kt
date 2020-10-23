@@ -1,26 +1,29 @@
 package com.dhimas.dhiflix.ui.series
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.ShowEntity
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
-import kotlinx.android.synthetic.main.fragment_dashboard.*
+import kotlinx.android.synthetic.main.fragment_series.*
 
 class SeriesFragment : Fragment() {
+    private lateinit var viewModel: SeriesViewModel
+    private lateinit var seriesAdapter: SeriesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_dashboard, container, false)
+        return inflater.inflate(R.layout.fragment_series, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -28,19 +31,25 @@ class SeriesFragment : Fragment() {
 
         if (activity != null) {
             val factory = ViewModelFactory.getInstance()
-            val viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
+            viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
+            seriesAdapter = SeriesAdapter()
 
-            val adapter = SeriesAdapter()
-
-            viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
-                adapter.setSeries(seriesList as ArrayList<ShowEntity>)
-                adapter.notifyDataSetChanged()
-            })
+            Handler(Looper.getMainLooper()).postDelayed({
+                viewModelObserve()
+            }, 1000)
 
             rv_series.layoutManager = GridLayoutManager(context, 3)
             rv_series.hasFixedSize()
-            rv_series.adapter = adapter
+            rv_series.adapter = seriesAdapter
         }
+    }
 
+    private fun viewModelObserve(){
+        viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
+            seriesAdapter.setSeries(seriesList as ArrayList<ShowEntity>)
+            seriesShimmerLayout.stopShimmer()
+            seriesShimmerLayout.visibility = View.GONE
+            seriesAdapter.notifyDataSetChanged()
+        })
     }
 }

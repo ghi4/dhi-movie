@@ -10,9 +10,9 @@ import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.ArrayList
+import java.util.*
 
-class RemoteDataSource private constructor(private val retrofitService: RetrofitInterface){
+class RemoteDataSource private constructor(private val retrofitService: RetrofitInterface) {
 
     companion object {
         @Volatile
@@ -24,16 +24,16 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
     }
 
-    fun getMovieList(callback: LoadMovieListCallback){
+    fun getMovieList(callback: LoadMovieListCallback) {
         val call = retrofitService.getMovieList()
 
         EspressoIdlingResource.increment()
-        call.enqueue(object : Callback<MovieListResponse>{
+        call.enqueue(object : Callback<MovieListResponse> {
             override fun onResponse(
                 call: Call<MovieListResponse>,
                 response: Response<MovieListResponse>
             ) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     val movieListResponse = response.body()?.showList
                     callback.onMovieListReceived(movieListResponse as ArrayList<MovieResponse>)
                     EspressoIdlingResource.decrement()
@@ -47,11 +47,11 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
         })
     }
 
-    fun getSeriesList(callback: LoadSeriesListCallback){
+    fun getSeriesList(callback: LoadSeriesListCallback) {
         val call = retrofitService.getSeriesList()
 
         EspressoIdlingResource.increment()
-        call.enqueue(object : Callback<SeriesListResponse>{
+        call.enqueue(object : Callback<SeriesListResponse> {
             override fun onResponse(
                 call: Call<SeriesListResponse>,
                 response: Response<SeriesListResponse>
@@ -68,13 +68,13 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
         })
     }
 
-    fun getMovieDetail(movie_id: String, callback: LoadMovieDetailCallback){
+    fun getMovieDetail(movie_id: String, callback: LoadMovieDetailCallback) {
         val call = retrofitService.getMovieDetail(movie_id)
 
         EspressoIdlingResource.increment()
-        call.enqueue(object : Callback<MovieResponse>{
+        call.enqueue(object : Callback<MovieResponse> {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     val movieResponse = response.body()
                     callback.onMovieDetailReceived(movieResponse as MovieResponse)
                     EspressoIdlingResource.decrement()
@@ -87,12 +87,15 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
         })
     }
 
-    fun getSeriesDetail(series_id: String, callback: LoadSeriesDetailCallback){
+    fun getSeriesDetail(series_id: String, callback: LoadSeriesDetailCallback) {
         val call = retrofitService.getSeriesDetail(series_id)
 
         EspressoIdlingResource.increment()
-        call.enqueue(object : Callback<SeriesResponse>{
-            override fun onResponse(call: Call<SeriesResponse>, response: Response<SeriesResponse>) {
+        call.enqueue(object : Callback<SeriesResponse> {
+            override fun onResponse(
+                call: Call<SeriesResponse>,
+                response: Response<SeriesResponse>
+            ) {
                 val seriesResponse = response.body()
                 callback.onSeriesDetailReceived(seriesResponse as SeriesResponse)
                 EspressoIdlingResource.decrement()

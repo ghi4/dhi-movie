@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cv_poster_horizontal"
     android:layout_width="100dp"
-    android:layout_height="wrap_content"
+    android:layout_height="150dp"
     android:layout_marginStart="4dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="4dp"
@@ -11,12 +11,13 @@
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp">
 
-    <ImageView
+    <aglibs.loading.skeleton.view.SkeletonImageView
         android:id="@+id/iv_poster_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:contentDescription="@string/content_description_movie_poster"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/poster_hardkill" />
+        app:skeletonColor="@color/grey_lighter"
+        app:srcCompat="@drawable/poster_placeholder" />
 </androidx.cardview.widget.CardView>

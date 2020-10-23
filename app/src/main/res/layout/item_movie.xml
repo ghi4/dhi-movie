@@ -26,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/poster_welcome_to_sudden_death" />
+            app:srcCompat="@drawable/poster_placeholder" />
 
         <TextView
             android:id="@+id/tv_title"

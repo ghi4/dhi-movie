@@ -1,26 +1,21 @@
 package com.dhimas.dhiflix.ui.movie
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.ShowEntity
 import com.dhimas.dhiflix.utils.DummyData
-import com.nhaarman.mockitokotlin2.mock
-import org.junit.Rule
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.*
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
-import org.mockito.junit.MockitoJUnitRunner
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
+import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 internal class MovieViewModelTest {
@@ -48,8 +43,9 @@ internal class MovieViewModelTest {
         movies.value = dummyMovie
 
         `when`(movieRepository.getMovieList()).thenReturn(movies)
+
         val movieEntity = viewModel.getMovies().value
-        verify<ShowRepository>(movieRepository).getMovieList()
+        verify(movieRepository).getMovieList()
 
         assertNotNull(movieEntity)
         assertEquals(12, movieEntity?.size)

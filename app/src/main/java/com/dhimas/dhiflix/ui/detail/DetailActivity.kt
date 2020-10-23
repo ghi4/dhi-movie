@@ -1,9 +1,13 @@
 package com.dhimas.dhiflix.ui.detail
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.data.source.local.ShowEntity
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -34,48 +38,61 @@ class DetailActivity : AppCompatActivity() {
         val showType = intent.getStringExtra(EXTRA_SHOW_TYPE)
 
         if (showId != null && showType != null) {
-            viewModel.getShowEntityById(showId, showType).observe(this, { showEntity ->
-                tv_detail_title.text = showEntity.title
-                tv_detail_release_year.text = showEntity.releaseYear
-                tv_detail_overview.text = showEntity.overview
+            Handler(Looper.getMainLooper()).postDelayed({
+                viewModel.getShowEntityById(showId, showType).observe(this, { showEntity ->
+                    tv_detail_title.text = showEntity.title
+                    tv_detail_release_year.text = showEntity.releaseYear
+                    tv_detail_overview.text = showEntity.overview
 
-                //For backdrop image
-                val backdropTargetWidth = 800
-                val backdropTargetHeight = 450
+                    //For backdrop image
+                    val backdropTargetWidth = 800
+                    val backdropTargetHeight = 450
 
-                Picasso.get()
-                    .load("https://image.tmdb.org/t/p/w500" + showEntity.backdropPath!!)
-                    .placeholder(R.drawable.image_placeholder)
-                    .error(R.drawable.image_error)
-                    .resize(backdropTargetWidth, backdropTargetHeight)
-                    .into(iv_detail_backdrop)
+                    Picasso.get()
+                        .load("https://image.tmdb.org/t/p/w500" + showEntity.backdropPath!!)
+                        .placeholder(R.drawable.backdrop_placeholder)
+                        .error(R.drawable.image_error)
+                        .resize(backdropTargetWidth, backdropTargetHeight)
+                        .into(iv_detail_backdrop)
 
-                //For poster image
-                val posterTargetWidth = 200
-                val posterTargetHeight = 300
+                    //For poster image
+                    val posterTargetWidth = 200
+                    val posterTargetHeight = 300
 
-                Picasso.get()
-                    .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
-                    .placeholder(R.drawable.placeholder_2_3)
-                    .error(R.drawable.image_error_2_3)
-                    .resize(posterTargetWidth, posterTargetHeight)
-                    .into(iv_detail_poster)
+                    Picasso.get()
+                        .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
+                        .placeholder(R.drawable.poster_placeholder)
+                        .error(R.drawable.image_error_2_3)
+                        .resize(posterTargetWidth, posterTargetHeight)
+                        .into(iv_detail_poster)
+
+                    stopShimmering()
+                })
+            }, 1000)
+
+            val detailAdapter = DetailAdapter()
+
+            viewModel.getShowList(showType).observe(this, { movieList ->
+                detailAdapter.setMovies(movieList as ArrayList<ShowEntity>, showType)
+                detailAdapter.notifyDataSetChanged()
             })
 
-//            val detailAdapter = DetailAdapter()
-//
-//            if (intent.extras!!.containsKey(EXTRA_FROM_MOVIES)) {
-//                val movies = viewModel.getMovieButExclude(showEntity)
-//                detailAdapter.setMovies(movies, EXTRA_FROM_MOVIES)
-//            } else if (intent.extras!!.containsKey(EXTRA_FROM_SERIES)) {
-//                val movies = viewModel.getSeriesButExclude(showEntity)
-//                detailAdapter.setMovies(movies, EXTRA_FROM_SERIES)
-//            }
-//
-//            val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-//            rv_other_movie.layoutManager = layoutManager
-//            rv_other_movie.hasFixedSize()
-//            rv_other_movie.adapter = detailAdapter
+            val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            rv_other_movie.layoutManager = layoutManager
+            rv_other_movie.hasFixedSize()
+            rv_other_movie.adapter = detailAdapter
+
+
         }
+    }
+
+    private fun stopShimmering() {
+        iv_detail_backdrop.stopLoading()
+        iv_detail_poster.stopLoading()
+        tv_detail_title.stopLoading()
+        tv_detail_release_year.stopLoading()
+        tv_overview.stopLoading()
+        tv_detail_overview.stopLoading()
+        tv_interest.stopLoading()
     }
 }

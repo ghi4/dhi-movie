@@ -1,6 +1,8 @@
 package com.dhimas.dhiflix.ui.detail
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,12 +41,19 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                 val posterTargetWidth = 200
                 val posterTargetHeight = 300
 
+                iv_poster_horizontal.startLoading()
+
                 Picasso.get()
-                    .load("https://image.tmdb.org/t/p/w500/ ${showEntity.posterPath!!}")
+                    .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
                     .resize(posterTargetWidth, posterTargetHeight)
                     .error(R.drawable.image_error_2_3)
-                    .placeholder(R.drawable.placeholder_2_3)
+                    .placeholder(R.drawable.poster_placeholder)
                     .into(iv_poster_horizontal)
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    iv_poster_horizontal.stopLoading()
+                }, 1000)
+
 
                 cv_poster_horizontal.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
@@ -52,11 +61,13 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
 
                     //Used for checking the show title type is movie or series
                     //Sending empty message because I use key for checking without read the data
-                    intent.putExtra(type, "")
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, type)
 
                     context.startActivity(intent)
                 }
             }
         }
     }
+
+
 }

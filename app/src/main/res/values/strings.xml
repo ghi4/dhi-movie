@@ -2,8 +2,8 @@
     <string name="app_name">dhiFlix</string>
     <string name="content_description_movie_poster">Movie poster</string>
     <string name="poster_example_title">Welcome to Sudden Death</string>
-    <string name="poster_example_release_year">2019</string>
-    <string name="movie_example_overview">Overview text here</string>
+    <string name="poster_example_release_year">2019\-08\-18</string>
+    <string name="movie_example_overview">When Grizz, Panda, and Ice Bear\'s love of food trucks and viral videos went out of hand, it catches the attention of Agent Trout from the National Wildlife Control, who pledges to restore the “natural order” by separating them forever. Chased away from their home, the Bears embark on an epic road trip as they seek refuge in Canada, with their journey being filled with new friends, perilous obstacles, and huge parties. The risky journey also forces the Bears to face how they first met and became brothers, in order to keep their family bond from splitting apart.</string>
     <string name="overview">Overview</string>
     <string name="content_description_movie_backdrop">Movie backdrop</string>
     <string name="nav_movie">Movie</string>

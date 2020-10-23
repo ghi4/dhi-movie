@@ -2,7 +2,7 @@ package com.dhimas.dhiflix.data.source.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class SeriesResponse (
+data class SeriesResponse(
     @SerializedName("id")
     var series_id: String,
 

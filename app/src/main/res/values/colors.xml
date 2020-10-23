@@ -8,4 +8,6 @@
 
     <color name="black_little">#222222</color>
     <color name="dark_blue">#092E51</color>
+    <color name="grey_light">#A9A9A9</color>
+    <color name="grey_lighter">#C0C0C0</color>
 </resources>

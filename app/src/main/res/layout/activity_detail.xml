@@ -11,11 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <aglibs.loading.skeleton.view.SkeletonImageView
             android:id="@+id/iv_detail_backdrop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:background="@drawable/backdrop_placeholder"
             android:contentDescription="@string/content_description_movie_backdrop"
             android:foreground="@drawable/backdrop_gradient"
             android:scaleType="fitCenter"
@@ -23,22 +24,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/backdrop_welcome_to_sudden_death" />
+            app:srcCompat="@drawable/backdrop_placeholder" />
 
-        <ImageView
+        <aglibs.loading.skeleton.view.SkeletonImageView
             android:id="@+id/iv_detail_poster"
             android:layout_width="110dp"
-            android:layout_height="wrap_content"
+            android:layout_height="165dp"
             android:layout_marginStart="16dp"
             android:adjustViewBounds="true"
-            android:background="@drawable/corner_radius"
+            android:background="@drawable/poster_placeholder"
             android:contentDescription="@string/content_description_movie_poster"
             app:layout_constraintBottom_toBottomOf="@+id/iv_detail_backdrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_detail_backdrop"
-            app:srcCompat="@drawable/poster_welcome_to_sudden_death" />
+            app:skeletonColor="@color/grey_light"
+            app:srcCompat="@drawable/poster_placeholder" />
 
-        <TextView
+        <aglibs.loading.skeleton.view.SkeletonTextView
             android:id="@+id/tv_detail_release_year"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -47,12 +49,13 @@
             app:layout_constraintStart_toStartOf="@+id/tv_detail_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_detail_title" />
 
-        <TextView
+        <aglibs.loading.skeleton.view.SkeletonTextView
             android:id="@+id/tv_detail_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:lineSpacingExtra="2dp"
             android:maxLines="2"
             android:text="@string/poster_example_title"
             android:textSize="28sp"
@@ -61,8 +64,8 @@
             app:layout_constraintStart_toEndOf="@+id/iv_detail_poster"
             app:layout_constraintTop_toTopOf="@+id/iv_detail_poster" />
 
-        <TextView
-            android:id="@+id/textView3"
+        <aglibs.loading.skeleton.view.SkeletonTextView
+            android:id="@+id/tv_overview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -73,20 +76,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_detail_poster" />
 
-        <TextView
+        <aglibs.loading.skeleton.view.SkeletonTextView
             android:id="@+id/tv_detail_overview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:lineSpacingExtra="2dp"
             android:text="@string/movie_example_overview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_overview"
+            app:skeletonColor="@color/grey_lighter" />
 
-        <TextView
-            android:id="@+id/textView"
+        <aglibs.loading.skeleton.view.SkeletonTextView
+            android:id="@+id/tv_interest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -107,7 +112,7 @@
             android:paddingEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_interest" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

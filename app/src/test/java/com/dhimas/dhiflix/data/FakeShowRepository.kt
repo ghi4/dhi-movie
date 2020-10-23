@@ -7,18 +7,7 @@ import com.dhimas.dhiflix.data.source.remote.RemoteDataSource
 import com.dhimas.dhiflix.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.data.source.remote.response.SeriesResponse
 
-class ShowRepository private constructor(private val remoteDataSource: RemoteDataSource) :
-    ShowDataSource {
-
-    companion object {
-        @Volatile
-        private var instance: ShowRepository? = null
-
-        fun getInstance(remoteDataSource: RemoteDataSource): ShowRepository =
-            instance ?: synchronized(this) {
-                instance ?: ShowRepository(remoteDataSource)
-            }
-    }
+class FakeShowRepository(private val remoteDataSource: RemoteDataSource) : ShowDataSource {
 
     override fun getMovieList(): LiveData<List<ShowEntity>> {
         val movieListResult = MutableLiveData<List<ShowEntity>>()

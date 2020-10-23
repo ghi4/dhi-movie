@@ -6,7 +6,14 @@ import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.ShowEntity
 
 class MovieViewModel(private val showRepository: ShowRepository) : ViewModel() {
+    private var movieList: LiveData<List<ShowEntity>>? = null
 
-    fun getMovies(): LiveData<List<ShowEntity>> = showRepository.getMovieList()
+    fun getMovies(): LiveData<List<ShowEntity>> {
+        if (movieList == null) {
+            movieList = showRepository.getMovieList()
+        }
+
+        return movieList as LiveData<List<ShowEntity>>
+    }
 
 }
