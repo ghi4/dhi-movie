@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <aglibs.loading.skeleton.view.SkeletonImageView
+        <ImageView
             android:id="@+id/iv_detail_backdrop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -19,9 +19,8 @@
             android:background="@drawable/backdrop_placeholder"
             android:contentDescription="@string/content_description_movie_backdrop"
             android:foreground="@drawable/backdrop_gradient"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:visibility="visible"
-            app:autoStart="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

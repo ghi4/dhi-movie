@@ -108,7 +108,6 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun stopShimmering() {
-        iv_detail_backdrop.stopLoading()
         iv_detail_poster.stopLoading()
         tv_detail_title.stopLoading()
         tv_detail_release_year.stopLoading()
@@ -118,7 +117,6 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun startShimmering() {
-        iv_detail_backdrop.startLoading()
         iv_detail_poster.startLoading()
         tv_detail_title.startLoading()
         tv_detail_release_year.startLoading()
