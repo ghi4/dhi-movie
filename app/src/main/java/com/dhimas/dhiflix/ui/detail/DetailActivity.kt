@@ -41,18 +41,22 @@ class DetailActivity : AppCompatActivity() {
 
         val factory = ViewModelFactory.getInstance()
         viewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
-        showId = intent.getStringExtra(EXTRA_SHOW_ID).toString()
-        showType = intent.getStringExtra(EXTRA_SHOW_TYPE).toString()
 
         detailAdapter = DetailAdapter()
 
+        showId = intent.getStringExtra(EXTRA_SHOW_ID).toString()
+        showType = intent.getStringExtra(EXTRA_SHOW_TYPE).toString()
+
         startShimmering()
 
+        //Minimum shimmer time
+        //If data loaded too fast causing awkward animation/view
+        val shimmerTime = 1000L
         if (!viewModel.isAlreadyShimmer) {
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModelObserve()
                 viewModel.setAlreadyShimmer()
-            }, 1000)
+            }, shimmerTime)
 
             viewModel.getShowList(showType).observe(this, { movieList ->
                 detailAdapter.setMovies(movieList as ArrayList<ShowEntity>, showType, false)
@@ -62,7 +66,7 @@ class DetailActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModelObserve()
                 viewModel.setAlreadyShimmer()
-            }, 100)
+            }, shimmerTime / 10)
 
             viewModel.getShowList(showType).observe(this, { movieList ->
                 detailAdapter.setMovies(movieList as ArrayList<ShowEntity>, showType, true)
@@ -79,7 +83,7 @@ class DetailActivity : AppCompatActivity() {
     private fun viewModelObserve() {
         viewModel.getShowEntityById(showId, showType).observe(this, { showEntity ->
             tv_detail_title.text = showEntity.title
-            tv_detail_release_year.text = Utils.dateParseToMonthAndYear(showEntity.releaseYear!!)
+            tv_detail_release_date.text = Utils.dateParseToMonthAndYear(showEntity.releaseDate!!)
             tv_detail_overview.text = showEntity.overview
 
             //For backdrop image
@@ -111,7 +115,7 @@ class DetailActivity : AppCompatActivity() {
     private fun stopShimmering() {
         iv_detail_poster.stopLoading()
         tv_detail_title.stopLoading()
-        tv_detail_release_year.stopLoading()
+        tv_detail_release_date.stopLoading()
         tv_overview.stopLoading()
         tv_detail_overview.stopLoading()
         tv_interest.stopLoading()
@@ -122,7 +126,7 @@ class DetailActivity : AppCompatActivity() {
         EspressoIdlingResource.increment()
         iv_detail_poster.startLoading()
         tv_detail_title.startLoading()
-        tv_detail_release_year.startLoading()
+        tv_detail_release_date.startLoading()
         tv_overview.startLoading()
         tv_detail_overview.startLoading()
         tv_interest.startLoading()

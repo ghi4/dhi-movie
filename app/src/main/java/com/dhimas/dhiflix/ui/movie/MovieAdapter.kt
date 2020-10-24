@@ -39,7 +39,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
         fun bind(movie: ShowEntity) {
             with(itemView) {
                 tv_title.text = movie.title
-                tv_release_year.text = Utils.dateParseToMonthAndYear(movie.releaseYear!!)
+                tv_release_date.text = Utils.dateParseToMonthAndYear(movie.releaseDate!!)
 
                 val posterTargetWidth = 200
                 val posterTargetHeight = 300

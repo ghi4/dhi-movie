@@ -42,7 +42,7 @@
             app:srcCompat="@drawable/poster_placeholder" />
 
         <aglibs.loading.skeleton.view.SkeletonTextView
-            android:id="@+id/tv_detail_release_year"
+            android:id="@+id/tv_detail_release_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

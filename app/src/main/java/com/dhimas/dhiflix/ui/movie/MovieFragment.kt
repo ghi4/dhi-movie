@@ -38,11 +38,14 @@ class MovieFragment : Fragment() {
 
             EspressoIdlingResource.increment()
 
+            //Minimum shimmer time
+            //If data loaded too fast causing awkward animation/view
+            val shimmerTime = 1000L
             if (!viewModel.isAlreadyShimmer) {
                 Handler(Looper.getMainLooper()).postDelayed({
                     viewModelObserve()
                     viewModel.setAlreadyShimmer()
-                }, 1000)
+                }, shimmerTime)
             } else {
                 movieShimmerLayout.stopShimmer()
                 movieShimmerLayout.visibility = View.GONE

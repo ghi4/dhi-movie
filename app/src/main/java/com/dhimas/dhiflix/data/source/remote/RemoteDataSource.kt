@@ -34,7 +34,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                     response: Response<MovieListResponse>
             ) {
                 if (response.isSuccessful) {
-                    val movieListResponse = response.body()?.showList
+                    val movieListResponse = response.body()?.movieList
                     callback.onMovieListReceived(movieListResponse as ArrayList<MovieResponse>)
                     EspressoIdlingResource.decrement()
                 }

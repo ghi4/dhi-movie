@@ -52,17 +52,18 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                         .placeholder(R.drawable.poster_placeholder)
                         .into(iv_poster_horizontal)
 
+                //Minimum shimmer time
+                //If data loaded too fast causing awkward animation/view
+                val shimmerTime = 1000L
                 if (!isAlreadyShimmer) {
                     Handler(Looper.getMainLooper()).postDelayed({
                         iv_poster_horizontal.stopLoading()
-                    }, 1000)
+                    }, shimmerTime)
                 } else {
                     Handler(Looper.getMainLooper()).postDelayed({
                         iv_poster_horizontal.stopLoading()
-                    }, 100)
+                    }, shimmerTime / 10)
                 }
-
-
 
                 cv_poster_horizontal.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)

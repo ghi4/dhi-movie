@@ -12,5 +12,4 @@ object Utils {
         return formatter.format(parser.parse(date)!!)
     }
 
-
 }

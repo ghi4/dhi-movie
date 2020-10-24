@@ -18,7 +18,7 @@ class FakeShowRepository(private val remoteDataSource: RemoteDataSource) : ShowD
 
                 for (response in movieListResponse) {
                     val movie = ShowEntity(
-                            response.show_id,
+                            response.movie_id,
                             response.title,
                             response.releaseDate,
                             response.overview,
@@ -44,7 +44,7 @@ class FakeShowRepository(private val remoteDataSource: RemoteDataSource) : ShowD
                 object : RemoteDataSource.LoadMovieDetailCallback {
                     override fun onMovieDetailReceived(movieDetailResponse: MovieResponse) {
                         val movieDetail = ShowEntity(
-                                movieDetailResponse.show_id,
+                                movieDetailResponse.movie_id,
                                 movieDetailResponse.title,
                                 movieDetailResponse.releaseDate,
                                 movieDetailResponse.overview,

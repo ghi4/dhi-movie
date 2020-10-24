@@ -10,7 +10,7 @@ data class ShowEntity(
 
         var title: String? = null,
 
-        var releaseYear: String? = null,
+        var releaseDate: String? = null,
 
         var overview: String? = null,
 

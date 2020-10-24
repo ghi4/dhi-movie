@@ -35,7 +35,7 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
         fun bind(series: ShowEntity) {
             with(itemView) {
                 tv_title.text = series.title
-                tv_release_year.text = series.releaseYear
+                tv_release_date.text = series.releaseDate
 
                 val posterTargetWidth = 200
                 val posterTargetHeight = 300

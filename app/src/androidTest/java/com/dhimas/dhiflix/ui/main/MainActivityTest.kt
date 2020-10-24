@@ -54,7 +54,7 @@ class MainActivityTest {
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
         onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_detail_release_year)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_other_movie)).perform(
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
@@ -72,7 +72,7 @@ class MainActivityTest {
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
         onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_detail_release_year)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_other_movie)).perform(
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
@@ -107,7 +107,7 @@ class MainActivityTest {
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
         onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_detail_release_year)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_other_movie)).perform(
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
@@ -125,7 +125,7 @@ class MainActivityTest {
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
         onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_detail_release_year)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_other_movie)).perform(
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
