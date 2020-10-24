@@ -19,9 +19,9 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
         private var instance: RemoteDataSource? = null
 
         fun getInstance(retrofitService: RetrofitInterface): RemoteDataSource =
-            instance ?: synchronized(this) {
-                instance ?: RemoteDataSource(retrofitService)
-            }
+                instance ?: synchronized(this) {
+                    instance ?: RemoteDataSource(retrofitService)
+                }
     }
 
     fun getMovieList(callback: LoadMovieListCallback) {
@@ -30,8 +30,8 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
         EspressoIdlingResource.increment()
         call.enqueue(object : Callback<MovieListResponse> {
             override fun onResponse(
-                call: Call<MovieListResponse>,
-                response: Response<MovieListResponse>
+                    call: Call<MovieListResponse>,
+                    response: Response<MovieListResponse>
             ) {
                 if (response.isSuccessful) {
                     val movieListResponse = response.body()?.showList
@@ -53,8 +53,8 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
         EspressoIdlingResource.increment()
         call.enqueue(object : Callback<SeriesListResponse> {
             override fun onResponse(
-                call: Call<SeriesListResponse>,
-                response: Response<SeriesListResponse>
+                    call: Call<SeriesListResponse>,
+                    response: Response<SeriesListResponse>
             ) {
                 val seriesListResponse = response.body()?.seriesList
                 callback.onSeriesListReceived(seriesListResponse as ArrayList<SeriesResponse>)
@@ -93,8 +93,8 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
         EspressoIdlingResource.increment()
         call.enqueue(object : Callback<SeriesResponse> {
             override fun onResponse(
-                call: Call<SeriesResponse>,
-                response: Response<SeriesResponse>
+                    call: Call<SeriesResponse>,
+                    response: Response<SeriesResponse>
             ) {
                 val seriesResponse = response.body()
                 callback.onSeriesDetailReceived(seriesResponse as SeriesResponse)

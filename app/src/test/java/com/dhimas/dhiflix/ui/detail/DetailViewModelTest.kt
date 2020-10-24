@@ -45,14 +45,14 @@ internal class DetailViewModelTest {
         `when`(showRepository.getMovieDetail(dummyMovie.id!!)).thenReturn(movie)
 
         val movieEntity =
-            viewModel.getShowEntityById(dummyMovie.id!!, DetailActivity.EXTRA_FROM_MOVIES).value
+                viewModel.getShowEntityById(dummyMovie.id!!, DetailActivity.EXTRA_FROM_MOVIES).value
         verify(showRepository).getMovieDetail(dummyMovie.id!!)
 
         assertNotNull(movieEntity)
         assertEquals(dummyMovie.title, movieEntity?.title)
 
         viewModel.getShowEntityById(dummyMovie.id!!, DetailActivity.EXTRA_FROM_MOVIES)
-            .observeForever(observer)
+                .observeForever(observer)
         verify(observer).onChanged(dummyMovie)
     }
 
@@ -65,14 +65,14 @@ internal class DetailViewModelTest {
         `when`(showRepository.getSeriesDetail(dummySeries.id!!)).thenReturn(series)
 
         val seriesEntity =
-            viewModel.getShowEntityById(dummySeries.id!!, DetailActivity.EXTRA_FROM_SERIES).value
+                viewModel.getShowEntityById(dummySeries.id!!, DetailActivity.EXTRA_FROM_SERIES).value
         verify(showRepository).getSeriesDetail(dummySeries.id!!)
 
         assertNotNull(seriesEntity)
         assertEquals(dummySeries.title, seriesEntity?.title)
 
         viewModel.getShowEntityById(dummySeries.id!!, DetailActivity.EXTRA_FROM_SERIES)
-            .observeForever(observer)
+                .observeForever(observer)
         verify(observer).onChanged(dummySeries)
     }
 }

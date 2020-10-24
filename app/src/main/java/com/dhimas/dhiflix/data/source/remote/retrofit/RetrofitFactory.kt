@@ -13,9 +13,9 @@ class RetrofitFactory {
         @Provides
         fun makeRetrofitService(): RetrofitInterface {
             val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
 
             return retrofit.create(RetrofitInterface::class.java)
         }

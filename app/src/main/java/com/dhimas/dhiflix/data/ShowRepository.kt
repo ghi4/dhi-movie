@@ -8,16 +8,16 @@ import com.dhimas.dhiflix.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.data.source.remote.response.SeriesResponse
 
 class ShowRepository private constructor(private val remoteDataSource: RemoteDataSource) :
-    ShowDataSource {
+        ShowDataSource {
 
     companion object {
         @Volatile
         private var instance: ShowRepository? = null
 
         fun getInstance(remoteDataSource: RemoteDataSource): ShowRepository =
-            instance ?: synchronized(this) {
-                instance ?: ShowRepository(remoteDataSource)
-            }
+                instance ?: synchronized(this) {
+                    instance ?: ShowRepository(remoteDataSource)
+                }
     }
 
     override fun getMovieList(): LiveData<List<ShowEntity>> {
@@ -29,12 +29,12 @@ class ShowRepository private constructor(private val remoteDataSource: RemoteDat
 
                 for (response in movieListResponse) {
                     val movie = ShowEntity(
-                        response.show_id,
-                        response.title,
-                        response.releaseDate,
-                        response.overview,
-                        response.posterPath,
-                        response.backdropPath
+                            response.show_id,
+                            response.title,
+                            response.releaseDate,
+                            response.overview,
+                            response.posterPath,
+                            response.backdropPath
                     )
 
                     movieList.add(movie)
@@ -51,21 +51,21 @@ class ShowRepository private constructor(private val remoteDataSource: RemoteDat
         val movieDetailResult = MutableLiveData<ShowEntity>()
 
         remoteDataSource.getMovieDetail(
-            movie_id,
-            object : RemoteDataSource.LoadMovieDetailCallback {
-                override fun onMovieDetailReceived(movieDetailResponse: MovieResponse) {
-                    val movieDetail = ShowEntity(
-                        movieDetailResponse.show_id,
-                        movieDetailResponse.title,
-                        movieDetailResponse.releaseDate,
-                        movieDetailResponse.overview,
-                        movieDetailResponse.posterPath,
-                        movieDetailResponse.backdropPath
-                    )
+                movie_id,
+                object : RemoteDataSource.LoadMovieDetailCallback {
+                    override fun onMovieDetailReceived(movieDetailResponse: MovieResponse) {
+                        val movieDetail = ShowEntity(
+                                movieDetailResponse.show_id,
+                                movieDetailResponse.title,
+                                movieDetailResponse.releaseDate,
+                                movieDetailResponse.overview,
+                                movieDetailResponse.posterPath,
+                                movieDetailResponse.backdropPath
+                        )
 
-                    movieDetailResult.postValue(movieDetail)
-                }
-            })
+                        movieDetailResult.postValue(movieDetail)
+                    }
+                })
 
         return movieDetailResult
     }
@@ -79,12 +79,12 @@ class ShowRepository private constructor(private val remoteDataSource: RemoteDat
 
                 for (response in seriesListResponse) {
                     val series = ShowEntity(
-                        response.series_id,
-                        response.name,
-                        response.releaseDate,
-                        response.overview,
-                        response.posterPath,
-                        response.backdropPath
+                            response.series_id,
+                            response.name,
+                            response.releaseDate,
+                            response.overview,
+                            response.posterPath,
+                            response.backdropPath
                     )
 
                     seriesList.add(series)
@@ -100,20 +100,20 @@ class ShowRepository private constructor(private val remoteDataSource: RemoteDat
         val seriesDetailResult = MutableLiveData<ShowEntity>()
 
         remoteDataSource.getSeriesDetail(
-            series_id,
-            object : RemoteDataSource.LoadSeriesDetailCallback {
-                override fun onSeriesDetailReceived(seriesDetailResponse: SeriesResponse) {
-                    val seriesEntity = ShowEntity(
-                        seriesDetailResponse.series_id,
-                        seriesDetailResponse.name,
-                        seriesDetailResponse.releaseDate,
-                        seriesDetailResponse.overview,
-                        seriesDetailResponse.posterPath,
-                        seriesDetailResponse.backdropPath
-                    )
-                    seriesDetailResult.postValue(seriesEntity)
-                }
-            })
+                series_id,
+                object : RemoteDataSource.LoadSeriesDetailCallback {
+                    override fun onSeriesDetailReceived(seriesDetailResponse: SeriesResponse) {
+                        val seriesEntity = ShowEntity(
+                                seriesDetailResponse.series_id,
+                                seriesDetailResponse.name,
+                                seriesDetailResponse.releaseDate,
+                                seriesDetailResponse.overview,
+                                seriesDetailResponse.posterPath,
+                                seriesDetailResponse.backdropPath
+                        )
+                        seriesDetailResult.postValue(seriesEntity)
+                    }
+                })
 
         return seriesDetailResult
     }

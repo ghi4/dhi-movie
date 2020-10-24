@@ -7,6 +7,11 @@ import com.dhimas.dhiflix.data.source.local.ShowEntity
 
 class SeriesViewModel(private val showRepository: ShowRepository) : ViewModel() {
     private var seriesList: LiveData<List<ShowEntity>>? = null
+    var isAlreadyShimmer: Boolean = false
+
+    fun setAlreadyShimmer() {
+        isAlreadyShimmer = true
+    }
 
     fun getSeries(): LiveData<List<ShowEntity>> {
         if (seriesList == null) {

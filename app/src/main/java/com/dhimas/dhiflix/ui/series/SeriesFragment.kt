@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.ui.series
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -19,9 +20,9 @@ class SeriesFragment : Fragment() {
     private lateinit var seriesAdapter: SeriesAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_series, container, false)
     }
@@ -34,17 +35,30 @@ class SeriesFragment : Fragment() {
             viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
             seriesAdapter = SeriesAdapter()
 
-            Handler(Looper.getMainLooper()).postDelayed({
+            if(!viewModel.isAlreadyShimmer) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    viewModelObserve()
+                    viewModel.setAlreadyShimmer()
+                }, 1000)
+            } else {
+                seriesShimmerLayout.stopShimmer()
+                seriesShimmerLayout.visibility = View.GONE
                 viewModelObserve()
-            }, 1000)
+            }
 
-            rv_series.layoutManager = GridLayoutManager(context, 3)
+            val phoneOrientation = requireActivity().resources.configuration.orientation
+            if(phoneOrientation == Configuration.ORIENTATION_PORTRAIT) {
+                rv_series.layoutManager = GridLayoutManager(context, 3)
+            } else {
+                rv_series.layoutManager = GridLayoutManager(context, 7)
+            }
+
             rv_series.hasFixedSize()
             rv_series.adapter = seriesAdapter
         }
     }
 
-    private fun viewModelObserve(){
+    private fun viewModelObserve() {
         viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
             seriesAdapter.setSeries(seriesList as ArrayList<ShowEntity>)
             seriesShimmerLayout.stopShimmer()

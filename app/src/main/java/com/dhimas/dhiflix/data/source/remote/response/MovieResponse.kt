@@ -6,22 +6,22 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class MovieResponse(
-    @SerializedName("id")
-    var show_id: String,
+        @SerializedName("id")
+        var show_id: String,
 
-    @SerializedName("title")
-    var title: String,
+        @SerializedName("title")
+        var title: String,
 
-    @SerializedName("release_date")
-    var releaseDate: String,
+        @SerializedName("release_date")
+        var releaseDate: String,
 
-    @SerializedName("overview")
-    var overview: String,
+        @SerializedName("overview")
+        var overview: String,
 
-    @SerializedName("poster_path")
-    var posterPath: String,
+        @SerializedName("poster_path")
+        var posterPath: String,
 
-    @SerializedName("backdrop_path")
-    var backdropPath: String
+        @SerializedName("backdrop_path")
+        var backdropPath: String
 
 ) : Parcelable

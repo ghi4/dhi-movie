@@ -39,9 +39,9 @@ class MainActivityTest {
         delay2seconds()
         onView(withId(R.id.rv_movie)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_movie)).perform(
-            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                dummyMovie.size - 1
-            )
+                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                        dummyMovie.size - 1
+                )
         )
     }
 
@@ -50,10 +50,10 @@ class MainActivityTest {
         delay2seconds()
 
         onView(withId(R.id.rv_movie)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                9,
-                click()
-            )
+                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                        9,
+                        click()
+                )
         )
 
         delay2seconds()
@@ -67,16 +67,16 @@ class MainActivityTest {
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
 //        onView(withId(R.id.tv_detail_overview)).check(matches(withText(dummyMovie[9].overview)))
         onView(withId(R.id.rv_other_movie)).perform(
-            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                9
-            )
+                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                        9
+                )
         )
 
         onView(withId(R.id.rv_other_movie)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                5,
-                click()
-            )
+                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                        5,
+                        click()
+                )
         )
 
         delay2seconds()
@@ -90,9 +90,9 @@ class MainActivityTest {
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
 //        onView(withId(R.id.tv_detail_overview)).check(matches(withText(dummyMovie[5].overview)))
         onView(withId(R.id.rv_other_movie)).perform(
-            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                dummyMovie.size - 2
-            )
+                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                        dummyMovie.size - 2
+                )
         )
     }
 
@@ -103,9 +103,9 @@ class MainActivityTest {
         delay2seconds()
         onView(withId(R.id.rv_series)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_series)).perform(
-            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                5
-            )
+                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                        5
+                )
         )
     }
 
@@ -118,10 +118,10 @@ class MainActivityTest {
         delay2seconds()
 
         onView(withId(R.id.rv_series)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                9,
-                click()
-            )
+                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                        9,
+                        click()
+                )
         )
 
         delay2seconds()
@@ -135,18 +135,18 @@ class MainActivityTest {
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
 //        onView(withId(R.id.tv_detail_overview)).check(matches(withText(dummySeries[9].overview)))
         onView(withId(R.id.rv_other_movie)).perform(
-            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                9
-            )
+                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                        9
+                )
         )
 
         delay2seconds()
 
         onView(withId(R.id.rv_other_movie)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                5,
-                click()
-            )
+                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                        5,
+                        click()
+                )
         )
 
         delay2seconds()
@@ -160,9 +160,9 @@ class MainActivityTest {
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
 //        onView(withId(R.id.tv_detail_overview)).check(matches(withText(dummySeries[5].overview)))
         onView(withId(R.id.rv_other_movie)).perform(
-            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                dummySeries.size - 2
-            )
+                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                        dummySeries.size - 2
+                )
         )
     }
 

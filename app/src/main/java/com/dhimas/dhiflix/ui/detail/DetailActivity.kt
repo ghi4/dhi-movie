@@ -8,11 +8,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.utils.Utils
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: DetailViewModel
+    private lateinit var showId: String
+    private lateinit var showType: String
+    private lateinit var detailAdapter: DetailAdapter
 
     companion object {
         //For sending Show Title
@@ -33,57 +39,72 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
 
         val factory = ViewModelFactory.getInstance()
-        val viewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
-        val showId = intent.getStringExtra(EXTRA_SHOW_ID)
-        val showType = intent.getStringExtra(EXTRA_SHOW_TYPE)
+        viewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
+        showId = intent.getStringExtra(EXTRA_SHOW_ID).toString()
+        showType = intent.getStringExtra(EXTRA_SHOW_TYPE).toString()
 
-        if (showId != null && showType != null) {
+        detailAdapter = DetailAdapter()
+
+        startShimmering()
+
+        if (!viewModel.isAlreadyShimmer) {
             Handler(Looper.getMainLooper()).postDelayed({
-                viewModel.getShowEntityById(showId, showType).observe(this, { showEntity ->
-                    tv_detail_title.text = showEntity.title
-                    tv_detail_release_year.text = showEntity.releaseYear
-                    tv_detail_overview.text = showEntity.overview
-
-                    //For backdrop image
-                    val backdropTargetWidth = 800
-                    val backdropTargetHeight = 450
-
-                    Picasso.get()
-                        .load("https://image.tmdb.org/t/p/w500" + showEntity.backdropPath!!)
-                        .placeholder(R.drawable.backdrop_placeholder)
-                        .error(R.drawable.image_error)
-                        .resize(backdropTargetWidth, backdropTargetHeight)
-                        .into(iv_detail_backdrop)
-
-                    //For poster image
-                    val posterTargetWidth = 200
-                    val posterTargetHeight = 300
-
-                    Picasso.get()
-                        .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
-                        .placeholder(R.drawable.poster_placeholder)
-                        .error(R.drawable.image_error_2_3)
-                        .resize(posterTargetWidth, posterTargetHeight)
-                        .into(iv_detail_poster)
-
-                    stopShimmering()
-                })
+                viewModelObserve()
+                viewModel.setAlreadyShimmer()
             }, 1000)
 
-            val detailAdapter = DetailAdapter()
-
             viewModel.getShowList(showType).observe(this, { movieList ->
-                detailAdapter.setMovies(movieList as ArrayList<ShowEntity>, showType)
+                detailAdapter.setMovies(movieList as ArrayList<ShowEntity>, showType, false)
                 detailAdapter.notifyDataSetChanged()
             })
+        } else {
+            Handler(Looper.getMainLooper()).postDelayed({
+                viewModelObserve()
+                viewModel.setAlreadyShimmer()
+            }, 100)
 
-            val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-            rv_other_movie.layoutManager = layoutManager
-            rv_other_movie.hasFixedSize()
-            rv_other_movie.adapter = detailAdapter
-
-
+            viewModel.getShowList(showType).observe(this, { movieList ->
+                detailAdapter.setMovies(movieList as ArrayList<ShowEntity>, showType, true)
+                detailAdapter.notifyDataSetChanged()
+            })
         }
+
+        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rv_other_movie.layoutManager = layoutManager
+        rv_other_movie.hasFixedSize()
+        rv_other_movie.adapter = detailAdapter
+    }
+
+    private fun viewModelObserve() {
+        viewModel.getShowEntityById(showId, showType).observe(this, { showEntity ->
+            tv_detail_title.text = showEntity.title
+            tv_detail_release_year.text = Utils.dateParseToMonthAndYear(showEntity.releaseYear!!)
+            tv_detail_overview.text = showEntity.overview
+
+            //For backdrop image
+            val backdropTargetWidth = 1280
+            val backdropTargetHeight = 720
+
+            Picasso.get()
+                    .load("https://image.tmdb.org/t/p/w500" + showEntity.backdropPath!!)
+                    .placeholder(R.drawable.backdrop_placeholder)
+                    .error(R.drawable.image_error)
+                    .resize(backdropTargetWidth, backdropTargetHeight)
+                    .into(iv_detail_backdrop)
+
+            //For poster image
+            val posterTargetWidth = 200
+            val posterTargetHeight = 300
+
+            Picasso.get()
+                    .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
+                    .placeholder(R.drawable.poster_placeholder)
+                    .error(R.drawable.image_error_2_3)
+                    .resize(posterTargetWidth, posterTargetHeight)
+                    .into(iv_detail_poster)
+
+            stopShimmering()
+        })
     }
 
     private fun stopShimmering() {
@@ -94,5 +115,15 @@ class DetailActivity : AppCompatActivity() {
         tv_overview.stopLoading()
         tv_detail_overview.stopLoading()
         tv_interest.stopLoading()
+    }
+
+    private fun startShimmering() {
+        iv_detail_backdrop.startLoading()
+        iv_detail_poster.startLoading()
+        tv_detail_title.startLoading()
+        tv_detail_release_year.startLoading()
+        tv_overview.startLoading()
+        tv_detail_overview.startLoading()
+        tv_interest.startLoading()
     }
 }

@@ -6,40 +6,51 @@ import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.ShowEntity
 
 class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() {
+    private var showEntity: LiveData<ShowEntity>? = null
+    private var showList: LiveData<List<ShowEntity>>? = null
+    var isAlreadyShimmer: Boolean = false
+
+    fun setAlreadyShimmer() {
+        isAlreadyShimmer = true
+    }
 
     fun getShowEntityById(show_id: String, show_type: String): LiveData<ShowEntity> {
-        return when (show_type) {
-            DetailActivity.EXTRA_FROM_MOVIES -> {
-                getMovieEntityById(show_id)
-            }
-            DetailActivity.EXTRA_FROM_SERIES -> {
-                getSeriesEntityById(show_id)
-            }
-            else -> {
-                throw Throwable("Unknown type of show: $show_type")
+
+        if (showEntity == null) {
+            when (show_type) {
+                DetailActivity.EXTRA_FROM_MOVIES -> {
+                    showEntity = getMovieEntityById(show_id)
+                }
+                DetailActivity.EXTRA_FROM_SERIES -> {
+                    showEntity = getSeriesEntityById(show_id)
+                }
             }
         }
+
+        return showEntity as LiveData<ShowEntity>
     }
 
     fun getShowList(show_type: String): LiveData<List<ShowEntity>> {
-        return when (show_type) {
-            DetailActivity.EXTRA_FROM_MOVIES -> {
-                getMovies()
-            }
-            DetailActivity.EXTRA_FROM_SERIES -> {
-                getSeries()
-            }
-            else -> {
-                throw Throwable("Unknown type of show: $show_type")
+
+        if (showList == null) {
+            when (show_type) {
+                DetailActivity.EXTRA_FROM_MOVIES -> {
+                    showList = getMovies()
+                }
+                DetailActivity.EXTRA_FROM_SERIES -> {
+                    showList = getSeries()
+                }
             }
         }
+
+        return showList as LiveData<List<ShowEntity>>
     }
 
     private fun getMovieEntityById(show_id: String): LiveData<ShowEntity> =
-        showRepository.getMovieDetail(show_id)
+            showRepository.getMovieDetail(show_id)
 
     private fun getSeriesEntityById(show_id: String): LiveData<ShowEntity> =
-        showRepository.getSeriesDetail(show_id)
+            showRepository.getSeriesDetail(show_id)
 
     private fun getMovies(): LiveData<List<ShowEntity>> = showRepository.getMovieList()
 

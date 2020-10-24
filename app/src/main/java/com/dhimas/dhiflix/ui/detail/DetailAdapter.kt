@@ -15,28 +15,30 @@ import kotlinx.android.synthetic.main.item_movie_horizontal.view.*
 class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     private var listMovies = ArrayList<ShowEntity>()
     private var listType = DetailActivity.EXTRA_FROM_MOVIES //Default type is movie
+    private var isAlreadyShimmer: Boolean = false
 
-    fun setMovies(listShows: ArrayList<ShowEntity>, listType: String) {
+    fun setMovies(listShows: ArrayList<ShowEntity>, listType: String, isAlreadyShimmer: Boolean) {
         this.listMovies.clear()
         this.listMovies.addAll(listShows)
         this.listType = listType
+        this.isAlreadyShimmer = isAlreadyShimmer
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_movie_horizontal, parent, false)
+                .inflate(R.layout.item_movie_horizontal, parent, false)
         return DetailViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
         val movie = listMovies[position]
-        holder.bind(movie, listType)
+        holder.bind(movie, listType, isAlreadyShimmer)
     }
 
     override fun getItemCount(): Int = listMovies.size
 
     class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(showEntity: ShowEntity, type: String) {
+        fun bind(showEntity: ShowEntity, type: String, isAlreadyShimmer: Boolean) {
             with(itemView) {
                 val posterTargetWidth = 200
                 val posterTargetHeight = 300
@@ -44,15 +46,22 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                 iv_poster_horizontal.startLoading()
 
                 Picasso.get()
-                    .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
-                    .resize(posterTargetWidth, posterTargetHeight)
-                    .error(R.drawable.image_error_2_3)
-                    .placeholder(R.drawable.poster_placeholder)
-                    .into(iv_poster_horizontal)
+                        .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
+                        .resize(posterTargetWidth, posterTargetHeight)
+                        .error(R.drawable.image_error_2_3)
+                        .placeholder(R.drawable.poster_placeholder)
+                        .into(iv_poster_horizontal)
 
-                Handler(Looper.getMainLooper()).postDelayed({
-                    iv_poster_horizontal.stopLoading()
-                }, 1000)
+                if (!isAlreadyShimmer) {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        iv_poster_horizontal.stopLoading()
+                    }, 1000)
+                } else {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        iv_poster_horizontal.stopLoading()
+                    }, 100)
+                }
+
 
 
                 cv_poster_horizontal.setOnClickListener {
