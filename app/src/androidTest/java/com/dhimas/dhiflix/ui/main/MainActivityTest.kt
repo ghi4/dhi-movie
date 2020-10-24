@@ -35,9 +35,9 @@ class MainActivityTest {
     fun loadMovies() {
         onView(withId(R.id.rv_movie)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_movie)).perform(
-                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                        10
-                )
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                10
+            )
         )
     }
 
@@ -45,10 +45,10 @@ class MainActivityTest {
     fun loadDetailMovie() {
 
         onView(withId(R.id.rv_movie)).perform(
-                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                        5,
-                        click()
-                )
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                5,
+                click()
+            )
         )
 
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
@@ -57,16 +57,16 @@ class MainActivityTest {
         onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_other_movie)).perform(
-                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                        10
-                )
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                10
+            )
         )
 
         onView(withId(R.id.rv_other_movie)).perform(
-                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                        10,
-                        click()
-                )
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                15,
+                click()
+            )
         )
 
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
@@ -75,22 +75,21 @@ class MainActivityTest {
         onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_other_movie)).perform(
-                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                        10
-                )
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                10
+            )
         )
     }
 
     @Test
     fun loadSeries() {
-
         onView(withId(R.id.navigation_series)).perform(click())
 
         onView(withId(R.id.rv_series)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_series)).perform(
-                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                        10
-                )
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                10
+            )
         )
     }
 
@@ -98,10 +97,10 @@ class MainActivityTest {
     fun loadDetailSeries() {
         onView(withId(R.id.navigation_series)).perform(click())
         onView(withId(R.id.rv_series)).perform(
-                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                        5,
-                        click()
-                )
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                5,
+                click()
+            )
         )
 
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
@@ -110,16 +109,16 @@ class MainActivityTest {
         onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_other_movie)).perform(
-                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                        10
-                )
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                10
+            )
         )
 
         onView(withId(R.id.rv_other_movie)).perform(
-                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                        5,
-                        click()
-                )
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                15,
+                click()
+            )
         )
 
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
@@ -128,9 +127,9 @@ class MainActivityTest {
         onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_other_movie)).perform(
-                RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                        10
-                )
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                10
+            )
         )
     }
 }

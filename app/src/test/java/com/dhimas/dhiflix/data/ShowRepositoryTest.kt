@@ -34,7 +34,7 @@ internal class ShowRepositoryTest {
     fun getAllMovies() {
         doAnswer { invocation ->
             (invocation.arguments[0] as RemoteDataSource.LoadMovieListCallback).onMovieListReceived(
-                    movieResponses
+                movieResponses
             )
             null
         }.`when`(remote).getMovieList(any())
@@ -56,7 +56,7 @@ internal class ShowRepositoryTest {
     fun getAllSeries() {
         doAnswer { invocation ->
             (invocation.arguments[0] as RemoteDataSource.LoadSeriesListCallback).onSeriesListReceived(
-                    seriesResponses
+                seriesResponses
             )
             null
         }.`when`(remote).getSeriesList(any())
@@ -78,7 +78,7 @@ internal class ShowRepositoryTest {
     fun getMovieDetail() {
         doAnswer { invocation ->
             (invocation.arguments[1] as RemoteDataSource.LoadMovieDetailCallback).onMovieDetailReceived(
-                    movieDetailResponse
+                movieDetailResponse
             )
             null
         }.`when`(remote).getMovieDetail(eq(movieId), any())
@@ -105,7 +105,7 @@ internal class ShowRepositoryTest {
     fun getSeriesDetail() {
         doAnswer { invocation ->
             (invocation.arguments[1] as RemoteDataSource.LoadSeriesDetailCallback).onSeriesDetailReceived(
-                    seriesDetailResponse
+                seriesDetailResponse
             )
             null
         }.`when`(remote).getSeriesDetail(eq(seriesId), any())

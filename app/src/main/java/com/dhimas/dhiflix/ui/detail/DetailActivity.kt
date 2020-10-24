@@ -91,22 +91,22 @@ class DetailActivity : AppCompatActivity() {
             val backdropTargetHeight = 720
 
             Picasso.get()
-                    .load("https://image.tmdb.org/t/p/w500" + showEntity.backdropPath!!)
-                    .placeholder(R.drawable.backdrop_placeholder)
-                    .error(R.drawable.image_error)
-                    .resize(backdropTargetWidth, backdropTargetHeight)
-                    .into(iv_detail_backdrop)
+                .load("https://image.tmdb.org/t/p/w500" + showEntity.backdropPath!!)
+                .placeholder(R.drawable.backdrop_placeholder)
+                .error(R.drawable.image_error)
+                .resize(backdropTargetWidth, backdropTargetHeight)
+                .into(iv_detail_backdrop)
 
             //For poster image
             val posterTargetWidth = 200
             val posterTargetHeight = 300
 
             Picasso.get()
-                    .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
-                    .placeholder(R.drawable.poster_placeholder)
-                    .error(R.drawable.image_error_2_3)
-                    .resize(posterTargetWidth, posterTargetHeight)
-                    .into(iv_detail_poster)
+                .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
+                .placeholder(R.drawable.poster_placeholder)
+                .error(R.drawable.image_error_2_3)
+                .resize(posterTargetWidth, posterTargetHeight)
+                .into(iv_detail_poster)
 
             stopShimmering()
         })

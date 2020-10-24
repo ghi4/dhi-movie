@@ -26,7 +26,7 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_movie_horizontal, parent, false)
+            .inflate(R.layout.item_movie_horizontal, parent, false)
         return DetailViewHolder(view)
     }
 
@@ -46,11 +46,11 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                 iv_poster_horizontal.startLoading()
 
                 Picasso.get()
-                        .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
-                        .resize(posterTargetWidth, posterTargetHeight)
-                        .error(R.drawable.image_error_2_3)
-                        .placeholder(R.drawable.poster_placeholder)
-                        .into(iv_poster_horizontal)
+                    .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
+                    .resize(posterTargetWidth, posterTargetHeight)
+                    .error(R.drawable.image_error_2_3)
+                    .placeholder(R.drawable.poster_placeholder)
+                    .into(iv_poster_horizontal)
 
                 //Minimum shimmer time
                 //If data loaded too fast causing awkward animation/view

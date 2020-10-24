@@ -47,10 +47,10 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
     }
 
     private fun getMovieEntityById(show_id: String): LiveData<ShowEntity> =
-            showRepository.getMovieDetail(show_id)
+        showRepository.getMovieDetail(show_id)
 
     private fun getSeriesEntityById(show_id: String): LiveData<ShowEntity> =
-            showRepository.getSeriesDetail(show_id)
+        showRepository.getSeriesDetail(show_id)
 
     private fun getMovies(): LiveData<List<ShowEntity>> = showRepository.getMovieList()
 

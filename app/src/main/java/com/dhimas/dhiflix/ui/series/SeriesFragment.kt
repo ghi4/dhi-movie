@@ -21,9 +21,9 @@ class SeriesFragment : Fragment() {
     private lateinit var seriesAdapter: SeriesAdapter
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_series, container, false)
     }
@@ -31,7 +31,7 @@ class SeriesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (activity != null) {
+        if (activity != null && view != null) {
             val factory = ViewModelFactory.getInstance()
             viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
             seriesAdapter = SeriesAdapter()
@@ -65,13 +65,15 @@ class SeriesFragment : Fragment() {
     }
 
     private fun viewModelObserve() {
-        viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
-            seriesAdapter.setSeries(seriesList as ArrayList<ShowEntity>)
-            seriesShimmerLayout.stopShimmer()
-            seriesShimmerLayout.visibility = View.GONE
-            seriesAdapter.notifyDataSetChanged()
+        if (view != null) {
+            viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
+                seriesAdapter.setSeries(seriesList as ArrayList<ShowEntity>)
+                seriesShimmerLayout.stopShimmer()
+                seriesShimmerLayout.visibility = View.GONE
+                seriesAdapter.notifyDataSetChanged()
 
-            EspressoIdlingResource.decrement()
-        })
+                EspressoIdlingResource.decrement()
+            })
+        }
     }
 }

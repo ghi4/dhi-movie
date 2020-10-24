@@ -21,9 +21,9 @@ class MovieFragment : Fragment() {
     private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_movie, container, false)
     }
@@ -31,7 +31,7 @@ class MovieFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (activity != null) {
+        if (activity != null && view != null) {
             val factory = ViewModelFactory.getInstance()
             viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
             movieAdapter = MovieAdapter()
@@ -65,13 +65,15 @@ class MovieFragment : Fragment() {
     }
 
     private fun viewModelObserve() {
-        viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
-            movieAdapter.setMovies(movieList as ArrayList<ShowEntity>)
-            movieShimmerLayout.stopShimmer()
-            movieShimmerLayout.visibility = View.GONE
-            movieAdapter.notifyDataSetChanged()
+        if (view != null) {
+            viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
+                movieAdapter.setMovies(movieList as ArrayList<ShowEntity>)
+                movieShimmerLayout.stopShimmer()
+                movieShimmerLayout.visibility = View.GONE
+                movieAdapter.notifyDataSetChanged()
 
-            EspressoIdlingResource.decrement()
-        })
+                EspressoIdlingResource.decrement()
+            })
+        }
     }
 }
