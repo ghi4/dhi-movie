@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import com.dhimas.dhiflix.utils.Utils
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
@@ -114,9 +115,11 @@ class DetailActivity : AppCompatActivity() {
         tv_overview.stopLoading()
         tv_detail_overview.stopLoading()
         tv_interest.stopLoading()
+        EspressoIdlingResource.decrement()
     }
 
     private fun startShimmering() {
+        EspressoIdlingResource.increment()
         iv_detail_poster.startLoading()
         tv_detail_title.startLoading()
         tv_detail_release_year.startLoading()

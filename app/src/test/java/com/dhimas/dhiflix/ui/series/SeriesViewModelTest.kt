@@ -48,7 +48,21 @@ internal class SeriesViewModelTest {
         verify(seriesRepository).getSeriesList()
 
         assertNotNull(seriesEntity)
-        assertEquals(12, seriesEntity?.size)
+        assertNotNull(seriesEntity?.get(0)?.id)
+        assertNotNull(seriesEntity?.get(0)?.title)
+        assertNotNull(seriesEntity?.get(0)?.releaseYear)
+        assertNotNull(seriesEntity?.get(0)?.overview)
+        assertNotNull(seriesEntity?.get(0)?.posterPath)
+        assertNotNull(seriesEntity?.get(0)?.backdropPath)
+
+        assertEquals(dummySeries.size, seriesEntity?.size)
+        assertEquals(dummySeries[0], seriesEntity?.get(0))
+        assertEquals(dummySeries[0].id, seriesEntity?.get(0)?.id)
+        assertEquals(dummySeries[0].title, seriesEntity?.get(0)?.title)
+        assertEquals(dummySeries[0].releaseYear, seriesEntity?.get(0)?.releaseYear)
+        assertEquals(dummySeries[0].overview, seriesEntity?.get(0)?.overview)
+        assertEquals(dummySeries[0].posterPath, seriesEntity?.get(0)?.posterPath)
+        assertEquals(dummySeries[0].backdropPath, seriesEntity?.get(0)?.backdropPath)
 
         viewModel.getSeries().observeForever(observer)
         verify(observer).onChanged(dummySeries)

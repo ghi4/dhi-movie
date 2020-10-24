@@ -49,7 +49,20 @@ internal class DetailViewModelTest {
         verify(showRepository).getMovieDetail(dummyMovie.id!!)
 
         assertNotNull(movieEntity)
+        assertNotNull(movieEntity?.id)
+        assertNotNull(movieEntity?.title)
+        assertNotNull(movieEntity?.releaseYear)
+        assertNotNull(movieEntity?.overview)
+        assertNotNull(movieEntity?.posterPath)
+        assertNotNull(movieEntity?.backdropPath)
+
+        assertEquals(dummyMovie, movieEntity)
+        assertEquals(dummyMovie.id, movieEntity?.id)
         assertEquals(dummyMovie.title, movieEntity?.title)
+        assertEquals(dummyMovie.releaseYear, movieEntity?.releaseYear)
+        assertEquals(dummyMovie.overview, movieEntity?.overview)
+        assertEquals(dummyMovie.posterPath, movieEntity?.posterPath)
+        assertEquals(dummyMovie.backdropPath, movieEntity?.backdropPath)
 
         viewModel.getShowEntityById(dummyMovie.id!!, DetailActivity.EXTRA_FROM_MOVIES)
                 .observeForever(observer)
@@ -69,7 +82,20 @@ internal class DetailViewModelTest {
         verify(showRepository).getSeriesDetail(dummySeries.id!!)
 
         assertNotNull(seriesEntity)
+        assertNotNull(seriesEntity?.id)
+        assertNotNull(seriesEntity?.title)
+        assertNotNull(seriesEntity?.releaseYear)
+        assertNotNull(seriesEntity?.overview)
+        assertNotNull(seriesEntity?.posterPath)
+        assertNotNull(seriesEntity?.backdropPath)
+
+        assertEquals(dummySeries, seriesEntity)
+        assertEquals(dummySeries.id, seriesEntity?.id)
         assertEquals(dummySeries.title, seriesEntity?.title)
+        assertEquals(dummySeries.releaseYear, seriesEntity?.releaseYear)
+        assertEquals(dummySeries.overview, seriesEntity?.overview)
+        assertEquals(dummySeries.posterPath, seriesEntity?.posterPath)
+        assertEquals(dummySeries.backdropPath, seriesEntity?.backdropPath)
 
         viewModel.getShowEntityById(dummySeries.id!!, DetailActivity.EXTRA_FROM_SERIES)
                 .observeForever(observer)

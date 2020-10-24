@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_movie.*
 
@@ -34,6 +35,8 @@ class MovieFragment : Fragment() {
             val factory = ViewModelFactory.getInstance()
             viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
             movieAdapter = MovieAdapter()
+
+            EspressoIdlingResource.increment()
 
             if (!viewModel.isAlreadyShimmer) {
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -64,6 +67,8 @@ class MovieFragment : Fragment() {
             movieShimmerLayout.stopShimmer()
             movieShimmerLayout.visibility = View.GONE
             movieAdapter.notifyDataSetChanged()
+
+            EspressoIdlingResource.decrement()
         })
     }
 }

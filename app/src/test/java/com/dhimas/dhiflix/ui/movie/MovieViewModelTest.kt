@@ -48,7 +48,21 @@ internal class MovieViewModelTest {
         verify(movieRepository).getMovieList()
 
         assertNotNull(movieEntity)
-        assertEquals(12, movieEntity?.size)
+        assertNotNull(movieEntity?.get(0)?.id)
+        assertNotNull(movieEntity?.get(0)?.title)
+        assertNotNull(movieEntity?.get(0)?.releaseYear)
+        assertNotNull(movieEntity?.get(0)?.overview)
+        assertNotNull(movieEntity?.get(0)?.posterPath)
+        assertNotNull(movieEntity?.get(0)?.backdropPath)
+
+        assertEquals(dummyMovie.size, movieEntity?.size)
+        assertEquals(dummyMovie[0], movieEntity?.get(0))
+        assertEquals(dummyMovie[0].id, movieEntity?.get(0)?.id)
+        assertEquals(dummyMovie[0].title, movieEntity?.get(0)?.title)
+        assertEquals(dummyMovie[0].releaseYear, movieEntity?.get(0)?.releaseYear)
+        assertEquals(dummyMovie[0].overview, movieEntity?.get(0)?.overview)
+        assertEquals(dummyMovie[0].posterPath, movieEntity?.get(0)?.posterPath)
+        assertEquals(dummyMovie[0].backdropPath, movieEntity?.get(0)?.backdropPath)
 
         viewModel.getMovies().observeForever(observer)
         verify(observer).onChanged(dummyMovie)

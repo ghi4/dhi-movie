@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_series.*
 
@@ -35,7 +36,9 @@ class SeriesFragment : Fragment() {
             viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
             seriesAdapter = SeriesAdapter()
 
-            if(!viewModel.isAlreadyShimmer) {
+            EspressoIdlingResource.increment()
+
+            if (!viewModel.isAlreadyShimmer) {
                 Handler(Looper.getMainLooper()).postDelayed({
                     viewModelObserve()
                     viewModel.setAlreadyShimmer()
@@ -47,7 +50,7 @@ class SeriesFragment : Fragment() {
             }
 
             val phoneOrientation = requireActivity().resources.configuration.orientation
-            if(phoneOrientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) {
                 rv_series.layoutManager = GridLayoutManager(context, 3)
             } else {
                 rv_series.layoutManager = GridLayoutManager(context, 7)
@@ -64,6 +67,8 @@ class SeriesFragment : Fragment() {
             seriesShimmerLayout.stopShimmer()
             seriesShimmerLayout.visibility = View.GONE
             seriesAdapter.notifyDataSetChanged()
+
+            EspressoIdlingResource.decrement()
         })
     }
 }

@@ -43,6 +43,12 @@ internal class ShowRepositoryTest {
         verify(remote).getMovieList(any())
 
         assertNotNull(movieEntities)
+        assertNotNull(movieEntities[0].id)
+        assertNotNull(movieEntities[0].title)
+        assertNotNull(movieEntities[0].releaseYear)
+        assertNotNull(movieEntities[0].overview)
+        assertNotNull(movieEntities[0].posterPath)
+        assertNotNull(movieEntities[0].backdropPath)
         assertEquals(movieResponses.size, movieEntities.size)
     }
 
@@ -59,6 +65,12 @@ internal class ShowRepositoryTest {
         verify(remote).getSeriesList(any())
 
         assertNotNull(seriesEntities)
+        assertNotNull(seriesEntities[0].id)
+        assertNotNull(seriesEntities[0].title)
+        assertNotNull(seriesEntities[0].releaseYear)
+        assertNotNull(seriesEntities[0].overview)
+        assertNotNull(seriesEntities[0].posterPath)
+        assertNotNull(seriesEntities[0].backdropPath)
         assertEquals(seriesResponses.size, seriesEntities.size)
     }
 
@@ -75,7 +87,18 @@ internal class ShowRepositoryTest {
         verify(remote).getMovieDetail(eq(movieId), any())
 
         assertNotNull(movieDetail)
+        assertNotNull(movieDetail.id)
+        assertNotNull(movieDetail.title)
+        assertNotNull(movieDetail.releaseYear)
+        assertNotNull(movieDetail.overview)
+        assertNotNull(movieDetail.posterPath)
+        assertNotNull(movieDetail.backdropPath)
+        assertEquals(movieDetailResponse.show_id, movieDetail.id)
         assertEquals(movieDetailResponse.title, movieDetail.title)
+        assertEquals(movieDetailResponse.releaseDate, movieDetail.releaseYear)
+        assertEquals(movieDetailResponse.overview, movieDetail.overview)
+        assertEquals(movieDetailResponse.posterPath, movieDetail.posterPath)
+        assertEquals(movieDetailResponse.backdropPath, movieDetail.backdropPath)
     }
 
     @Test
@@ -91,7 +114,18 @@ internal class ShowRepositoryTest {
         verify(remote).getSeriesDetail(eq(seriesId), any())
 
         assertNotNull(seriesDetail)
+        assertNotNull(seriesDetail.id)
+        assertNotNull(seriesDetail.title)
+        assertNotNull(seriesDetail.releaseYear)
+        assertNotNull(seriesDetail.overview)
+        assertNotNull(seriesDetail.posterPath)
+        assertNotNull(seriesDetail.backdropPath)
+        assertEquals(seriesDetailResponse.series_id, seriesDetail.id)
         assertEquals(seriesDetailResponse.name, seriesDetail.title)
+        assertEquals(seriesDetailResponse.releaseDate, seriesDetail.releaseYear)
+        assertEquals(seriesDetailResponse.overview, seriesDetail.overview)
+        assertEquals(seriesDetailResponse.posterPath, seriesDetail.posterPath)
+        assertEquals(seriesDetailResponse.backdropPath, seriesDetail.backdropPath)
     }
 
 }
