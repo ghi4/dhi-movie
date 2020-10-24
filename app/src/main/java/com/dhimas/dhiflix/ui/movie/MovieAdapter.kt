@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.ShowEntity
 import com.dhimas.dhiflix.ui.detail.DetailActivity
+import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.Utils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
@@ -41,12 +42,9 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 tv_title.text = movie.title
                 tv_release_date.text = Utils.dateParseToMonthAndYear(movie.releaseDate!!)
 
-                val posterTargetWidth = 200
-                val posterTargetHeight = 300
-
                 Picasso.get()
-                    .load("https://image.tmdb.org/t/p/w500" + movie.posterPath!!)
-                    .resize(posterTargetWidth, posterTargetHeight)
+                    .load(Constant.URL_BASE_IMAGE + movie.posterPath!!)
+                    .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.image_error_2_3)
                     .placeholder(R.drawable.poster_placeholder)
                     .into(iv_poster)
@@ -56,7 +54,6 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                     intent.putExtra(DetailActivity.EXTRA_SHOW_ID, movie.id)
 
                     //Used for checking if the show entity is from movie page
-                    //Sending empty value because I use key for checking without read the data
                     intent.putExtra(
                         DetailActivity.EXTRA_SHOW_TYPE,
                         DetailActivity.EXTRA_FROM_MOVIES

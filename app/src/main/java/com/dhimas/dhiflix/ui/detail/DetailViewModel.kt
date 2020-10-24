@@ -16,6 +16,7 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
 
     fun getShowEntityById(show_id: String, show_type: String): LiveData<ShowEntity> {
 
+        //Prevent re-load when rotating phone
         if (showEntity == null) {
             when (show_type) {
                 DetailActivity.EXTRA_FROM_MOVIES -> {
@@ -32,6 +33,7 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
 
     fun getShowList(show_type: String): LiveData<List<ShowEntity>> {
 
+        //Prevent re-load when rotating phone
         if (showList == null) {
             when (show_type) {
                 DetailActivity.EXTRA_FROM_MOVIES -> {

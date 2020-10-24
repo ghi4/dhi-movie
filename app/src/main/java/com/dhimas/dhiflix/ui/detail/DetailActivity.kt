@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import com.dhimas.dhiflix.utils.Utils
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
@@ -49,15 +50,15 @@ class DetailActivity : AppCompatActivity() {
 
         startShimmering()
 
-        //Minimum shimmer time
-        //If data loaded too fast causing awkward animation/view
-        val shimmerTime = 1000L
+        //Prevent shimmer take too long when phone rotating
         if (!viewModel.isAlreadyShimmer) {
+            //If loading too fast. Shimmer look awkward.
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModelObserve()
                 viewModel.setAlreadyShimmer()
-            }, shimmerTime)
+            }, Constant.MINIMUM_SHIMMER_TIME)
 
+            //Have its own shimmer delay
             viewModel.getShowList(showType).observe(this, { movieList ->
                 detailAdapter.setMovies(movieList as ArrayList<ShowEntity>, showType, false)
                 detailAdapter.notifyDataSetChanged()
@@ -66,8 +67,9 @@ class DetailActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModelObserve()
                 viewModel.setAlreadyShimmer()
-            }, shimmerTime / 10)
+            }, Constant.MINIMUM_SHIMMER_TIME / 10)
 
+            //Have its own shimmer delay
             viewModel.getShowList(showType).observe(this, { movieList ->
                 detailAdapter.setMovies(movieList as ArrayList<ShowEntity>, showType, true)
                 detailAdapter.notifyDataSetChanged()
@@ -86,26 +88,18 @@ class DetailActivity : AppCompatActivity() {
             tv_detail_release_date.text = Utils.dateParseToMonthAndYear(showEntity.releaseDate!!)
             tv_detail_overview.text = showEntity.overview
 
-            //For backdrop image
-            val backdropTargetWidth = 1280
-            val backdropTargetHeight = 720
-
             Picasso.get()
-                .load("https://image.tmdb.org/t/p/w500" + showEntity.backdropPath!!)
+                .load(Constant.URL_BASE_IMAGE + showEntity.backdropPath!!)
                 .placeholder(R.drawable.backdrop_placeholder)
                 .error(R.drawable.image_error)
-                .resize(backdropTargetWidth, backdropTargetHeight)
+                .resize(Constant.BACKDROP_TARGET_WIDTH, Constant.BACKDROP_TARGET_HEIGHT)
                 .into(iv_detail_backdrop)
 
-            //For poster image
-            val posterTargetWidth = 200
-            val posterTargetHeight = 300
-
             Picasso.get()
-                .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
+                .load(Constant.URL_BASE_IMAGE + showEntity.posterPath!!)
                 .placeholder(R.drawable.poster_placeholder)
                 .error(R.drawable.image_error_2_3)
-                .resize(posterTargetWidth, posterTargetHeight)
+                .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
                 .into(iv_detail_poster)
 
             stopShimmering()

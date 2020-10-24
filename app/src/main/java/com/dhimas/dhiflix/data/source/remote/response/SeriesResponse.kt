@@ -3,6 +3,7 @@ package com.dhimas.dhiflix.data.source.remote.response
 import com.google.gson.annotations.SerializedName
 
 data class SeriesResponse(
+
     @SerializedName("id")
     var series_id: String,
 
@@ -20,4 +21,5 @@ data class SeriesResponse(
 
     @SerializedName("backdrop_path")
     var backdropPath: String
+
 )

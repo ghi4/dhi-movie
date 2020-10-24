@@ -14,6 +14,8 @@ class SeriesViewModel(private val showRepository: ShowRepository) : ViewModel() 
     }
 
     fun getSeries(): LiveData<List<ShowEntity>> {
+
+        //Prevent re-load when rotating phone
         if (seriesList == null) {
             seriesList = showRepository.getSeriesList()
         }

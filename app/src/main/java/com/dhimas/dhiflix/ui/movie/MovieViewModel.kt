@@ -14,6 +14,8 @@ class MovieViewModel(private val showRepository: ShowRepository) : ViewModel() {
     }
 
     fun getMovies(): LiveData<List<ShowEntity>> {
+
+        //Prevent re-load when rotating phone
         if (movieList == null) {
             movieList = showRepository.getMovieList()
         }

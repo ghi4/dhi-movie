@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_movie.*
@@ -38,20 +39,20 @@ class MovieFragment : Fragment() {
 
             EspressoIdlingResource.increment()
 
-            //Minimum shimmer time
-            //If data loaded too fast causing awkward animation/view
-            val shimmerTime = 1000L
+            //Prevent re-shimmer when rotating phone
             if (!viewModel.isAlreadyShimmer) {
+                //If data loaded too fast causing awkward animation/view
                 Handler(Looper.getMainLooper()).postDelayed({
                     viewModelObserve()
                     viewModel.setAlreadyShimmer()
-                }, shimmerTime)
+                }, Constant.MINIMUM_SHIMMER_TIME)
             } else {
                 movieShimmerLayout.stopShimmer()
                 movieShimmerLayout.visibility = View.GONE
                 viewModelObserve()
             }
 
+            //Change grid layout spanCount when Landscape/Portrait
             val phoneOrientation = requireActivity().resources.configuration.orientation
             if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) {
                 rv_movie.layoutManager = GridLayoutManager(context, 3)

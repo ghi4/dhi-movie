@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.utils.Constant
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie_horizontal.view.*
 
@@ -40,29 +41,26 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(showEntity: ShowEntity, type: String, isAlreadyShimmer: Boolean) {
             with(itemView) {
-                val posterTargetWidth = 200
-                val posterTargetHeight = 300
 
                 iv_poster_horizontal.startLoading()
 
                 Picasso.get()
-                    .load("https://image.tmdb.org/t/p/w500" + showEntity.posterPath!!)
-                    .resize(posterTargetWidth, posterTargetHeight)
+                    .load(Constant.URL_BASE_IMAGE + showEntity.posterPath!!)
+                    .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.image_error_2_3)
                     .placeholder(R.drawable.poster_placeholder)
                     .into(iv_poster_horizontal)
 
-                //Minimum shimmer time
-                //If data loaded too fast causing awkward animation/view
-                val shimmerTime = 1000L
+                //Prevent re-shimmer when scrolling view
                 if (!isAlreadyShimmer) {
+                    //If data loaded too fast causing awkward animation/view
                     Handler(Looper.getMainLooper()).postDelayed({
                         iv_poster_horizontal.stopLoading()
-                    }, shimmerTime)
+                    }, Constant.MINIMUM_SHIMMER_TIME)
                 } else {
                     Handler(Looper.getMainLooper()).postDelayed({
                         iv_poster_horizontal.stopLoading()
-                    }, shimmerTime / 10)
+                    }, Constant.MINIMUM_SHIMMER_TIME / 10)
                 }
 
                 cv_poster_horizontal.setOnClickListener {
@@ -70,7 +68,6 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                     intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
 
                     //Used for checking the show title type is movie or series
-                    //Sending empty message because I use key for checking without read the data
                     intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, type)
 
                     context.startActivity(intent)

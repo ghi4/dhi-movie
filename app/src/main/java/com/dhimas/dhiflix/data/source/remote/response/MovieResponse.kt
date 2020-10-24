@@ -6,6 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class MovieResponse(
+
     @SerializedName("id")
     var movie_id: String,
 
