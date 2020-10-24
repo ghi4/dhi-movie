@@ -1,2 +1,2 @@
 # dhi-movie
-Dicoding - Android Jetpack - Submission 1
+Dicoding - Android Jetpack - Submission
