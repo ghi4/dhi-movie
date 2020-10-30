@@ -1,6 +1,6 @@
 package com.dhimas.dhiflix.utils
 
-import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.data.source.remote.response.SeriesResponse
 

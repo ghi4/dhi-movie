@@ -9,7 +9,7 @@ object Utils {
         val parser = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         val formatter = SimpleDateFormat("MMMM yyyy", Locale.ENGLISH)
 
-        return formatter.format(parser.parse(date)!!)
+        return formatter.format(parser.parse(date) as Date)
     }
 
 }

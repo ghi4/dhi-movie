@@ -3,7 +3,7 @@ package com.dhimas.dhiflix.ui.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.dhimas.dhiflix.data.ShowRepository
-import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 
 class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() {
     private var showEntity: LiveData<ShowEntity>? = null

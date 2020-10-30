@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
     id 'kotlin-android-extensions'
     id 'de.mannodermaus.android-junit5'
 }
@@ -73,6 +74,14 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.github.AgnaldoNP:AGSkeletonLoading:1.1'
 
+    //Room
+    implementation "androidx.room:room-runtime:2.2.5"
+    kapt "androidx.room:room-compiler:2.2.5"
+
+    //Hilt
+    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
+
     //Mockito
     testImplementation "org.mockito:mockito-core:3.3.3"
     testImplementation "org.mockito:mockito-inline:3.0.0"
@@ -82,7 +91,7 @@ dependencies {
     implementation "androidx.test.espresso:espresso-idling-resource:3.3.0"
 
     testImplementation 'junit:junit:4.13.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

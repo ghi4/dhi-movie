@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.dhimas.dhiflix.data.ShowRepository
-import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.DummyData
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals

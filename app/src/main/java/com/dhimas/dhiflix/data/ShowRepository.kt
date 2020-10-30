@@ -2,7 +2,7 @@ package com.dhimas.dhiflix.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.dhimas.dhiflix.data.source.local.ShowEntity
+import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.data.source.remote.RemoteDataSource
 import com.dhimas.dhiflix.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.data.source.remote.response.SeriesResponse

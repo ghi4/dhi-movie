@@ -15,5 +15,9 @@ class Constant {
 
         //If loading too fast. Shimmer look awkward.
         const val MINIMUM_SHIMMER_TIME = 1000L
+
+        //For knowing the show type (Movie/Series)
+        const val MOVIE_TYPE = 0
+        const val SERIES_TYPE = 1
     }
 }
