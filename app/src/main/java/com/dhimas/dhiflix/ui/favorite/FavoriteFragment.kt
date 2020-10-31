@@ -24,8 +24,8 @@ import kotlinx.android.synthetic.main.fragment_favorite.*
 class FavoriteFragment : Fragment() {
 
     private lateinit var viewModel: FavoriteViewModel
-    private lateinit var favoriteMovieAdapter: DetailAdapter
-    private lateinit var favoriteSeriesAdapter: DetailAdapter
+    private lateinit var favoriteMovieAdapter: FavoriteAdapter
+    private lateinit var favoriteSeriesAdapter: FavoriteAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,8 +42,8 @@ class FavoriteFragment : Fragment() {
             val factory = ViewModelFactory.getInstance(requireContext())
             viewModel = ViewModelProvider(this, factory)[FavoriteViewModel::class.java]
 
-            favoriteMovieAdapter = DetailAdapter()
-            favoriteSeriesAdapter = DetailAdapter()
+            favoriteMovieAdapter = FavoriteAdapter()
+            favoriteSeriesAdapter = FavoriteAdapter()
 
             viewModel.getFavoriteMovies().observe(viewLifecycleOwner, {favoriteMovieList ->
                 if(favoriteMovieList != null){
@@ -53,7 +53,8 @@ class FavoriteFragment : Fragment() {
                         }
                         Status.SUCCESS -> {
                             Log.d("Kucing", "${favoriteMovieList.data?.size}")
-                            favoriteMovieAdapter.setMovies(favoriteMovieList.data as ArrayList<ShowEntity>, DetailActivity.EXTRA_FROM_MOVIES, true)
+                            favoriteMovieAdapter.submitList(favoriteMovieList.data)
+                            favoriteMovieAdapter.setMovies(DetailActivity.EXTRA_FROM_MOVIES, true)
                             rv_favorite_movie.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                             rv_favorite_movie.hasFixedSize()
                             favoriteMovieAdapter.notifyDataSetChanged()
@@ -74,7 +75,8 @@ class FavoriteFragment : Fragment() {
                         }
                         Status.SUCCESS -> {
                             Log.d("Kucing", "${favoriteSeriesList.data?.size}")
-                            favoriteSeriesAdapter.setMovies(favoriteSeriesList.data as ArrayList<ShowEntity>, DetailActivity.EXTRA_FROM_SERIES, true)
+                            favoriteSeriesAdapter.submitList(favoriteSeriesList.data)
+                            favoriteSeriesAdapter.setMovies(DetailActivity.EXTRA_FROM_SERIES, true)
                             rv_favorite_series.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                             rv_favorite_series.hasFixedSize()
                             favoriteSeriesAdapter.notifyDataSetChanged()
