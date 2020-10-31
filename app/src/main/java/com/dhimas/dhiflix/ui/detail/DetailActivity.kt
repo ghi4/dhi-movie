@@ -3,6 +3,7 @@ package com.dhimas.dhiflix.ui.detail
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import com.dhimas.dhiflix.utils.Utils
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
+import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -40,7 +42,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        val factory = ViewModelFactory.getInstance()
+        val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
 
         detailAdapter = DetailAdapter()
@@ -60,8 +62,11 @@ class DetailActivity : AppCompatActivity() {
 
             //Have its own shimmer delay
             viewModel.getShowList(showType).observe(this, { movieList ->
-                detailAdapter.setMovies(movieList as ArrayList<ShowEntity>, showType, false)
-                detailAdapter.notifyDataSetChanged()
+                if(Status.SUCCESS == movieList.status){
+                    detailAdapter.setMovies(movieList.data as ArrayList<ShowEntity>, showType, false)
+                    detailAdapter.notifyDataSetChanged()
+                }
+
             })
         } else {
             Handler(Looper.getMainLooper()).postDelayed({
@@ -71,8 +76,10 @@ class DetailActivity : AppCompatActivity() {
 
             //Have its own shimmer delay
             viewModel.getShowList(showType).observe(this, { movieList ->
-                detailAdapter.setMovies(movieList as ArrayList<ShowEntity>, showType, true)
-                detailAdapter.notifyDataSetChanged()
+                if(Status.SUCCESS == movieList.status) {
+                    detailAdapter.setMovies(movieList.data as ArrayList<ShowEntity>, showType, true)
+                    detailAdapter.notifyDataSetChanged()
+                }
             })
         }
 
@@ -84,25 +91,40 @@ class DetailActivity : AppCompatActivity() {
 
     private fun viewModelObserve() {
         viewModel.getShowEntityById(showId, showType).observe(this, { showEntity ->
-            tv_detail_title.text = showEntity.title
-            tv_detail_release_date.text = Utils.dateParseToMonthAndYear(showEntity.releaseDate!!)
-            tv_detail_overview.text = showEntity.overview
+            if(showEntity != null){
+                when(showEntity.status){
+                    Status.LOADING -> Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+                    Status.SUCCESS -> {
+                        if(showEntity.data != null) {
+                            tv_detail_title.text = showEntity.data.title
+                            tv_detail_release_date.text =
+                                Utils.dateParseToMonthAndYear(showEntity.data.releaseDate!!)
+                            tv_detail_overview.text = showEntity.data.overview
 
-            Picasso.get()
-                .load(Constant.URL_BASE_IMAGE + showEntity.backdropPath)
-                .placeholder(R.drawable.backdrop_placeholder)
-                .error(R.drawable.image_error)
-                .resize(Constant.BACKDROP_TARGET_WIDTH, Constant.BACKDROP_TARGET_HEIGHT)
-                .into(iv_detail_backdrop)
+                            Picasso.get()
+                                .load(Constant.URL_BASE_IMAGE + showEntity.data.backdropPath)
+                                .placeholder(R.drawable.backdrop_placeholder)
+                                .error(R.drawable.image_error)
+                                .resize(
+                                    Constant.BACKDROP_TARGET_WIDTH,
+                                    Constant.BACKDROP_TARGET_HEIGHT
+                                )
+                                .into(iv_detail_backdrop)
 
-            Picasso.get()
-                .load(Constant.URL_BASE_IMAGE + showEntity.posterPath)
-                .placeholder(R.drawable.poster_placeholder)
-                .error(R.drawable.image_error_2_3)
-                .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
-                .into(iv_detail_poster)
+                            Picasso.get()
+                                .load(Constant.URL_BASE_IMAGE + showEntity.data.posterPath)
+                                .placeholder(R.drawable.poster_placeholder)
+                                .error(R.drawable.image_error_2_3)
+                                .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
+                                .into(iv_detail_poster)
 
-            stopShimmering()
+                            stopShimmering()
+                        }
+                    }
+                }
+            }
+
+
         })
     }
 

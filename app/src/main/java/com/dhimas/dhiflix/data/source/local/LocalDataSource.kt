@@ -15,7 +15,7 @@ class LocalDataSource private constructor(private val showDao: ShowDao){
 
     fun getAllMovie(): LiveData<List<ShowEntity>> = showDao.getMovies()
 
-    fun getAllSeries(): LiveData<List<ShowEntity>> = showDao.getMovies()
+    fun getAllSeries(): LiveData<List<ShowEntity>> = showDao.getSeries()
 
     fun getShowById(showId: String): LiveData<ShowEntity> = showDao.getShowById(showId)
 

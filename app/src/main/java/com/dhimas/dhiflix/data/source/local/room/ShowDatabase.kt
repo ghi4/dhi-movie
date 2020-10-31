@@ -26,4 +26,6 @@ abstract class ShowDatabase: RoomDatabase() {
             return INSTANCE as ShowDatabase
         }
     }
+
+    abstract fun showDao(): ShowDao
 }

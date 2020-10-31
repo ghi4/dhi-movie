@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,6 +16,7 @@ import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
+import com.dhimas.dhiflix.vo.Status
 import kotlinx.android.synthetic.main.fragment_series.*
 
 class SeriesFragment : Fragment() {
@@ -32,8 +34,8 @@ class SeriesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (activity != null && view != null) {
-            val factory = ViewModelFactory.getInstance()
+        if (activity != null && view != null && context != null) {
+            val factory = ViewModelFactory.getInstance(requireContext())
             viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
             seriesAdapter = SeriesAdapter()
 
@@ -67,14 +69,25 @@ class SeriesFragment : Fragment() {
 
     private fun viewModelObserve() {
         if (view != null) {
-            viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
-                seriesAdapter.setSeries(seriesList as ArrayList<ShowEntity>)
-                seriesShimmerLayout.stopShimmer()
-                seriesShimmerLayout.visibility = View.GONE
-                seriesAdapter.notifyDataSetChanged()
-
-                EspressoIdlingResource.decrement()
+            viewModel.getSeries().observe(viewLifecycleOwner, {seriesList ->
+                if(seriesList != null){
+                    when(seriesList.status){
+                        Status.LOADING -> Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
+                        Status.SUCCESS -> {
+                            seriesAdapter.setSeries(seriesList.data as ArrayList<ShowEntity>)
+                            seriesAdapter.notifyDataSetChanged()
+                            seriesShimmerLayout.stopShimmer()
+                            seriesShimmerLayout.visibility = View.GONE
+                        }
+                        Status.ERROR -> {
+                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                            seriesShimmerLayout.stopShimmer()
+                            seriesShimmerLayout.visibility = View.GONE
+                        }
+                    }
+                }
             })
+
         }
     }
 }

@@ -22,4 +22,6 @@ data class SeriesResponse(
     @SerializedName("backdrop_path")
     var backdropPath: String
 
-)
+) {
+    constructor() : this("", "", "", "", "", "")
+}

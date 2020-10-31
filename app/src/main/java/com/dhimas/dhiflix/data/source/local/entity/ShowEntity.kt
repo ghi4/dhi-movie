@@ -1,6 +1,7 @@
 package com.dhimas.dhiflix.data.source.local.entity
 
 import android.os.Parcelable
+import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
@@ -10,7 +11,8 @@ import kotlinx.android.parcel.Parcelize
 data class ShowEntity(
 
     @PrimaryKey
-    var id: String? = null,
+    @NonNull
+    var id: String,
 
     var title: String? = null,
 

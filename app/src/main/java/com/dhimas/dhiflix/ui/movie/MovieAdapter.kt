@@ -40,7 +40,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
         fun bind(movie: ShowEntity) {
             with(itemView) {
                 tv_title.text = movie.title
-                tv_release_date.text = Utils.dateParseToMonthAndYear(movie.releaseDate!!)
+                tv_release_date.text = Utils.dateParseToMonthAndYear(movie.releaseDate)
 
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + movie.posterPath!!)

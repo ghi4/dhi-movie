@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,7 +16,9 @@ import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
+import com.dhimas.dhiflix.vo.Status
 import kotlinx.android.synthetic.main.fragment_movie.*
+import kotlinx.android.synthetic.main.fragment_series.*
 
 class MovieFragment : Fragment() {
     private lateinit var viewModel: MovieViewModel
@@ -32,8 +35,8 @@ class MovieFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (activity != null && view != null) {
-            val factory = ViewModelFactory.getInstance()
+        if (activity != null && view != null && context != null) {
+            val factory = ViewModelFactory.getInstance(requireContext())
             viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
             movieAdapter = MovieAdapter()
 
@@ -68,13 +71,24 @@ class MovieFragment : Fragment() {
     private fun viewModelObserve() {
         if (view != null) {
             viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
-                movieAdapter.setMovies(movieList as ArrayList<ShowEntity>)
-                movieShimmerLayout.stopShimmer()
-                movieShimmerLayout.visibility = View.GONE
-                movieAdapter.notifyDataSetChanged()
-
-                EspressoIdlingResource.decrement()
+                if(movieList != null){
+                    when(movieList.status) {
+                        Status.LOADING -> Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
+                        Status.SUCCESS -> {
+                            movieAdapter.setMovies(movieList.data as ArrayList<ShowEntity>)
+                            movieAdapter.notifyDataSetChanged()
+                            movieShimmerLayout.stopShimmer()
+                            movieShimmerLayout.visibility = View.GONE
+                        }
+                        Status.ERROR -> {
+                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                            movieShimmerLayout.stopShimmer()
+                            movieShimmerLayout.visibility = View.GONE
+                        }
+                    }
+                }
             })
+
         }
     }
 }

@@ -9,6 +9,7 @@ import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Constant
+import com.dhimas.dhiflix.utils.Utils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
@@ -36,7 +37,7 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
         fun bind(series: ShowEntity) {
             with(itemView) {
                 tv_title.text = series.title
-                tv_release_date.text = series.releaseDate
+                tv_release_date.text = Utils.dateParseToMonthAndYear(series.releaseDate)
 
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + series.posterPath!!)
