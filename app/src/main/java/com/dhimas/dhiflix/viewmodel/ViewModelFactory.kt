@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.di.Injection
 import com.dhimas.dhiflix.ui.detail.DetailViewModel
+import com.dhimas.dhiflix.ui.favorite.FavoriteViewModel
 import com.dhimas.dhiflix.ui.movie.MovieViewModel
 import com.dhimas.dhiflix.ui.series.SeriesViewModel
 
@@ -35,6 +36,10 @@ class ViewModelFactory private constructor(private val showRepository: ShowRepos
 
             modelClass.isAssignableFrom(SeriesViewModel::class.java) -> {
                 SeriesViewModel(showRepository) as T
+            }
+
+            modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> {
+                FavoriteViewModel(showRepository) as T
             }
 
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)

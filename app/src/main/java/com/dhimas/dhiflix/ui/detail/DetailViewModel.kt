@@ -44,4 +44,8 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
     private fun getMovies(): LiveData<Resource<List<ShowEntity>>> = showRepository.getMovieList()
 
     private fun getSeries(): LiveData<Resource<List<ShowEntity>>> = showRepository.getSeriesList()
+
+    fun setFavorite(showEntity: ShowEntity) {
+        showRepository.setFavorite(showEntity)
+    }
 }

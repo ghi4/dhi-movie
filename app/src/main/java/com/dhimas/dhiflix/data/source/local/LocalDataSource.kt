@@ -1,6 +1,7 @@
 package com.dhimas.dhiflix.data.source.local
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.data.source.local.room.ShowDao
 
@@ -16,6 +17,10 @@ class LocalDataSource private constructor(private val showDao: ShowDao){
     fun getAllMovie(): LiveData<List<ShowEntity>> = showDao.getMovies()
 
     fun getAllSeries(): LiveData<List<ShowEntity>> = showDao.getSeries()
+
+    fun getAllFavoriteMovie(): DataSource.Factory<Int, ShowEntity> = showDao.getFavoriteMovies()
+
+    fun getAllFavoriteSeries(): DataSource.Factory<Int, ShowEntity> = showDao.getFavoriteSeries()
 
     fun getShowById(showId: String): LiveData<ShowEntity> = showDao.getShowById(showId)
 

@@ -24,6 +24,8 @@ data class ShowEntity(
 
     var backdropPath: String? = null,
 
-    var show_type: Int? = null
+    var show_type: Int? = null,
+
+    var isFavorite: Int? = 0
 
 ) : Parcelable

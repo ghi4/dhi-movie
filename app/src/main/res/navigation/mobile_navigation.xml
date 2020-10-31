@@ -14,4 +14,9 @@
         android:name="com.dhimas.dhiflix.ui.series.SeriesFragment"
         tools:layout="@layout/fragment_series" />
 
+    <fragment
+        android:id="@+id/navigation_favorite"
+        android:name="com.dhimas.dhiflix.ui.favorite.FavoriteFragment"
+        tools:layout="@layout/fragment_favorite" />
+
 </navigation>

@@ -119,6 +119,12 @@ class DetailActivity : AppCompatActivity() {
                                 .into(iv_detail_poster)
 
                             stopShimmering()
+
+                            val showEntity2 = showEntity.data
+                            val showFav = showEntity2
+                            showFav.isFavorite = 1
+
+                            viewModel.setFavorite(showFav)
                         }
                     }
                 }
@@ -135,11 +141,9 @@ class DetailActivity : AppCompatActivity() {
         tv_overview.stopLoading()
         tv_detail_overview.stopLoading()
         tv_interest.stopLoading()
-        EspressoIdlingResource.decrement()
     }
 
     private fun startShimmering() {
-        EspressoIdlingResource.increment()
         iv_detail_poster.startLoading()
         tv_detail_title.startLoading()
         tv_detail_release_date.startLoading()
