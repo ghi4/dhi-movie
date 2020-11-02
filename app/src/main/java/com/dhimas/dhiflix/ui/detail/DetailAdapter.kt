@@ -3,6 +3,7 @@ package com.dhimas.dhiflix.ui.detail
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,8 +43,6 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
         fun bind(showEntity: ShowEntity, type: String, isAlreadyShimmer: Boolean) {
             with(itemView) {
 
-                iv_poster_horizontal.startLoading()
-
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + showEntity.posterPath!!)
                     .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
@@ -53,12 +52,15 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
 
                 //Prevent re-shimmer when scrolling view
                 if (!isAlreadyShimmer) {
+                    iv_poster_horizontal.startLoading()
                     //If data loaded too fast causing awkward animation/view
                     Handler(Looper.getMainLooper()).postDelayed({
+                        Log.d("Serigala", "isShimmer not yet")
                         iv_poster_horizontal.stopLoading()
                     }, Constant.MINIMUM_SHIMMER_TIME)
                 } else {
                     Handler(Looper.getMainLooper()).postDelayed({
+                        Log.d("Serigala", "isShimmer already")
                         iv_poster_horizontal.stopLoading()
                     }, Constant.MINIMUM_SHIMMER_TIME / 10)
                 }

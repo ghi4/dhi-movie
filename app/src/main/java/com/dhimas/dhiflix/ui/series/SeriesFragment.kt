@@ -69,10 +69,11 @@ class SeriesFragment : Fragment() {
 
     private fun viewModelObserve() {
         if (view != null) {
-            viewModel.getSeries().observe(viewLifecycleOwner, {seriesList ->
-                if(seriesList != null){
-                    when(seriesList.status){
-                        Status.LOADING -> Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
+            viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
+                if (seriesList != null) {
+                    when (seriesList.status) {
+                        Status.LOADING -> Toast.makeText(context, "Loading", Toast.LENGTH_SHORT)
+                            .show()
                         Status.SUCCESS -> {
                             seriesAdapter.setSeries(seriesList.data as ArrayList<ShowEntity>)
                             seriesAdapter.notifyDataSetChanged()

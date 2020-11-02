@@ -1,6 +1,5 @@
 package com.dhimas.dhiflix.data.source.remote
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dhimas.dhiflix.data.source.remote.response.MovieListResponse
@@ -12,7 +11,6 @@ import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.collections.ArrayList
 
 class RemoteDataSource private constructor(private val retrofitService: RetrofitInterface) {
 
@@ -41,7 +39,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                 if (response.isSuccessful) {
                     val mMovieListResponse = response.body()?.movieList
 
-                    if(!mMovieListResponse.isNullOrEmpty()){
+                    if (!mMovieListResponse.isNullOrEmpty()) {
                         movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
                         resultMovie.value = ApiResponse.success(movieListResponse)
                     } else {
@@ -77,12 +75,13 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                 if (response.isSuccessful) {
                     val mSeriesListResponse = response.body()?.seriesList
 
-                    if(!mSeriesListResponse.isNullOrEmpty()){
+                    if (!mSeriesListResponse.isNullOrEmpty()) {
                         seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
                         resultSeries.value = ApiResponse.success(seriesListResponse)
                     } else {
                         seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
-                        resultSeries.value = ApiResponse.empty(seriesListResponse, "No series found.")
+                        resultSeries.value =
+                            ApiResponse.empty(seriesListResponse, "No series found.")
                     }
 
                 }
@@ -109,7 +108,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                 if (response.isSuccessful) {
                     val movieResponse = response.body()
 
-                    if(movieResponse != null){
+                    if (movieResponse != null) {
                         resultMovie.value = ApiResponse.success(movieResponse)
                     } else {
                         resultMovie.value = ApiResponse.error(MovieResponse(), "No movie found")
@@ -137,10 +136,10 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                 call: Call<SeriesResponse>,
                 response: Response<SeriesResponse>
             ) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     val seriesResponse = response.body()
 
-                    if(seriesResponse != null){
+                    if (seriesResponse != null) {
                         resultSeries.value = ApiResponse.success(seriesResponse)
                     } else {
                         resultSeries.value = ApiResponse.empty(SeriesResponse(), "No Series Found")

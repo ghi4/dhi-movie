@@ -1,47 +1,55 @@
 package com.dhimas.dhiflix.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
+import com.dhimas.dhiflix.data.source.local.LocalDataSource
+import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.data.source.remote.RemoteDataSource
+import com.dhimas.dhiflix.utils.AppExecutors
 import com.dhimas.dhiflix.utils.DummyData
 import com.dhimas.dhiflix.utils.LiveDataTest
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.eq
+import com.dhimas.dhiflix.utils.PagedListUtil
+import com.dhimas.dhiflix.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 
 internal class ShowRepositoryTest {
 
-//    @get:Rule
-//    var instantTaskExecutorRule = InstantTaskExecutorRule()
-//
-//    private val remote = mock(RemoteDataSource::class.java)
-//    private val showRepository = FakeShowRepository(remote)
-//
-//    private val movieResponses = DummyData.generateRemoteDummyMovies()
-//    private val movieId = movieResponses[0].movie_id
-//    private val movieDetailResponse = movieResponses[0]
-//
-//    private val seriesResponses = DummyData.generateRemoteDummySeries()
-//    private val seriesId = seriesResponses[0].series_id
-//    private val seriesDetailResponse = seriesResponses[0]
-//
-//    @Test
-//    fun getAllMovies() {
-//        doAnswer { invocation ->
-//            (invocation.arguments[0] as RemoteDataSource.LoadMovieListCallback).onMovieListReceived(
-//                movieResponses
-//            )
-//            null
-//        }.`when`(remote).getMovieList(any())
-//
-//        val movieEntities = LiveDataTest.getValue(showRepository.getMovieList())
-//        verify(remote).getMovieList(any())
-//
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    private val remote = mock(RemoteDataSource::class.java)
+    private val local = mock(LocalDataSource::class.java)
+    private val appExecutors = mock(AppExecutors::class.java)
+
+    private val showRepository = FakeShowRepository(remote, local, appExecutors)
+
+    private val movieResponses = DummyData.generateRemoteDummyMovies()
+    private val movieId = movieResponses[0].movie_id
+    private val movieDetailResponse = movieResponses[0]
+
+    private val seriesResponses = DummyData.generateRemoteDummySeries()
+    private val seriesId = seriesResponses[0].series_id
+    private val seriesDetailResponse = seriesResponses[0]
+
+    @Test
+    fun getAllMovies() {
+        val dummyMovie = MutableLiveData<List<ShowEntity>>()
+        `when`(local.getAllMovie()).thenReturn(dummyMovie)
+        dummyMovie.value = DummyData.generateDummyMovies()
+
+        val movieEntities = LiveDataTest.getValue(showRepository.getMovieList())
+        verify(local).getAllMovie()
+
+        assertNotNull(movieEntities.data)
+        assertEquals(movieResponses.size.toLong(), movieEntities.data?.size?.toLong())
+
 //        assertNotNull(movieEntities)
 //        assertNotNull(movieEntities[0].id)
 //        assertNotNull(movieEntities[0].title)
@@ -50,19 +58,19 @@ internal class ShowRepositoryTest {
 //        assertNotNull(movieEntities[0].posterPath)
 //        assertNotNull(movieEntities[0].backdropPath)
 //        assertEquals(movieResponses.size, movieEntities.size)
-//    }
-//
-//    @Test
-//    fun getAllSeries() {
-//        doAnswer { invocation ->
-//            (invocation.arguments[0] as RemoteDataSource.LoadSeriesListCallback).onSeriesListReceived(
-//                seriesResponses
-//            )
-//            null
-//        }.`when`(remote).getSeriesList(any())
-//
-//        val seriesEntities = LiveDataTest.getValue(showRepository.getSeriesList())
-//        verify(remote).getSeriesList(any())
+    }
+
+    @Test
+    fun getAllSeries() {
+        val dummySeries = MutableLiveData<List<ShowEntity>>()
+        `when`(local.getAllSeries()).thenReturn(dummySeries)
+        dummySeries.value = DummyData.generateDummySeries()
+
+        val seriesEntities = LiveDataTest.getValue(showRepository.getSeriesList())
+        verify(local).getAllSeries()
+
+        assertNotNull(seriesEntities.data)
+
 //
 //        assertNotNull(seriesEntities)
 //        assertNotNull(seriesEntities[0].id)
@@ -72,7 +80,7 @@ internal class ShowRepositoryTest {
 //        assertNotNull(seriesEntities[0].posterPath)
 //        assertNotNull(seriesEntities[0].backdropPath)
 //        assertEquals(seriesResponses.size, seriesEntities.size)
-//    }
+    }
 //
 //    @Test
 //    fun getMovieDetail() {
@@ -127,5 +135,30 @@ internal class ShowRepositoryTest {
 //        assertEquals(seriesDetailResponse.posterPath, seriesDetail.posterPath)
 //        assertEquals(seriesDetailResponse.backdropPath, seriesDetail.backdropPath)
 //    }
+
+    @Test
+    fun getAllFavoriteMovie() {
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, ShowEntity>
+        `when`(local.getAllFavoriteMovie()).thenReturn(dataSourceFactory)
+        showRepository.getFavoriteMovieList()
+
+        val movieEntities = Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
+        verify(local).getAllFavoriteMovie()
+
+        assertNotNull(movieEntities.data)
+        assertEquals(movieResponses.size.toLong(), movieEntities.data?.size?.toLong())
+    }
+
+    @Test
+    fun getAllFavoriteSeries() {
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, ShowEntity>
+        `when`(local.getAllFavoriteSeries()).thenReturn(dataSourceFactory)
+
+        val seriesEntities = Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
+        verify(local).getAllFavoriteSeries()
+
+        assertNotNull(seriesEntities.data)
+        assertEquals(seriesResponses.size, seriesEntities.data?.size)
+    }
 
 }

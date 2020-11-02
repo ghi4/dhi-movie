@@ -16,7 +16,8 @@ import com.dhimas.dhiflix.utils.Constant
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie_horizontal.view.*
 
-class FavoriteAdapter internal constructor(): PagedListAdapter<ShowEntity, FavoriteAdapter.ShowViewHolder>(DIFF_CALLBACK){
+class FavoriteAdapter internal constructor() :
+    PagedListAdapter<ShowEntity, FavoriteAdapter.ShowViewHolder>(DIFF_CALLBACK) {
     private var listType = DetailActivity.EXTRA_FROM_MOVIES //Default type is movie
     private var isAlreadyShimmer: Boolean = false
 
@@ -26,7 +27,7 @@ class FavoriteAdapter internal constructor(): PagedListAdapter<ShowEntity, Favor
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShowEntity>(){
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShowEntity>() {
             override fun areItemsTheSame(oldItem: ShowEntity, newItem: ShowEntity): Boolean {
                 return oldItem.id == newItem.id
             }
@@ -37,24 +38,23 @@ class FavoriteAdapter internal constructor(): PagedListAdapter<ShowEntity, Favor
         }
     }
 
-    fun getSwipedData(swipedPosition: Int): ShowEntity = getItem(swipedPosition) as ShowEntity
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie_horizontal, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_movie_horizontal, parent, false)
 
         return ShowViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ShowViewHolder, position: Int) {
         val showEntity = getItem(position)
-        if(showEntity != null){
+        if (showEntity != null) {
             holder.bind(showEntity, listType, isAlreadyShimmer)
         }
     }
 
-    class ShowViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        fun bind(showEntity: ShowEntity, type: String, isAlreadyShimmer: Boolean){
-            with(itemView){
+    class ShowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(showEntity: ShowEntity, type: String, isAlreadyShimmer: Boolean) {
+            with(itemView) {
                 iv_poster_horizontal.startLoading()
 
                 Picasso.get()

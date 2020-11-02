@@ -1,7 +1,7 @@
 package com.dhimas.dhiflix.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.source.local.LocalDataSource
@@ -18,21 +18,25 @@ import java.util.concurrent.Executors
 class ShowRepository private constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
-    private val appExecutors: AppExecutors)
-    : ShowDataSource {
+    private val appExecutors: AppExecutors
+) : ShowDataSource {
 
     companion object {
         @Volatile
         private var instance: ShowRepository? = null
 
-        fun getInstance(remoteDataSource: RemoteDataSource, localData: LocalDataSource, appExecutors: AppExecutors): ShowRepository =
+        fun getInstance(
+            remoteDataSource: RemoteDataSource,
+            localData: LocalDataSource,
+            appExecutors: AppExecutors
+        ): ShowRepository =
             instance ?: synchronized(this) {
                 instance ?: ShowRepository(remoteDataSource, localData, appExecutors)
             }
     }
 
     override fun getMovieList(): LiveData<Resource<List<ShowEntity>>> {
-        return object : NetworkBoundResource<List<ShowEntity>, List<MovieResponse>>(appExecutors){
+        return object : NetworkBoundResource<List<ShowEntity>, List<MovieResponse>>(appExecutors) {
             public override fun loadFromDB(): LiveData<List<ShowEntity>> =
                 localDataSource.getAllMovie()
 
@@ -45,7 +49,7 @@ class ShowRepository private constructor(
             override fun saveCallResult(data: List<MovieResponse>) {
                 val movieList = ArrayList<ShowEntity>()
 
-                for(response in data){
+                for (response in data) {
                     val movie = ShowEntity(
                         response.movie_id,
                         response.title,
@@ -66,7 +70,7 @@ class ShowRepository private constructor(
     }
 
     override fun getMovieDetail(movie_id: String): LiveData<Resource<ShowEntity>> {
-        return object : NetworkBoundResource<ShowEntity, MovieResponse>(appExecutors){
+        return object : NetworkBoundResource<ShowEntity, MovieResponse>(appExecutors) {
             public override fun loadFromDB(): LiveData<ShowEntity> =
                 localDataSource.getShowById(movie_id)
 
@@ -92,7 +96,7 @@ class ShowRepository private constructor(
     }
 
     override fun getSeriesDetail(series_id: String): LiveData<Resource<ShowEntity>> {
-        return object : NetworkBoundResource<ShowEntity, SeriesResponse>(appExecutors){
+        return object : NetworkBoundResource<ShowEntity, SeriesResponse>(appExecutors) {
             public override fun loadFromDB(): LiveData<ShowEntity> =
                 localDataSource.getShowById(series_id)
 
@@ -118,7 +122,7 @@ class ShowRepository private constructor(
     }
 
     override fun getSeriesList(): LiveData<Resource<List<ShowEntity>>> {
-        return object : NetworkBoundResource<List<ShowEntity>, List<SeriesResponse>>(appExecutors){
+        return object : NetworkBoundResource<List<ShowEntity>, List<SeriesResponse>>(appExecutors) {
             public override fun loadFromDB(): LiveData<List<ShowEntity>> =
                 localDataSource.getAllSeries()
 
@@ -131,7 +135,7 @@ class ShowRepository private constructor(
             override fun saveCallResult(data: List<SeriesResponse>) {
                 val seriesList = ArrayList<ShowEntity>()
 
-                for(response in data){
+                for (response in data) {
                     val series = ShowEntity(
                         response.series_id,
                         response.name,
@@ -152,7 +156,8 @@ class ShowRepository private constructor(
     }
 
     override fun getFavoriteMovieList(): LiveData<Resource<PagedList<ShowEntity>>> {
-        return object : NetworkBoundResource<PagedList<ShowEntity>, List<MovieResponse>>(appExecutors){
+        return object :
+            NetworkBoundResource<PagedList<ShowEntity>, List<MovieResponse>>(appExecutors) {
             public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
                 val config = PagedList.Config.Builder()
                     .setEnablePlaceholders(false)
@@ -175,7 +180,8 @@ class ShowRepository private constructor(
     }
 
     override fun getFavoriteSeriesList(): LiveData<Resource<PagedList<ShowEntity>>> {
-        return object : NetworkBoundResource<PagedList<ShowEntity>, List<SeriesResponse>>(appExecutors){
+        return object :
+            NetworkBoundResource<PagedList<ShowEntity>, List<SeriesResponse>>(appExecutors) {
             public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
                 val config = PagedList.Config.Builder()
                     .setEnablePlaceholders(false)
@@ -198,9 +204,20 @@ class ShowRepository private constructor(
         }.asLiveData()
     }
 
-    fun setFavorite(showEntity: ShowEntity){
-        Executors.newSingleThreadExecutor().execute{
-            localDataSource.insertShows(listOf(showEntity))
+    fun setFavorite(showEntity: ShowEntity) {
+        Executors.newSingleThreadExecutor().execute {
+            Log.d("BMX", "Favorite: ${showEntity.isFavorite}")
+            if (showEntity.isFavorite == 0) {
+                Log.d("BMX", "Favorite IF")
+                showEntity.isFavorite = 1
+                localDataSource.updateShow(showEntity)
+            } else {
+                Log.d("BMX", "Favorite ELSE")
+                showEntity.isFavorite = 0
+                Log.d("BMX", "Favorite: ${showEntity.isFavorite}x")
+                localDataSource.updateShow(showEntity)
+            }
+
         }
     }
 

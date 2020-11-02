@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,6 @@ import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import kotlinx.android.synthetic.main.fragment_movie.*
-import kotlinx.android.synthetic.main.fragment_series.*
 
 class MovieFragment : Fragment() {
     private lateinit var viewModel: MovieViewModel
@@ -71,9 +71,11 @@ class MovieFragment : Fragment() {
     private fun viewModelObserve() {
         if (view != null) {
             viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
-                if(movieList != null){
-                    when(movieList.status) {
-                        Status.LOADING -> Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
+                Log.d("Fox", "MovieFragment")
+                if (movieList != null) {
+                    when (movieList.status) {
+                        Status.LOADING -> Toast.makeText(context, "Loading", Toast.LENGTH_SHORT)
+                            .show()
                         Status.SUCCESS -> {
                             movieAdapter.setMovies(movieList.data as ArrayList<ShowEntity>)
                             movieAdapter.notifyDataSetChanged()

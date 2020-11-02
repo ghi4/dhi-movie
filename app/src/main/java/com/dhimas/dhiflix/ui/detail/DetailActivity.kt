@@ -3,6 +3,7 @@ package com.dhimas.dhiflix.ui.detail
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -10,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.Constant
-import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import com.dhimas.dhiflix.utils.Utils
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
@@ -23,6 +23,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var showId: String
     private lateinit var showType: String
     private lateinit var detailAdapter: DetailAdapter
+    private lateinit var showEntity1: ShowEntity
 
     companion object {
         //For sending Show Title
@@ -52,18 +53,29 @@ class DetailActivity : AppCompatActivity() {
 
         startShimmering()
 
+        Log.d("Fox", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+
         //Prevent shimmer take too long when phone rotating
         if (!viewModel.isAlreadyShimmer) {
             //If loading too fast. Shimmer look awkward.
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModelObserve()
                 viewModel.setAlreadyShimmer()
+                Log.d("Fox", "isHere0")
             }, Constant.MINIMUM_SHIMMER_TIME)
 
+            Log.d("Fox", "isHere1")
+
             //Have its own shimmer delay
-            viewModel.getShowList(showType).observe(this, { movieList ->
-                if(Status.SUCCESS == movieList.status){
-                    detailAdapter.setMovies(movieList.data as ArrayList<ShowEntity>, showType, false)
+            viewModel.getMovies().observe(this, { movieList ->
+                Log.d("Fox", "orHereOUT")
+                if (Status.SUCCESS == movieList.status) {
+                    Log.d("Fox", "orHere")
+                    detailAdapter.setMovies(
+                        movieList.data as ArrayList<ShowEntity>,
+                        showType,
+                        false
+                    )
                     detailAdapter.notifyDataSetChanged()
                 }
 
@@ -72,15 +84,22 @@ class DetailActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModelObserve()
                 viewModel.setAlreadyShimmer()
+                Log.d("Fox", "isHere000")
             }, Constant.MINIMUM_SHIMMER_TIME / 10)
 
+            Log.d("Fox", "isHere111")
             //Have its own shimmer delay
             viewModel.getShowList(showType).observe(this, { movieList ->
-                if(Status.SUCCESS == movieList.status) {
+                if (Status.SUCCESS == movieList.status) {
+                    Log.d("Fox", "orHere333")
                     detailAdapter.setMovies(movieList.data as ArrayList<ShowEntity>, showType, true)
                     detailAdapter.notifyDataSetChanged()
                 }
             })
+        }
+
+        bt_favorite.setOnClickListener {
+            viewModel.setFavorite(showEntity1)
         }
 
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -91,15 +110,25 @@ class DetailActivity : AppCompatActivity() {
 
     private fun viewModelObserve() {
         viewModel.getShowEntityById(showId, showType).observe(this, { showEntity ->
-            if(showEntity != null){
-                when(showEntity.status){
+            Log.d("Fox", "MAINXXX")
+            if (showEntity != null) {
+                when (showEntity.status) {
                     Status.LOADING -> Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
                     Status.SUCCESS -> {
-                        if(showEntity.data != null) {
+                        if (showEntity.data != null) {
+
+                            this.showEntity1 = showEntity.data
+
                             tv_detail_title.text = showEntity.data.title
                             tv_detail_release_date.text =
                                 Utils.dateParseToMonthAndYear(showEntity.data.releaseDate!!)
                             tv_detail_overview.text = showEntity.data.overview
+
+                            if (showEntity.data.isFavorite == 0) {
+                                bt_favorite.text = "Like it!"
+                            } else {
+                                bt_favorite.text = "Unlike"
+                            }
 
                             Picasso.get()
                                 .load(Constant.URL_BASE_IMAGE + showEntity.data.backdropPath)
@@ -119,18 +148,10 @@ class DetailActivity : AppCompatActivity() {
                                 .into(iv_detail_poster)
 
                             stopShimmering()
-
-                            val showEntity2 = showEntity.data
-                            val showFav = showEntity2
-                            showFav.isFavorite = 1
-
-                            viewModel.setFavorite(showFav)
                         }
                     }
                 }
             }
-
-
         })
     }
 

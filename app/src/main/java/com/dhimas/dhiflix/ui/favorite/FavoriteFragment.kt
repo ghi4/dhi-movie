@@ -8,15 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.ui.detail.DetailActivity
-import com.dhimas.dhiflix.ui.detail.DetailAdapter
-import com.dhimas.dhiflix.ui.movie.MovieAdapter
-import com.dhimas.dhiflix.ui.series.SeriesAdapter
-import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import kotlinx.android.synthetic.main.fragment_favorite.*
@@ -37,7 +31,7 @@ class FavoriteFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if(activity != null && view != null && context != null){
+        if (activity != null && view != null && context != null) {
 
             val factory = ViewModelFactory.getInstance(requireContext())
             viewModel = ViewModelProvider(this, factory)[FavoriteViewModel::class.java]
@@ -45,9 +39,9 @@ class FavoriteFragment : Fragment() {
             favoriteMovieAdapter = FavoriteAdapter()
             favoriteSeriesAdapter = FavoriteAdapter()
 
-            viewModel.getFavoriteMovies().observe(viewLifecycleOwner, {favoriteMovieList ->
-                if(favoriteMovieList != null){
-                    when(favoriteMovieList.status){
+            viewModel.getFavoriteMovies().observe(viewLifecycleOwner, { favoriteMovieList ->
+                if (favoriteMovieList != null) {
+                    when (favoriteMovieList.status) {
                         Status.LOADING -> {
                             Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
                         }
@@ -55,7 +49,8 @@ class FavoriteFragment : Fragment() {
                             Log.d("Kucing", "${favoriteMovieList.data?.size}")
                             favoriteMovieAdapter.submitList(favoriteMovieList.data)
                             favoriteMovieAdapter.setMovies(DetailActivity.EXTRA_FROM_MOVIES, true)
-                            rv_favorite_movie.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                            rv_favorite_movie.layoutManager =
+                                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                             rv_favorite_movie.hasFixedSize()
                             favoriteMovieAdapter.notifyDataSetChanged()
                             rv_favorite_movie.adapter = favoriteMovieAdapter
@@ -67,9 +62,9 @@ class FavoriteFragment : Fragment() {
                 }
             })
 
-            viewModel.getFavoriteSeries().observe(viewLifecycleOwner, {favoriteSeriesList ->
-                if(favoriteSeriesList != null){
-                    when(favoriteSeriesList.status){
+            viewModel.getFavoriteSeries().observe(viewLifecycleOwner, { favoriteSeriesList ->
+                if (favoriteSeriesList != null) {
+                    when (favoriteSeriesList.status) {
                         Status.LOADING -> {
                             Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
                         }
@@ -77,7 +72,8 @@ class FavoriteFragment : Fragment() {
                             Log.d("Kucing", "${favoriteSeriesList.data?.size}")
                             favoriteSeriesAdapter.submitList(favoriteSeriesList.data)
                             favoriteSeriesAdapter.setMovies(DetailActivity.EXTRA_FROM_SERIES, true)
-                            rv_favorite_series.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                            rv_favorite_series.layoutManager =
+                                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                             rv_favorite_series.hasFixedSize()
                             favoriteSeriesAdapter.notifyDataSetChanged()
                             rv_favorite_series.adapter = favoriteSeriesAdapter

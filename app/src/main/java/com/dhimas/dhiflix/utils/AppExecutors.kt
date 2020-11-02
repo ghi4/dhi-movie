@@ -1,23 +1,21 @@
 package com.dhimas.dhiflix.utils
 
 import android.os.Looper
-import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-import java.util.logging.Handler
 
 class AppExecutors @VisibleForTesting constructor(
     private val diskIO: Executor,
     private val networkIO: Executor,
     private val mainThread: Executor
-){
+) {
 
     companion object {
         private const val THREAD_COUNT = 3
     }
 
-    constructor(): this(
+    constructor() : this(
         Executors.newSingleThreadExecutor(),
         Executors.newFixedThreadPool(THREAD_COUNT),
         MainThreadExecutor()

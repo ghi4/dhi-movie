@@ -19,7 +19,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val executo
 
         result.addSource(dbSource) { data ->
             result.removeSource(dbSource)
-            if(shouldFetch(data)) {
+            if (shouldFetch(data)) {
                 fetchFromNetwork(dbSource)
             } else {
                 result.addSource(dbSource) { newData ->
@@ -50,12 +50,12 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val executo
             result.removeSource(apiResponse)
             result.removeSource(dbSource)
 
-            when(response.statusResponse) {
+            when (response.statusResponse) {
                 StatusResponse.SUCCESS -> executors.diskIO().execute {
                     saveCallResult(response.data)
 
-                    executors.mainThread().execute{
-                        result.addSource(loadFromDB()) {newData ->
+                    executors.mainThread().execute {
+                        result.addSource(loadFromDB()) { newData ->
                             result.value = Resource.success(newData)
                         }
                     }
@@ -69,7 +69,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val executo
 
                 StatusResponse.ERROR -> {
                     onFetchFailed()
-                    result.addSource(dbSource) {newData ->
+                    result.addSource(dbSource) { newData ->
                         result.value = Resource.error(response.message, newData)
                     }
                 }

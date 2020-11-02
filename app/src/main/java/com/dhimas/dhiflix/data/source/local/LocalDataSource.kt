@@ -5,7 +5,7 @@ import androidx.paging.DataSource
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.data.source.local.room.ShowDao
 
-class LocalDataSource private constructor(private val showDao: ShowDao){
+class LocalDataSource private constructor(private val showDao: ShowDao) {
 
     companion object {
         private var INSTANCE: LocalDataSource? = null

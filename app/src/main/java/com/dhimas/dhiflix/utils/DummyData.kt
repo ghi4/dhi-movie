@@ -6,7 +6,7 @@ import com.dhimas.dhiflix.data.source.remote.response.SeriesResponse
 
 object DummyData {
 
-    fun generateDummyMovies(): ArrayList<ShowEntity> {
+    fun generateDummyMovies(): List<ShowEntity> {
         val movies = ArrayList<ShowEntity>()
 
         movies.add(
@@ -144,7 +144,7 @@ object DummyData {
         return movies
     }
 
-    fun generateDummySeries(): ArrayList<ShowEntity> {
+    fun generateDummySeries(): List<ShowEntity> {
         val series = ArrayList<ShowEntity>()
 
         series.add(
@@ -282,7 +282,7 @@ object DummyData {
         return series
     }
 
-    fun generateRemoteDummyMovies(): ArrayList<MovieResponse> {
+    fun generateRemoteDummyMovies(): List<MovieResponse> {
         val movies = ArrayList<MovieResponse>()
 
         movies.add(
@@ -420,7 +420,7 @@ object DummyData {
         return movies
     }
 
-    fun generateRemoteDummySeries(): ArrayList<SeriesResponse> {
+    fun generateRemoteDummySeries(): List<SeriesResponse> {
         val series = ArrayList<SeriesResponse>()
 
         series.add(
