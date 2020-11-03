@@ -8,8 +8,8 @@ import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.vo.Resource
 
 class FavoriteViewModel(private val showRepository: ShowRepository) : ViewModel() {
-    lateinit var movieList: LiveData<Resource<PagedList<ShowEntity>>>
-    lateinit var seriesList: LiveData<Resource<PagedList<ShowEntity>>>
+    private lateinit var movieList: LiveData<Resource<PagedList<ShowEntity>>>
+    private lateinit var seriesList: LiveData<Resource<PagedList<ShowEntity>>>
 
     fun getFavoriteMovies(): LiveData<Resource<PagedList<ShowEntity>>> {
         if(!::movieList.isInitialized)

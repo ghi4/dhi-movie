@@ -52,7 +52,7 @@ class DetailActivity : AppCompatActivity() {
 
         startShimmering()
 
-        val minShimmerTime = if(!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
+        val minShimmerTime = if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
 
         Handler(Looper.getMainLooper()).postDelayed({
             viewModelObserve()
@@ -61,7 +61,11 @@ class DetailActivity : AppCompatActivity() {
 
         viewModel.getShowList(showType).observe(this, { movieList ->
             if (Status.SUCCESS == movieList.status) {
-                detailAdapter.setMovies(movieList.data as ArrayList<ShowEntity>, showType, viewModel.isAlreadyShimmer)
+                detailAdapter.setMovies(
+                    movieList.data as ArrayList<ShowEntity>,
+                    showType,
+                    viewModel.isAlreadyShimmer
+                )
                 detailAdapter.notifyDataSetChanged()
             }
         })
@@ -91,20 +95,43 @@ class DetailActivity : AppCompatActivity() {
                                 Utils.dateParseToMonthAndYear(showEntity.data.releaseDate)
                             tv_detail_overview.text = showEntity.data.overview
 
-                            bt_favorite.text = if(showEntity.data.isFavorite == 0) "Like it!" else "Unlike"
+                            bt_favorite.text =
+                                if (showEntity.data.isFavorite == 0)
+                                    "Like it!"
+                                else
+                                    "Unlike"
+
+                            val imgFavorite =
+                                if (showEntity.data.isFavorite == 1)
+                                    R.drawable.ic_baseline_favorite_white_24
+                                else
+                                    R.drawable.ic_baseline_favorite_border_white_24
+
+                            bt_favorite.setCompoundDrawablesWithIntrinsicBounds(
+                                imgFavorite,
+                                0,
+                                0,
+                                0
+                            )
 
                             Picasso.get()
                                 .load(Constant.URL_BASE_IMAGE + showEntity.data.backdropPath)
                                 .placeholder(R.drawable.backdrop_placeholder)
                                 .error(R.drawable.image_error)
-                                .resize(Constant.BACKDROP_TARGET_WIDTH, Constant.BACKDROP_TARGET_HEIGHT)
+                                .resize(
+                                    Constant.BACKDROP_TARGET_WIDTH,
+                                    Constant.BACKDROP_TARGET_HEIGHT
+                                )
                                 .into(iv_detail_backdrop)
 
                             Picasso.get()
                                 .load(Constant.URL_BASE_IMAGE + showEntity.data.posterPath)
                                 .placeholder(R.drawable.poster_placeholder)
                                 .error(R.drawable.image_error_2_3)
-                                .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
+                                .resize(
+                                    Constant.POSTER_TARGET_WIDTH,
+                                    Constant.POSTER_TARGET_HEIGHT
+                                )
                                 .into(iv_detail_poster)
 
                             stopShimmering()

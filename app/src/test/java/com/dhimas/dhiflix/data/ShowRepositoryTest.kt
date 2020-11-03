@@ -1,7 +1,6 @@
 package com.dhimas.dhiflix.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.dhimas.dhiflix.data.source.local.LocalDataSource
@@ -13,12 +12,12 @@ import com.dhimas.dhiflix.utils.LiveDataTest
 import com.dhimas.dhiflix.utils.PagedListUtil
 import com.dhimas.dhiflix.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 
 internal class ShowRepositoryTest {
 

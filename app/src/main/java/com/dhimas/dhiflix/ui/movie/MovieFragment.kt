@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.Constant
-import com.dhimas.dhiflix.utils.EspressoIdlingResource
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import kotlinx.android.synthetic.main.fragment_movie.*

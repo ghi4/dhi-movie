@@ -8,8 +8,8 @@ import com.dhimas.dhiflix.vo.Resource
 
 class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() {
     var isAlreadyShimmer: Boolean = false
-    lateinit var showEntity: LiveData<Resource<ShowEntity>>
-    lateinit var showList: LiveData<Resource<List<ShowEntity>>>
+    private lateinit var showEntity: LiveData<Resource<ShowEntity>>
+    private lateinit var showList: LiveData<Resource<List<ShowEntity>>>
 
     fun setAlreadyShimmer() {
         isAlreadyShimmer = true
