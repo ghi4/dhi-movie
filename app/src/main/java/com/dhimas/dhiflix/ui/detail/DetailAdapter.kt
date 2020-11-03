@@ -49,7 +49,7 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                     .placeholder(R.drawable.poster_placeholder)
                     .into(iv_poster_horizontal)
 
-                val minShimmerTime = if(!isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 10
+                val minShimmerTime = if(!isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
 
                 iv_poster_horizontal.startLoading()
 

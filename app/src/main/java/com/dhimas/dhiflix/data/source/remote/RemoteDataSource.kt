@@ -1,5 +1,7 @@
 package com.dhimas.dhiflix.data.source.remote
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dhimas.dhiflix.data.source.remote.response.MovieListResponse
@@ -92,7 +94,9 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
         })
 
-        EspressoIdlingResource.decrement()
+        Handler(Looper.getMainLooper()).postDelayed({
+            EspressoIdlingResource.decrement()
+        }, 2000)
 
         return resultSeries
     }

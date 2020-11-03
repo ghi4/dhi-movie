@@ -87,8 +87,8 @@ dependencies {
     kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
 
     //Mockito
-    testImplementation "org.mockito:mockito-core:3.3.3"
-    testImplementation "org.mockito:mockito-inline:3.0.0"
+    testImplementation "org.mockito:mockito-core:3.6.0"
+    testImplementation "org.mockito:mockito-inline:3.6.0"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 
     //Idling

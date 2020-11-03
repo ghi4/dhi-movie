@@ -43,7 +43,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 tv_release_date.text = Utils.dateParseToMonthAndYear(movie.releaseDate)
 
                 Picasso.get()
-                    .load(Constant.URL_BASE_IMAGE + movie.posterPath!!)
+                    .load(Constant.URL_BASE_IMAGE + movie.posterPath)
                     .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.image_error_2_3)
                     .placeholder(R.drawable.poster_placeholder)
