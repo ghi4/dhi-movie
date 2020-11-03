@@ -1,7 +1,6 @@
 package com.dhimas.dhiflix.ui.favorite
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,7 +45,6 @@ class FavoriteFragment : Fragment() {
                             Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
                         }
                         Status.SUCCESS -> {
-                            Log.d("Kucing", "${favoriteMovieList.data?.size}")
                             favoriteMovieAdapter.submitList(favoriteMovieList.data)
                             favoriteMovieAdapter.setMovies(DetailActivity.EXTRA_FROM_MOVIES, true)
                             rv_favorite_movie.layoutManager =
@@ -69,7 +67,6 @@ class FavoriteFragment : Fragment() {
                             Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
                         }
                         Status.SUCCESS -> {
-                            Log.d("Kucing", "${favoriteSeriesList.data?.size}")
                             favoriteSeriesAdapter.submitList(favoriteSeriesList.data)
                             favoriteSeriesAdapter.setMovies(DetailActivity.EXTRA_FROM_SERIES, true)
                             rv_favorite_series.layoutManager =

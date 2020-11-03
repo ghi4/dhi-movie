@@ -51,7 +51,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-                resultMovie.value = ApiResponse.error(movieListResponse, "${t.printStackTrace()}")
+                resultMovie.value = ApiResponse.error(movieListResponse, "An error occured.")
             }
         })
 
@@ -88,7 +88,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<SeriesListResponse>, t: Throwable) {
-                resultSeries.value = ApiResponse.error(seriesListResponse, "${t.printStackTrace()}")
+                resultSeries.value = ApiResponse.error(seriesListResponse, "An error occured.")
             }
         })
 
@@ -119,7 +119,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                resultMovie.value = ApiResponse.error(MovieResponse(), "${t.printStackTrace()}")
+                resultMovie.value = ApiResponse.error(MovieResponse(), "An error occured.")
             }
         })
 
@@ -148,7 +148,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<SeriesResponse>, t: Throwable) {
-                resultSeries.value = ApiResponse.error(SeriesResponse(), "${t.printStackTrace()}")
+                resultSeries.value = ApiResponse.error(SeriesResponse(), "An error occured.")
             }
 
         })

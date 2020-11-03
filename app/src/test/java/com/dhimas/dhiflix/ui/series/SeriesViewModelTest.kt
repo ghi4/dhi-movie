@@ -40,10 +40,10 @@ internal class SeriesViewModelTest {
     @Test
     fun getSeriesList() {
         val dummySeries = Resource.success(DummyData.generateDummySeries())
-        val seriess = MutableLiveData<Resource<List<ShowEntity>>>()
-        seriess.value = dummySeries
+        val series = MutableLiveData<Resource<List<ShowEntity>>>()
+        series.value = dummySeries
 
-        `when`(seriesRepository.getSeriesList()).thenReturn(seriess)
+        `when`(seriesRepository.getSeriesList()).thenReturn(series)
         val seriesEntity = viewModel.getSeries().value?.data
         verify(seriesRepository).getSeriesList()
 

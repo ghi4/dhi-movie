@@ -29,4 +29,9 @@ class LocalDataSource private constructor(private val showDao: ShowDao) {
     fun updateShow(show: ShowEntity) = showDao.updateShow(show)
 
     fun deleteShow(show: ShowEntity) = showDao.deleteShow(show)
+
+    fun setFavorite(showEntity: ShowEntity) {
+        showEntity.isFavorite = if(showEntity.isFavorite == 0) 1 else 0
+        showDao.updateShow(showEntity)
+    }
 }

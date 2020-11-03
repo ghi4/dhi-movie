@@ -3,7 +3,6 @@ package com.dhimas.dhiflix.ui.detail
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,20 +49,14 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                     .placeholder(R.drawable.poster_placeholder)
                     .into(iv_poster_horizontal)
 
+                val minShimmerTime = if(!isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 10
+
+                iv_poster_horizontal.startLoading()
+
                 //Prevent re-shimmer when scrolling view
-                if (!isAlreadyShimmer) {
-                    iv_poster_horizontal.startLoading()
-                    //If data loaded too fast causing awkward animation/view
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        Log.d("Serigala", "isShimmer not yet")
-                        iv_poster_horizontal.stopLoading()
-                    }, Constant.MINIMUM_SHIMMER_TIME)
-                } else {
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        Log.d("Serigala", "isShimmer already")
-                        iv_poster_horizontal.stopLoading()
-                    }, Constant.MINIMUM_SHIMMER_TIME / 10)
-                }
+                Handler(Looper.getMainLooper()).postDelayed({
+                    iv_poster_horizontal.stopLoading()
+                }, minShimmerTime)
 
                 cv_poster_horizontal.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)

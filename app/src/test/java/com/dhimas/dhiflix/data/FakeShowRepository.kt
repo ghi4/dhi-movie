@@ -1,7 +1,6 @@
 package com.dhimas.dhiflix.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.source.local.LocalDataSource

@@ -8,31 +8,41 @@ import com.dhimas.dhiflix.vo.Resource
 
 class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() {
     var isAlreadyShimmer: Boolean = false
+    lateinit var showEntity: LiveData<Resource<ShowEntity>>
+    lateinit var showList: LiveData<Resource<List<ShowEntity>>>
 
     fun setAlreadyShimmer() {
         isAlreadyShimmer = true
     }
 
     fun getShowEntityById(show_id: String, show_type: String): LiveData<Resource<ShowEntity>> {
-        return when (show_type) {
-            DetailActivity.EXTRA_FROM_MOVIES -> {
-                getMovieEntityById(show_id)
-            }
-            else -> {
-                getSeriesEntityById(show_id)
+        if(!::showEntity.isInitialized){
+            showEntity = when (show_type) {
+                DetailActivity.EXTRA_FROM_MOVIES -> {
+                    getMovieEntityById(show_id)
+                }
+                else -> {
+                    getSeriesEntityById(show_id)
+                }
             }
         }
+
+        return showEntity
     }
 
     fun getShowList(show_type: String): LiveData<Resource<List<ShowEntity>>> {
-        return when (show_type) {
-            DetailActivity.EXTRA_FROM_MOVIES -> {
-                getMovies()
-            }
-            else -> {
-                getSeries()
+        if(!::showList.isInitialized){
+            showList = when (show_type) {
+                DetailActivity.EXTRA_FROM_MOVIES -> {
+                    getMovies()
+                }
+                else -> {
+                    getSeries()
+                }
             }
         }
+
+        return showList
     }
 
     private fun getMovieEntityById(show_id: String): LiveData<Resource<ShowEntity>> =
@@ -41,9 +51,9 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
     private fun getSeriesEntityById(show_id: String): LiveData<Resource<ShowEntity>> =
         showRepository.getSeriesDetail(show_id)
 
-    fun getMovies(): LiveData<Resource<List<ShowEntity>>> = showRepository.getMovieList()
+    private fun getMovies(): LiveData<Resource<List<ShowEntity>>> = showRepository.getMovieList()
 
-    fun getSeries(): LiveData<Resource<List<ShowEntity>>> = showRepository.getSeriesList()
+    private fun getSeries(): LiveData<Resource<List<ShowEntity>>> = showRepository.getSeriesList()
 
     fun setFavorite(showEntity: ShowEntity) {
         showRepository.setFavorite(showEntity)

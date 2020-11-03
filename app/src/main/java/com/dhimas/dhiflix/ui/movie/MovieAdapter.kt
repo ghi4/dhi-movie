@@ -1,7 +1,6 @@
 package com.dhimas.dhiflix.ui.movie
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,8 +41,6 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
             with(itemView) {
                 tv_title.text = movie.title
                 tv_release_date.text = Utils.dateParseToMonthAndYear(movie.releaseDate)
-
-                Log.d("Serigala", "isMOvie repeat")
 
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + movie.posterPath!!)

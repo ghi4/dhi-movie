@@ -1,6 +1,5 @@
 package com.dhimas.dhiflix.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -13,7 +12,6 @@ import com.dhimas.dhiflix.data.source.remote.response.SeriesResponse
 import com.dhimas.dhiflix.utils.AppExecutors
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.vo.Resource
-import java.util.concurrent.Executors
 
 class ShowRepository private constructor(
     private val remoteDataSource: RemoteDataSource,
@@ -205,19 +203,8 @@ class ShowRepository private constructor(
     }
 
     fun setFavorite(showEntity: ShowEntity) {
-        Executors.newSingleThreadExecutor().execute {
-            Log.d("BMX", "Favorite: ${showEntity.isFavorite}")
-            if (showEntity.isFavorite == 0) {
-                Log.d("BMX", "Favorite IF")
-                showEntity.isFavorite = 1
-                localDataSource.updateShow(showEntity)
-            } else {
-                Log.d("BMX", "Favorite ELSE")
-                showEntity.isFavorite = 0
-                Log.d("BMX", "Favorite: ${showEntity.isFavorite}x")
-                localDataSource.updateShow(showEntity)
-            }
-
+        appExecutors.diskIO().execute{
+            localDataSource.setFavorite(showEntity)
         }
     }
 

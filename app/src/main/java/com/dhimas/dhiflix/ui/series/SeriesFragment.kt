@@ -39,28 +39,22 @@ class SeriesFragment : Fragment() {
             viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
             seriesAdapter = SeriesAdapter()
 
-            EspressoIdlingResource.increment()
-
-            //Prevent re-shimmer when rotating phone
-            if (!viewModel.isAlreadyShimmer) {
-                //If data loaded too fast causing awkward animation/view
-                Handler(Looper.getMainLooper()).postDelayed({
-                    viewModelObserve()
-                    viewModel.setAlreadyShimmer()
-                }, Constant.MINIMUM_SHIMMER_TIME)
-            } else {
-                seriesShimmerLayout.stopShimmer()
-                seriesShimmerLayout.visibility = View.GONE
-                viewModelObserve()
+            //Minimum time for shimmer
+            val minShimmerTime = if(!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
+            if(viewModel.isAlreadyShimmer) {
+                stopShimmer()
             }
+
+            //Delay loading for shimmer
+            Handler(Looper.getMainLooper()).postDelayed({
+                viewModelObserve()
+                viewModel.setAlreadyShimmer()
+            }, minShimmerTime)
 
             //Change grid layout spanCount when Landscape/Portrait
             val phoneOrientation = requireActivity().resources.configuration.orientation
-            if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) {
-                rv_series.layoutManager = GridLayoutManager(context, 3)
-            } else {
-                rv_series.layoutManager = GridLayoutManager(context, 7)
-            }
+            val spanCount = if(phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
+            rv_series.layoutManager = GridLayoutManager(context, spanCount)
 
             rv_series.hasFixedSize()
             rv_series.adapter = seriesAdapter
@@ -72,23 +66,25 @@ class SeriesFragment : Fragment() {
             viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
                 if (seriesList != null) {
                     when (seriesList.status) {
-                        Status.LOADING -> Toast.makeText(context, "Loading", Toast.LENGTH_SHORT)
-                            .show()
+                        Status.LOADING -> {
+                            Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
+                        }
                         Status.SUCCESS -> {
                             seriesAdapter.setSeries(seriesList.data as ArrayList<ShowEntity>)
                             seriesAdapter.notifyDataSetChanged()
-                            seriesShimmerLayout.stopShimmer()
-                            seriesShimmerLayout.visibility = View.GONE
                         }
                         Status.ERROR -> {
                             Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-                            seriesShimmerLayout.stopShimmer()
-                            seriesShimmerLayout.visibility = View.GONE
                         }
                     }
                 }
+                stopShimmer()
             })
-
         }
+    }
+
+    private fun stopShimmer(){
+        seriesShimmerLayout.stopShimmer()
+        seriesShimmerLayout.visibility = View.GONE
     }
 }

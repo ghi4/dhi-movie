@@ -3,7 +3,6 @@ package com.dhimas.dhiflix.ui.detail
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -53,50 +52,19 @@ class DetailActivity : AppCompatActivity() {
 
         startShimmering()
 
-        Log.d("Fox", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+        val minShimmerTime = if(!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
 
-        //Prevent shimmer take too long when phone rotating
-        if (!viewModel.isAlreadyShimmer) {
-            //If loading too fast. Shimmer look awkward.
-            Handler(Looper.getMainLooper()).postDelayed({
-                viewModelObserve()
-                viewModel.setAlreadyShimmer()
-                Log.d("Fox", "isHere0")
-            }, Constant.MINIMUM_SHIMMER_TIME)
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewModelObserve()
+            viewModel.setAlreadyShimmer()
+        }, minShimmerTime)
 
-            Log.d("Fox", "isHere1")
-
-            //Have its own shimmer delay
-            viewModel.getMovies().observe(this, { movieList ->
-                Log.d("Fox", "orHereOUT")
-                if (Status.SUCCESS == movieList.status) {
-                    Log.d("Fox", "orHere")
-                    detailAdapter.setMovies(
-                        movieList.data as ArrayList<ShowEntity>,
-                        showType,
-                        false
-                    )
-                    detailAdapter.notifyDataSetChanged()
-                }
-
-            })
-        } else {
-            Handler(Looper.getMainLooper()).postDelayed({
-                viewModelObserve()
-                viewModel.setAlreadyShimmer()
-                Log.d("Fox", "isHere000")
-            }, Constant.MINIMUM_SHIMMER_TIME / 10)
-
-            Log.d("Fox", "isHere111")
-            //Have its own shimmer delay
-            viewModel.getShowList(showType).observe(this, { movieList ->
-                if (Status.SUCCESS == movieList.status) {
-                    Log.d("Fox", "orHere333")
-                    detailAdapter.setMovies(movieList.data as ArrayList<ShowEntity>, showType, true)
-                    detailAdapter.notifyDataSetChanged()
-                }
-            })
-        }
+        viewModel.getShowList(showType).observe(this, { movieList ->
+            if (Status.SUCCESS == movieList.status) {
+                detailAdapter.setMovies(movieList.data as ArrayList<ShowEntity>, showType, viewModel.isAlreadyShimmer)
+                detailAdapter.notifyDataSetChanged()
+            }
+        })
 
         bt_favorite.setOnClickListener {
             viewModel.setFavorite(showEntity1)
@@ -110,7 +78,6 @@ class DetailActivity : AppCompatActivity() {
 
     private fun viewModelObserve() {
         viewModel.getShowEntityById(showId, showType).observe(this, { showEntity ->
-            Log.d("Fox", "MAINXXX")
             if (showEntity != null) {
                 when (showEntity.status) {
                     Status.LOADING -> Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
@@ -121,23 +88,16 @@ class DetailActivity : AppCompatActivity() {
 
                             tv_detail_title.text = showEntity.data.title
                             tv_detail_release_date.text =
-                                Utils.dateParseToMonthAndYear(showEntity.data.releaseDate!!)
+                                Utils.dateParseToMonthAndYear(showEntity.data.releaseDate)
                             tv_detail_overview.text = showEntity.data.overview
 
-                            if (showEntity.data.isFavorite == 0) {
-                                bt_favorite.text = "Like it!"
-                            } else {
-                                bt_favorite.text = "Unlike"
-                            }
+                            bt_favorite.text = if(showEntity.data.isFavorite == 0) "Like it!" else "Unlike"
 
                             Picasso.get()
                                 .load(Constant.URL_BASE_IMAGE + showEntity.data.backdropPath)
                                 .placeholder(R.drawable.backdrop_placeholder)
                                 .error(R.drawable.image_error)
-                                .resize(
-                                    Constant.BACKDROP_TARGET_WIDTH,
-                                    Constant.BACKDROP_TARGET_HEIGHT
-                                )
+                                .resize(Constant.BACKDROP_TARGET_WIDTH, Constant.BACKDROP_TARGET_HEIGHT)
                                 .into(iv_detail_backdrop)
 
                             Picasso.get()

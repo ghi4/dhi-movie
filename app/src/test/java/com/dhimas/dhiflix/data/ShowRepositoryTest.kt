@@ -1,6 +1,7 @@
 package com.dhimas.dhiflix.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.dhimas.dhiflix.data.source.local.LocalDataSource
@@ -81,19 +82,19 @@ internal class ShowRepositoryTest {
 //        assertNotNull(seriesEntities[0].backdropPath)
 //        assertEquals(seriesResponses.size, seriesEntities.size)
     }
-//
-//    @Test
-//    fun getMovieDetail() {
-//        doAnswer { invocation ->
-//            (invocation.arguments[1] as RemoteDataSource.LoadMovieDetailCallback).onMovieDetailReceived(
-//                movieDetailResponse
-//            )
-//            null
-//        }.`when`(remote).getMovieDetail(eq(movieId), any())
-//
-//        val movieDetail = LiveDataTest.getValue(showRepository.getMovieDetail(movieId))
-//        verify(remote).getMovieDetail(eq(movieId), any())
-//
+
+    @Test
+    fun getMovieDetail() {
+        val dummyEntity = MutableLiveData<ShowEntity>()
+        dummyEntity.value = DummyData.generateDummyMovies()[0]
+
+        `when`(local.getShowById(movieId)).thenReturn(dummyEntity)
+
+        val movieEntity = LiveDataTest.getValue(showRepository.getMovieDetail(movieId))
+        verify(local).getShowById(movieId)
+
+        assertNotNull(movieEntity.data)
+
 //        assertNotNull(movieDetail)
 //        assertNotNull(movieDetail.id)
 //        assertNotNull(movieDetail.title)
@@ -107,19 +108,21 @@ internal class ShowRepositoryTest {
 //        assertEquals(movieDetailResponse.overview, movieDetail.overview)
 //        assertEquals(movieDetailResponse.posterPath, movieDetail.posterPath)
 //        assertEquals(movieDetailResponse.backdropPath, movieDetail.backdropPath)
-//    }
-//
-//    @Test
-//    fun getSeriesDetail() {
-//        doAnswer { invocation ->
-//            (invocation.arguments[1] as RemoteDataSource.LoadSeriesDetailCallback).onSeriesDetailReceived(
-//                seriesDetailResponse
-//            )
-//            null
-//        }.`when`(remote).getSeriesDetail(eq(seriesId), any())
-//
-//        val seriesDetail = LiveDataTest.getValue(showRepository.getSeriesDetail(seriesId))
-//        verify(remote).getSeriesDetail(eq(seriesId), any())
+    }
+
+    @Test
+    fun getSeriesDetail() {
+        val dummySeries = MutableLiveData<ShowEntity>()
+        dummySeries.value = DummyData.generateDummySeries()[0]
+
+        `when`(local.getShowById(seriesId)).thenReturn(dummySeries)
+
+        val seriesEntity = LiveDataTest.getValue(showRepository.getSeriesDetail(seriesId))
+        verify(local).getShowById(seriesId)
+
+        assertNotNull(seriesEntity)
+
+
 //
 //        assertNotNull(seriesDetail)
 //        assertNotNull(seriesDetail.id)
@@ -134,7 +137,7 @@ internal class ShowRepositoryTest {
 //        assertEquals(seriesDetailResponse.overview, seriesDetail.overview)
 //        assertEquals(seriesDetailResponse.posterPath, seriesDetail.posterPath)
 //        assertEquals(seriesDetailResponse.backdropPath, seriesDetail.backdropPath)
-//    }
+    }
 
     @Test
     fun getAllFavoriteMovie() {
@@ -153,6 +156,7 @@ internal class ShowRepositoryTest {
     fun getAllFavoriteSeries() {
         val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, ShowEntity>
         `when`(local.getAllFavoriteSeries()).thenReturn(dataSourceFactory)
+        showRepository.getFavoriteSeriesList()
 
         val seriesEntities = Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
         verify(local).getAllFavoriteSeries()
