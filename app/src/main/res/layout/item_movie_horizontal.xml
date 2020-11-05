@@ -18,6 +18,7 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/content_description_movie_poster"
         android:scaleType="fitCenter"
+        app:autoStart="false"
         app:skeletonColor="@color/grey_lighter"
         app:srcCompat="@drawable/poster_placeholder" />
 </androidx.cardview.widget.CardView>

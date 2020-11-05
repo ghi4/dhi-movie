@@ -97,22 +97,22 @@ class DetailActivity : AppCompatActivity() {
 
                             bt_favorite.text =
                                 if (showEntity.data.isFavorite == 0)
-                                    "Like it!"
+                                    "Add to favorite.!"
                                 else
-                                    "Unlike"
+                                    "Remove from favorite"
 
-                            val imgFavorite =
-                                if (showEntity.data.isFavorite == 1)
-                                    R.drawable.ic_baseline_favorite_white_24
-                                else
-                                    R.drawable.ic_baseline_favorite_border_white_24
-
-                            bt_favorite.setCompoundDrawablesWithIntrinsicBounds(
-                                imgFavorite,
-                                0,
-                                0,
-                                0
-                            )
+//                            val imgFavorite =
+//                                if (showEntity.data.isFavorite == 1)
+//                                    R.drawable.ic_baseline_favorite_white_24
+//                                else
+//                                    R.drawable.ic_baseline_favorite_border_white_24
+//
+//                            bt_favorite.setCompoundDrawablesWithIntrinsicBounds(
+//                                imgFavorite,
+//                                0,
+//                                0,
+//                                0
+//                            )
 
                             Picasso.get()
                                 .load(Constant.URL_BASE_IMAGE + showEntity.data.backdropPath)
@@ -137,6 +137,7 @@ class DetailActivity : AppCompatActivity() {
                             stopShimmering()
                         }
                     }
+                    Status.ERROR -> Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -149,6 +150,7 @@ class DetailActivity : AppCompatActivity() {
         tv_overview.stopLoading()
         tv_detail_overview.stopLoading()
         tv_interest.stopLoading()
+        bt_favorite.stopLoading()
     }
 
     private fun startShimmering() {
@@ -158,5 +160,6 @@ class DetailActivity : AppCompatActivity() {
         tv_overview.startLoading()
         tv_detail_overview.startLoading()
         tv_interest.startLoading()
+        bt_favorite.startLoading()
     }
 }

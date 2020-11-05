@@ -16,7 +16,9 @@ import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_movie.*
+import kotlinx.android.synthetic.main.fragment_movie.view.*
 
 class MovieFragment : Fragment() {
     private lateinit var viewModel: MovieViewModel
@@ -27,37 +29,41 @@ class MovieFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_movie, container, false)
+
+        val factory = ViewModelFactory.getInstance(requireContext())
+        viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
+        movieAdapter = MovieAdapter()
+
+        val root = inflater.inflate(R.layout.fragment_movie, container, false)
+        root.movieShimmerLayout.startShimmer()
+
+        //Prevent re-shimmer when rotating phone
+        if(viewModel.isAlreadyShimmer){
+            root.movieShimmerLayout.stopShimmer()
+            root.movieShimmerLayout.visibility = View.GONE
+        }
+
+        //Change grid layout spanCount when Landscape/Portrait
+        val phoneOrientation = requireActivity().resources.configuration.orientation
+        val spanCount = if(phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
+
+        root.rv_movie.layoutManager = GridLayoutManager(context, spanCount)
+        root.rv_movie.hasFixedSize()
+        root.rv_movie.adapter = movieAdapter
+
+        return root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         if (activity != null && view != null && context != null) {
-            val factory = ViewModelFactory.getInstance(requireContext())
-            viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
-            movieAdapter = MovieAdapter()
-
             val minShimmerTime = if(!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
-
-            //Prevent re-shimmer when rotating phone
-            if(viewModel.isAlreadyShimmer){
-                stopShimmer()
-            }
 
             //Delay loading for shimmer
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModelObserve()
-                viewModel.setAlreadyShimmer()
             }, minShimmerTime)
-
-            //Change grid layout spanCount when Landscape/Portrait
-            val phoneOrientation = requireActivity().resources.configuration.orientation
-            val spanCount = if(phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
-
-            rv_movie.layoutManager = GridLayoutManager(context, spanCount)
-            rv_movie.hasFixedSize()
-            rv_movie.adapter = movieAdapter
         }
     }
 
@@ -71,15 +77,26 @@ class MovieFragment : Fragment() {
                         Status.SUCCESS -> {
                             movieAdapter.setMovies(movieList.data as ArrayList<ShowEntity>)
                             movieAdapter.notifyDataSetChanged()
+                            viewModel.setAlreadyShimmer()
+                            stopShimmer()
                         }
                         Status.ERROR -> {
                             Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                            showSnackBar()
                         }
                     }
                 }
-                stopShimmer()
             })
         }
+    }
+
+    private fun showSnackBar(){
+        Snackbar.make(requireView(), "No internet connection!", Snackbar.LENGTH_INDEFINITE)
+            .setAction("RETRY") {
+                viewModel.refresh()
+                movieAdapter.notifyDataSetChanged()
+            }
+            .show()
     }
 
     private fun stopShimmer(){

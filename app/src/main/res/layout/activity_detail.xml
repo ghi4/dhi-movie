@@ -34,7 +34,6 @@
             android:adjustViewBounds="true"
             android:background="@drawable/poster_placeholder"
             android:contentDescription="@string/content_description_movie_poster"
-            app:autoStart="false"
             app:layout_constraintBottom_toBottomOf="@+id/iv_detail_backdrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_detail_backdrop"
@@ -115,12 +114,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_interest" />
 
-        <Button
+        <aglibs.loading.skeleton.view.SkeletonButtonView
             android:id="@+id/bt_favorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:drawableStart="@drawable/ic_baseline_favorite_border_white_24"
+            android:backgroundTint="#FBA526"
             android:text="Like it!"
             app:layout_constraintStart_toStartOf="@+id/tv_detail_release_date"
             app:layout_constraintTop_toBottomOf="@+id/tv_detail_release_date" />

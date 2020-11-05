@@ -21,4 +21,8 @@ class MovieViewModel(private val showRepository: ShowRepository) : ViewModel() {
         return movieList
     }
 
+    fun refresh(){
+        movieList = showRepository.getMovieList()
+    }
+
 }

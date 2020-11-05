@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_movie, R.id.navigation_series,
             )
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 

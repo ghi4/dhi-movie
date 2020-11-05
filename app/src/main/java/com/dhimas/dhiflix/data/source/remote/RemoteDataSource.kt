@@ -38,6 +38,8 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                 call: Call<MovieListResponse>,
                 response: Response<MovieListResponse>
             ) {
+
+                Handler(Looper.getMainLooper()).postDelayed({
                 if (response.isSuccessful) {
                     val mMovieListResponse = response.body()?.movieList
 
@@ -48,16 +50,18 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                         movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
                         resultMovie.value = ApiResponse.empty(movieListResponse, "No movie found.")
                     }
-
                 }
+
+
+                    EspressoIdlingResource.decrement()
+                }, 5000L)
+
             }
 
             override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
                 resultMovie.value = ApiResponse.error(movieListResponse, "An error occurred.")
             }
         })
-
-        EspressoIdlingResource.decrement()
 
         return resultMovie
     }
@@ -85,18 +89,14 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                         resultSeries.value =
                             ApiResponse.empty(seriesListResponse, "No series found.")
                     }
-
                 }
+                EspressoIdlingResource.decrement()
             }
 
             override fun onFailure(call: Call<SeriesListResponse>, t: Throwable) {
                 resultSeries.value = ApiResponse.error(seriesListResponse, "An error occurred.")
             }
         })
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            EspressoIdlingResource.decrement()
-        }, 2000)
 
         return resultSeries
     }
@@ -117,9 +117,9 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                     } else {
                         resultMovie.value = ApiResponse.error(MovieResponse(), "No movie found")
                     }
-
-                    EspressoIdlingResource.decrement()
                 }
+
+                EspressoIdlingResource.decrement()
             }
 
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
@@ -135,6 +135,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
         val resultSeries = MutableLiveData<ApiResponse<SeriesResponse>>()
 
         EspressoIdlingResource.increment()
+
         call.enqueue(object : Callback<SeriesResponse> {
             override fun onResponse(
                 call: Call<SeriesResponse>,
@@ -149,6 +150,8 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                         resultSeries.value = ApiResponse.empty(SeriesResponse(), "No Series Found")
                     }
                 }
+
+                EspressoIdlingResource.decrement()
             }
 
             override fun onFailure(call: Call<SeriesResponse>, t: Throwable) {
