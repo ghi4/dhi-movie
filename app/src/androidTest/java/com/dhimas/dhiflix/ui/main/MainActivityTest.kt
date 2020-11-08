@@ -43,6 +43,25 @@ class MainActivityTest {
     }
 
     @Test
+    fun loadSeries() {
+        onView(withId(R.id.navigation_series)).perform(click())
+
+        onView(withId(R.id.rv_series)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_series)).perform(
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                10
+            )
+        )
+    }
+
+    @Test
+    fun loadFavorite() {
+        onView(withId(R.id.navigation_favorite)).perform(click())
+
+        onView(withId(R.id.rv_favorite_movie)).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun loadDetailMovie() {
 
         onView(withId(R.id.rv_movie)).perform(
@@ -76,18 +95,6 @@ class MainActivityTest {
         onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_other_movie)).perform(
-            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                10
-            )
-        )
-    }
-
-    @Test
-    fun loadSeries() {
-        onView(withId(R.id.navigation_series)).perform(click())
-
-        onView(withId(R.id.rv_series)).check(matches(isDisplayed()))
-        onView(withId(R.id.rv_series)).perform(
             RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
                 10
             )
