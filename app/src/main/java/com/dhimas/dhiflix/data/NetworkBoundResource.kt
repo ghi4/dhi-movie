@@ -1,13 +1,11 @@
 package com.dhimas.dhiflix.data
 
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.dhimas.dhiflix.data.source.remote.ApiResponse
 import com.dhimas.dhiflix.data.source.remote.StatusResponse
 import com.dhimas.dhiflix.utils.AppExecutors
 import com.dhimas.dhiflix.vo.Resource
-import java.util.logging.Handler
 
 abstract class NetworkBoundResource<ResultType, RequestType>(private val executors: AppExecutors) {
 

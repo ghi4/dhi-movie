@@ -11,4 +11,8 @@
     <string name="maybe_you_re_interested">Maybe you\'re interested</string>
     <string name="splash_logo">Splash Logo</string>
     <string name="favorite">Favorite</string>
+    <string name="add_to_favorite">Add to favorite.</string>
+    <string name="my_favorite_movie">My Favorite Movie</string>
+    <string name="my_favorite_series">My Favorite Series</string>
+    <string name="remove_from_favorite">Remove from favorite</string>
 </resources>

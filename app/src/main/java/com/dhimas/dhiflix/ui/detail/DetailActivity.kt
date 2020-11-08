@@ -97,22 +97,9 @@ class DetailActivity : AppCompatActivity() {
 
                             bt_favorite.text =
                                 if (showEntity.data.isFavorite == 0)
-                                    "Add to favorite.!"
+                                    getString(R.string.add_to_favorite)
                                 else
-                                    "Remove from favorite"
-
-//                            val imgFavorite =
-//                                if (showEntity.data.isFavorite == 1)
-//                                    R.drawable.ic_baseline_favorite_white_24
-//                                else
-//                                    R.drawable.ic_baseline_favorite_border_white_24
-//
-//                            bt_favorite.setCompoundDrawablesWithIntrinsicBounds(
-//                                imgFavorite,
-//                                0,
-//                                0,
-//                                0
-//                            )
+                                    getString(R.string.remove_from_favorite)
 
                             Picasso.get()
                                 .load(Constant.URL_BASE_IMAGE + showEntity.data.backdropPath)

@@ -2,7 +2,7 @@ package com.dhimas.dhiflix.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.DataSource
+import androidx.paging.DataSource.Factory
 import com.dhimas.dhiflix.data.source.local.LocalDataSource
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.data.source.remote.RemoteDataSource
@@ -50,14 +50,14 @@ internal class ShowRepositoryTest {
         assertNotNull(movieEntities.data)
         assertEquals(movieResponses.size.toLong(), movieEntities.data?.size?.toLong())
 
-//        assertNotNull(movieEntities)
-//        assertNotNull(movieEntities[0].id)
-//        assertNotNull(movieEntities[0].title)
-//        assertNotNull(movieEntities[0].releaseDate)
-//        assertNotNull(movieEntities[0].overview)
-//        assertNotNull(movieEntities[0].posterPath)
-//        assertNotNull(movieEntities[0].backdropPath)
-//        assertEquals(movieResponses.size, movieEntities.size)
+        val movieEntity = movieEntities.data?.get(0)
+        assertNotNull(movieEntity)
+        assertNotNull(movieEntity?.id)
+        assertNotNull(movieEntity?.title)
+        assertNotNull(movieEntity?.releaseDate)
+        assertNotNull(movieEntity?.overview)
+        assertNotNull(movieEntity?.posterPath)
+        assertNotNull(movieEntity?.backdropPath)
     }
 
     @Test
@@ -70,16 +70,16 @@ internal class ShowRepositoryTest {
         verify(local).getAllSeries()
 
         assertNotNull(seriesEntities.data)
+        assertEquals(seriesResponses.size.toLong(), seriesEntities.data?.size?.toLong())
 
-//
-//        assertNotNull(seriesEntities)
-//        assertNotNull(seriesEntities[0].id)
-//        assertNotNull(seriesEntities[0].title)
-//        assertNotNull(seriesEntities[0].releaseDate)
-//        assertNotNull(seriesEntities[0].overview)
-//        assertNotNull(seriesEntities[0].posterPath)
-//        assertNotNull(seriesEntities[0].backdropPath)
-//        assertEquals(seriesResponses.size, seriesEntities.size)
+        val seriesEntity = seriesEntities.data?.get(0)
+        assertNotNull(seriesEntity)
+        assertNotNull(seriesEntity?.id)
+        assertNotNull(seriesEntity?.title)
+        assertNotNull(seriesEntity?.releaseDate)
+        assertNotNull(seriesEntity?.overview)
+        assertNotNull(seriesEntity?.posterPath)
+        assertNotNull(seriesEntity?.backdropPath)
     }
 
     @Test
@@ -94,19 +94,21 @@ internal class ShowRepositoryTest {
 
         assertNotNull(movieEntity.data)
 
-//        assertNotNull(movieDetail)
-//        assertNotNull(movieDetail.id)
-//        assertNotNull(movieDetail.title)
-//        assertNotNull(movieDetail.releaseDate)
-//        assertNotNull(movieDetail.overview)
-//        assertNotNull(movieDetail.posterPath)
-//        assertNotNull(movieDetail.backdropPath)
-//        assertEquals(movieDetailResponse.movie_id, movieDetail.id)
-//        assertEquals(movieDetailResponse.title, movieDetail.title)
-//        assertEquals(movieDetailResponse.releaseDate, movieDetail.releaseDate)
-//        assertEquals(movieDetailResponse.overview, movieDetail.overview)
-//        assertEquals(movieDetailResponse.posterPath, movieDetail.posterPath)
-//        assertEquals(movieDetailResponse.backdropPath, movieDetail.backdropPath)
+        val movieDetail = movieEntity.data
+
+        assertNotNull(movieDetail)
+        assertNotNull(movieDetail?.id)
+        assertNotNull(movieDetail?.title)
+        assertNotNull(movieDetail?.releaseDate)
+        assertNotNull(movieDetail?.overview)
+        assertNotNull(movieDetail?.posterPath)
+        assertNotNull(movieDetail?.backdropPath)
+        assertEquals(movieDetailResponse.movie_id, movieDetail?.id)
+        assertEquals(movieDetailResponse.title, movieDetail?.title)
+        assertEquals(movieDetailResponse.releaseDate, movieDetail?.releaseDate)
+        assertEquals(movieDetailResponse.overview, movieDetail?.overview)
+        assertEquals(movieDetailResponse.posterPath, movieDetail?.posterPath)
+        assertEquals(movieDetailResponse.backdropPath, movieDetail?.backdropPath)
     }
 
     @Test
@@ -121,26 +123,25 @@ internal class ShowRepositoryTest {
 
         assertNotNull(seriesEntity)
 
-
-//
-//        assertNotNull(seriesDetail)
-//        assertNotNull(seriesDetail.id)
-//        assertNotNull(seriesDetail.title)
-//        assertNotNull(seriesDetail.releaseDate)
-//        assertNotNull(seriesDetail.overview)
-//        assertNotNull(seriesDetail.posterPath)
-//        assertNotNull(seriesDetail.backdropPath)
-//        assertEquals(seriesDetailResponse.series_id, seriesDetail.id)
-//        assertEquals(seriesDetailResponse.name, seriesDetail.title)
-//        assertEquals(seriesDetailResponse.releaseDate, seriesDetail.releaseDate)
-//        assertEquals(seriesDetailResponse.overview, seriesDetail.overview)
-//        assertEquals(seriesDetailResponse.posterPath, seriesDetail.posterPath)
-//        assertEquals(seriesDetailResponse.backdropPath, seriesDetail.backdropPath)
+        val seriesDetail = seriesEntity.data
+        assertNotNull(seriesDetail)
+        assertNotNull(seriesDetail?.id)
+        assertNotNull(seriesDetail?.title)
+        assertNotNull(seriesDetail?.releaseDate)
+        assertNotNull(seriesDetail?.overview)
+        assertNotNull(seriesDetail?.posterPath)
+        assertNotNull(seriesDetail?.backdropPath)
+        assertEquals(seriesDetailResponse.series_id, seriesDetail?.id)
+        assertEquals(seriesDetailResponse.name, seriesDetail?.title)
+        assertEquals(seriesDetailResponse.releaseDate, seriesDetail?.releaseDate)
+        assertEquals(seriesDetailResponse.overview, seriesDetail?.overview)
+        assertEquals(seriesDetailResponse.posterPath, seriesDetail?.posterPath)
+        assertEquals(seriesDetailResponse.backdropPath, seriesDetail?.backdropPath)
     }
 
     @Test
     fun getAllFavoriteMovie() {
-        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, ShowEntity>
+        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
         `when`(local.getAllFavoriteMovie()).thenReturn(dataSourceFactory)
         showRepository.getFavoriteMovieList()
 
@@ -149,11 +150,20 @@ internal class ShowRepositoryTest {
 
         assertNotNull(movieEntities.data)
         assertEquals(movieResponses.size.toLong(), movieEntities.data?.size?.toLong())
+
+        val movieEntity = movieEntities.data?.get(0)
+        assertNotNull(movieEntity)
+        assertNotNull(movieEntity?.id)
+        assertNotNull(movieEntity?.title)
+        assertNotNull(movieEntity?.releaseDate)
+        assertNotNull(movieEntity?.overview)
+        assertNotNull(movieEntity?.posterPath)
+        assertNotNull(movieEntity?.backdropPath)
     }
 
     @Test
     fun getAllFavoriteSeries() {
-        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, ShowEntity>
+        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
         `when`(local.getAllFavoriteSeries()).thenReturn(dataSourceFactory)
         showRepository.getFavoriteSeriesList()
 
@@ -162,6 +172,18 @@ internal class ShowRepositoryTest {
 
         assertNotNull(seriesEntities.data)
         assertEquals(seriesResponses.size, seriesEntities.data?.size)
+
+        assertNotNull(seriesEntities.data)
+        assertEquals(seriesResponses.size.toLong(), seriesEntities.data?.size?.toLong())
+
+        val seriesEntity = seriesEntities.data?.get(0)
+        assertNotNull(seriesEntity)
+        assertNotNull(seriesEntity?.id)
+        assertNotNull(seriesEntity?.title)
+        assertNotNull(seriesEntity?.releaseDate)
+        assertNotNull(seriesEntity?.overview)
+        assertNotNull(seriesEntity?.posterPath)
+        assertNotNull(seriesEntity?.backdropPath)
     }
 
 }

@@ -7,6 +7,7 @@ import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.vo.Resource
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
@@ -41,19 +42,41 @@ class FavoriteFragmentTest {
 
     @Test
     fun getFavoriteMovie() {
-        val dummyMovie = Resource.success(pagedList)
-        `when`(dummyMovie.data?.size).thenReturn(10)
+        val dummyDataMovie = Resource.success(pagedList)
+        `when`(dummyDataMovie.data?.size).thenReturn(10)
 
         val movies = MutableLiveData<Resource<PagedList<ShowEntity>>>()
-        movies.value = dummyMovie
+        movies.value = dummyDataMovie
 
         `when`(showRepository.getFavoriteMovieList()).thenReturn(movies)
         val movieEntities = viewModel.getFavoriteMovies().value?.data
         verify(showRepository).getFavoriteMovieList()
 
         assertNotNull(movieEntities)
+        assertEquals(10, dummyDataMovie.data?.size)
 
         viewModel.getFavoriteMovies().observeForever(observer)
-        verify(observer).onChanged(dummyMovie)
+        verify(observer).onChanged(dummyDataMovie)
     }
+
+    @Test
+    fun getFavoriteSeries() {
+        val dummyDataSeries = Resource.success(pagedList)
+        `when`(dummyDataSeries.data?.size).thenReturn(10)
+
+        val series = MutableLiveData<Resource<PagedList<ShowEntity>>>()
+        series.value = dummyDataSeries
+
+        `when`(showRepository.getFavoriteSeriesList()).thenReturn(series)
+        val seriesEntities = viewModel.getFavoriteSeries().value?.data
+        verify(showRepository).getFavoriteSeriesList()
+
+        assertNotNull(seriesEntities)
+        assertEquals(10, dummyDataSeries.data?.size)
+
+        viewModel.getFavoriteSeries().observeForever(observer)
+        verify(observer).onChanged(dummyDataSeries)
+    }
+
+
 }

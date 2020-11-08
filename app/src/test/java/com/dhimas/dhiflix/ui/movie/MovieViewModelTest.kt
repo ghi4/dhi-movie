@@ -8,8 +8,8 @@ import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.DummyData
 import com.dhimas.dhiflix.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

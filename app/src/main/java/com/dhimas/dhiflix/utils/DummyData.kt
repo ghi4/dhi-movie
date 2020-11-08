@@ -291,8 +291,8 @@ object DummyData {
                 "One Night in Bangkok",
                 "2020",
                 "A hit man named Kai flies into Bangkok, gets a gun, and orders a cab. He offers a professional female driver big money to be his all-night driver. But when she realizes Kai is committing brutal murders at each stop, it's too late to walk away. Meanwhile, an offbeat police detective races to decode the string of slayings before more blood is spilled.",
-                "/i4kPwXPlM1iy8Jf3S1uuLuwqQAV.jpg",
-                "/riDrpqQtZpXGeiJdlmfcwwPH7nN.jpg"
+                "R.drawable.poster_one_night_in_bangkok",
+                "R.drawable.backdrop_one_night_in_bangkok"
             )
         )
 
@@ -302,8 +302,8 @@ object DummyData {
                 "We Bare Bears: The Movie",
                 "2020",
                 "When Grizz, Panda, and Ice Bear's love of food trucks and viral videos went out of hand, it catches the attention of Agent Trout from the National Wildlife Control, who pledges to restore the “natural order” by separating them forever. Chased away from their home, the Bears embark on an epic road trip as they seek refuge in Canada, with their journey being filled with new friends, perilous obstacles, and huge parties. The risky journey also forces the Bears to face how they first met and became brothers, in order to keep their family bond from splitting apart.",
-                "/kPzcvxBwt7kEISB9O4jJEuBn72t.jpg",
-                "/pO1SnM5a1fEsYrFaVZW78Wb0zRJ.jpg"
+                "R.drawable.poster_bare_bear",
+                "R.drawable.backdrop_bare_bear"
             )
         )
 

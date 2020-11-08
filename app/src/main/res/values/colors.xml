@@ -10,4 +10,6 @@
     <color name="dark_blue">#092E51</color>
     <color name="grey_light">#A9A9A9</color>
     <color name="grey_lighter">#C0C0C0</color>
+
+    <color name="skeleton_grey_light">#99A9A9A9</color>
 </resources>
