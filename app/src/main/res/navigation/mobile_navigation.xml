@@ -15,6 +15,11 @@
         tools:layout="@layout/fragment_series" />
 
     <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.dhimas.dhiflix.ui.search.SearchFragment"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
         android:id="@+id/navigation_favorite"
         android:name="com.dhimas.dhiflix.ui.favorite.FavoriteFragment"
         tools:layout="@layout/fragment_favorite" />

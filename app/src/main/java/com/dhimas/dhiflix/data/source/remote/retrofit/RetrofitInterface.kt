@@ -22,4 +22,9 @@ interface RetrofitInterface {
     @GET("tv/{movie_id}?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US")
     fun getSeriesDetail(@Path("movie_id") movie_id: String?): Call<SeriesResponse>
 
+    @GET("movie/{movie_id}/similar?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US&page=1")
+    fun getSimilarMovie(@Path("movie_id") movie_id: String?): Call<MovieListResponse>
+
+    @GET("tv/{tv_id}/similar?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US&page=1")
+    fun getSimilarSeries(@Path("tv_id") tv_id: String?): Call<SeriesListResponse>
 }

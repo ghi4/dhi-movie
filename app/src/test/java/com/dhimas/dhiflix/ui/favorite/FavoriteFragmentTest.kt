@@ -6,6 +6,8 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.utils.DummyData
+import com.dhimas.dhiflix.utils.PagedListUtil
 import com.dhimas.dhiflix.vo.Resource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -42,40 +44,72 @@ class FavoriteFragmentTest {
 
     @Test
     fun getFavoriteMovie() {
-        val dummyDataMovie = Resource.success(pagedList)
-        `when`(dummyDataMovie.data?.size).thenReturn(10)
+        val dummyMovieList = Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
 
-        val movies = MutableLiveData<Resource<PagedList<ShowEntity>>>()
-        movies.value = dummyDataMovie
+        val movie = MutableLiveData<Resource<PagedList<ShowEntity>>>()
+        movie.value = dummyMovieList
 
-        `when`(showRepository.getFavoriteMovieList()).thenReturn(movies)
+        `when`(showRepository.getFavoriteMovieList()).thenReturn(movie)
         val movieEntities = viewModel.getFavoriteMovies().value?.data
         verify(showRepository).getFavoriteMovieList()
 
-        assertNotNull(movieEntities)
-        assertEquals(10, dummyDataMovie.data?.size)
+        val dummyMovie = dummyMovieList.data?.get(0)
+        val movieEntity = movieEntities?.get(0)
+
+        assertNotNull(movieEntity)
+        assertNotNull(movieEntity?.id)
+        assertNotNull(movieEntity?.title)
+        assertNotNull(movieEntity?.releaseDate)
+        assertNotNull(movieEntity?.overview)
+        assertNotNull(movieEntity?.posterPath)
+        assertNotNull(movieEntity?.backdropPath)
+
+        assertEquals(dummyMovie, movieEntity)
+        assertEquals(dummyMovie?.id, movieEntity?.id)
+        assertEquals(dummyMovie?.title, movieEntity?.title)
+        assertEquals(dummyMovie?.releaseDate, movieEntity?.releaseDate)
+        assertEquals(dummyMovie?.overview, movieEntity?.overview)
+        assertEquals(dummyMovie?.posterPath, movieEntity?.posterPath)
+        assertEquals(dummyMovie?.backdropPath, movieEntity?.backdropPath)
+        assertEquals(dummyMovieList.data?.size, movieEntities?.size)
 
         viewModel.getFavoriteMovies().observeForever(observer)
-        verify(observer).onChanged(dummyDataMovie)
+        verify(observer).onChanged(dummyMovieList)
     }
 
     @Test
     fun getFavoriteSeries() {
-        val dummyDataSeries = Resource.success(pagedList)
-        `when`(dummyDataSeries.data?.size).thenReturn(10)
+        val dummySeriesList = Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
 
         val series = MutableLiveData<Resource<PagedList<ShowEntity>>>()
-        series.value = dummyDataSeries
+        series.value = dummySeriesList
 
         `when`(showRepository.getFavoriteSeriesList()).thenReturn(series)
         val seriesEntities = viewModel.getFavoriteSeries().value?.data
         verify(showRepository).getFavoriteSeriesList()
 
-        assertNotNull(seriesEntities)
-        assertEquals(10, dummyDataSeries.data?.size)
+        val dummySeries = dummySeriesList.data?.get(0)
+        val seriesEntity = seriesEntities?.get(0)
+
+        assertNotNull(seriesEntity)
+        assertNotNull(seriesEntity?.id)
+        assertNotNull(seriesEntity?.title)
+        assertNotNull(seriesEntity?.releaseDate)
+        assertNotNull(seriesEntity?.overview)
+        assertNotNull(seriesEntity?.posterPath)
+        assertNotNull(seriesEntity?.backdropPath)
+
+        assertEquals(dummySeries, seriesEntity)
+        assertEquals(dummySeries?.id, seriesEntity?.id)
+        assertEquals(dummySeries?.title, seriesEntity?.title)
+        assertEquals(dummySeries?.releaseDate, seriesEntity?.releaseDate)
+        assertEquals(dummySeries?.overview, seriesEntity?.overview)
+        assertEquals(dummySeries?.posterPath, seriesEntity?.posterPath)
+        assertEquals(dummySeries?.backdropPath, seriesEntity?.backdropPath)
+        assertEquals(dummySeriesList.data?.size, seriesEntities?.size)
 
         viewModel.getFavoriteSeries().observeForever(observer)
-        verify(observer).onChanged(dummyDataSeries)
+        verify(observer).onChanged(dummySeriesList)
     }
 
 

@@ -1,10 +1,12 @@
 package com.dhimas.dhiflix.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.source.local.LocalDataSource
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.data.source.local.entity.SimilarShowEntity
 import com.dhimas.dhiflix.data.source.remote.ApiResponse
 import com.dhimas.dhiflix.data.source.remote.RemoteDataSource
 import com.dhimas.dhiflix.data.source.remote.response.MovieResponse
@@ -201,6 +203,76 @@ class ShowRepository private constructor(
 
         }.asLiveData()
     }
+
+    override fun getSimilarMovieList(movie_id: String): LiveData<Resource<List<ShowEntity>>> {
+        return object : NetworkBoundResource<List<ShowEntity>, List<MovieResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<List<ShowEntity>> =
+                localDataSource.getSimilarMovies()
+
+            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
+
+            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
+                remoteDataSource.getSimilarMovieList(movie_id)
+
+            override fun saveCallResult(data: List<MovieResponse>) {
+                localDataSource.deleteAllSimilarShow()
+
+                val movieList = ArrayList<SimilarShowEntity>()
+
+                for (response in data) {
+                    val movie = SimilarShowEntity(
+                        response.movie_id,
+                        response.title,
+                        response.releaseDate,
+                        response.overview,
+                        response.posterPath,
+                        response.backdropPath,
+                        Constant.MOVIE_TYPE
+                    )
+
+                    movieList.add(movie)
+                }
+
+                localDataSource.insertSimilarShows(movieList)
+            }
+        }.asLiveData()
+    }
+
+    override fun getSimilarSeriesList(series_id: String): LiveData<Resource<List<ShowEntity>>> {
+        return object : NetworkBoundResource<List<ShowEntity>, List<SeriesResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<List<ShowEntity>> =
+                localDataSource.getSimilarSeries()
+
+            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
+
+            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
+                remoteDataSource.getSimilarSeriesList(series_id)
+
+            override fun saveCallResult(data: List<SeriesResponse>) {
+                localDataSource.deleteAllSimilarShow()
+
+                val seriesList = ArrayList<SimilarShowEntity>()
+
+                for (response in data) {
+                    val series = SimilarShowEntity(
+                        response.series_id,
+                        response.name,
+                        response.releaseDate,
+                        response.overview,
+                        response.posterPath,
+                        response.backdropPath,
+                        Constant.SERIES_TYPE
+                    )
+
+                    seriesList.add(series)
+                }
+
+                localDataSource.insertSimilarShows(seriesList)
+            }
+        }.asLiveData()
+    }
+
+
 
     fun setFavorite(showEntity: ShowEntity) {
         appExecutors.diskIO().execute{

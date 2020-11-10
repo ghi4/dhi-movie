@@ -39,32 +39,35 @@ internal class SeriesViewModelTest {
 
     @Test
     fun getSeriesList() {
-        val dummySeries = Resource.success(DummyData.generateDummySeries())
+        val dummySeriesList = Resource.success(DummyData.generateDummySeries())
         val series = MutableLiveData<Resource<List<ShowEntity>>>()
-        series.value = dummySeries
+        series.value = dummySeriesList
 
         `when`(seriesRepository.getSeriesList()).thenReturn(series)
-        val seriesEntity = viewModel.getSeries().value?.data
+        val seriesEntities = viewModel.getSeries().value?.data
         verify(seriesRepository).getSeriesList()
 
-        assertNotNull(seriesEntity)
-        assertNotNull(seriesEntity?.get(0)?.id)
-        assertNotNull(seriesEntity?.get(0)?.title)
-        assertNotNull(seriesEntity?.get(0)?.releaseDate)
-        assertNotNull(seriesEntity?.get(0)?.overview)
-        assertNotNull(seriesEntity?.get(0)?.posterPath)
-        assertNotNull(seriesEntity?.get(0)?.backdropPath)
+        val dummySeries = dummySeriesList.data?.get(0)
+        val seriesEntity = seriesEntities?.get(0)
 
-        assertEquals(dummySeries.data?.size, seriesEntity?.size)
-        assertEquals(dummySeries.data?.get(0), seriesEntity?.get(0))
-        assertEquals(dummySeries.data?.get(0)?.id, seriesEntity?.get(0)?.id)
-        assertEquals(dummySeries.data?.get(0)?.title, seriesEntity?.get(0)?.title)
-        assertEquals(dummySeries.data?.get(0)?.releaseDate, seriesEntity?.get(0)?.releaseDate)
-        assertEquals(dummySeries.data?.get(0)?.overview, seriesEntity?.get(0)?.overview)
-        assertEquals(dummySeries.data?.get(0)?.posterPath, seriesEntity?.get(0)?.posterPath)
-        assertEquals(dummySeries.data?.get(0)?.backdropPath, seriesEntity?.get(0)?.backdropPath)
+        assertNotNull(seriesEntity)
+        assertNotNull(seriesEntity?.id)
+        assertNotNull(seriesEntity?.title)
+        assertNotNull(seriesEntity?.releaseDate)
+        assertNotNull(seriesEntity?.overview)
+        assertNotNull(seriesEntity?.posterPath)
+        assertNotNull(seriesEntity?.backdropPath)
+
+        assertEquals(dummySeries, seriesEntity)
+        assertEquals(dummySeries?.id, seriesEntity?.id)
+        assertEquals(dummySeries?.title, seriesEntity?.title)
+        assertEquals(dummySeries?.releaseDate, seriesEntity?.releaseDate)
+        assertEquals(dummySeries?.overview, seriesEntity?.overview)
+        assertEquals(dummySeries?.posterPath, seriesEntity?.posterPath)
+        assertEquals(dummySeries?.backdropPath, seriesEntity?.backdropPath)
+        assertEquals(dummySeriesList.data?.size, seriesEntities?.size)
 
         viewModel.getSeries().observeForever(observer)
-        verify(observer).onChanged(dummySeries)
+        verify(observer).onChanged(dummySeriesList)
     }
 }

@@ -30,14 +30,14 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
         return showEntity
     }
 
-    fun getShowList(show_type: String): LiveData<Resource<List<ShowEntity>>> {
+    fun getShowList(show_type: String, show_id: String): LiveData<Resource<List<ShowEntity>>> {
         if(!::showList.isInitialized){
             showList = when (show_type) {
                 DetailActivity.EXTRA_FROM_MOVIES -> {
-                    getMovies()
+                    getMovies(show_id)
                 }
                 else -> {
-                    getSeries()
+                    getSeries(show_id)
                 }
             }
         }
@@ -51,9 +51,9 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
     private fun getSeriesEntityById(show_id: String): LiveData<Resource<ShowEntity>> =
         showRepository.getSeriesDetail(show_id)
 
-    private fun getMovies(): LiveData<Resource<List<ShowEntity>>> = showRepository.getMovieList()
+    private fun getMovies(show_id: String): LiveData<Resource<List<ShowEntity>>> = showRepository.getSimilarMovieList(show_id)
 
-    private fun getSeries(): LiveData<Resource<List<ShowEntity>>> = showRepository.getSeriesList()
+    private fun getSeries(show_id: String): LiveData<Resource<List<ShowEntity>>> = showRepository.getSimilarSeriesList(show_id)
 
     fun setFavorite(showEntity: ShowEntity) {
         showRepository.setFavorite(showEntity)

@@ -10,8 +10,7 @@ object PagedListUtil {
 
         `when`(pagedList[anyInt()]).then{invocation ->
             val index = invocation.arguments.first() as Int
-            list[index
-            ]
+            list[index]
         }
 
         `when`(pagedList.size).thenReturn(list.size)

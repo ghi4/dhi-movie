@@ -38,33 +38,36 @@ internal class MovieViewModelTest {
 
     @Test
     fun getMovieList() {
-        val dummyMovie = Resource.success(DummyData.generateDummyMovies())
+        val dummyMovieList = Resource.success(DummyData.generateDummyMovies())
         val movies = MutableLiveData<Resource<List<ShowEntity>>>()
-        movies.value = dummyMovie
+        movies.value = dummyMovieList
 
         `when`(movieRepository.getMovieList()).thenReturn(movies)
-        val movieEntity = viewModel.getMovies().value?.data
+        val movieEntities = viewModel.getMovies().value?.data
         verify(movieRepository).getMovieList()
 
-        assertNotNull(movieEntity)
-        assertNotNull(movieEntity?.get(0)?.id)
-        assertNotNull(movieEntity?.get(0)?.title)
-        assertNotNull(movieEntity?.get(0)?.releaseDate)
-        assertNotNull(movieEntity?.get(0)?.overview)
-        assertNotNull(movieEntity?.get(0)?.posterPath)
-        assertNotNull(movieEntity?.get(0)?.backdropPath)
+        val dummyMovie = dummyMovieList.data?.get(0)
+        val movieEntity = movieEntities?.get(0)
 
-        assertEquals(dummyMovie.data?.size, movieEntity?.size)
-        assertEquals(dummyMovie.data?.get(0), movieEntity?.get(0))
-        assertEquals(dummyMovie.data?.get(0)?.id, movieEntity?.get(0)?.id)
-        assertEquals(dummyMovie.data?.get(0)?.title, movieEntity?.get(0)?.title)
-        assertEquals(dummyMovie.data?.get(0)?.releaseDate, movieEntity?.get(0)?.releaseDate)
-        assertEquals(dummyMovie.data?.get(0)?.overview, movieEntity?.get(0)?.overview)
-        assertEquals(dummyMovie.data?.get(0)?.posterPath, movieEntity?.get(0)?.posterPath)
-        assertEquals(dummyMovie.data?.get(0)?.backdropPath, movieEntity?.get(0)?.backdropPath)
+        assertNotNull(movieEntity)
+        assertNotNull(movieEntity?.id)
+        assertNotNull(movieEntity?.title)
+        assertNotNull(movieEntity?.releaseDate)
+        assertNotNull(movieEntity?.overview)
+        assertNotNull(movieEntity?.posterPath)
+        assertNotNull(movieEntity?.backdropPath)
+
+        assertEquals(dummyMovie, movieEntity)
+        assertEquals(dummyMovie?.id, movieEntity?.id)
+        assertEquals(dummyMovie?.title, movieEntity?.title)
+        assertEquals(dummyMovie?.releaseDate, movieEntity?.releaseDate)
+        assertEquals(dummyMovie?.overview, movieEntity?.overview)
+        assertEquals(dummyMovie?.posterPath, movieEntity?.posterPath)
+        assertEquals(dummyMovie?.backdropPath, movieEntity?.backdropPath)
+        assertEquals(dummyMovieList.data?.size, movieEntities?.size)
 
         viewModel.getMovies().observeForever(observer)
-        verify(observer).onChanged(dummyMovie)
+        verify(observer).onChanged(dummyMovieList)
     }
 
 }

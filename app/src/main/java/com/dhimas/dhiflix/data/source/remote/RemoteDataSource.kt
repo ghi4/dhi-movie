@@ -1,7 +1,5 @@
 package com.dhimas.dhiflix.data.source.remote
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dhimas.dhiflix.data.source.remote.response.MovieListResponse
@@ -39,7 +37,6 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                 response: Response<MovieListResponse>
             ) {
 
-                Handler(Looper.getMainLooper()).postDelayed({
                 if (response.isSuccessful) {
                     val mMovieListResponse = response.body()?.movieList
 
@@ -53,8 +50,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                 }
 
 
-                    EspressoIdlingResource.decrement()
-                }, 5000L)
+                EspressoIdlingResource.decrement()
 
             }
 
@@ -158,6 +154,79 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                 resultSeries.value = ApiResponse.error(SeriesResponse(), "An error occurred.")
             }
 
+        })
+
+        return resultSeries
+    }
+
+    fun getSimilarMovieList(movie_id: String): LiveData<ApiResponse<List<MovieResponse>>> {
+        val call = retrofitService.getSimilarMovie(movie_id)
+        val resultMovie = MutableLiveData<ApiResponse<List<MovieResponse>>>()
+        var movieListResponse = ArrayList<MovieResponse>()
+
+        EspressoIdlingResource.increment()
+
+        call.enqueue(object : Callback<MovieListResponse> {
+            override fun onResponse(
+                call: Call<MovieListResponse>,
+                response: Response<MovieListResponse>
+            ) {
+
+                if (response.isSuccessful) {
+                    val mMovieListResponse = response.body()?.movieList
+
+                    if (!mMovieListResponse.isNullOrEmpty()) {
+                        movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
+                        resultMovie.value = ApiResponse.success(movieListResponse)
+                    } else {
+                        movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
+                        resultMovie.value = ApiResponse.empty(movieListResponse, "No movie found.")
+                    }
+                }
+
+
+                EspressoIdlingResource.decrement()
+
+            }
+
+            override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
+                resultMovie.value = ApiResponse.error(movieListResponse, "An error occurred.")
+            }
+        })
+
+        return resultMovie
+    }
+
+    fun getSimilarSeriesList(series_id: String): LiveData<ApiResponse<List<SeriesResponse>>> {
+        val call = retrofitService.getSimilarSeries(series_id)
+        val resultSeries = MutableLiveData<ApiResponse<List<SeriesResponse>>>()
+        var seriesListResponse = ArrayList<SeriesResponse>()
+
+        EspressoIdlingResource.increment()
+
+        call.enqueue(object : Callback<SeriesListResponse> {
+            override fun onResponse(
+                call: Call<SeriesListResponse>,
+                response: Response<SeriesListResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val mSeriesListResponse = response.body()?.seriesList
+
+                    if (!mSeriesListResponse.isNullOrEmpty()) {
+                        seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
+                        resultSeries.value = ApiResponse.success(seriesListResponse)
+                    } else {
+                        seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
+                        resultSeries.value =
+                            ApiResponse.empty(seriesListResponse, "No series found.")
+                    }
+                }
+                EspressoIdlingResource.decrement()
+            }
+
+            override fun onFailure(call: Call<SeriesListResponse>, t: Throwable) {
+                resultSeries.value = ApiResponse.error(seriesListResponse, "An error occurred.")
+            }
         })
 
         return resultSeries
