@@ -185,4 +185,20 @@ class FakeShowRepository constructor(
         }.asLiveData()
     }
 
+    override fun getSimilarMovieList(movie_id: String): LiveData<Resource<List<ShowEntity>>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getSimilarSeriesList(series_id: String): LiveData<Resource<List<ShowEntity>>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun searchMovie(keyword: String): LiveData<Resource<List<ShowEntity>>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun searchSeries(keyword: String): LiveData<Resource<List<ShowEntity>>> {
+        TODO("Not yet implemented")
+    }
+
 }

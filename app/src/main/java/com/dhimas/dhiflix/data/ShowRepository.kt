@@ -1,7 +1,6 @@
 package com.dhimas.dhiflix.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.source.local.LocalDataSource
@@ -272,6 +271,69 @@ class ShowRepository private constructor(
         }.asLiveData()
     }
 
+    override fun searchMovie(keyword: String): LiveData<Resource<List<ShowEntity>>> {
+        return object : NetworkBoundResource<List<ShowEntity>, List<MovieResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<List<ShowEntity>> =
+                localDataSource.searchMovie("$keyword%")
+
+            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
+
+            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
+                remoteDataSource.searchMovie(keyword)
+
+            override fun saveCallResult(data: List<MovieResponse>) {
+                val movieList = ArrayList<ShowEntity>()
+
+                for (response in data) {
+                    val movie = ShowEntity(
+                        response.movie_id,
+                        response.title,
+                        response.releaseDate,
+                        response.overview,
+                        response.posterPath,
+                        response.backdropPath,
+                        Constant.MOVIE_TYPE
+                    )
+
+                    movieList.add(movie)
+                }
+
+                localDataSource.insertShows(movieList)
+            }
+        }.asLiveData()
+    }
+
+    override fun searchSeries(keyword: String): LiveData<Resource<List<ShowEntity>>> {
+        return object : NetworkBoundResource<List<ShowEntity>, List<SeriesResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<List<ShowEntity>> =
+                localDataSource.searchSeries("$keyword%")
+
+            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
+
+            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
+                remoteDataSource.searchSeries(keyword)
+
+            override fun saveCallResult(data: List<SeriesResponse>) {
+                val seriesList = ArrayList<ShowEntity>()
+
+                for (response in data) {
+                    val series = ShowEntity(
+                        response.series_id,
+                        response.name,
+                        response.releaseDate,
+                        response.overview,
+                        response.posterPath,
+                        response.backdropPath,
+                        Constant.SERIES_TYPE
+                    )
+
+                    seriesList.add(series)
+                }
+
+                localDataSource.insertShows(seriesList)
+            }
+        }.asLiveData()
+    }
 
 
     fun setFavorite(showEntity: ShowEntity) {

@@ -28,6 +28,12 @@ interface ShowDao {
     @Query("SELECT * FROM similarshowtable WHERE show_type = ${Constant.SERIES_TYPE}")
     fun getSimilarSeries(): LiveData<List<ShowEntity>>
 
+    @Query("SELECT * FROM showtable WHERE show_type = ${Constant.MOVIE_TYPE} AND title LIKE :keyword")
+    fun searchMovies(keyword: String): LiveData<List<ShowEntity>>
+
+    @Query("SELECT * FROM showtable WHERE show_type = ${Constant.SERIES_TYPE} AND title LIKE :keyword")
+    fun searchSeries(keyword: String): LiveData<List<ShowEntity>>
+
     @Query("SELECT * FROM showtable WHERE id = :showId")
     fun getShowById(showId: String): LiveData<ShowEntity>
 

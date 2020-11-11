@@ -231,4 +231,75 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
 
         return resultSeries
     }
+
+    fun searchMovie(keyword: String): LiveData<ApiResponse<List<MovieResponse>>> {
+        val call = retrofitService.searchMovie(keyword)
+        val resultMovie = MutableLiveData<ApiResponse<List<MovieResponse>>>()
+        var movieListResponse = ArrayList<MovieResponse>()
+
+        EspressoIdlingResource.increment()
+
+        call.enqueue(object : Callback<MovieListResponse> {
+            override fun onResponse(
+                call: Call<MovieListResponse>,
+                response: Response<MovieListResponse>
+            ) {
+
+                if (response.isSuccessful) {
+                    val mMovieListResponse = response.body()?.movieList
+
+                    if (!mMovieListResponse.isNullOrEmpty()) {
+                        movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
+                        resultMovie.value = ApiResponse.success(movieListResponse)
+                    } else {
+                        movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
+                        resultMovie.value = ApiResponse.empty(movieListResponse, "No movie found.")
+                    }
+                }
+                EspressoIdlingResource.decrement()
+            }
+
+            override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
+                resultMovie.value = ApiResponse.error(movieListResponse, "An error occurred.")
+            }
+        })
+
+        return resultMovie
+    }
+
+    fun searchSeries(keyword: String): LiveData<ApiResponse<List<SeriesResponse>>> {
+        val call = retrofitService.searchSeries(keyword)
+        val resultSeries = MutableLiveData<ApiResponse<List<SeriesResponse>>>()
+        var seriesListResponse = ArrayList<SeriesResponse>()
+
+        EspressoIdlingResource.increment()
+
+        call.enqueue(object : Callback<SeriesListResponse> {
+            override fun onResponse(
+                call: Call<SeriesListResponse>,
+                response: Response<SeriesListResponse>
+            ) {
+
+                if (response.isSuccessful) {
+                    val mSeriesListResponse = response.body()?.seriesList
+
+                    if (!mSeriesListResponse.isNullOrEmpty()) {
+                        seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
+                        resultSeries.value = ApiResponse.success(seriesListResponse)
+                    } else {
+                        seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
+                        resultSeries.value =
+                            ApiResponse.empty(seriesListResponse, "No series found.")
+                    }
+                }
+                EspressoIdlingResource.decrement()
+            }
+
+            override fun onFailure(call: Call<SeriesListResponse>, t: Throwable) {
+                resultSeries.value = ApiResponse.error(seriesListResponse, "An error occurred.")
+            }
+        })
+
+        return resultSeries
+    }
 }

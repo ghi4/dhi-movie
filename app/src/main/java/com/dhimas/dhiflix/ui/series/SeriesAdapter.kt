@@ -40,7 +40,7 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
                 tv_release_date.text = Utils.dateParseToMonthAndYear(series.releaseDate)
 
                 Picasso.get()
-                    .load(Constant.URL_BASE_IMAGE + series.posterPath!!)
+                    .load(Constant.URL_BASE_IMAGE + series.posterPath)
                     .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.image_error_2_3)
                     .placeholder(R.drawable.poster_placeholder)

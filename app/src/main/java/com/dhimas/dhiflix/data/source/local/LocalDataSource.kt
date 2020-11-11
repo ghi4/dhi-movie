@@ -27,6 +27,10 @@ class LocalDataSource private constructor(private val showDao: ShowDao) {
 
     fun getSimilarSeries(): LiveData<List<ShowEntity>> = showDao.getSimilarSeries()
 
+    fun searchMovie(keyword: String): LiveData<List<ShowEntity>> = showDao.searchMovies(keyword)
+
+    fun searchSeries(keyword: String): LiveData<List<ShowEntity>> = showDao.searchSeries(keyword)
+
     fun getShowById(showId: String): LiveData<ShowEntity> = showDao.getShowById(showId)
 
     fun insertShows(shows: List<ShowEntity>) = showDao.insertShows(shows)

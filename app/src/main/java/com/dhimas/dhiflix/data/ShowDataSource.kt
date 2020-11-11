@@ -23,4 +23,8 @@ interface ShowDataSource {
 
     fun getSimilarSeriesList(series_id: String): LiveData<Resource<List<ShowEntity>>>
 
+    fun searchMovie(keyword: String): LiveData<Resource<List<ShowEntity>>>
+
+    fun searchSeries(keyword: String): LiveData<Resource<List<ShowEntity>>>
+
 }
