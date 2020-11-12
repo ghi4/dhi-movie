@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
@@ -39,8 +38,9 @@ class SeriesFragment : Fragment() {
             seriesAdapter = SeriesAdapter()
 
             //Minimum time for shimmer
-            val minShimmerTime = if(!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
-            if(viewModel.isAlreadyShimmer) {
+            val minShimmerTime =
+                if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
+            if (viewModel.isAlreadyShimmer) {
                 stopShimmer()
             }
 
@@ -52,7 +52,7 @@ class SeriesFragment : Fragment() {
 
             //Change grid layout spanCount when Landscape/Portrait
             val phoneOrientation = requireActivity().resources.configuration.orientation
-            val spanCount = if(phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
+            val spanCount = if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
             rv_series.layoutManager = GridLayoutManager(context, spanCount)
 
             rv_series.hasFixedSize()
@@ -69,7 +69,7 @@ class SeriesFragment : Fragment() {
                             Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
                         }
                         Status.SUCCESS -> {
-                            seriesAdapter.setSeries(seriesList.data as ArrayList<ShowEntity>)
+                            seriesAdapter.submitList(seriesList.data)
                             seriesAdapter.notifyDataSetChanged()
                         }
                         Status.ERROR -> {
@@ -82,7 +82,7 @@ class SeriesFragment : Fragment() {
         }
     }
 
-    private fun stopShimmer(){
+    private fun stopShimmer() {
         seriesShimmerLayout.stopShimmer()
         seriesShimmerLayout.visibility = View.GONE
     }

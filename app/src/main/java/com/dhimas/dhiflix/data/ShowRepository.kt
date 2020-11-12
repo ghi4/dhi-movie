@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.source.local.LocalDataSource
+import com.dhimas.dhiflix.data.source.local.entity.SearchShowEntity
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.data.source.local.entity.SimilarShowEntity
 import com.dhimas.dhiflix.data.source.remote.ApiResponse
@@ -34,12 +35,24 @@ class ShowRepository private constructor(
             }
     }
 
-    override fun getMovieList(): LiveData<Resource<List<ShowEntity>>> {
-        return object : NetworkBoundResource<List<ShowEntity>, List<MovieResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<ShowEntity>> =
-                localDataSource.getAllMovie()
+    fun pagedListConfigBuilder(): PagedList.Config {
+        return PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(6)
+            .setPageSize(6)
+            .build()
+    }
 
-            override fun shouldFetch(data: List<ShowEntity>?): Boolean =
+    override fun getMovieList(): LiveData<Resource<PagedList<ShowEntity>>> {
+        return object :
+            NetworkBoundResource<PagedList<ShowEntity>, List<MovieResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
+                val config = pagedListConfigBuilder()
+
+                return LivePagedListBuilder(localDataSource.getAllMovie(), config).build()
+            }
+
+            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean =
                 data == null || data.isEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
@@ -120,12 +133,16 @@ class ShowRepository private constructor(
         }.asLiveData()
     }
 
-    override fun getSeriesList(): LiveData<Resource<List<ShowEntity>>> {
-        return object : NetworkBoundResource<List<ShowEntity>, List<SeriesResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<ShowEntity>> =
-                localDataSource.getAllSeries()
+    override fun getSeriesList(): LiveData<Resource<PagedList<ShowEntity>>> {
+        return object :
+            NetworkBoundResource<PagedList<ShowEntity>, List<SeriesResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
+                val config = pagedListConfigBuilder()
 
-            override fun shouldFetch(data: List<ShowEntity>?): Boolean =
+                return LivePagedListBuilder(localDataSource.getAllSeries(), config).build()
+            }
+
+            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean =
                 data == null || data.isEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
@@ -182,11 +199,7 @@ class ShowRepository private constructor(
         return object :
             NetworkBoundResource<PagedList<ShowEntity>, List<SeriesResponse>>(appExecutors) {
             public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
-                val config = PagedList.Config.Builder()
-                    .setEnablePlaceholders(false)
-                    .setInitialLoadSizeHint(4)
-                    .setPageSize(4)
-                    .build()
+                val config = pagedListConfigBuilder()
 
                 return LivePagedListBuilder(localDataSource.getAllFavoriteSeries(), config).build()
             }
@@ -203,12 +216,16 @@ class ShowRepository private constructor(
         }.asLiveData()
     }
 
-    override fun getSimilarMovieList(movie_id: String): LiveData<Resource<List<ShowEntity>>> {
-        return object : NetworkBoundResource<List<ShowEntity>, List<MovieResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<ShowEntity>> =
-                localDataSource.getSimilarMovies()
+    override fun getSimilarMovieList(movie_id: String): LiveData<Resource<PagedList<ShowEntity>>> {
+        return object :
+            NetworkBoundResource<PagedList<ShowEntity>, List<MovieResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
+                val config = pagedListConfigBuilder()
 
-            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
+                return LivePagedListBuilder(localDataSource.getSimilarMovies(), config).build()
+            }
+
+            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = true
 
             override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
                 remoteDataSource.getSimilarMovieList(movie_id)
@@ -237,12 +254,16 @@ class ShowRepository private constructor(
         }.asLiveData()
     }
 
-    override fun getSimilarSeriesList(series_id: String): LiveData<Resource<List<ShowEntity>>> {
-        return object : NetworkBoundResource<List<ShowEntity>, List<SeriesResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<ShowEntity>> =
-                localDataSource.getSimilarSeries()
+    override fun getSimilarSeriesList(series_id: String): LiveData<Resource<PagedList<ShowEntity>>> {
+        return object :
+            NetworkBoundResource<PagedList<ShowEntity>, List<SeriesResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
+                val config = pagedListConfigBuilder()
 
-            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
+                return LivePagedListBuilder(localDataSource.getSimilarSeries(), config).build()
+            }
+
+            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = true
 
             override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
                 remoteDataSource.getSimilarSeriesList(series_id)
@@ -271,21 +292,30 @@ class ShowRepository private constructor(
         }.asLiveData()
     }
 
-    override fun searchMovie(keyword: String): LiveData<Resource<List<ShowEntity>>> {
-        return object : NetworkBoundResource<List<ShowEntity>, List<MovieResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<ShowEntity>> =
-                localDataSource.searchMovie("$keyword%")
+    override fun searchMovie(keyword: String): LiveData<Resource<PagedList<ShowEntity>>> {
+        return object :
+            NetworkBoundResource<PagedList<ShowEntity>, List<MovieResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
+                val config = pagedListConfigBuilder()
 
-            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
+                return LivePagedListBuilder(
+                    localDataSource.searchMovie("$keyword%"),
+                    config
+                ).build()
+            }
+
+            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = true
 
             override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
                 remoteDataSource.searchMovie(keyword)
 
             override fun saveCallResult(data: List<MovieResponse>) {
-                val movieList = ArrayList<ShowEntity>()
+                val movieList = ArrayList<SearchShowEntity>()
+
+                localDataSource.deleteAllSearchShow()
 
                 for (response in data) {
-                    val movie = ShowEntity(
+                    val movie = SearchShowEntity(
                         response.movie_id,
                         response.title,
                         response.releaseDate,
@@ -298,26 +328,35 @@ class ShowRepository private constructor(
                     movieList.add(movie)
                 }
 
-                localDataSource.insertShows(movieList)
+                localDataSource.insertSearchShows(movieList)
             }
         }.asLiveData()
     }
 
-    override fun searchSeries(keyword: String): LiveData<Resource<List<ShowEntity>>> {
-        return object : NetworkBoundResource<List<ShowEntity>, List<SeriesResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<ShowEntity>> =
-                localDataSource.searchSeries("$keyword%")
+    override fun searchSeries(keyword: String): LiveData<Resource<PagedList<ShowEntity>>> {
+        return object :
+            NetworkBoundResource<PagedList<ShowEntity>, List<SeriesResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
+                val config = pagedListConfigBuilder()
 
-            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
+                return LivePagedListBuilder(
+                    localDataSource.searchSeries("$keyword%"),
+                    config
+                ).build()
+            }
+
+            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = true
 
             override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
                 remoteDataSource.searchSeries(keyword)
 
             override fun saveCallResult(data: List<SeriesResponse>) {
-                val seriesList = ArrayList<ShowEntity>()
+                val seriesList = ArrayList<SearchShowEntity>()
+
+                localDataSource.deleteAllSearchShow()
 
                 for (response in data) {
-                    val series = ShowEntity(
+                    val series = SearchShowEntity(
                         response.series_id,
                         response.name,
                         response.releaseDate,
@@ -330,14 +369,14 @@ class ShowRepository private constructor(
                     seriesList.add(series)
                 }
 
-                localDataSource.insertShows(seriesList)
+                localDataSource.insertSearchShows(seriesList)
             }
         }.asLiveData()
     }
 
 
     fun setFavorite(showEntity: ShowEntity) {
-        appExecutors.diskIO().execute{
+        appExecutors.diskIO().execute {
             localDataSource.setFavorite(showEntity)
         }
     }

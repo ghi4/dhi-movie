@@ -12,14 +12,14 @@ class FavoriteViewModel(private val showRepository: ShowRepository) : ViewModel(
     private lateinit var seriesList: LiveData<Resource<PagedList<ShowEntity>>>
 
     fun getFavoriteMovies(): LiveData<Resource<PagedList<ShowEntity>>> {
-        if(!::movieList.isInitialized)
+        if (!::movieList.isInitialized)
             movieList = showRepository.getFavoriteMovieList()
 
         return movieList
     }
 
     fun getFavoriteSeries(): LiveData<Resource<PagedList<ShowEntity>>> {
-        if(!::seriesList.isInitialized)
+        if (!::seriesList.isInitialized)
             seriesList = showRepository.getFavoriteSeriesList()
 
         return seriesList

@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
@@ -38,14 +37,14 @@ class MovieFragment : Fragment() {
         root.movieShimmerLayout.startShimmer()
 
         //Prevent re-shimmer when rotating phone
-        if(viewModel.isAlreadyShimmer){
+        if (viewModel.isAlreadyShimmer) {
             root.movieShimmerLayout.stopShimmer()
             root.movieShimmerLayout.visibility = View.GONE
         }
 
         //Change grid layout spanCount when Landscape/Portrait
         val phoneOrientation = requireActivity().resources.configuration.orientation
-        val spanCount = if(phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
+        val spanCount = if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
 
         root.rv_movie.layoutManager = GridLayoutManager(context, spanCount)
         root.rv_movie.hasFixedSize()
@@ -58,7 +57,8 @@ class MovieFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         if (activity != null && view != null && context != null) {
-            val minShimmerTime = if(!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
+            val minShimmerTime =
+                if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
 
             //Delay loading for shimmer
             Handler(Looper.getMainLooper()).postDelayed({
@@ -75,7 +75,7 @@ class MovieFragment : Fragment() {
                         Status.LOADING -> Toast.makeText(context, "Loading", Toast.LENGTH_SHORT)
                             .show()
                         Status.SUCCESS -> {
-                            movieAdapter.setMovies(movieList.data as ArrayList<ShowEntity>)
+                            movieAdapter.submitList(movieList.data)
                             movieAdapter.notifyDataSetChanged()
                             viewModel.setAlreadyShimmer()
                             stopShimmer()
@@ -90,7 +90,7 @@ class MovieFragment : Fragment() {
         }
     }
 
-    private fun showSnackBar(){
+    private fun showSnackBar() {
         Snackbar.make(requireView(), "No internet connection!", Snackbar.LENGTH_INDEFINITE)
             .setAction("RETRY") {
                 viewModel.refresh()
@@ -99,7 +99,7 @@ class MovieFragment : Fragment() {
             .show()
     }
 
-    private fun stopShimmer(){
+    private fun stopShimmer() {
         movieShimmerLayout.stopShimmer()
         movieShimmerLayout.visibility = View.GONE
     }

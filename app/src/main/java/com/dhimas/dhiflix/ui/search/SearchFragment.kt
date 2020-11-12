@@ -32,8 +32,8 @@ class SearchFragment : Fragment() {
 
         viewPager2.adapter = ViewPagerAdapter(requireActivity(), null)
 
-        TabLayoutMediator(tabs, viewPager2){ tab, position ->
-            when(position){
+        TabLayoutMediator(tabs, viewPager2) { tab, position ->
+            when (position) {
                 0 -> tab.text = "Movies"
                 1 -> tab.text = "Series"
             }
@@ -49,13 +49,13 @@ class SearchFragment : Fragment() {
         movieAdapter = MovieAdapter()
 
         searchingX.doOnTextChanged { text, _, _, _ ->
-            if(!text.toString().isEmpty()){
+            if (text.toString().isNotEmpty()) {
                 setupViewPager(text.toString())
             }
         }
     }
 
-    private fun setupViewPager(keyword: String){
+    private fun setupViewPager(keyword: String) {
         viewPager2.adapter = ViewPagerAdapter(requireActivity(), keyword)
     }
 

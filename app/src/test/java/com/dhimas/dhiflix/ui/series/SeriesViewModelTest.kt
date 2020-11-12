@@ -3,11 +3,12 @@ package com.dhimas.dhiflix.ui.series
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.DummyData
+import com.dhimas.dhiflix.utils.PagedListUtil
 import com.dhimas.dhiflix.vo.Resource
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -15,6 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -27,25 +29,27 @@ internal class SeriesViewModelTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock
-    private lateinit var seriesRepository: ShowRepository
+    private lateinit var showRepository: ShowRepository
 
     @Mock
-    private lateinit var observer: Observer<Resource<List<ShowEntity>>>
+    private lateinit var observer: Observer<Resource<PagedList<ShowEntity>>>
 
     @Before
     fun setUp() {
-        viewModel = SeriesViewModel(seriesRepository)
+        viewModel = SeriesViewModel(showRepository)
     }
 
     @Test
     fun getSeriesList() {
-        val dummySeriesList = Resource.success(DummyData.generateDummySeries())
-        val series = MutableLiveData<Resource<List<ShowEntity>>>()
+        val dummySeriesList =
+            Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
+
+        val series = MutableLiveData<Resource<PagedList<ShowEntity>>>()
         series.value = dummySeriesList
 
-        `when`(seriesRepository.getSeriesList()).thenReturn(series)
+        `when`(showRepository.getSeriesList()).thenReturn(series)
         val seriesEntities = viewModel.getSeries().value?.data
-        verify(seriesRepository).getSeriesList()
+        Mockito.verify(showRepository).getSeriesList()
 
         val dummySeries = dummySeriesList.data?.get(0)
         val seriesEntity = seriesEntities?.get(0)
@@ -68,6 +72,6 @@ internal class SeriesViewModelTest {
         assertEquals(dummySeriesList.data?.size, seriesEntities?.size)
 
         viewModel.getSeries().observeForever(observer)
-        verify(observer).onChanged(dummySeriesList)
+        Mockito.verify(observer).onChanged(dummySeriesList)
     }
 }

@@ -7,9 +7,9 @@ import com.dhimas.dhiflix.vo.Resource
 
 interface ShowDataSource {
 
-    fun getMovieList(): LiveData<Resource<List<ShowEntity>>>
+    fun getMovieList(): LiveData<Resource<PagedList<ShowEntity>>>
 
-    fun getSeriesList(): LiveData<Resource<List<ShowEntity>>>
+    fun getSeriesList(): LiveData<Resource<PagedList<ShowEntity>>>
 
     fun getMovieDetail(movie_id: String): LiveData<Resource<ShowEntity>>
 
@@ -19,12 +19,12 @@ interface ShowDataSource {
 
     fun getFavoriteSeriesList(): LiveData<Resource<PagedList<ShowEntity>>>
 
-    fun getSimilarMovieList(movie_id: String): LiveData<Resource<List<ShowEntity>>>
+    fun getSimilarMovieList(movie_id: String): LiveData<Resource<PagedList<ShowEntity>>>
 
-    fun getSimilarSeriesList(series_id: String): LiveData<Resource<List<ShowEntity>>>
+    fun getSimilarSeriesList(series_id: String): LiveData<Resource<PagedList<ShowEntity>>>
 
-    fun searchMovie(keyword: String): LiveData<Resource<List<ShowEntity>>>
+    fun searchMovie(keyword: String): LiveData<Resource<PagedList<ShowEntity>>>
 
-    fun searchSeries(keyword: String): LiveData<Resource<List<ShowEntity>>>
+    fun searchSeries(keyword: String): LiveData<Resource<PagedList<ShowEntity>>>
 
 }

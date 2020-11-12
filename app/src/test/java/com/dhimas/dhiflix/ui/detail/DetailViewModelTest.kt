@@ -81,7 +81,10 @@ internal class DetailViewModelTest {
         `when`(showRepository.getSeriesDetail(dummySeries!!.id)).thenReturn(series)
 
         val seriesEntity =
-            viewModel.getShowEntityById(dummySeries.id, DetailActivity.EXTRA_FROM_SERIES).value?.data
+            viewModel.getShowEntityById(
+                dummySeries.id,
+                DetailActivity.EXTRA_FROM_SERIES
+            ).value?.data
         verify(showRepository).getSeriesDetail(dummySeries.id)
 
         assertNotNull(seriesEntity)

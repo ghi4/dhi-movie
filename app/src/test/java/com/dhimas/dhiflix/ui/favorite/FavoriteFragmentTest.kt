@@ -34,9 +34,6 @@ class FavoriteFragmentTest {
     @Mock
     private lateinit var observer: Observer<Resource<PagedList<ShowEntity>>>
 
-    @Mock
-    private lateinit var pagedList: PagedList<ShowEntity>
-
     @Before
     fun setUp() {
         viewModel = FavoriteViewModel(showRepository)
@@ -44,7 +41,8 @@ class FavoriteFragmentTest {
 
     @Test
     fun getFavoriteMovie() {
-        val dummyMovieList = Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
+        val dummyMovieList =
+            Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
 
         val movie = MutableLiveData<Resource<PagedList<ShowEntity>>>()
         movie.value = dummyMovieList
@@ -79,7 +77,8 @@ class FavoriteFragmentTest {
 
     @Test
     fun getFavoriteSeries() {
-        val dummySeriesList = Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
+        val dummySeriesList =
+            Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
 
         val series = MutableLiveData<Resource<PagedList<ShowEntity>>>()
         series.value = dummySeriesList

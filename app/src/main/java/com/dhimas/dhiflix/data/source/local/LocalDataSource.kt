@@ -2,6 +2,7 @@ package com.dhimas.dhiflix.data.source.local
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
+import com.dhimas.dhiflix.data.source.local.entity.SearchShowEntity
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.data.source.local.entity.SimilarShowEntity
 import com.dhimas.dhiflix.data.source.local.room.ShowDao
@@ -15,21 +16,23 @@ class LocalDataSource private constructor(private val showDao: ShowDao) {
             INSTANCE ?: LocalDataSource(showDao)
     }
 
-    fun getAllMovie(): LiveData<List<ShowEntity>> = showDao.getMovies()
+    fun getAllMovie(): DataSource.Factory<Int, ShowEntity> = showDao.getMovies()
 
-    fun getAllSeries(): LiveData<List<ShowEntity>> = showDao.getSeries()
+    fun getAllSeries(): DataSource.Factory<Int, ShowEntity> = showDao.getSeries()
 
     fun getAllFavoriteMovie(): DataSource.Factory<Int, ShowEntity> = showDao.getFavoriteMovies()
 
     fun getAllFavoriteSeries(): DataSource.Factory<Int, ShowEntity> = showDao.getFavoriteSeries()
 
-    fun getSimilarMovies(): LiveData<List<ShowEntity>> = showDao.getSimilarMovies()
+    fun getSimilarMovies(): DataSource.Factory<Int, ShowEntity> = showDao.getSimilarMovies()
 
-    fun getSimilarSeries(): LiveData<List<ShowEntity>> = showDao.getSimilarSeries()
+    fun getSimilarSeries(): DataSource.Factory<Int, ShowEntity> = showDao.getSimilarSeries()
 
-    fun searchMovie(keyword: String): LiveData<List<ShowEntity>> = showDao.searchMovies(keyword)
+    fun searchMovie(keyword: String): DataSource.Factory<Int, ShowEntity> =
+        showDao.searchMovies(keyword)
 
-    fun searchSeries(keyword: String): LiveData<List<ShowEntity>> = showDao.searchSeries(keyword)
+    fun searchSeries(keyword: String): DataSource.Factory<Int, ShowEntity> =
+        showDao.searchSeries(keyword)
 
     fun getShowById(showId: String): LiveData<ShowEntity> = showDao.getShowById(showId)
 
@@ -37,14 +40,14 @@ class LocalDataSource private constructor(private val showDao: ShowDao) {
 
     fun insertSimilarShows(shows: List<SimilarShowEntity>) = showDao.insertSimilarShows(shows)
 
-    fun updateShow(show: ShowEntity) = showDao.updateShow(show)
-
-    fun deleteShow(show: ShowEntity) = showDao.deleteShow(show)
+    fun insertSearchShows(shows: List<SearchShowEntity>) = showDao.insertSearchShows(shows)
 
     fun deleteAllSimilarShow() = showDao.deleteAllSimilar()
 
+    fun deleteAllSearchShow() = showDao.deleteAllSearch()
+
     fun setFavorite(showEntity: ShowEntity) {
-        showEntity.isFavorite = if(showEntity.isFavorite == 0) 1 else 0
+        showEntity.isFavorite = if (showEntity.isFavorite == 0) 1 else 0
         showDao.updateShow(showEntity)
     }
 }

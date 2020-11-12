@@ -34,10 +34,10 @@
             android:adjustViewBounds="true"
             android:background="@drawable/poster_placeholder"
             android:contentDescription="@string/content_description_movie_poster"
-            app:skeletonColor="@color/skeleton_grey_light"
             app:layout_constraintBottom_toBottomOf="@+id/iv_detail_backdrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_detail_backdrop"
+            app:skeletonColor="@color/skeleton_grey_light"
             app:srcCompat="@drawable/poster_placeholder" />
 
         <aglibs.loading.skeleton.view.SkeletonTextView
@@ -46,9 +46,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/poster_example_release_year"
-            app:skeletonColor="@color/skeleton_grey_light"
             app:layout_constraintStart_toStartOf="@+id/tv_detail_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_detail_title" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_title"
+            app:skeletonColor="@color/skeleton_grey_light" />
 
         <aglibs.loading.skeleton.view.SkeletonTextView
             android:id="@+id/tv_detail_title"
@@ -61,10 +61,10 @@
             android:text="@string/poster_example_title"
             android:textSize="28sp"
             android:textStyle="bold"
-            app:skeletonColor="@color/skeleton_grey_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_detail_poster"
-            app:layout_constraintTop_toTopOf="@+id/iv_detail_poster" />
+            app:layout_constraintTop_toTopOf="@+id/iv_detail_poster"
+            app:skeletonColor="@color/skeleton_grey_light" />
 
         <aglibs.loading.skeleton.view.SkeletonTextView
             android:id="@+id/tv_overview"
@@ -75,9 +75,9 @@
             android:text="@string/overview"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:skeletonColor="@color/skeleton_grey_light"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_detail_poster" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_detail_poster"
+            app:skeletonColor="@color/skeleton_grey_light" />
 
         <aglibs.loading.skeleton.view.SkeletonTextView
             android:id="@+id/tv_detail_overview"
@@ -88,11 +88,11 @@
             android:layout_marginEnd="16dp"
             android:lineSpacingExtra="2dp"
             android:text="@string/movie_example_overview"
-            app:skeletonColor="@color/skeleton_grey_light"
-            app:shimmerLightenFactor="0.7"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_overview" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_overview"
+            app:shimmerLightenFactor="0.7"
+            app:skeletonColor="@color/skeleton_grey_light" />
 
         <aglibs.loading.skeleton.view.SkeletonTextView
             android:id="@+id/tv_interest"
@@ -103,9 +103,9 @@
             android:text="@string/maybe_you_re_interested"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:skeletonColor="@color/skeleton_grey_light"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_detail_overview" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_overview"
+            app:skeletonColor="@color/skeleton_grey_light" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_other_movie"
@@ -126,9 +126,9 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="#FBA526"
             android:text="@string/add_to_favorite"
-            app:skeletonColor="@color/skeleton_grey_light"
             app:layout_constraintStart_toStartOf="@+id/tv_detail_release_date"
-            app:layout_constraintTop_toBottomOf="@+id/tv_detail_release_date" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_release_date"
+            app:skeletonColor="@color/skeleton_grey_light" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

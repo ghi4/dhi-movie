@@ -1,6 +1,5 @@
 package com.dhimas.dhiflix.utils
 
-import android.app.Activity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,14 +19,6 @@ object Utils {
         } else {
             "No Date"
         }
-    }
-
-    fun isNetworkConnected(){
-
-    }
-
-    fun restartActivity(activity: Activity){
-        activity.recreate()
     }
 
 }

@@ -62,10 +62,10 @@ class DetailActivity : AppCompatActivity() {
         viewModel.getShowList(showType, showId).observe(this, { movieList ->
             if (Status.SUCCESS == movieList.status) {
                 detailAdapter.setMovies(
-                    movieList.data as ArrayList<ShowEntity>,
                     showType,
                     viewModel.isAlreadyShimmer
                 )
+                detailAdapter.submitList(movieList.data)
                 detailAdapter.notifyDataSetChanged()
             }
         })

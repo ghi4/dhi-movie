@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.ui.series.SeriesAdapter
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.search_series_fragment.*
@@ -45,8 +44,8 @@ class SearchSeriesFragment : Fragment() {
 
         keyword?.let {
             viewModel.searchSeries(it).observe(viewLifecycleOwner, { seriesList ->
-                if(!seriesList.data.isNullOrEmpty()){
-                    seriesAdapter.setSeries(seriesList.data as ArrayList<ShowEntity>)
+                if (!seriesList.data.isNullOrEmpty()) {
+                    seriesAdapter.submitList(seriesList.data)
                     seriesAdapter.notifyDataSetChanged()
                 }
             })

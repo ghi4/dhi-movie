@@ -4,6 +4,8 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
@@ -13,12 +15,19 @@ import com.dhimas.dhiflix.utils.Utils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
-    private val seriesList = ArrayList<ShowEntity>()
+class SeriesAdapter : PagedListAdapter<ShowEntity, SeriesAdapter.SeriesViewHolder>(DIFF_CALLBACK) {
 
-    fun setSeries(series: ArrayList<ShowEntity>) {
-        this.seriesList.clear()
-        this.seriesList.addAll(series)
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShowEntity>() {
+            override fun areItemsTheSame(oldItem: ShowEntity, newItem: ShowEntity): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: ShowEntity, newItem: ShowEntity): Boolean {
+                return oldItem == newItem
+            }
+
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeriesViewHolder {
@@ -27,11 +36,9 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: SeriesViewHolder, position: Int) {
-        val seriesEntity = seriesList[position]
+        val seriesEntity = getItem(position) as ShowEntity
         holder.bind(seriesEntity)
     }
-
-    override fun getItemCount(): Int = seriesList.size
 
     class SeriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(series: ShowEntity) {

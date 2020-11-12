@@ -4,10 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.dhimas.dhiflix.data.source.local.entity.SearchShowEntity
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.data.source.local.entity.SimilarShowEntity
 
-@Database(entities = [ShowEntity::class, SimilarShowEntity::class], version = 1, exportSchema = false)
+@Database(
+    entities = [ShowEntity::class, SimilarShowEntity::class, SearchShowEntity::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class ShowDatabase : RoomDatabase() {
 
     companion object {

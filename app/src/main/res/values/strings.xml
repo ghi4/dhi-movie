@@ -16,4 +16,7 @@
     <string name="my_favorite_series">My Favorite Series</string>
     <string name="remove_from_favorite">Remove from favorite</string>
     <string name="search">Search</string>
+    <string name="search_movie_or_series">Search movie or series</string>
+    <string name="movie">Movie</string>
+    <string name="series">Series</string>
 </resources>

@@ -6,6 +6,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
@@ -13,14 +15,24 @@ import com.dhimas.dhiflix.utils.Constant
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie_horizontal.view.*
 
-class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
-    private var listMovies = ArrayList<ShowEntity>()
+class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolder>(DIFF_CALLBACK) {
     private var listType = DetailActivity.EXTRA_FROM_MOVIES //Default type is movie
     private var isAlreadyShimmer: Boolean = false
 
-    fun setMovies(listShows: ArrayList<ShowEntity>, listType: String, isAlreadyShimmer: Boolean) {
-        this.listMovies.clear()
-        this.listMovies.addAll(listShows)
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShowEntity>() {
+            override fun areItemsTheSame(oldItem: ShowEntity, newItem: ShowEntity): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: ShowEntity, newItem: ShowEntity): Boolean {
+                return oldItem == newItem
+            }
+
+        }
+    }
+
+    fun setMovies(listType: String, isAlreadyShimmer: Boolean) {
         this.listType = listType
         this.isAlreadyShimmer = isAlreadyShimmer
     }
@@ -32,11 +44,9 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
-        val movie = listMovies[position]
+        val movie = getItem(position) as ShowEntity
         holder.bind(movie, listType, isAlreadyShimmer)
     }
-
-    override fun getItemCount(): Int = listMovies.size
 
     class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(showEntity: ShowEntity, type: String, isAlreadyShimmer: Boolean) {
@@ -49,7 +59,7 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                     .placeholder(R.drawable.poster_placeholder)
                     .into(iv_poster_horizontal)
 
-                val minShimmerTime = if(!isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
+                val minShimmerTime = if (!isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
 
                 iv_poster_horizontal.startLoading()
 

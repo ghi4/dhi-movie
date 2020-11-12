@@ -2,6 +2,7 @@ package com.dhimas.dhiflix.ui.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.vo.Resource
@@ -9,14 +10,14 @@ import com.dhimas.dhiflix.vo.Resource
 class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() {
     var isAlreadyShimmer: Boolean = false
     private lateinit var showEntity: LiveData<Resource<ShowEntity>>
-    private lateinit var showList: LiveData<Resource<List<ShowEntity>>>
+    private lateinit var showList: LiveData<Resource<PagedList<ShowEntity>>>
 
     fun setAlreadyShimmer() {
         isAlreadyShimmer = true
     }
 
     fun getShowEntityById(show_id: String, show_type: String): LiveData<Resource<ShowEntity>> {
-        if(!::showEntity.isInitialized){
+        if (!::showEntity.isInitialized) {
             showEntity = when (show_type) {
                 DetailActivity.EXTRA_FROM_MOVIES -> {
                     getMovieEntityById(show_id)
@@ -30,8 +31,8 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
         return showEntity
     }
 
-    fun getShowList(show_type: String, show_id: String): LiveData<Resource<List<ShowEntity>>> {
-        if(!::showList.isInitialized){
+    fun getShowList(show_type: String, show_id: String): LiveData<Resource<PagedList<ShowEntity>>> {
+        if (!::showList.isInitialized) {
             showList = when (show_type) {
                 DetailActivity.EXTRA_FROM_MOVIES -> {
                     getMovies(show_id)
@@ -51,9 +52,11 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
     private fun getSeriesEntityById(show_id: String): LiveData<Resource<ShowEntity>> =
         showRepository.getSeriesDetail(show_id)
 
-    private fun getMovies(show_id: String): LiveData<Resource<List<ShowEntity>>> = showRepository.getSimilarMovieList(show_id)
+    private fun getMovies(show_id: String): LiveData<Resource<PagedList<ShowEntity>>> =
+        showRepository.getSimilarMovieList(show_id)
 
-    private fun getSeries(show_id: String): LiveData<Resource<List<ShowEntity>>> = showRepository.getSimilarSeriesList(show_id)
+    private fun getSeries(show_id: String): LiveData<Resource<PagedList<ShowEntity>>> =
+        showRepository.getSimilarSeriesList(show_id)
 
     fun setFavorite(showEntity: ShowEntity) {
         showRepository.setFavorite(showEntity)
