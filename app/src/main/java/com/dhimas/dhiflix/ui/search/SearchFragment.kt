@@ -48,7 +48,7 @@ class SearchFragment : Fragment() {
         viewModel = ViewModelProvider(this, factory)[SearchViewModel::class.java]
         movieAdapter = MovieAdapter()
 
-        searchingX.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        searchingX.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.toString().isNotEmpty()) {
                     setupViewPager(query.toString())

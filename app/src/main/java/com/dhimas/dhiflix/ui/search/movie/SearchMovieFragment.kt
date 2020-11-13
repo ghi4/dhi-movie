@@ -46,40 +46,40 @@ class SearchMovieFragment : Fragment() {
 
         keyword?.let {
             viewModel.searchMovie(it).observe(viewLifecycleOwner, { movieList ->
-                    when(movieList.status){
-                        Status.SUCCESS -> {
-                            movieAdapter.submitList(movieList.data)
-                            movieAdapter.notifyDataSetChanged()
+                when (movieList.status) {
+                    Status.SUCCESS -> {
+                        movieAdapter.submitList(movieList.data)
+                        movieAdapter.notifyDataSetChanged()
 
-                            progressBar.visibility = View.GONE
-                            iv_movie_illustration.visibility = View.GONE
-                            tv_movie_info.visibility = View.GONE
-                        }
-
-                        Status.LOADING -> {
-                            progressBar.visibility = View.VISIBLE
-                            iv_movie_illustration.visibility = View.GONE
-                            tv_movie_info.visibility = View.GONE
-                        }
-
-                        Status.ERROR -> {
-                            progressBar.visibility = View.GONE
-
-                            val imgSize = 230
-
-                            Picasso.get()
-                                .load(R.drawable.undraw_not_found_60pq)
-                                .placeholder(R.drawable.backdrop_placeholder)
-                                .error(R.drawable.image_error)
-                                .resize(imgSize, imgSize)
-                                .into(iv_movie_illustration)
-                            tv_movie_info.text = movieList.message
-
-                            iv_movie_illustration.visibility = View.VISIBLE
-                            tv_movie_info.visibility = View.VISIBLE
-
-                        }
+                        progressBar.visibility = View.GONE
+                        iv_movie_illustration.visibility = View.GONE
+                        tv_movie_info.visibility = View.GONE
                     }
+
+                    Status.LOADING -> {
+                        progressBar.visibility = View.VISIBLE
+                        iv_movie_illustration.visibility = View.GONE
+                        tv_movie_info.visibility = View.GONE
+                    }
+
+                    Status.ERROR -> {
+                        progressBar.visibility = View.GONE
+
+                        val imgSize = 230
+
+                        Picasso.get()
+                            .load(R.drawable.undraw_not_found_60pq)
+                            .placeholder(R.drawable.backdrop_placeholder)
+                            .error(R.drawable.image_error)
+                            .resize(imgSize, imgSize)
+                            .into(iv_movie_illustration)
+                        tv_movie_info.text = movieList.message
+
+                        iv_movie_illustration.visibility = View.VISIBLE
+                        tv_movie_info.visibility = View.VISIBLE
+
+                    }
+                }
             })
         }
 

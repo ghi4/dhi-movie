@@ -47,7 +47,7 @@ class SearchSeriesFragment : Fragment() {
         keyword?.let {
             viewModel.searchSeries(it).observe(viewLifecycleOwner, { seriesList ->
                 if (!seriesList.data.isNullOrEmpty()) {
-                    when(seriesList.status){
+                    when (seriesList.status) {
                         Status.SUCCESS -> {
                             seriesAdapter.submitList(seriesList.data)
                             seriesAdapter.notifyDataSetChanged()

@@ -151,7 +151,7 @@ class MainActivityTest {
         )
     }
 
-    private fun waitHandler(){
+    private fun waitHandler() {
         Thread.sleep(2000L)
     }
 }
