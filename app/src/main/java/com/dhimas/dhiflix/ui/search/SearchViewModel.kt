@@ -5,5 +5,5 @@ import com.dhimas.dhiflix.data.ShowRepository
 
 class SearchViewModel(private val showRepository: ShowRepository) : ViewModel() {
 
-
+    fun search(keyword: String) = showRepository.searchMovie(keyword)
 }
