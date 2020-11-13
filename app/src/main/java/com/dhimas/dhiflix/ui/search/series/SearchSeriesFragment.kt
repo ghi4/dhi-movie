@@ -43,6 +43,7 @@ class SearchSeriesFragment : Fragment() {
         viewModel = ViewModelProvider(this, factory).get(SearchSeriesViewModel::class.java)
 
         val seriesAdapter = SeriesAdapter()
+        seriesAdapter.notifyDataSetChanged()
 
         keyword?.let {
             viewModel.searchSeries(it).observe(viewLifecycleOwner, { seriesList ->

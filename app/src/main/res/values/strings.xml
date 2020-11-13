@@ -20,4 +20,6 @@
     <string name="series">Series</string>
     <string name="lets_search_the_movie">Lets search the movie!</string>
     <string name="illustration">Illustration</string>
+    <string name="you_have_no_favorite_movie_series">You have no favorite movie/series.</string>
+    <string name="favorite_empty">Favorite Empty</string>
 </resources>

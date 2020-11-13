@@ -43,18 +43,26 @@ class FavoriteFragment : Fragment() {
                     when (favoriteMovieList.status) {
                         Status.LOADING -> {
                             Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
+
+                            progressBar2.visibility = View.VISIBLE
                         }
                         Status.SUCCESS -> {
                             favoriteMovieAdapter.submitList(favoriteMovieList.data)
                             favoriteMovieAdapter.setMovies(DetailActivity.EXTRA_FROM_MOVIES, true)
-                            rv_favorite_movie.layoutManager =
-                                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                            rv_favorite_movie.hasFixedSize()
                             favoriteMovieAdapter.notifyDataSetChanged()
-                            rv_favorite_movie.adapter = favoriteMovieAdapter
+
+                            progressBar2.visibility = View.GONE
+                            iv_favorite.visibility = View.GONE
+                            tv_favorite_info.visibility = View.GONE
                         }
                         Status.ERROR -> {
                             Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()
+
+                            progressBar2.visibility = View.GONE
+                            iv_favorite.visibility = View.VISIBLE
+                            tv_favorite_info.visibility = View.VISIBLE
+
+                            tv_favorite_info.text = favoriteMovieList.message
                         }
                     }
                 }
@@ -64,24 +72,49 @@ class FavoriteFragment : Fragment() {
                 if (favoriteSeriesList != null) {
                     when (favoriteSeriesList.status) {
                         Status.LOADING -> {
+                            progressBar2.visibility = View.VISIBLE
                             Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
                         }
                         Status.SUCCESS -> {
                             favoriteSeriesAdapter.submitList(favoriteSeriesList.data)
                             favoriteSeriesAdapter.setMovies(DetailActivity.EXTRA_FROM_SERIES, true)
-                            rv_favorite_series.layoutManager =
-                                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                            rv_favorite_series.hasFixedSize()
                             favoriteSeriesAdapter.notifyDataSetChanged()
-                            rv_favorite_series.adapter = favoriteSeriesAdapter
+
+                            progressBar2.visibility = View.GONE
+                            iv_favorite.visibility = View.GONE
+                            tv_favorite_info.visibility = View.GONE
+
+                            if(favoriteSeriesList.data.isNullOrEmpty()){
+                                progressBar2.visibility = View.GONE
+                                iv_favorite.visibility = View.VISIBLE
+                                tv_favorite_info.visibility = View.VISIBLE
+                                textView.visibility = View.GONE
+                                textView2.visibility = View.GONE
+                            }
                         }
                         Status.ERROR -> {
                             Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()
+
+                            progressBar2.visibility = View.GONE
+                            iv_favorite.visibility = View.VISIBLE
+                            tv_favorite_info.visibility = View.VISIBLE
+
+                            tv_favorite_info.text = favoriteSeriesList.message
                         }
                     }
                 }
             })
         }
+
+        rv_favorite_movie.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rv_favorite_movie.hasFixedSize()
+        rv_favorite_movie.adapter = favoriteMovieAdapter
+
+        rv_favorite_series.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rv_favorite_series.hasFixedSize()
+        rv_favorite_series.adapter = favoriteSeriesAdapter
     }
 
 }

@@ -43,6 +43,7 @@ class SearchMovieFragment : Fragment() {
         viewModel = ViewModelProvider(this, factory).get(SearchMovieViewModel::class.java)
 
         val movieAdapter = MovieAdapter()
+        movieAdapter.notifyDataSetChanged()
 
         keyword?.let {
             viewModel.searchMovie(it).observe(viewLifecycleOwner, { movieList ->
