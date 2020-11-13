@@ -19,4 +19,6 @@
     <string name="search_movie_or_series">Search movie or series</string>
     <string name="movie">Movie</string>
     <string name="series">Series</string>
+    <string name="lets_search_the_movie">Lets search the movie!</string>
+    <string name="illustration">Illustration</string>
 </resources>

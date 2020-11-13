@@ -34,6 +34,7 @@ class MainActivityTest {
 
     @Test
     fun loadMovies() {
+        waitHandler()
         onView(withId(R.id.rv_movie)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_movie)).perform(
             RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
@@ -44,6 +45,7 @@ class MainActivityTest {
 
     @Test
     fun loadSeries() {
+        waitHandler()
         onView(withId(R.id.navigation_series)).perform(click())
 
         onView(withId(R.id.rv_series)).check(matches(isDisplayed()))
@@ -63,6 +65,7 @@ class MainActivityTest {
 
     @Test
     fun loadDetailMovie() {
+        waitHandler()
 
         onView(withId(R.id.rv_movie)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
@@ -71,6 +74,7 @@ class MainActivityTest {
             )
         )
 
+        waitHandler()
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
         onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
@@ -89,6 +93,7 @@ class MainActivityTest {
             )
         )
 
+        waitHandler()
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
         onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
@@ -103,7 +108,10 @@ class MainActivityTest {
 
     @Test
     fun loadDetailSeries() {
+        waitHandler()
         onView(withId(R.id.navigation_series)).perform(click())
+
+        waitHandler()
         onView(withId(R.id.rv_series)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
                 5,
@@ -111,6 +119,7 @@ class MainActivityTest {
             )
         )
 
+        waitHandler()
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
         onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
@@ -129,6 +138,7 @@ class MainActivityTest {
             )
         )
 
+        waitHandler()
         onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
         onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
@@ -139,5 +149,9 @@ class MainActivityTest {
                 10
             )
         )
+    }
+
+    private fun waitHandler(){
+        Thread.sleep(2000L)
     }
 }

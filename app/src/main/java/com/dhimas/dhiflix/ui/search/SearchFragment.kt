@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -48,11 +49,20 @@ class SearchFragment : Fragment() {
         viewModel = ViewModelProvider(this, factory)[SearchViewModel::class.java]
         movieAdapter = MovieAdapter()
 
-        searchingX.doOnTextChanged { text, _, _, _ ->
-            if (text.toString().isNotEmpty()) {
-                setupViewPager(text.toString())
+        searchingX.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query.toString().isNotEmpty()) {
+                    setupViewPager(query.toString())
+                }
+
+                return false
             }
-        }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+        })
     }
 
     private fun setupViewPager(keyword: String) {
