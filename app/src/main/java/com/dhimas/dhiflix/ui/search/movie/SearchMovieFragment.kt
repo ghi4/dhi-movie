@@ -13,7 +13,6 @@ import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.search_movie_fragment.*
-import kotlinx.android.synthetic.main.search_movie_fragment.view.*
 
 class SearchMovieFragment : Fragment() {
 

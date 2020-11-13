@@ -12,9 +12,7 @@ import com.dhimas.dhiflix.ui.series.SeriesAdapter
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.search_movie_fragment.*
 import kotlinx.android.synthetic.main.search_series_fragment.*
-import kotlinx.android.synthetic.main.search_series_fragment.progressBar
 
 class SearchSeriesFragment : Fragment() {
 
