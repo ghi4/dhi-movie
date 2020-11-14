@@ -1,6 +1,7 @@
 package com.dhimas.dhiflix.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.ui.movie.MovieAdapter
+import com.dhimas.dhiflix.ui.search.movie.SearchMovieFragment
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -23,14 +25,15 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewPager2.adapter = ViewPagerAdapter(requireActivity(), null)
+        val factory = ViewModelFactory.getInstance(requireContext())
+        viewModel = ViewModelProvider(this, factory)[SearchViewModel::class.java]
+        viewPager2.adapter = ViewPagerAdapter(requireActivity(), viewModel)
 
         TabLayoutMediator(tabs, viewPager2) { tab, position ->
             when (position) {
@@ -44,14 +47,14 @@ class SearchFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val factory = ViewModelFactory.getInstance(requireContext())
-        viewModel = ViewModelProvider(this, factory)[SearchViewModel::class.java]
         movieAdapter = MovieAdapter()
 
         searchingX.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.toString().isNotEmpty()) {
-                    setupViewPager(query.toString())
+                    Log.d("Kucing", "=====IN SEARCH=====")
+
+                    viewModel.searchQuery.postValue(query.toString())
                 }
 
                 return false
@@ -63,9 +66,4 @@ class SearchFragment : Fragment() {
 
         })
     }
-
-    private fun setupViewPager(keyword: String) {
-        viewPager2.adapter = ViewPagerAdapter(requireActivity(), keyword)
-    }
-
 }

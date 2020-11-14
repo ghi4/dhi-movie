@@ -30,7 +30,7 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (activity != null && context != null) {
+        if (activity != null) {
 
             val factory = ViewModelFactory.getInstance(requireContext())
             viewModel = ViewModelProvider(this, factory)[FavoriteViewModel::class.java]
@@ -42,8 +42,6 @@ class FavoriteFragment : Fragment() {
                 if (favoriteMovieList != null) {
                     when (favoriteMovieList.status) {
                         Status.LOADING -> {
-                            Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
-
                             progressBar2.visibility = View.VISIBLE
                         }
                         Status.SUCCESS -> {
@@ -52,8 +50,13 @@ class FavoriteFragment : Fragment() {
                             favoriteMovieAdapter.notifyDataSetChanged()
 
                             progressBar2.visibility = View.GONE
-                            iv_favorite.visibility = View.GONE
-                            tv_favorite_info.visibility = View.GONE
+
+                            if(!favoriteMovieList.data.isNullOrEmpty()){
+                                rv_favorite_movie.visibility = View.VISIBLE
+                                textView.visibility = View.VISIBLE
+                                iv_favorite.visibility = View.GONE
+                                tv_favorite_info.visibility = View.GONE
+                            }
                         }
                         Status.ERROR -> {
                             Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()
@@ -73,7 +76,6 @@ class FavoriteFragment : Fragment() {
                     when (favoriteSeriesList.status) {
                         Status.LOADING -> {
                             progressBar2.visibility = View.VISIBLE
-                            Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
                         }
                         Status.SUCCESS -> {
                             favoriteSeriesAdapter.submitList(favoriteSeriesList.data)
@@ -81,15 +83,12 @@ class FavoriteFragment : Fragment() {
                             favoriteSeriesAdapter.notifyDataSetChanged()
 
                             progressBar2.visibility = View.GONE
-                            iv_favorite.visibility = View.GONE
-                            tv_favorite_info.visibility = View.GONE
 
-                            if(favoriteSeriesList.data.isNullOrEmpty()){
-                                progressBar2.visibility = View.GONE
-                                iv_favorite.visibility = View.VISIBLE
-                                tv_favorite_info.visibility = View.VISIBLE
-                                textView.visibility = View.GONE
-                                textView2.visibility = View.GONE
+                            if(!favoriteSeriesList.data.isNullOrEmpty()){
+                                rv_favorite_series.visibility = View.VISIBLE
+                                textView2.visibility = View.VISIBLE
+                                iv_favorite.visibility = View.GONE
+                                tv_favorite_info.visibility = View.GONE
                             }
                         }
                         Status.ERROR -> {

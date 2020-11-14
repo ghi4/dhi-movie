@@ -1,6 +1,7 @@
 package com.dhimas.dhiflix.ui.search.series
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.ui.search.SearchViewModel
+import com.dhimas.dhiflix.ui.search.movie.SearchMovieFragment
 import com.dhimas.dhiflix.ui.series.SeriesAdapter
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
@@ -16,14 +19,12 @@ import kotlinx.android.synthetic.main.search_series_fragment.*
 
 class SearchSeriesFragment : Fragment() {
 
-    private lateinit var viewModel: SearchSeriesViewModel
-
     companion object {
-        private var keyword: String? = null
+        private lateinit var viewModel: SearchViewModel
 
-        fun newInstance(keyword: String?): SearchSeriesFragment {
-            val fragment = SearchSeriesFragment()
-            Companion.keyword = keyword
+        fun newInstance(viewModel: SearchViewModel): SearchMovieFragment {
+            val fragment = SearchMovieFragment()
+            Companion.viewModel = viewModel
 
             return fragment
         }
@@ -39,19 +40,19 @@ class SearchSeriesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val factory = ViewModelFactory.getInstance(requireContext())
-        viewModel = ViewModelProvider(this, factory).get(SearchSeriesViewModel::class.java)
-
         val seriesAdapter = SeriesAdapter()
         seriesAdapter.notifyDataSetChanged()
 
-        keyword?.let {
-            viewModel.searchSeries(it).observe(viewLifecycleOwner, { seriesList ->
+        viewModel.searchQuery.observe(viewLifecycleOwner, {searchQuery ->
+            viewModel.searchSeries(searchQuery).observe(viewLifecycleOwner, { seriesList ->
                 if (!seriesList.data.isNullOrEmpty()) {
                     when (seriesList.status) {
                         Status.SUCCESS -> {
                             seriesAdapter.submitList(seriesList.data)
                             seriesAdapter.notifyDataSetChanged()
+
+                            Log.d("Kucingx", "GGX" + seriesList.data.size)
+                            Log.d("Kucingx", "GGX" + seriesList.data[0]?.title)
 
                             progressBar.visibility = View.GONE
                             iv_series_illustration.visibility = View.GONE
@@ -83,7 +84,7 @@ class SearchSeriesFragment : Fragment() {
 
                 }
             })
-        }
+        })
 
         rv_search_series.layoutManager = GridLayoutManager(requireContext(), 3)
         rv_search_series.hasFixedSize()

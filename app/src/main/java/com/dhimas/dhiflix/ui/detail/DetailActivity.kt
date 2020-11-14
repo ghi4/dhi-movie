@@ -50,8 +50,6 @@ class DetailActivity : AppCompatActivity() {
         showId = intent.getStringExtra(EXTRA_SHOW_ID).toString()
         showType = intent.getStringExtra(EXTRA_SHOW_TYPE).toString()
 
-        startShimmering()
-
         val minShimmerTime = if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -84,7 +82,7 @@ class DetailActivity : AppCompatActivity() {
         viewModel.getShowEntityById(showId, showType).observe(this, { showEntity ->
             if (showEntity != null) {
                 when (showEntity.status) {
-                    Status.LOADING -> Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+                    Status.LOADING -> startShimmering()
                     Status.SUCCESS -> {
                         if (showEntity.data != null) {
 

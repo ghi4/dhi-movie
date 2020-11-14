@@ -1,6 +1,7 @@
 package com.dhimas.dhiflix.ui.search.movie
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.ui.movie.MovieAdapter
+import com.dhimas.dhiflix.ui.search.SearchFragment
+import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
@@ -16,14 +19,12 @@ import kotlinx.android.synthetic.main.search_movie_fragment.*
 
 class SearchMovieFragment : Fragment() {
 
-    private lateinit var viewModel: SearchMovieViewModel
-
     companion object {
-        private var keyword: String? = null
+        private lateinit var viewModel: SearchViewModel
 
-        fun newInstance(keyword: String?): SearchMovieFragment {
+        fun newInstance(viewModel: SearchViewModel): SearchMovieFragment {
             val fragment = SearchMovieFragment()
-            Companion.keyword = keyword
+            Companion.viewModel = viewModel
 
             return fragment
         }
@@ -39,14 +40,12 @@ class SearchMovieFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val factory = ViewModelFactory.getInstance(requireContext())
-        viewModel = ViewModelProvider(this, factory).get(SearchMovieViewModel::class.java)
-
         val movieAdapter = MovieAdapter()
         movieAdapter.notifyDataSetChanged()
 
-        keyword?.let {
-            viewModel.searchMovie(it).observe(viewLifecycleOwner, { movieList ->
+        viewModel.searchQuery.observe(viewLifecycleOwner, {searchQuery ->
+            viewModel.searchMovie(searchQuery).observe(viewLifecycleOwner, { movieList ->
+                Log.d("Kucing", "IN MOVIE")
                 when (movieList.status) {
                     Status.SUCCESS -> {
                         movieAdapter.submitList(movieList.data)
@@ -55,6 +54,9 @@ class SearchMovieFragment : Fragment() {
                         progressBar.visibility = View.GONE
                         iv_movie_illustration.visibility = View.GONE
                         tv_movie_info.visibility = View.GONE
+
+                        Log.d("Kucingx", "GGKK" + movieList.data?.size)
+                        Log.d("Kucingx", "GGXKK" + movieList.data?.get(0)?.title)
                     }
 
                     Status.LOADING -> {
@@ -82,7 +84,8 @@ class SearchMovieFragment : Fragment() {
                     }
                 }
             })
-        }
+        })
+
 
         rv_search_movies.layoutManager = GridLayoutManager(requireContext(), 3)
         rv_search_movies.hasFixedSize()
