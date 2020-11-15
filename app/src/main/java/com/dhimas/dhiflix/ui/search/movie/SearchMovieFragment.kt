@@ -6,13 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.ui.movie.MovieAdapter
-import com.dhimas.dhiflix.ui.search.SearchFragment
 import com.dhimas.dhiflix.ui.search.SearchViewModel
-import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.search_movie_fragment.*
@@ -41,49 +38,50 @@ class SearchMovieFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val movieAdapter = MovieAdapter()
-        movieAdapter.notifyDataSetChanged()
 
-        viewModel.searchQuery.observe(viewLifecycleOwner, {searchQuery ->
-            viewModel.searchMovie(searchQuery).observe(viewLifecycleOwner, { movieList ->
-                Log.d("Kucing", "IN MOVIE")
-                when (movieList.status) {
-                    Status.SUCCESS -> {
-                        movieAdapter.submitList(movieList.data)
-                        movieAdapter.notifyDataSetChanged()
+        viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
+            Log.d("Kucing", "===IN MOVIE===")
+            when (movieList.status) {
+                Status.SUCCESS -> {
+                    movieAdapter.submitList(movieList.data)
+                    movieAdapter.notifyDataSetChanged()
 
-                        progressBar.visibility = View.GONE
-                        iv_movie_illustration.visibility = View.GONE
-                        tv_movie_info.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+                    iv_movie_illustration.visibility = View.GONE
+                    tv_movie_info.visibility = View.GONE
 
-                        Log.d("Kucingx", "GGKK" + movieList.data?.size)
-                        Log.d("Kucingx", "GGXKK" + movieList.data?.get(0)?.title)
-                    }
-
-                    Status.LOADING -> {
-                        progressBar.visibility = View.VISIBLE
-                        iv_movie_illustration.visibility = View.GONE
-                        tv_movie_info.visibility = View.GONE
-                    }
-
-                    Status.ERROR -> {
-                        progressBar.visibility = View.GONE
-
-                        val imgSize = 230
-
-                        Picasso.get()
-                            .load(R.drawable.undraw_not_found_60pq)
-                            .placeholder(R.drawable.backdrop_placeholder)
-                            .error(R.drawable.image_error)
-                            .resize(imgSize, imgSize)
-                            .into(iv_movie_illustration)
-                        tv_movie_info.text = movieList.message
-
-                        iv_movie_illustration.visibility = View.VISIBLE
-                        tv_movie_info.visibility = View.VISIBLE
-
+                    Log.d("Kucingx", "Size: " + movieList.data?.size)
+                    try {
+                        Log.d("Kucingx", "Title: " + movieList.data?.get(0)?.title)
+                    } catch (e: Exception) {
+                        Log.d("Kucingx", e.toString())
                     }
                 }
-            })
+
+                Status.LOADING -> {
+                    progressBar.visibility = View.VISIBLE
+                    iv_movie_illustration.visibility = View.GONE
+                    tv_movie_info.visibility = View.GONE
+                }
+
+                Status.ERROR -> {
+                    progressBar.visibility = View.GONE
+
+                    val imgSize = 230
+
+                    Picasso.get()
+                        .load(R.drawable.undraw_not_found_60pq)
+                        .placeholder(R.drawable.backdrop_placeholder)
+                        .error(R.drawable.image_error)
+                        .resize(imgSize, imgSize)
+                        .into(iv_movie_illustration)
+                    tv_movie_info.text = movieList.message
+
+                    iv_movie_illustration.visibility = View.VISIBLE
+                    tv_movie_info.visibility = View.VISIBLE
+
+                }
+            }
         })
 
 

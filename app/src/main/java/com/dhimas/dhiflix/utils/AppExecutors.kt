@@ -7,17 +7,13 @@ import java.util.concurrent.Executors
 
 class AppExecutors @VisibleForTesting constructor(
     private val diskIO: Executor,
-    private val networkIO: Executor,
     private val mainThread: Executor
 ) {
 
-    companion object {
-        private const val THREAD_COUNT = 3
-    }
+    companion object;
 
     constructor() : this(
         Executors.newSingleThreadExecutor(),
-        Executors.newFixedThreadPool(THREAD_COUNT),
         MainThreadExecutor()
     )
 

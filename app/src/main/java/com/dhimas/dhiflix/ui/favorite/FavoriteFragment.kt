@@ -51,7 +51,7 @@ class FavoriteFragment : Fragment() {
 
                             progressBar2.visibility = View.GONE
 
-                            if(!favoriteMovieList.data.isNullOrEmpty()){
+                            if (!favoriteMovieList.data.isNullOrEmpty()) {
                                 rv_favorite_movie.visibility = View.VISIBLE
                                 textView.visibility = View.VISIBLE
                                 iv_favorite.visibility = View.GONE
@@ -84,7 +84,7 @@ class FavoriteFragment : Fragment() {
 
                             progressBar2.visibility = View.GONE
 
-                            if(!favoriteSeriesList.data.isNullOrEmpty()){
+                            if (!favoriteSeriesList.data.isNullOrEmpty()) {
                                 rv_favorite_series.visibility = View.VISIBLE
                                 textView2.visibility = View.VISIBLE
                                 iv_favorite.visibility = View.GONE

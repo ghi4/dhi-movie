@@ -8,6 +8,7 @@ import com.dhimas.dhiflix.ui.search.series.SearchSeriesFragment
 
 class ViewPagerAdapter(fa: FragmentActivity, private val viewModel: SearchViewModel) :
     FragmentStateAdapter(fa) {
+
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {

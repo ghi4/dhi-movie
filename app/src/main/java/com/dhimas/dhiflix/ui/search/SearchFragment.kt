@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.ui.movie.MovieAdapter
-import com.dhimas.dhiflix.ui.search.movie.SearchMovieFragment
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -52,9 +51,9 @@ class SearchFragment : Fragment() {
         searchingX.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.toString().isNotEmpty()) {
-                    Log.d("Kucing", "=====IN SEARCH=====")
+                    Log.d("Kucing", "=======IN SEARCH=======")
 
-                    viewModel.searchQuery.postValue(query.toString())
+                    viewModel.setSearchQuery(query.toString())
                 }
 
                 return false
