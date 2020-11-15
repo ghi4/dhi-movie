@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/slider_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".ui.SliderFragment">
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:contentDescription="@string/image_slider"
+        android:foreground="@drawable/backdrop_slider_gradient"
         android:scaleType="fitCenter"
         android:src="@drawable/backdrop_placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,15 +23,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/iv_slider_title"
+        android:id="@+id/tv_slider_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:maxLines="2"
-        android:text="Pokemon"
+        android:text="@string/title_here"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

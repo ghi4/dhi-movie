@@ -23,4 +23,5 @@
     <string name="you_have_no_favorite_movie_series">You have no favorite movie/series.</string>
     <string name="favorite_empty">Favorite Empty</string>
     <string name="image_slider">Image slider</string>
+    <string name="title_here">Title Here</string>
 </resources>

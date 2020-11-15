@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.ui.SliderAdapter
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
@@ -22,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_movie.view.*
 class MovieFragment : Fragment() {
     private lateinit var viewModel: MovieViewModel
     private lateinit var movieAdapter: MovieAdapter
+    private lateinit var sliderAdapter: SliderAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +35,7 @@ class MovieFragment : Fragment() {
         val factory = ViewModelFactory.getInstance(requireContext())
         viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
         movieAdapter = MovieAdapter()
+        sliderAdapter = SliderAdapter(requireActivity())
 
         val root = inflater.inflate(R.layout.fragment_movie, container, false)
         root.movieShimmerLayout.startShimmer()
@@ -49,14 +53,16 @@ class MovieFragment : Fragment() {
         root.rv_movie.layoutManager = GridLayoutManager(context, spanCount)
         root.rv_movie.hasFixedSize()
         root.rv_movie.adapter = movieAdapter
+        root.vp_slider.adapter = sliderAdapter
 
         return root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        if (activity != null && view != null && context != null) {
+        Log.d("GGWPX", "VIEW CREATED")
+        if (activity != null && context != null) {
             val minShimmerTime =
                 if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
 
@@ -77,6 +83,19 @@ class MovieFragment : Fragment() {
                         Status.SUCCESS -> {
                             movieAdapter.submitList(movieList.data)
                             movieAdapter.notifyDataSetChanged()
+
+                            Log.d("GGWPX", "OUT")
+                            if(movieList.data != null) {
+                                Log.d("GGWPX", "HERE")
+                                sliderAdapter.deleteShow()
+                                for (item in movieList.data) {
+                                    Log.d("GGWPX", "count")
+                                    sliderAdapter.addShow(item)
+                                }
+                            }
+
+                            dots_indicator.setViewPager2(vp_slider)
+
                             viewModel.setAlreadyShimmer()
                             stopShimmer()
                         }

@@ -86,6 +86,9 @@ dependencies {
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
     kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
 
+    //Dots Indicator
+    implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
+
     //Mockito
     testImplementation "org.mockito:mockito-core:3.6.0"
     testImplementation "org.mockito:mockito-inline:3.6.0"
