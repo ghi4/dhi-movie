@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.vo.Resource
 
 class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() {
@@ -16,10 +17,10 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
         isAlreadyShimmer = true
     }
 
-    fun getShowEntityById(show_id: String, show_type: String): LiveData<Resource<ShowEntity>> {
+    fun getShowEntityById(show_id: String, show_type: Int): LiveData<Resource<ShowEntity>> {
         if (!::showEntity.isInitialized) {
             showEntity = when (show_type) {
-                DetailActivity.EXTRA_FROM_MOVIES -> {
+                Constant.MOVIE_TYPE -> {
                     getMovieEntityById(show_id)
                 }
                 else -> {
@@ -31,10 +32,10 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
         return showEntity
     }
 
-    fun getShowList(show_type: String, show_id: String): LiveData<Resource<PagedList<ShowEntity>>> {
+    fun getShowList(show_type: Int, show_id: String): LiveData<Resource<PagedList<ShowEntity>>> {
         if (!::showList.isInitialized) {
             showList = when (show_type) {
-                DetailActivity.EXTRA_FROM_MOVIES -> {
+                Constant.MOVIE_TYPE -> {
                     getMovies(show_id)
                 }
                 else -> {

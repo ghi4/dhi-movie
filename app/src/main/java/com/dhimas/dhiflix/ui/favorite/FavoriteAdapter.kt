@@ -18,10 +18,10 @@ import kotlinx.android.synthetic.main.item_movie_horizontal.view.*
 
 class FavoriteAdapter internal constructor() :
     PagedListAdapter<ShowEntity, FavoriteAdapter.ShowViewHolder>(DIFF_CALLBACK) {
-    private var listType = DetailActivity.EXTRA_FROM_MOVIES //Default type is movie
+    private var listType = Constant.MOVIE_TYPE //Default type is movie
     private var isAlreadyShimmer: Boolean = false
 
-    fun setMovies(listType: String, isAlreadyShimmer: Boolean) {
+    fun setMovies(listType: Int, isAlreadyShimmer: Boolean) {
         this.listType = listType
         this.isAlreadyShimmer = isAlreadyShimmer
     }
@@ -53,7 +53,7 @@ class FavoriteAdapter internal constructor() :
     }
 
     class ShowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(showEntity: ShowEntity, type: String, isAlreadyShimmer: Boolean) {
+        fun bind(showEntity: ShowEntity, type: Int, isAlreadyShimmer: Boolean) {
             with(itemView) {
                 iv_poster_horizontal.startLoading()
 

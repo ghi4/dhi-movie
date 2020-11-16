@@ -34,8 +34,8 @@ class SearchSeriesFragment : Fragment() {
         return inflater.inflate(R.layout.search_series_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val seriesAdapter = SeriesAdapter()
         seriesAdapter.notifyDataSetChanged()

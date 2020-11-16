@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.ui.detail.DetailActivity
+import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import kotlinx.android.synthetic.main.fragment_favorite.*
@@ -46,7 +46,7 @@ class FavoriteFragment : Fragment() {
                         }
                         Status.SUCCESS -> {
                             favoriteMovieAdapter.submitList(favoriteMovieList.data)
-                            favoriteMovieAdapter.setMovies(DetailActivity.EXTRA_FROM_MOVIES, true)
+                            favoriteMovieAdapter.setMovies(Constant.MOVIE_TYPE, true)
                             favoriteMovieAdapter.notifyDataSetChanged()
 
                             progressBar2.visibility = View.GONE
@@ -79,7 +79,7 @@ class FavoriteFragment : Fragment() {
                         }
                         Status.SUCCESS -> {
                             favoriteSeriesAdapter.submitList(favoriteSeriesList.data)
-                            favoriteSeriesAdapter.setMovies(DetailActivity.EXTRA_FROM_SERIES, true)
+                            favoriteSeriesAdapter.setMovies(Constant.SERIES_TYPE, true)
                             favoriteSeriesAdapter.notifyDataSetChanged()
 
                             progressBar2.visibility = View.GONE

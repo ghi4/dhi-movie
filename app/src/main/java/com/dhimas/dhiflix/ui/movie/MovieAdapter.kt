@@ -66,7 +66,7 @@ class MovieAdapter internal constructor() :
                     //Used for checking if the show entity is from movie page
                     intent.putExtra(
                         DetailActivity.EXTRA_SHOW_TYPE,
-                        DetailActivity.EXTRA_FROM_MOVIES
+                        movie.show_type
                     )
 
                     context.startActivity(intent)

@@ -34,8 +34,8 @@ class SearchMovieFragment : Fragment() {
         return inflater.inflate(R.layout.search_movie_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val movieAdapter = MovieAdapter()
 
@@ -47,8 +47,8 @@ class SearchMovieFragment : Fragment() {
                     movieAdapter.notifyDataSetChanged()
 
                     progressBar.visibility = View.GONE
-                    iv_movie_illustration.visibility = View.GONE
-                    tv_movie_info.visibility = View.GONE
+                    iv_movie_illustration.visibility = View.INVISIBLE
+                    tv_movie_info.visibility = View.INVISIBLE
 
                     Log.d("Kucingx", "Size: " + movieList.data?.size)
                     try {
@@ -60,8 +60,8 @@ class SearchMovieFragment : Fragment() {
 
                 Status.LOADING -> {
                     progressBar.visibility = View.VISIBLE
-                    iv_movie_illustration.visibility = View.GONE
-                    tv_movie_info.visibility = View.GONE
+                    iv_movie_illustration.visibility = View.INVISIBLE
+                    tv_movie_info.visibility = View.INVISIBLE
                 }
 
                 Status.ERROR -> {
@@ -89,5 +89,4 @@ class SearchMovieFragment : Fragment() {
         rv_search_movies.hasFixedSize()
         rv_search_movies.adapter = movieAdapter
     }
-
 }

@@ -60,7 +60,7 @@ class SeriesAdapter : PagedListAdapter<ShowEntity, SeriesAdapter.SeriesViewHolde
                     //Used for checking if the show entity is from series page
                     intent.putExtra(
                         DetailActivity.EXTRA_SHOW_TYPE,
-                        DetailActivity.EXTRA_FROM_SERIES
+                        series.show_type
                     )
 
                     context.startActivity(intent)

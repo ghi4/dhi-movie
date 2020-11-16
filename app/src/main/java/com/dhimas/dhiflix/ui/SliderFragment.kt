@@ -1,13 +1,11 @@
 package com.dhimas.dhiflix.ui
 
 import android.content.Intent
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.transition.Slide
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.ui.detail.DetailActivity
@@ -29,8 +27,6 @@ class SliderFragment : Fragment() {
         }
     }
 
-    private lateinit var viewModel: SliderViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,6 +43,7 @@ class SliderFragment : Fragment() {
             .error(R.drawable.image_error)
             .resize(Constant.BACKDROP_TARGET_WIDTH, Constant.BACKDROP_TARGET_HEIGHT)
             .into(iv_slider)
+
         tv_slider_title.text = showEntity.title
 
         slider_container.setOnClickListener {
@@ -54,19 +51,10 @@ class SliderFragment : Fragment() {
             intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
 
             //Used for checking if the show entity is from movie page
-            intent.putExtra(
-                DetailActivity.EXTRA_SHOW_TYPE,
-                DetailActivity.EXTRA_FROM_MOVIES
-            )
+            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, showEntity.show_type)
 
             startActivity(intent)
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SliderViewModel::class.java)
-
     }
 
 }

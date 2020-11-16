@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie_horizontal.view.*
 
 class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolder>(DIFF_CALLBACK) {
-    private var listType = DetailActivity.EXTRA_FROM_MOVIES //Default type is movie
+    private var listType = Constant.MOVIE_TYPE //Default type is movie
     private var isAlreadyShimmer: Boolean = false
 
     companion object {
@@ -32,7 +32,7 @@ class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolde
         }
     }
 
-    fun setMovies(listType: String, isAlreadyShimmer: Boolean) {
+    fun setMovies(listType: Int, isAlreadyShimmer: Boolean) {
         this.listType = listType
         this.isAlreadyShimmer = isAlreadyShimmer
     }
@@ -49,7 +49,7 @@ class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolde
     }
 
     class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(showEntity: ShowEntity, type: String, isAlreadyShimmer: Boolean) {
+        fun bind(showEntity: ShowEntity, type: Int, isAlreadyShimmer: Boolean) {
             with(itemView) {
 
                 Picasso.get()

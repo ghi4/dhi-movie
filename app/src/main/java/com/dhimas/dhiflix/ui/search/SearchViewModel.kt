@@ -23,7 +23,7 @@ class SearchViewModel(private val showRepository: ShowRepository) : ViewModel() 
         }
 
     fun setSearchQuery(searchQuery: String) {
-        this.searchQuery.value = searchQuery
+        this.searchQuery.postValue(searchQuery)
     }
 
     fun getSeries() = seriesList

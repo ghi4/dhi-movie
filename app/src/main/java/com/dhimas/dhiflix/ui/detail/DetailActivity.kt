@@ -20,7 +20,7 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var viewModel: DetailViewModel
     private lateinit var showId: String
-    private lateinit var showType: String
+    private var showType: Int = 0
     private lateinit var detailAdapter: DetailAdapter
     private lateinit var showEntity1: ShowEntity
 
@@ -30,12 +30,6 @@ class DetailActivity : AppCompatActivity() {
 
         //FOr sending Show Type (Movie/Series)
         const val EXTRA_SHOW_TYPE = "extra_show_type"
-
-        //For checking if Show Title is from Movie Fragment
-        const val EXTRA_FROM_MOVIES = "extra_from_movies"
-
-        //For checking if Show Title is from Series Fragment
-        const val EXTRA_FROM_SERIES = "extra_from_series"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +42,7 @@ class DetailActivity : AppCompatActivity() {
         detailAdapter = DetailAdapter()
 
         showId = intent.getStringExtra(EXTRA_SHOW_ID).toString()
-        showType = intent.getStringExtra(EXTRA_SHOW_TYPE).toString()
+        showType = intent.getIntExtra(EXTRA_SHOW_TYPE, 0)
 
         val minShimmerTime = if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
 
