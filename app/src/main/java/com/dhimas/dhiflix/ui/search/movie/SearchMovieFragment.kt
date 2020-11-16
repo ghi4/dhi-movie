@@ -15,12 +15,14 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.search_movie_fragment.*
 
 class SearchMovieFragment : Fragment() {
+    private lateinit var movieAdapter: MovieAdapter
 
     companion object {
         private lateinit var viewModel: SearchViewModel
 
         fun newInstance(viewModel: SearchViewModel): SearchMovieFragment {
             val fragment = SearchMovieFragment()
+
             Companion.viewModel = viewModel
 
             return fragment
@@ -37,56 +39,55 @@ class SearchMovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val movieAdapter = MovieAdapter()
+        movieAdapter = MovieAdapter()
 
         viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
-            Log.d("Kucing", "===IN MOVIE===")
             when (movieList.status) {
                 Status.SUCCESS -> {
                     movieAdapter.submitList(movieList.data)
                     movieAdapter.notifyDataSetChanged()
 
-                    progressBar.visibility = View.GONE
-                    iv_movie_illustration.visibility = View.INVISIBLE
-                    tv_movie_info.visibility = View.INVISIBLE
-
-                    Log.d("Kucingx", "Size: " + movieList.data?.size)
-                    try {
-                        Log.d("Kucingx", "Title: " + movieList.data?.get(0)?.title)
-                    } catch (e: Exception) {
-                        Log.d("Kucingx", e.toString())
+                    if(movieList.data != null) {
+                        setViewVisibility(loading = false, ivIllustration = false, tvInfo = false)
+                    }
+                    else{
+                        setViewVisibility(loading = false, ivIllustration = true, tvInfo = true)
+                        setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, "No movie found.")
                     }
                 }
 
                 Status.LOADING -> {
-                    progressBar.visibility = View.VISIBLE
-                    iv_movie_illustration.visibility = View.INVISIBLE
-                    tv_movie_info.visibility = View.INVISIBLE
+                    setViewVisibility(loading = true, ivIllustration = false, tvInfo = false)
                 }
 
                 Status.ERROR -> {
-                    progressBar.visibility = View.GONE
-
-                    val imgSize = 230
-
-                    Picasso.get()
-                        .load(R.drawable.undraw_not_found_60pq)
-                        .placeholder(R.drawable.backdrop_placeholder)
-                        .error(R.drawable.image_error)
-                        .resize(imgSize, imgSize)
-                        .into(iv_movie_illustration)
-                    tv_movie_info.text = movieList.message
-
-                    iv_movie_illustration.visibility = View.VISIBLE
-                    tv_movie_info.visibility = View.VISIBLE
-
+                    setViewVisibility(loading = false, ivIllustration = true, tvInfo = true)
+                    setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, movieList.message.toString())
                 }
             }
         })
-
 
         rv_search_movies.layoutManager = GridLayoutManager(requireContext(), 3)
         rv_search_movies.hasFixedSize()
         rv_search_movies.adapter = movieAdapter
     }
+
+    private fun setViewVisibility(loading: Boolean, ivIllustration: Boolean, tvInfo: Boolean){
+        progressBar.visibility = if(loading) View.VISIBLE else View.GONE
+        iv_movie_illustration.visibility = if(ivIllustration) View.VISIBLE else View.INVISIBLE
+        tv_movie_info.visibility = if(tvInfo) View.VISIBLE else View.INVISIBLE
+    }
+
+    private fun setInfoImageAndMessage(image: Int, message: String){
+        val imgSize = 230
+
+        Picasso.get()
+            .load(image)
+            .placeholder(R.drawable.backdrop_placeholder)
+            .error(R.drawable.image_error)
+            .resize(imgSize, imgSize)
+            .into(iv_movie_illustration)
+        tv_movie_info.text = message
+    }
+
 }

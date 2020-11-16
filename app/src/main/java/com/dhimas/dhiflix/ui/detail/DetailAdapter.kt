@@ -55,7 +55,7 @@ class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolde
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + showEntity.posterPath!!)
                     .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
-                    .error(R.drawable.image_error_2_3)
+                    .error(R.drawable.poster_error)
                     .placeholder(R.drawable.poster_placeholder)
                     .into(iv_poster_horizontal)
 

@@ -32,7 +32,7 @@ class SearchFragment : Fragment() {
 
         val factory = ViewModelFactory.getInstance(requireContext())
         viewModel = ViewModelProvider(this, factory)[SearchViewModel::class.java]
-        viewPager2.adapter = ViewPagerAdapter(requireActivity(), viewModel)
+        viewPager2.adapter = ViewPagerAdapter(childFragmentManager, lifecycle, viewModel)
 
         TabLayoutMediator(tabs, viewPager2) { tab, position ->
             when (position) {
@@ -40,11 +40,6 @@ class SearchFragment : Fragment() {
                 1 -> tab.text = "Series"
             }
         }.attach()
-
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         movieAdapter = MovieAdapter()
 
@@ -64,5 +59,6 @@ class SearchFragment : Fragment() {
             }
 
         })
+
     }
 }

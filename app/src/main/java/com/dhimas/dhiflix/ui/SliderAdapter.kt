@@ -33,15 +33,16 @@ class SliderAdapter(val context: Context): RecyclerView.Adapter<SliderAdapter.Sl
             with(itemView){
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + showEntity.backdropPath)
+                    .placeholder(R.drawable.backdrop_placeholder)
+                    .error(R.drawable.image_error)
                     .into(iv_slider)
 
                 tv_slider_title.text = showEntity.title
 
                 setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
 
-                    //Used for checking if the show entity is from movie page
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
                     intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, showEntity.show_type)
 
                     startActivity(context, intent, null)

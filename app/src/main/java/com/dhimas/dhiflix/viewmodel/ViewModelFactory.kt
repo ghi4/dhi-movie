@@ -47,14 +47,6 @@ class ViewModelFactory private constructor(private val showRepository: ShowRepos
                 SearchViewModel(showRepository) as T
             }
 
-//            modelClass.isAssignableFrom(SearchMovieViewModel::class.java) -> {
-//                SearchMovieViewModel(showRepository) as T
-//            }
-//
-//            modelClass.isAssignableFrom(SearchSeriesViewModel::class.java) -> {
-//                SearchSeriesViewModel(showRepository) as T
-//            }
-
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }
     }
