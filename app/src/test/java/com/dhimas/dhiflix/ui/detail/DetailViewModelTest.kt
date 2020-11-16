@@ -107,5 +107,6 @@ internal class DetailViewModelTest {
         viewModel.getShowEntityById(dummySeries.id, Constant.SERIES_TYPE)
             .observeForever(observer)
         verify(observer).onChanged(dummySeries1)
+
     }
 }
