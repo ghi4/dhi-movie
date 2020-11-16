@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.DummyData
 import com.dhimas.dhiflix.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
@@ -47,7 +48,7 @@ internal class DetailViewModelTest {
         `when`(showRepository.getMovieDetail(dummyMovie!!.id)).thenReturn(movie)
 
         val movieEntity =
-            viewModel.getShowEntityById(dummyMovie.id, DetailActivity.EXTRA_FROM_MOVIES).value?.data
+            viewModel.getShowEntityById(dummyMovie.id, Constant.MOVIE_TYPE).value?.data
         verify(showRepository).getMovieDetail(dummyMovie.id)
 
         assertNotNull(movieEntity)
@@ -66,7 +67,7 @@ internal class DetailViewModelTest {
         assertEquals(dummyMovie.posterPath, movieEntity?.posterPath)
         assertEquals(dummyMovie.backdropPath, movieEntity?.backdropPath)
 
-        viewModel.getShowEntityById(dummyMovie.id, DetailActivity.EXTRA_FROM_MOVIES)
+        viewModel.getShowEntityById(dummyMovie.id, Constant.MOVIE_TYPE)
             .observeForever(observer)
         verify(observer).onChanged(dummyMovie1)
     }
@@ -83,7 +84,7 @@ internal class DetailViewModelTest {
         val seriesEntity =
             viewModel.getShowEntityById(
                 dummySeries.id,
-                DetailActivity.EXTRA_FROM_SERIES
+                Constant.SERIES_TYPE
             ).value?.data
         verify(showRepository).getSeriesDetail(dummySeries.id)
 
@@ -103,7 +104,7 @@ internal class DetailViewModelTest {
         assertEquals(dummySeries.posterPath, seriesEntity?.posterPath)
         assertEquals(dummySeries.backdropPath, seriesEntity?.backdropPath)
 
-        viewModel.getShowEntityById(dummySeries.id, DetailActivity.EXTRA_FROM_SERIES)
+        viewModel.getShowEntityById(dummySeries.id, Constant.SERIES_TYPE)
             .observeForever(observer)
         verify(observer).onChanged(dummySeries1)
     }

@@ -1,26 +1,53 @@
 package com.dhimas.dhiflix.ui
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
+import android.content.Context
+import android.content.Intent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
+import androidx.recyclerview.widget.RecyclerView
+import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.ui.detail.DetailActivity
+import com.dhimas.dhiflix.utils.Constant
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.slider_fragment.view.*
 
-class SliderAdapter(fa: FragmentActivity): FragmentStateAdapter(fa) {
+class SliderAdapter(val context: Context): RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
+    var sliderEntities = ArrayList<ShowEntity>()
 
-    private var sliderEntities = ArrayList<ShowEntity>()
-
-    fun deleteShow() {
-        sliderEntities.clear()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
+        val view = LayoutInflater.from(context).inflate(R.layout.slider_fragment, parent, false)
+        return SliderViewHolder(view)
     }
 
-    fun addShow(showEntity: ShowEntity){
-        sliderEntities.add(showEntity)
+    override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
+        holder.bind(sliderEntities[position])
     }
 
     override fun getItemCount(): Int = sliderEntities.size
 
-    override fun createFragment(position: Int): Fragment {
-        return SliderFragment.newInstance(sliderEntities[position])
+    class SliderViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        fun bind(showEntity: ShowEntity){
+            with(itemView){
+                Picasso.get()
+                    .load(Constant.URL_BASE_IMAGE + showEntity.backdropPath)
+                    .into(iv_slider)
+
+                tv_slider_title.text = showEntity.title
+
+                setOnClickListener {
+                    val intent = Intent(context, DetailActivity::class.java)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
+
+                    //Used for checking if the show entity is from movie page
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, showEntity.show_type)
+
+                    startActivity(context, intent, null)
+                }
+            }
+        }
     }
 
 }

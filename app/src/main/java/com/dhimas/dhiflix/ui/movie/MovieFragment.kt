@@ -30,10 +30,8 @@ class MovieFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val root = inflater.inflate(R.layout.fragment_movie, container, false)
 
-
-        return root
+        return inflater.inflate(R.layout.fragment_movie, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,7 +41,7 @@ class MovieFragment : Fragment() {
             val factory = ViewModelFactory.getInstance(requireContext())
             viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
             movieAdapter = MovieAdapter()
-            sliderAdapter = SliderAdapter(requireActivity())
+            sliderAdapter = SliderAdapter(requireContext())
 
             //Minimum time for shimmer
             val minShimmerTime =
@@ -65,6 +63,7 @@ class MovieFragment : Fragment() {
             rv_movie.layoutManager = GridLayoutManager(context, spanCount)
             rv_movie.hasFixedSize()
             rv_movie.adapter = movieAdapter
+            vp_slider.adapter = sliderAdapter
         }
     }
 
@@ -81,11 +80,10 @@ class MovieFragment : Fragment() {
                             movieAdapter.notifyDataSetChanged()
 
                             if(movieList.data != null) {
-                                sliderAdapter.deleteShow()
                                 for (item in movieList.data) {
-                                    sliderAdapter.addShow(item)
+                                    sliderAdapter.sliderEntities.add(item)
                                 }
-                                vp_slider.adapter = sliderAdapter
+                                sliderAdapter.notifyDataSetChanged()
                                 dots_indicator.setViewPager2(vp_slider)
                                 textView3.visibility = View.VISIBLE
                             }

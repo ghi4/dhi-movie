@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +39,7 @@ class SeriesFragment : Fragment() {
             val factory = ViewModelFactory.getInstance(requireContext())
             viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
             seriesAdapter = SeriesAdapter()
-            sliderAdapter = SliderAdapter(requireActivity())
+            sliderAdapter = SliderAdapter(requireContext())
 
             //Minimum time for shimmer
             val minShimmerTime =
@@ -77,10 +78,14 @@ class SeriesFragment : Fragment() {
                             seriesAdapter.notifyDataSetChanged()
 
                             if(seriesList.data != null) {
-                                sliderAdapter.deleteShow()
                                 for (item in seriesList.data) {
-                                    sliderAdapter.addShow(item)
+                                    Log.d("Kucingx", "" + item.title)
+                                    sliderAdapter.sliderEntities.add(item)
                                 }
+
+                                for(item in sliderAdapter.sliderEntities)
+                                    Log.d("Kucingx", "===" + item.title)
+
                                 vp_series_slider.adapter = sliderAdapter
                                 dots_indicator_series.setViewPager2(vp_series_slider)
                                 textView4.visibility = View.VISIBLE
