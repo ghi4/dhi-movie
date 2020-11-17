@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_movie.*
 
 class MovieFragment : Fragment() {
+
     private lateinit var viewModel: MovieViewModel
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var sliderAdapter: SliderAdapter
@@ -37,17 +38,15 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (activity != null && context != null) {
+        if (activity != null) {
             val factory = ViewModelFactory.getInstance(requireContext())
             viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
             movieAdapter = MovieAdapter()
             sliderAdapter = SliderAdapter(requireContext())
 
             //Minimum time for shimmer
-            val minShimmerTime =
-                if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
+            val minShimmerTime = if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
 
-            //Prevent re-shimmer when rotating phone
             if (viewModel.isAlreadyShimmer) {
                 stopShimmer()
             }

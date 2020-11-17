@@ -52,6 +52,8 @@ class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolde
         fun bind(showEntity: ShowEntity, type: Int, isAlreadyShimmer: Boolean) {
             with(itemView) {
 
+                iv_poster_horizontal.startLoading()
+
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + showEntity.posterPath!!)
                     .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
@@ -59,20 +61,16 @@ class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolde
                     .placeholder(R.drawable.poster_placeholder)
                     .into(iv_poster_horizontal)
 
+                //If data loaded too fast causing awkward animation/view
                 val minShimmerTime = if (!isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
-
-                iv_poster_horizontal.startLoading()
-
-                //Prevent re-shimmer when scrolling view
                 Handler(Looper.getMainLooper()).postDelayed({
                     iv_poster_horizontal.stopLoading()
                 }, minShimmerTime)
 
                 cv_poster_horizontal.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
 
-                    //Used for checking the show title type is movie or series
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
                     intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, type)
 
                     context.startActivity(intent)

@@ -40,25 +40,6 @@ internal class ShowRepositoryTest {
 
     @Test
     fun getAllMovies() {
-//        val dummyMovie = MutableLiveData<List<ShowEntity>>()
-//        `when`(local.getAllMovie()).thenReturn(dummyMovie)
-//        dummyMovie.value = DummyData.generateDummyMovies()
-//
-//        val movieEntities = LiveDataTest.getValue(showRepository.getMovieList())
-//        verify(local).getAllMovie()
-//
-//        assertNotNull(movieEntities.data)
-//        assertEquals(movieResponses.size.toLong(), movieEntities.data?.size?.toLong())
-//
-//        val movieEntity = movieEntities.data?.get(0)
-//        assertNotNull(movieEntity)
-//        assertNotNull(movieEntity?.id)
-//        assertNotNull(movieEntity?.title)
-//        assertNotNull(movieEntity?.releaseDate)
-//        assertNotNull(movieEntity?.overview)
-//        assertNotNull(movieEntity?.posterPath)
-//        assertNotNull(movieEntity?.backdropPath)
-
         val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
         `when`(local.getAllMovie()).thenReturn(dataSourceFactory)
         showRepository.getMovieList()
@@ -82,25 +63,6 @@ internal class ShowRepositoryTest {
 
     @Test
     fun getAllSeries() {
-//        val dummySeries = MutableLiveData<List<ShowEntity>>()
-//        `when`(local.getAllSeries()).thenReturn(dummySeries)
-//        dummySeries.value = DummyData.generateDummySeries()
-//
-//        val seriesEntities = LiveDataTest.getValue(showRepository.getSeriesList())
-//        verify(local).getAllSeries()
-//
-//        assertNotNull(seriesEntities.data)
-//        assertEquals(seriesResponses.size.toLong(), seriesEntities.data?.size?.toLong())
-//
-//        val seriesEntity = seriesEntities.data?.get(0)
-//        assertNotNull(seriesEntity)
-//        assertNotNull(seriesEntity?.id)
-//        assertNotNull(seriesEntity?.title)
-//        assertNotNull(seriesEntity?.releaseDate)
-//        assertNotNull(seriesEntity?.overview)
-//        assertNotNull(seriesEntity?.posterPath)
-//        assertNotNull(seriesEntity?.backdropPath)
-
         val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
         `when`(local.getAllSeries()).thenReturn(dataSourceFactory)
         showRepository.getSeriesList()
@@ -217,6 +179,80 @@ internal class ShowRepositoryTest {
 
         assertNotNull(seriesEntities.data)
         assertEquals(seriesResponses.size, seriesEntities.data?.size)
+
+        assertNotNull(seriesEntities.data)
+        assertEquals(seriesResponses.size.toLong(), seriesEntities.data?.size?.toLong())
+
+        val seriesEntity = seriesEntities.data?.get(0)
+        assertNotNull(seriesEntity)
+        assertNotNull(seriesEntity?.id)
+        assertNotNull(seriesEntity?.title)
+        assertNotNull(seriesEntity?.releaseDate)
+        assertNotNull(seriesEntity?.overview)
+        assertNotNull(seriesEntity?.posterPath)
+        assertNotNull(seriesEntity?.backdropPath)
+    }
+
+    @Test
+    fun getSimilarMovieList() {
+        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
+        `when`(local.getSimilarMovies()).thenReturn(dataSourceFactory)
+        showRepository.getSimilarMovieList(movieId)
+
+        val movieEntities =
+            Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
+        verify(local).getSimilarMovies()
+
+        assertNotNull(movieEntities.data)
+        assertEquals(movieResponses.size.toLong(), movieEntities.data?.size?.toLong())
+
+        val movieEntity = movieEntities.data?.get(0)
+        assertNotNull(movieEntity)
+        assertNotNull(movieEntity?.id)
+        assertNotNull(movieEntity?.title)
+        assertNotNull(movieEntity?.releaseDate)
+        assertNotNull(movieEntity?.overview)
+        assertNotNull(movieEntity?.posterPath)
+        assertNotNull(movieEntity?.backdropPath)
+    }
+
+    @Test
+    fun getSimilarSeriesList() {
+        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
+        `when`(local.getSimilarSeries()).thenReturn(dataSourceFactory)
+        showRepository.getSimilarSeriesList(seriesId)
+
+        val seriesEntities =
+            Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
+        verify(local).getSimilarSeries()
+
+        assertNotNull(seriesEntities.data)
+        assertEquals(seriesResponses.size.toLong(), seriesEntities.data?.size?.toLong())
+
+        val seriesEntity = seriesEntities.data?.get(0)
+        assertNotNull(seriesEntity)
+        assertNotNull(seriesEntity?.id)
+        assertNotNull(seriesEntity?.title)
+        assertNotNull(seriesEntity?.releaseDate)
+        assertNotNull(seriesEntity?.overview)
+        assertNotNull(seriesEntity?.posterPath)
+        assertNotNull(seriesEntity?.backdropPath)
+    }
+
+    @Test
+    fun getSearchMovie() {
+
+    }
+
+    @Test
+    fun getSearchSeries() {
+        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
+        `when`(local.searchSeries(seriesDetailResponse.name)).thenReturn(dataSourceFactory)
+        showRepository.searchSeries(seriesDetailResponse.name)
+
+        val seriesEntities =
+            Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
+        verify(local).searchSeries(seriesDetailResponse.name)
 
         assertNotNull(seriesEntities.data)
         assertEquals(seriesResponses.size.toLong(), seriesEntities.data?.size?.toLong())

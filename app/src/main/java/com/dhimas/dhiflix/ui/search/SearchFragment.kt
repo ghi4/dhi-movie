@@ -1,7 +1,6 @@
 package com.dhimas.dhiflix.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +31,8 @@ class SearchFragment : Fragment() {
 
         val factory = ViewModelFactory.getInstance(requireContext())
         viewModel = ViewModelProvider(this, factory)[SearchViewModel::class.java]
+        movieAdapter = MovieAdapter()
+
         viewPager2.adapter = ViewPagerAdapter(childFragmentManager, lifecycle, viewModel)
 
         TabLayoutMediator(tabs, viewPager2) { tab, position ->
@@ -41,13 +42,9 @@ class SearchFragment : Fragment() {
             }
         }.attach()
 
-        movieAdapter = MovieAdapter()
-
         searchingX.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.toString().isNotEmpty()) {
-                    Log.d("Kucing", "=======IN SEARCH=======")
-
                     viewModel.setSearchQuery(query.toString())
                 }
 

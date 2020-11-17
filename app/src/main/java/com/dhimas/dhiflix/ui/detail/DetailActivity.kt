@@ -21,7 +21,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var viewModel: DetailViewModel
     private lateinit var showId: String
     private var showType: Int = 0
-    private lateinit var detailAdapter: DetailAdapter
+    private var detailAdapter: DetailAdapter = DetailAdapter()
     private lateinit var showEntity1: ShowEntity
 
     companion object {
@@ -39,28 +39,15 @@ class DetailActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
 
-        detailAdapter = DetailAdapter()
-
         showId = intent.getStringExtra(EXTRA_SHOW_ID).toString()
         showType = intent.getIntExtra(EXTRA_SHOW_TYPE, 0)
 
         val minShimmerTime = if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
-
         Handler(Looper.getMainLooper()).postDelayed({
-            viewModelObserve()
-            viewModel.setAlreadyShimmer()
+            viewModelObserveDetail()
         }, minShimmerTime)
 
-        viewModel.getShowList(showType, showId).observe(this, { movieList ->
-            if (Status.SUCCESS == movieList.status) {
-                detailAdapter.setMovies(
-                    showType,
-                    viewModel.isAlreadyShimmer
-                )
-                detailAdapter.submitList(movieList.data)
-                detailAdapter.notifyDataSetChanged()
-            }
-        })
+        viewModelObserveList()
 
         bt_favorite.setOnClickListener {
             viewModel.setFavorite(showEntity1)
@@ -72,11 +59,35 @@ class DetailActivity : AppCompatActivity() {
         rv_other_movie.adapter = detailAdapter
     }
 
-    private fun viewModelObserve() {
+    private fun viewModelObserveList() {
+        viewModel.getShowList(showType, showId).observe(this, { movieList ->
+            when(movieList.status){
+                Status.LOADING -> stopShimmering()
+
+                Status.SUCCESS -> {
+                    detailAdapter.setMovies(
+                        showType,
+                        viewModel.isAlreadyShimmer
+                    )
+                    detailAdapter.submitList(movieList.data)
+                    detailAdapter.notifyDataSetChanged()
+                }
+
+                Status.ERROR -> {
+                    Toast.makeText(this, "An error occurred on List", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    private fun viewModelObserveDetail() {
         viewModel.getShowEntityById(showId, showType).observe(this, { showEntity ->
             if (showEntity != null) {
                 when (showEntity.status) {
-                    Status.LOADING -> startShimmering()
+                    Status.LOADING -> {
+                        startShimmering()
+                    }
+
                     Status.SUCCESS -> {
                         if (showEntity.data != null) {
 
@@ -116,10 +127,15 @@ class DetailActivity : AppCompatActivity() {
                             stopShimmering()
                         }
                     }
-                    Status.ERROR -> Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+
+                    Status.ERROR -> {
+                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         })
+
+        viewModel.setAlreadyShimmer()
     }
 
     private fun stopShimmering() {

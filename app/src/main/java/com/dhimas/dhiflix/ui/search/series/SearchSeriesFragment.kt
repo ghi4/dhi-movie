@@ -1,7 +1,6 @@
 package com.dhimas.dhiflix.ui.search.series
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,7 @@ import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.ui.series.SeriesAdapter
 import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.search_movie_fragment.*
 import kotlinx.android.synthetic.main.search_series_fragment.*
-import kotlinx.android.synthetic.main.search_series_fragment.progressBar
 
 class SearchSeriesFragment : Fragment() {
     private lateinit var seriesAdapter: SeriesAdapter

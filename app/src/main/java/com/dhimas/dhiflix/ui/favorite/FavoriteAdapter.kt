@@ -21,11 +21,6 @@ class FavoriteAdapter internal constructor() :
     private var listType = Constant.MOVIE_TYPE //Default type is movie
     private var isAlreadyShimmer: Boolean = false
 
-    fun setMovies(listType: Int, isAlreadyShimmer: Boolean) {
-        this.listType = listType
-        this.isAlreadyShimmer = isAlreadyShimmer
-    }
-
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShowEntity>() {
             override fun areItemsTheSame(oldItem: ShowEntity, newItem: ShowEntity): Boolean {
@@ -36,6 +31,11 @@ class FavoriteAdapter internal constructor() :
                 return oldItem == newItem
             }
         }
+    }
+
+    fun setMovies(listType: Int, isAlreadyShimmer: Boolean) {
+        this.listType = listType
+        this.isAlreadyShimmer = isAlreadyShimmer
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
@@ -64,23 +64,16 @@ class FavoriteAdapter internal constructor() :
                     .placeholder(R.drawable.poster_placeholder)
                     .into(iv_poster_horizontal)
 
-                //Prevent re-shimmer when scrolling view
-                if (!isAlreadyShimmer) {
-                    //If data loaded too fast causing awkward animation/view
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        iv_poster_horizontal.stopLoading()
-                    }, Constant.MINIMUM_SHIMMER_TIME)
-                } else {
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        iv_poster_horizontal.stopLoading()
-                    }, Constant.MINIMUM_SHIMMER_TIME / 10)
-                }
+                //If data loaded too fast causing awkward animation/view
+                val minShimmerTime = if(!isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
+                Handler(Looper.getMainLooper()).postDelayed({
+                    iv_poster_horizontal.stopLoading()
+                }, minShimmerTime)
 
                 cv_poster_horizontal.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
 
-                    //Used for checking the show title type is movie or series
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
                     intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, type)
 
                     context.startActivity(intent)

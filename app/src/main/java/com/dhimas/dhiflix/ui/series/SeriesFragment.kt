@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,26 +34,24 @@ class SeriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (activity != null && context != null) {
+        if (activity != null) {
             val factory = ViewModelFactory.getInstance(requireContext())
             viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
             seriesAdapter = SeriesAdapter()
             sliderAdapter = SliderAdapter(requireContext())
 
-            //Minimum time for shimmer
-            val minShimmerTime =
-                if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
-
-            //Prevent re-shimmer when rotating phone
             if (viewModel.isAlreadyShimmer) {
                 stopShimmer()
             }
 
-            //Delay loading for shimmer
+            //Minimum time for shimmer
+            val minShimmerTime =
+                if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModelObserve()
                 viewModel.setAlreadyShimmer()
             }, minShimmerTime)
+
 
             //Change grid layout spanCount when Landscape/Portrait
             val phoneOrientation = requireActivity().resources.configuration.orientation
@@ -79,12 +76,8 @@ class SeriesFragment : Fragment() {
 
                             if(seriesList.data != null) {
                                 for (item in seriesList.data) {
-                                    Log.d("Kucingx", "" + item.title)
                                     sliderAdapter.sliderEntities.add(item)
                                 }
-
-                                for(item in sliderAdapter.sliderEntities)
-                                    Log.d("Kucingx", "===" + item.title)
 
                                 vp_series_slider.adapter = sliderAdapter
                                 dots_indicator_series.setViewPager2(vp_series_slider)

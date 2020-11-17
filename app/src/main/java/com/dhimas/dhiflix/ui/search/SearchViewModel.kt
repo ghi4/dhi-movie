@@ -1,6 +1,5 @@
 package com.dhimas.dhiflix.ui.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -15,13 +14,11 @@ class SearchViewModel(private val showRepository: ShowRepository) : ViewModel() 
 
     private var movieList: LiveData<Resource<PagedList<ShowEntity>>> =
         Transformations.switchMap(searchQuery) { mSearchQuery ->
-            Log.d("Kucingy", "MOV: " + searchQuery.value.toString())
             showRepository.searchMovie(mSearchQuery)
         }
 
     private var seriesList: LiveData<Resource<PagedList<ShowEntity>>> =
         Transformations.switchMap(searchQuery) { mSearchQuery ->
-            Log.d("Kucingy", "SER: " + searchQuery.value.toString())
             showRepository.searchSeries(mSearchQuery)
         }
 

@@ -374,7 +374,6 @@ class ShowRepository private constructor(
         }.asLiveData()
     }
 
-
     fun setFavorite(showEntity: ShowEntity) {
         appExecutors.diskIO().execute {
             localDataSource.setFavorite(showEntity)

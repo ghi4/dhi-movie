@@ -55,13 +55,9 @@ class SeriesAdapter : PagedListAdapter<ShowEntity, SeriesAdapter.SeriesViewHolde
 
                 cv_poster.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, series.id)
 
-                    //Used for checking if the show entity is from series page
-                    intent.putExtra(
-                        DetailActivity.EXTRA_SHOW_TYPE,
-                        series.show_type
-                    )
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, series.id)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, series.show_type)
 
                     context.startActivity(intent)
                 }
