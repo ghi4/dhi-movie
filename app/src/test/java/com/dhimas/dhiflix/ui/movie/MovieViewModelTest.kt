@@ -16,8 +16,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -46,8 +46,11 @@ internal class MovieViewModelTest {
         movie.value = dummyMovieList
 
         `when`(showRepository.getMovieList()).thenReturn(movie)
+        viewModel.getMovies().observeForever(observer)
+        verify(observer).onChanged(dummyMovieList)
+
         val movieEntities = viewModel.getMovies().value?.data
-        Mockito.verify(showRepository).getMovieList()
+        verify(showRepository).getMovieList()
 
         val dummyMovie = dummyMovieList.data?.get(0)
         val movieEntity = movieEntities?.get(0)
@@ -68,9 +71,6 @@ internal class MovieViewModelTest {
         assertEquals(dummyMovie?.posterPath, movieEntity?.posterPath)
         assertEquals(dummyMovie?.backdropPath, movieEntity?.backdropPath)
         assertEquals(dummyMovieList.data?.size, movieEntities?.size)
-
-        viewModel.getMovies().observeForever(observer)
-        Mockito.verify(observer).onChanged(dummyMovieList)
     }
 
 }

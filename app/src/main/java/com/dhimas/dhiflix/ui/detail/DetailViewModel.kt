@@ -1,6 +1,7 @@
 package com.dhimas.dhiflix.ui.detail
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.ShowRepository
@@ -10,6 +11,7 @@ import com.dhimas.dhiflix.vo.Resource
 
 class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() {
     var isAlreadyShimmer: Boolean = false
+    private var refreshTrigger = MutableLiveData(Unit)
     private lateinit var showEntity: LiveData<Resource<ShowEntity>>
     private lateinit var showList: LiveData<Resource<PagedList<ShowEntity>>>
 

@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -47,18 +48,25 @@ class ShowRepository private constructor(
         return object :
             NetworkBoundResource<PagedList<ShowEntity>, List<MovieResponse>>(appExecutors) {
             public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
+                Log.d("Kucingx", "IN Load DB")
                 val config = pagedListConfigBuilder()
 
                 return LivePagedListBuilder(localDataSource.getAllMovie(), config).build()
             }
 
-            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean =
-                data == null || data.isEmpty()
+            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean {
+                Log.d("Kucingx", "IN F Check: ${data.isNullOrEmpty()}" )
+                return data == null || data.isEmpty()
+            }
 
-            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
-                remoteDataSource.getMovieList()
+            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> {
+                Log.d("Kucingx", "IN Call")
+                return remoteDataSource.getMovieList()
+            }
+
 
             override fun saveCallResult(data: List<MovieResponse>) {
+                Log.d("Kucingx", "IN Fetch")
                 val movieList = ArrayList<ShowEntity>()
 
                 for (response in data) {

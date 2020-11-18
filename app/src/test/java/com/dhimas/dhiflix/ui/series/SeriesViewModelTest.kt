@@ -16,8 +16,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 
@@ -48,8 +48,11 @@ internal class SeriesViewModelTest {
         series.value = dummySeriesList
 
         `when`(showRepository.getSeriesList()).thenReturn(series)
+        viewModel.getSeries().observeForever(observer)
+        verify(observer).onChanged(dummySeriesList)
+
         val seriesEntities = viewModel.getSeries().value?.data
-        Mockito.verify(showRepository).getSeriesList()
+        verify(showRepository).getSeriesList()
 
         val dummySeries = dummySeriesList.data?.get(0)
         val seriesEntity = seriesEntities?.get(0)
@@ -70,8 +73,5 @@ internal class SeriesViewModelTest {
         assertEquals(dummySeries?.posterPath, seriesEntity?.posterPath)
         assertEquals(dummySeries?.backdropPath, seriesEntity?.backdropPath)
         assertEquals(dummySeriesList.data?.size, seriesEntities?.size)
-
-        viewModel.getSeries().observeForever(observer)
-        Mockito.verify(observer).onChanged(dummySeriesList)
     }
 }

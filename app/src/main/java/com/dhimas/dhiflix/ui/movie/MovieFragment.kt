@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,12 +70,14 @@ class MovieFragment : Fragment() {
     private fun viewModelObserve() {
         if (view != null) {
             viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
-                if (movieList != null) {
+                Log.d("Kucingx", "View Model Observe")
                     when (movieList.status) {
                         Status.LOADING -> {
+                            Log.d("Kucingx", "IN Loading")
                             Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
                         }
                         Status.SUCCESS -> {
+                            Log.d("Kucingx", "IN Success")
                             movieAdapter.submitList(movieList.data)
                             movieAdapter.notifyDataSetChanged()
 
@@ -91,11 +94,11 @@ class MovieFragment : Fragment() {
                             stopShimmer()
                         }
                         Status.ERROR -> {
-                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                            Log.d("Kucingx", "IN Error")
+                            Toast.makeText(context, "======Error", Toast.LENGTH_SHORT).show()
                             showSnackBar()
                         }
                     }
-                }
             })
         }
     }
@@ -103,6 +106,7 @@ class MovieFragment : Fragment() {
     private fun showSnackBar() {
         Snackbar.make(requireView(), "No internet connection!", Snackbar.LENGTH_INDEFINITE)
             .setAction("RETRY") {
+                Log.d("Kucingx", "IN Snackbar")
                 viewModel.refresh()
                 movieAdapter.notifyDataSetChanged()
             }

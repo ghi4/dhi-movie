@@ -1,25 +1,23 @@
 package com.dhimas.dhiflix.ui.search
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.DummyData
 import com.dhimas.dhiflix.utils.PagedListUtil
 import com.dhimas.dhiflix.vo.Resource
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
-import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)

@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.utils.EspressoIdlingResource
+import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -48,6 +49,7 @@ class MainActivityTest {
         waitHandler()
         onView(withId(R.id.navigation_series)).perform(click())
 
+        waitHandler()
         onView(withId(R.id.rv_series)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_series)).perform(
             RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
@@ -60,7 +62,7 @@ class MainActivityTest {
     fun loadFavorite() {
         onView(withId(R.id.navigation_favorite)).perform(click())
 
-        onView(withId(R.id.rv_favorite_movie)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_favorite_movie)).check(matches(not(isDisplayed())))
     }
 
     @Test
