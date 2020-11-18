@@ -241,18 +241,38 @@ internal class ShowRepositoryTest {
 
     @Test
     fun getSearchMovie() {
+        val keyword = "T"
+        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
+        `when`(local.searchMovie("$keyword%")).thenReturn(dataSourceFactory)
+        showRepository.searchMovie(keyword)
 
+        val movieEntities =
+            Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
+        verify(local).searchMovie("$keyword%")
+
+        assertNotNull(movieEntities.data)
+        assertEquals(movieResponses.size.toLong(), movieEntities.data?.size?.toLong())
+
+        val movieEntity = movieEntities.data?.get(0)
+        assertNotNull(movieEntity)
+        assertNotNull(movieEntity?.id)
+        assertNotNull(movieEntity?.title)
+        assertNotNull(movieEntity?.releaseDate)
+        assertNotNull(movieEntity?.overview)
+        assertNotNull(movieEntity?.posterPath)
+        assertNotNull(movieEntity?.backdropPath)
     }
 
     @Test
     fun getSearchSeries() {
+        val keyword = "T"
         val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.searchSeries(seriesDetailResponse.name)).thenReturn(dataSourceFactory)
-        showRepository.searchSeries(seriesDetailResponse.name)
+        `when`(local.searchSeries("$keyword%")).thenReturn(dataSourceFactory)
+        showRepository.searchSeries(keyword)
 
         val seriesEntities =
             Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
-        verify(local).searchSeries(seriesDetailResponse.name)
+        verify(local).searchSeries("$keyword%")
 
         assertNotNull(seriesEntities.data)
         assertEquals(seriesResponses.size.toLong(), seriesEntities.data?.size?.toLong())
@@ -266,33 +286,5 @@ internal class ShowRepositoryTest {
         assertNotNull(seriesEntity?.posterPath)
         assertNotNull(seriesEntity?.backdropPath)
     }
-
-//    @Test
-//    fun getMovieSearchResult() {
-//        val keyword = "Mulan"
-//        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-//        `when`(local.searchMovie(keyword)).thenReturn(dataSourceFactory)
-//        showRepository.searchMovie(keyword)
-//
-//        val movieEntities = Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
-//        verify(local).searchMovie(keyword)
-//
-//        assertNotNull(movieEntities.data)
-//        assertEquals(movieResponses.size.toLong(), movieEntities.data?.size?.toLong())
-//
-//        val movieEntity = movieEntities.data?.get(0)
-//        assertNotNull(movieEntity)
-//        assertNotNull(movieEntity?.id)
-//        assertNotNull(movieEntity?.title)
-//        assertNotNull(movieEntity?.releaseDate)
-//        assertNotNull(movieEntity?.overview)
-//        assertNotNull(movieEntity?.posterPath)
-//        assertNotNull(movieEntity?.backdropPath)
-//    }
-//
-//    @Test
-//    fun getSeriesSearchResult() {
-//
-//    }
 
 }

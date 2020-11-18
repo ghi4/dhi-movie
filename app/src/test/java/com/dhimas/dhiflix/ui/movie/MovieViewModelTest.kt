@@ -42,7 +42,6 @@ internal class MovieViewModelTest {
     fun getMovieList() {
         val dummyMovieList =
             Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
-
         val movie = MutableLiveData<Resource<PagedList<ShowEntity>>>()
         movie.value = dummyMovieList
 

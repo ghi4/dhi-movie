@@ -349,7 +349,7 @@ class FakeShowRepository constructor(
                         response.overview,
                         response.posterPath,
                         response.backdropPath,
-                        Constant.SERIES_TYPE
+                        Constant.MOVIE_TYPE
                     )
 
                     seriesList.add(series)
