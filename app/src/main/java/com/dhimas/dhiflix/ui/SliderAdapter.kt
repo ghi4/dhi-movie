@@ -14,7 +14,7 @@ import com.dhimas.dhiflix.utils.Constant
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.slider_fragment.view.*
 
-class SliderAdapter(val context: Context): RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
+class SliderAdapter(val context: Context) : RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
     var sliderEntities = ArrayList<ShowEntity>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
@@ -28,9 +28,9 @@ class SliderAdapter(val context: Context): RecyclerView.Adapter<SliderAdapter.Sl
 
     override fun getItemCount(): Int = sliderEntities.size
 
-    class SliderViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bind(showEntity: ShowEntity){
-            with(itemView){
+    class SliderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(showEntity: ShowEntity) {
+            with(itemView) {
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + showEntity.backdropPath)
                     .placeholder(R.drawable.backdrop_placeholder)

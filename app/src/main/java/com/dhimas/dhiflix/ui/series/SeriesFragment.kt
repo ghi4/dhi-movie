@@ -16,6 +16,7 @@ import com.dhimas.dhiflix.ui.SliderAdapter
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_series.*
 
 class SeriesFragment : Fragment() {
@@ -74,7 +75,7 @@ class SeriesFragment : Fragment() {
                             seriesAdapter.submitList(seriesList.data)
                             seriesAdapter.notifyDataSetChanged()
 
-                            if(seriesList.data != null) {
+                            if (seriesList.data != null) {
                                 for (item in seriesList.data) {
                                     sliderAdapter.sliderEntities.add(item)
                                 }
@@ -89,6 +90,7 @@ class SeriesFragment : Fragment() {
                         }
                         Status.ERROR -> {
                             Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                            showSnackBar()
                         }
                     }
                 }
@@ -101,4 +103,14 @@ class SeriesFragment : Fragment() {
         seriesShimmerLayout.stopShimmer()
         seriesShimmerLayout.visibility = View.GONE
     }
+
+    private fun showSnackBar() {
+        Snackbar.make(requireView(), "No internet connection!", Snackbar.LENGTH_INDEFINITE)
+            .setAction("RETRY") {
+                viewModel.refresh()
+                seriesAdapter.notifyDataSetChanged()
+            }
+            .show()
+    }
+
 }

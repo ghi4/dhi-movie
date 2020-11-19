@@ -22,7 +22,7 @@ class SeriesViewModel(private val showRepository: ShowRepository) : ViewModel() 
 
     fun getSeries(): LiveData<Resource<PagedList<ShowEntity>>> = seriesList
 
-    fun refresh(){
+    fun refresh() {
         refreshTrigger.value = Unit
     }
 

@@ -65,7 +65,7 @@ class FavoriteAdapter internal constructor() :
                     .into(iv_poster_horizontal)
 
                 //If data loaded too fast causing awkward animation/view
-                val minShimmerTime = if(!isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
+                val minShimmerTime = if (!isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
                 Handler(Looper.getMainLooper()).postDelayed({
                     iv_poster_horizontal.stopLoading()
                 }, minShimmerTime)

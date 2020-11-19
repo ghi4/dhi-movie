@@ -46,7 +46,8 @@ class MovieFragment : Fragment() {
             sliderAdapter = SliderAdapter(requireContext())
 
             //Minimum time for shimmer
-            val minShimmerTime = if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
+            val minShimmerTime =
+                if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
 
             if (viewModel.isAlreadyShimmer) {
                 stopShimmer()
@@ -71,34 +72,34 @@ class MovieFragment : Fragment() {
         if (view != null) {
             viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
                 Log.d("Kucingx", "View Model Observe")
-                    when (movieList.status) {
-                        Status.LOADING -> {
-                            Log.d("Kucingx", "IN Loading")
-                            Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
-                        }
-                        Status.SUCCESS -> {
-                            Log.d("Kucingx", "IN Success")
-                            movieAdapter.submitList(movieList.data)
-                            movieAdapter.notifyDataSetChanged()
-
-                            if(movieList.data != null) {
-                                for (item in movieList.data) {
-                                    sliderAdapter.sliderEntities.add(item)
-                                }
-                                sliderAdapter.notifyDataSetChanged()
-                                dots_indicator.setViewPager2(vp_slider)
-                                textView3.visibility = View.VISIBLE
-                            }
-
-                            viewModel.setAlreadyShimmer()
-                            stopShimmer()
-                        }
-                        Status.ERROR -> {
-                            Log.d("Kucingx", "IN Error")
-                            Toast.makeText(context, "======Error", Toast.LENGTH_SHORT).show()
-                            showSnackBar()
-                        }
+                when (movieList.status) {
+                    Status.LOADING -> {
+                        Log.d("Kucingx", "IN Loading")
+                        Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
                     }
+                    Status.SUCCESS -> {
+                        Log.d("Kucingx", "IN Success")
+                        movieAdapter.submitList(movieList.data)
+                        movieAdapter.notifyDataSetChanged()
+
+                        if (movieList.data != null) {
+                            for (item in movieList.data) {
+                                sliderAdapter.sliderEntities.add(item)
+                            }
+                            sliderAdapter.notifyDataSetChanged()
+                            dots_indicator.setViewPager2(vp_slider)
+                            textView3.visibility = View.VISIBLE
+                        }
+
+                        viewModel.setAlreadyShimmer()
+                        stopShimmer()
+                    }
+                    Status.ERROR -> {
+                        Log.d("Kucingx", "IN Error")
+                        Toast.makeText(context, "======Error", Toast.LENGTH_SHORT).show()
+                        showSnackBar()
+                    }
+                }
             })
         }
     }

@@ -260,7 +260,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-                resultMovie.value = ApiResponse.error(movieListResponse, "An error occurred.")
+                resultMovie.value = ApiResponse.error(movieListResponse, "" + t.localizedMessage)
             }
         })
 

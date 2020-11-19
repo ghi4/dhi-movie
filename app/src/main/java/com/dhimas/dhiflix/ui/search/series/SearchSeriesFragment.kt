@@ -41,29 +41,31 @@ class SearchSeriesFragment : Fragment() {
         seriesAdapter = SeriesAdapter()
 
         viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
-                when (seriesList.status) {
-                    Status.SUCCESS -> {
-                        seriesAdapter.submitList(seriesList.data)
-                        seriesAdapter.notifyDataSetChanged()
+            when (seriesList.status) {
+                Status.SUCCESS -> {
+                    seriesAdapter.submitList(seriesList.data)
+                    seriesAdapter.notifyDataSetChanged()
 
-                        if(seriesList.data != null) {
-                            setViewVisibility(loading = false, ivIllustration = false, tvInfo = false)
-                        }
-                        else{
-                            setViewVisibility(loading = false, ivIllustration = true, tvInfo = true)
-                            setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, "No series found.")
-                        }
-                    }
-
-                    Status.LOADING -> {
-                        setViewVisibility(loading = true, ivIllustration = false, tvInfo = false)
-                    }
-
-                    Status.ERROR -> {
+                    if (seriesList.data != null) {
+                        setViewVisibility(loading = false, ivIllustration = false, tvInfo = false)
+                    } else {
                         setViewVisibility(loading = false, ivIllustration = true, tvInfo = true)
-                        setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, seriesList.message.toString())
+                        setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, "No series found.")
                     }
                 }
+
+                Status.LOADING -> {
+                    setViewVisibility(loading = true, ivIllustration = false, tvInfo = false)
+                }
+
+                Status.ERROR -> {
+                    setViewVisibility(loading = false, ivIllustration = true, tvInfo = true)
+                    setInfoImageAndMessage(
+                        R.drawable.undraw_not_found_60pq,
+                        seriesList.message.toString()
+                    )
+                }
+            }
         })
 
         rv_search_series.layoutManager = GridLayoutManager(requireContext(), 3)
@@ -71,20 +73,20 @@ class SearchSeriesFragment : Fragment() {
         rv_search_series.adapter = seriesAdapter
     }
 
-    private fun setViewVisibility(loading: Boolean, ivIllustration: Boolean, tvInfo: Boolean){
-        progressBar.visibility = if(loading) View.VISIBLE else View.GONE
-        iv_series_illustration.visibility = if(ivIllustration) View.VISIBLE else View.INVISIBLE
-        tv_series_info.visibility = if(tvInfo) View.VISIBLE else View.INVISIBLE
+    private fun setViewVisibility(loading: Boolean, ivIllustration: Boolean, tvInfo: Boolean) {
+        progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+        iv_series_illustration.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
+        tv_series_info.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
     }
 
-    private fun setInfoImageAndMessage(image: Int, message: String){
-        val imgSize = 230
-
+    private fun setInfoImageAndMessage(image: Int, message: String) {
+        val targetWidth = 1361
+        val targetHeight = 938
         Picasso.get()
             .load(image)
             .placeholder(R.drawable.backdrop_placeholder)
             .error(R.drawable.image_error)
-            .resize(imgSize, imgSize)
+            .resize(targetWidth, targetHeight)
             .into(iv_series_illustration)
         tv_series_info.text = message
     }

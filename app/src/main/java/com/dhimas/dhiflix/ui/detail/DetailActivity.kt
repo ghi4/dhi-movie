@@ -3,6 +3,7 @@ package com.dhimas.dhiflix.ui.detail
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +14,7 @@ import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.Utils
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -41,6 +43,7 @@ class DetailActivity : AppCompatActivity() {
 
         showId = intent.getStringExtra(EXTRA_SHOW_ID).toString()
         showType = intent.getIntExtra(EXTRA_SHOW_TYPE, 0)
+        viewModel.setDoubleTrigger(showId, showType)
 
         val minShimmerTime = if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
         Handler(Looper.getMainLooper()).postDelayed({
@@ -60,9 +63,9 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun viewModelObserveList() {
-        viewModel.getShowList(showType, showId).observe(this, { movieList ->
-            when(movieList.status){
-                Status.LOADING -> stopShimmering()
+        viewModel.getShowList().observe(this, { movieList ->
+            when (movieList.status) {
+                Status.LOADING -> startShimmering()
 
                 Status.SUCCESS -> {
                     detailAdapter.setMovies(
@@ -71,9 +74,12 @@ class DetailActivity : AppCompatActivity() {
                     )
                     detailAdapter.submitList(movieList.data)
                     detailAdapter.notifyDataSetChanged()
+
+                    stopShimmering()
                 }
 
                 Status.ERROR -> {
+                    showSnackBar()
                     Toast.makeText(this, "An error occurred on List", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -81,7 +87,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun viewModelObserveDetail() {
-        viewModel.getShowEntityById(showId, showType).observe(this, { showEntity ->
+        viewModel.getShowEntityById().observe(this, { showEntity ->
             if (showEntity != null) {
                 when (showEntity.status) {
                     Status.LOADING -> {
@@ -125,17 +131,33 @@ class DetailActivity : AppCompatActivity() {
                                 .into(iv_detail_poster)
 
                             stopShimmering()
+                        } else {
+                            showSnackBar()
                         }
                     }
 
                     Status.ERROR -> {
                         Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                        showSnackBar()
                     }
                 }
             }
         })
 
         viewModel.setAlreadyShimmer()
+    }
+
+    private fun showSnackBar() {
+        Log.d("Singa", "SNACK CALLED")
+        Log.d("Singa", "SNACK INSIDE")
+        Snackbar.make(scrollView, "No internet connection!", Snackbar.LENGTH_INDEFINITE)
+            .setAction("RETRY") {
+                Log.d("Singa", "SNACK IN ACTION")
+                viewModel.setDoubleTrigger(showId, showType)
+                detailAdapter.notifyDataSetChanged()
+            }
+            .show()
+
     }
 
     private fun stopShimmering() {

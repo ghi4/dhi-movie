@@ -1,6 +1,7 @@
 package com.dhimas.dhiflix.ui.search.movie
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,29 +40,71 @@ class SearchMovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         movieAdapter = MovieAdapter()
+        Log.d("Garongx","In VCreated")
 
         viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
+            Log.d("Garongx","In Observe")
             when (movieList.status) {
                 Status.SUCCESS -> {
+                    Log.d("Garongx","In Success")
                     movieAdapter.submitList(movieList.data)
                     movieAdapter.notifyDataSetChanged()
 
-                    if(movieList.data != null) {
-                        setViewVisibility(loading = false, ivIllustration = false, tvInfo = false)
-                    }
-                    else{
-                        setViewVisibility(loading = false, ivIllustration = true, tvInfo = true)
+                    if (movieList.data != null) {
+                        Log.d("Garongx","In Not Null")
+                        setViewVisibility(
+                            loading = false,
+                            rvMovie = true,
+                            ivIllustration = false,
+                            tvInfo = false
+                        )
+                        if (movieList.data.isNullOrEmpty()) {
+                            Log.d("Garongx","In Null")
+                            setViewVisibility(
+                                loading = false,
+                                rvMovie = false,
+                                ivIllustration = true,
+                                tvInfo = true
+                            )
+                            setInfoImageAndMessage(
+                                R.drawable.undraw_not_found_60pq,
+                                "No movie found."
+                            )
+                        }
+                    } else {
+                        Log.d("Garongx","In Null 2")
+                        setViewVisibility(
+                            loading = false,
+                            rvMovie = false,
+                            ivIllustration = true,
+                            tvInfo = true
+                        )
                         setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, "No movie found.")
                     }
                 }
 
                 Status.LOADING -> {
-                    setViewVisibility(loading = true, ivIllustration = false, tvInfo = false)
+                    Log.d("Garongx","In Loading")
+                    setViewVisibility(
+                        loading = true,
+                        rvMovie = true,
+                        ivIllustration = false,
+                        tvInfo = false
+                    )
                 }
 
                 Status.ERROR -> {
-                    setViewVisibility(loading = false, ivIllustration = true, tvInfo = true)
-                    setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, movieList.message.toString())
+                    Log.d("Garongx","In Error")
+                    setViewVisibility(
+                        loading = false,
+                        rvMovie = false,
+                        ivIllustration = true,
+                        tvInfo = true
+                    )
+                    setInfoImageAndMessage(
+                        R.drawable.undraw_not_found_60pq,
+                        movieList.message.toString()
+                    )
                 }
             }
         })
@@ -71,22 +114,58 @@ class SearchMovieFragment : Fragment() {
         rv_search_movies.adapter = movieAdapter
     }
 
-    private fun setViewVisibility(loading: Boolean, ivIllustration: Boolean, tvInfo: Boolean){
-        progressBar.visibility = if(loading) View.VISIBLE else View.GONE
-        iv_movie_illustration.visibility = if(ivIllustration) View.VISIBLE else View.INVISIBLE
-        tv_movie_info.visibility = if(tvInfo) View.VISIBLE else View.INVISIBLE
+    private fun setViewVisibility(
+        loading: Boolean,
+        rvMovie: Boolean,
+        ivIllustration: Boolean,
+        tvInfo: Boolean
+    ) {
+        progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+        rv_search_movies.visibility = if (rvMovie) View.VISIBLE else View.INVISIBLE
+        iv_movie_illustration.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
+        tv_movie_info.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
     }
 
-    private fun setInfoImageAndMessage(image: Int, message: String){
-        val imgSize = 230
-
+    private fun setInfoImageAndMessage(image: Int, message: String) {
+        val targetWidth = 1361
+        val targetHeight = 938
         Picasso.get()
             .load(image)
             .placeholder(R.drawable.backdrop_placeholder)
             .error(R.drawable.image_error)
-            .resize(imgSize, imgSize)
+            .resize(targetWidth, targetHeight)
             .into(iv_movie_illustration)
         tv_movie_info.text = message
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.d("Garongx", "ON Resume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Log.d("Garongx", "ON Pause")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Log.d("Garongx", "ON Destroy")
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        Log.d("Garongx", "ON Start")
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        Log.d("Garongx", "ON Stop")
     }
 
 }

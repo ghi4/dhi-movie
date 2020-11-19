@@ -55,7 +55,7 @@ class ShowRepository private constructor(
             }
 
             override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean {
-                Log.d("Kucingx", "IN F Check: ${data.isNullOrEmpty()}" )
+                Log.d("Kucingx", "IN F Check: ${data.isNullOrEmpty()}")
                 return data == null || data.isEmpty()
             }
 
