@@ -11,19 +11,23 @@ import com.dhimas.dhiflix.vo.Resource
 
 class SeriesViewModel(private val showRepository: ShowRepository) : ViewModel() {
     var isAlreadyShimmer: Boolean = false
-    private var refreshTrigger = MutableLiveData(Unit)
-    private var seriesList = refreshTrigger.switchMap {
-        showRepository.getSeriesList()
+    private var page = MutableLiveData<Int>()
+    private var seriesList = page.switchMap {
+        showRepository.getSeriesList(it)
     }
 
     fun setAlreadyShimmer() {
         isAlreadyShimmer = true
     }
 
+    fun setPage(page: Int) {
+        this.page.postValue(page)
+    }
+
     fun getSeries(): LiveData<Resource<PagedList<ShowEntity>>> = seriesList
 
     fun refresh() {
-        refreshTrigger.value = Unit
+        page.postValue(page.value)
     }
 
 }

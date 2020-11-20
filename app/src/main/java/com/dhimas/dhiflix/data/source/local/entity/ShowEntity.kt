@@ -24,7 +24,9 @@ data class ShowEntity(
 
     var backdropPath: String? = null,
 
-    var show_type: Int? = null,
+    var show_type: Int? = 0,
+
+    var page: Int? = 0,
 
     var isFavorite: Int? = 0
 

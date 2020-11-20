@@ -7,6 +7,7 @@
     tools:context=".ui.movie.MovieFragment">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollMovie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -88,9 +89,10 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_movie"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginTop="16dp"
+                android:descendantFocusability="blocksDescendants"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"

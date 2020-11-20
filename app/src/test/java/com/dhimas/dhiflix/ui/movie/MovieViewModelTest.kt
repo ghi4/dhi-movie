@@ -40,17 +40,19 @@ internal class MovieViewModelTest {
 
     @Test
     fun getMovieList() {
+        val page = 1
         val dummyMovieList =
             Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
         val movie = MutableLiveData<Resource<PagedList<ShowEntity>>>()
         movie.value = dummyMovieList
 
-        `when`(showRepository.getMovieList()).thenReturn(movie)
+        `when`(showRepository.getMovieList(page)).thenReturn(movie)
+        viewModel.setPage(page)
         viewModel.getMovies().observeForever(observer)
         verify(observer).onChanged(dummyMovieList)
 
         val movieEntities = viewModel.getMovies().value?.data
-        verify(showRepository).getMovieList()
+        verify(showRepository).getMovieList(page)
 
         val dummyMovie = dummyMovieList.data?.get(0)
         val movieEntity = movieEntities?.get(0)

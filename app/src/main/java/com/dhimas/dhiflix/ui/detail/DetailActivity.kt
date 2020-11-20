@@ -3,18 +3,20 @@ package com.dhimas.dhiflix.ui.detail
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.Constant
-import com.dhimas.dhiflix.utils.Utils
+import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
+import com.dhimas.dhiflix.utils.Utils.doneDelay
+import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
+import com.dhimas.dhiflix.utils.Utils.showSnackBar
+import com.dhimas.dhiflix.utils.Utils.showToast
+import com.dhimas.dhiflix.utils.Utils.waitDelay
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -22,12 +24,14 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var viewModel: DetailViewModel
     private lateinit var showId: String
-    private var showType: Int = 0
-    private var detailAdapter: DetailAdapter = DetailAdapter()
     private lateinit var showEntity1: ShowEntity
 
+    private var showType: Int = 0
+    private var detailAdapter: DetailAdapter = DetailAdapter()
+
+
     companion object {
-        //For sending Show Title
+        //For sending Show ID
         const val EXTRA_SHOW_ID = "extra_show_id"
 
         //FOr sending Show Type (Movie/Series)
@@ -45,42 +49,55 @@ class DetailActivity : AppCompatActivity() {
         showType = intent.getIntExtra(EXTRA_SHOW_TYPE, 0)
         viewModel.setDoubleTrigger(showId, showType)
 
-        val minShimmerTime = if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
+        setupUI()
+
+        //Delay for shimmer animation
+        val minShimmerTime = getMinShimmerTime(viewModel.isAlreadyShimmer)
         Handler(Looper.getMainLooper()).postDelayed({
             viewModelObserveDetail()
+            viewModelObserveList()
         }, minShimmerTime)
+    }
 
-        viewModelObserveList()
-
-        bt_favorite.setOnClickListener {
-            viewModel.setFavorite(showEntity1)
-        }
-
+    private fun setupUI() {
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rv_other_movie.layoutManager = layoutManager
         rv_other_movie.hasFixedSize()
         rv_other_movie.adapter = detailAdapter
+
+        bt_favorite.setOnClickListener {
+            viewModel.setFavorite(showEntity1)
+        }
     }
 
     private fun viewModelObserveList() {
         viewModel.getShowList().observe(this, { movieList ->
             when (movieList.status) {
-                Status.LOADING -> startShimmering()
+                Status.LOADING -> {
+                    startShimmering()
+                }
 
                 Status.SUCCESS -> {
-                    detailAdapter.setMovies(
-                        showType,
-                        viewModel.isAlreadyShimmer
-                    )
+                    detailAdapter.setMovies(showType, viewModel.isAlreadyShimmer)
                     detailAdapter.submitList(movieList.data)
                     detailAdapter.notifyDataSetChanged()
+
+                    if (movieList.data.isNullOrEmpty()) {
+                        showToast(this, "List failed to load.")
+                        showSnackBar(scrollView, movieList.message.toString()) {
+                            val default = "671039"
+                            viewModel.setDoubleTrigger(default, showType)
+                        }
+                    }
 
                     stopShimmering()
                 }
 
                 Status.ERROR -> {
-                    showSnackBar()
-                    Toast.makeText(this, "An error occurred on List", Toast.LENGTH_SHORT).show()
+                    showToast(this, "List failed to load.")
+                    showSnackBar(scrollView, movieList.message.toString()) {
+                        viewModel.setDoubleTrigger(showId, showType)
+                    }
                 }
             }
         })
@@ -88,76 +105,65 @@ class DetailActivity : AppCompatActivity() {
 
     private fun viewModelObserveDetail() {
         viewModel.getShowEntityById().observe(this, { showEntity ->
-            if (showEntity != null) {
-                when (showEntity.status) {
-                    Status.LOADING -> {
-                        startShimmering()
-                    }
+            when (showEntity.status) {
+                Status.LOADING -> {
+                    startShimmering()
+                }
 
-                    Status.SUCCESS -> {
-                        if (showEntity.data != null) {
+                Status.SUCCESS -> {
+                    if (showEntity.data != null) {
 
-                            this.showEntity1 = showEntity.data
+                        this.showEntity1 = showEntity.data
 
-                            tv_detail_title.text = showEntity.data.title
-                            tv_detail_release_date.text =
-                                Utils.dateParseToMonthAndYear(showEntity.data.releaseDate)
-                            tv_detail_overview.text = showEntity.data.overview
+                        val btFavoriteText =
+                            if (showEntity1.isFavorite == 0)
+                                getString(R.string.add_to_favorite)
+                            else
+                                getString(R.string.remove_from_favorite)
 
-                            bt_favorite.text =
-                                if (showEntity.data.isFavorite == 0)
-                                    getString(R.string.add_to_favorite)
-                                else
-                                    getString(R.string.remove_from_favorite)
+                        tv_detail_title.text = showEntity1.title
+                        tv_detail_release_date.text =
+                            dateParseToMonthAndYear(showEntity1.releaseDate)
+                        tv_detail_overview.text = showEntity1.overview
+                        bt_favorite.text = btFavoriteText
 
-                            Picasso.get()
-                                .load(Constant.URL_BASE_IMAGE + showEntity.data.backdropPath)
-                                .placeholder(R.drawable.backdrop_placeholder)
-                                .error(R.drawable.image_error)
-                                .resize(
-                                    Constant.BACKDROP_TARGET_WIDTH,
-                                    Constant.BACKDROP_TARGET_HEIGHT
-                                )
-                                .into(iv_detail_backdrop)
+                        Picasso.get()
+                            .load(Constant.URL_BASE_IMAGE + showEntity1.backdropPath)
+                            .placeholder(R.drawable.backdrop_placeholder)
+                            .error(R.drawable.image_error)
+                            .resize(
+                                Constant.BACKDROP_TARGET_WIDTH,
+                                Constant.BACKDROP_TARGET_HEIGHT
+                            )
+                            .into(iv_detail_backdrop)
 
-                            Picasso.get()
-                                .load(Constant.URL_BASE_IMAGE + showEntity.data.posterPath)
-                                .placeholder(R.drawable.poster_placeholder)
-                                .error(R.drawable.poster_error)
-                                .resize(
-                                    Constant.POSTER_TARGET_WIDTH,
-                                    Constant.POSTER_TARGET_HEIGHT
-                                )
-                                .into(iv_detail_poster)
+                        Picasso.get()
+                            .load(Constant.URL_BASE_IMAGE + showEntity1.posterPath)
+                            .placeholder(R.drawable.poster_placeholder)
+                            .error(R.drawable.poster_error)
+                            .resize(
+                                Constant.POSTER_TARGET_WIDTH,
+                                Constant.POSTER_TARGET_HEIGHT
+                            )
+                            .into(iv_detail_poster)
 
-                            stopShimmering()
-                        } else {
-                            showSnackBar()
+                        stopShimmering()
+                    } else {
+                        showSnackBar(scrollView, showEntity.message.toString()) {
+                            viewModel.setDoubleTrigger(showId, showType)
                         }
                     }
+                }
 
-                    Status.ERROR -> {
-                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-                        showSnackBar()
+                Status.ERROR -> {
+                    showSnackBar(scrollView, showEntity.message.toString()) {
+                        viewModel.setDoubleTrigger(showId, showType)
                     }
                 }
             }
         })
 
         viewModel.setAlreadyShimmer()
-    }
-
-    private fun showSnackBar() {
-        Log.d("Singa", "SNACK CALLED")
-        Log.d("Singa", "SNACK INSIDE")
-        Snackbar.make(scrollView, "No internet connection!", Snackbar.LENGTH_INDEFINITE)
-            .setAction("RETRY") {
-                Log.d("Singa", "SNACK IN ACTION")
-                viewModel.setDoubleTrigger(showId, showType)
-                detailAdapter.notifyDataSetChanged()
-            }
-            .show()
-
     }
 
     private fun stopShimmering() {
@@ -168,9 +174,11 @@ class DetailActivity : AppCompatActivity() {
         tv_detail_overview.stopLoading()
         tv_interest.stopLoading()
         bt_favorite.stopLoading()
+        doneDelay()
     }
 
     private fun startShimmering() {
+        waitDelay()
         iv_detail_poster.startLoading()
         tv_detail_title.startLoading()
         tv_detail_release_date.startLoading()

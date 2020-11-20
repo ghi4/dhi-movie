@@ -11,19 +11,23 @@ import com.dhimas.dhiflix.vo.Resource
 
 class MovieViewModel(private val showRepository: ShowRepository) : ViewModel() {
     var isAlreadyShimmer: Boolean = false
-    private val refreshTrigger = MutableLiveData(Unit)
-    private var movieList = refreshTrigger.switchMap {
-        showRepository.getMovieList()
+    private val page = MutableLiveData<Int>()
+    private var movieList = page.switchMap {
+        showRepository.getMovieList(it)
     }
 
     fun setAlreadyShimmer() {
         isAlreadyShimmer = true
     }
 
+    fun setPage(page: Int) {
+        this.page.postValue(page)
+    }
+
     fun getMovies(): LiveData<Resource<PagedList<ShowEntity>>> = movieList
 
     fun refresh() {
-        refreshTrigger.value = Unit
+        page.postValue(page.value)
     }
 
 }

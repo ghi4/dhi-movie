@@ -41,18 +41,20 @@ internal class SeriesViewModelTest {
 
     @Test
     fun getSeriesList() {
+        val page = 1
         val dummySeriesList =
             Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
 
         val series = MutableLiveData<Resource<PagedList<ShowEntity>>>()
         series.value = dummySeriesList
 
-        `when`(showRepository.getSeriesList()).thenReturn(series)
+        `when`(showRepository.getSeriesList(page)).thenReturn(series)
+        viewModel.setPage(page)
         viewModel.getSeries().observeForever(observer)
         verify(observer).onChanged(dummySeriesList)
 
         val seriesEntities = viewModel.getSeries().value?.data
-        verify(showRepository).getSeriesList()
+        verify(showRepository).getSeriesList(page)
 
         val dummySeries = dummySeriesList.data?.get(0)
         val seriesEntity = seriesEntities?.get(0)

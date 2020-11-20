@@ -1,6 +1,7 @@
 package com.dhimas.dhiflix.ui.search.series
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -89,6 +90,12 @@ class SearchSeriesFragment : Fragment() {
             .resize(targetWidth, targetHeight)
             .into(iv_series_illustration)
         tv_series_info.text = message
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.d("Garongx", "ON Resume")
     }
 
 }

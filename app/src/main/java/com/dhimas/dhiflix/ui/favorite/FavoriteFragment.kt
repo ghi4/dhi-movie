@@ -1,7 +1,6 @@
 package com.dhimas.dhiflix.ui.favorite
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,18 +23,13 @@ class FavoriteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("Garong", "vCreate")
         return inflater.inflate(R.layout.fragment_favorite, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("Garong", "ViewCreated")
-
         if (activity != null) {
-            Log.d("Garong", "NOT NULL")
-
             val factory = ViewModelFactory.getInstance(requireContext())
             viewModel = ViewModelProvider(this, factory)[FavoriteViewModel::class.java]
             viewModel.refresh()
@@ -44,7 +38,6 @@ class FavoriteFragment : Fragment() {
             favoriteSeriesAdapter = FavoriteAdapter()
 
             viewModel.getFavoriteMovies().observe(viewLifecycleOwner, { favoriteMovieList ->
-                Log.d("Garong", "VM Movie")
                 when (favoriteMovieList.status) {
                     Status.LOADING -> {
                         setViewVisibility(
@@ -81,7 +74,6 @@ class FavoriteFragment : Fragment() {
             })
 
             viewModel.getFavoriteSeries().observe(viewLifecycleOwner, { favoriteSeriesList ->
-                Log.d("Garong", "VM Series")
                 when (favoriteSeriesList.status) {
                     Status.LOADING -> {
                         setViewVisibility(
@@ -154,30 +146,6 @@ class FavoriteFragment : Fragment() {
         setSeriesViewVisibility(tvSeries = false, rvSeries = false)
         setViewVisibility(loading = true, ivIllustration = true, tvInfo = true)
         viewModel.refresh()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        Log.d("Garong", "ON Pause")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Log.d("Garong", "ON Destroy")
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        Log.d("Garong", "ON Start")
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        Log.d("Garong", "ON Stop")
     }
 
 }

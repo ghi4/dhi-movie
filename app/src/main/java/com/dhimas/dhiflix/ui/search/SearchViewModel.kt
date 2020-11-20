@@ -11,7 +11,6 @@ import com.dhimas.dhiflix.vo.Resource
 
 class SearchViewModel(private val showRepository: ShowRepository) : ViewModel() {
     private var searchQuery = MutableLiveData<String>()
-
     private var movieList: LiveData<Resource<PagedList<ShowEntity>>> =
         searchQuery.switchMap { mSearchQuery ->
             showRepository.searchMovie(mSearchQuery)

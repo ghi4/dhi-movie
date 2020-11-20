@@ -7,22 +7,27 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.ui.SliderAdapter
-import com.dhimas.dhiflix.utils.Constant
+import com.dhimas.dhiflix.utils.Utils.doneDelay
+import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
+import com.dhimas.dhiflix.utils.Utils.showSnackBar
+import com.dhimas.dhiflix.utils.Utils.showToast
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_series.*
 
 class SeriesFragment : Fragment() {
+
     private lateinit var viewModel: SeriesViewModel
     private lateinit var seriesAdapter: SeriesAdapter
     private lateinit var sliderAdapter: SliderAdapter
+    private var page = 1
+    private var isBottom = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,82 +40,98 @@ class SeriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (activity != null) {
-            val factory = ViewModelFactory.getInstance(requireContext())
-            viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
-            seriesAdapter = SeriesAdapter()
-            sliderAdapter = SliderAdapter(requireContext())
+        val factory = ViewModelFactory.getInstance(requireContext())
+        viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
+        seriesAdapter = SeriesAdapter()
+        sliderAdapter = SliderAdapter(requireContext())
+        viewModel.setPage(page)
 
-            if (viewModel.isAlreadyShimmer) {
-                stopShimmer()
-            }
+        setupUI()
 
-            //Minimum time for shimmer
-            val minShimmerTime =
-                if (!viewModel.isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 0
-            Handler(Looper.getMainLooper()).postDelayed({
-                viewModelObserve()
-                viewModel.setAlreadyShimmer()
-            }, minShimmerTime)
-
-
-            //Change grid layout spanCount when Landscape/Portrait
-            val phoneOrientation = requireActivity().resources.configuration.orientation
-            val spanCount = if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
-            rv_series.layoutManager = GridLayoutManager(context, spanCount)
-            rv_series.hasFixedSize()
-            rv_series.adapter = seriesAdapter
-        }
+        //Delay for shimmer animation
+        val minShimmerTime = getMinShimmerTime(viewModel.isAlreadyShimmer)
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewModelObserver()
+        }, minShimmerTime)
     }
 
-    private fun viewModelObserve() {
-        if (view != null) {
+    private fun setupUI() {
+        //Prevent re-shimmer
+        if (viewModel.isAlreadyShimmer)
+            stopShimmer()
+
+        //Change grid layout spanCount when Landscape/Portrait
+        val phoneOrientation = requireActivity().resources.configuration.orientation
+        val spanCount = if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
+        rv_series.layoutManager = GridLayoutManager(context, spanCount)
+        rv_series.hasFixedSize()
+        rv_series.adapter = seriesAdapter
+        rv_series.isNestedScrollingEnabled = false
+
+        vp_series_slider.adapter = sliderAdapter
+        dots_indicator_series.setViewPager2(vp_series_slider)
+
+        nestedScrollSeries.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener{ v, _, scrollY, _, _ ->
+                if (scrollY == (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)) {
+                    page++
+                    viewModel.setPage(page)
+
+                    showToast(requireContext(), "Load more.")
+                }
+        })
+    }
+
+    private fun viewModelObserver() {
+        if(view != null) {
             viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
-                if (seriesList != null) {
-                    when (seriesList.status) {
-                        Status.LOADING -> {
-                            Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
-                        }
-                        Status.SUCCESS -> {
+                when (seriesList.status) {
+                    Status.LOADING -> {
+                        startShimmer()
+                    }
+
+                    Status.SUCCESS -> {
+                        if (seriesList.data != null) {
                             seriesAdapter.submitList(seriesList.data)
                             seriesAdapter.notifyDataSetChanged()
 
-                            if (seriesList.data != null) {
-                                for (item in seriesList.data) {
-                                    sliderAdapter.sliderEntities.add(item)
-                                }
+                            sliderAdapter.sliderEntities.clear()
+                            for (i in 0..4)
+                                seriesList.data[i]?.let { sliderAdapter.sliderEntities.add(it) }
+                            sliderAdapter.notifyDataSetChanged()
 
-                                vp_series_slider.adapter = sliderAdapter
-                                dots_indicator_series.setViewPager2(vp_series_slider)
-                                textView4.visibility = View.VISIBLE
-                            }
-
-                            viewModel.setAlreadyShimmer()
+                            isBottom = false
+                            textView4.visibility = View.VISIBLE
                             stopShimmer()
+                            doneDelay()
+                        } else {
+                            showToast(requireContext(), "No Series Found.")
+                            showSnackBar(requireView(), "Do you want to retry?") {
+                                viewModel.refresh()
+                            }
                         }
-                        Status.ERROR -> {
-                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-                            showSnackBar()
+                        viewModel.setAlreadyShimmer()
+
+                    }
+
+                    Status.ERROR -> {
+                        showSnackBar(requireView(), seriesList.message.toString()) {
+                            viewModel.refresh()
                         }
                     }
                 }
-                stopShimmer()
             })
         }
+    }
+
+    private fun startShimmer() {
+        seriesShimmerLayout.startShimmer()
+        seriesShimmerLayout.visibility = View.VISIBLE
     }
 
     private fun stopShimmer() {
         seriesShimmerLayout.stopShimmer()
         seriesShimmerLayout.visibility = View.GONE
-    }
-
-    private fun showSnackBar() {
-        Snackbar.make(requireView(), "No internet connection!", Snackbar.LENGTH_INDEFINITE)
-            .setAction("RETRY") {
-                viewModel.refresh()
-                seriesAdapter.notifyDataSetChanged()
-            }
-            .show()
     }
 
 }

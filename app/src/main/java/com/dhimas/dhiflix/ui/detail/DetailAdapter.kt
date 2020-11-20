@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.Constant
+import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie_horizontal.view.*
 
@@ -52,8 +53,10 @@ class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolde
         fun bind(showEntity: ShowEntity, type: Int, isAlreadyShimmer: Boolean) {
             with(itemView) {
 
+                //Start shimmer
                 iv_poster_horizontal.startLoading()
 
+                //Horizontal Poster
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + showEntity.posterPath!!)
                     .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
@@ -61,12 +64,13 @@ class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolde
                     .placeholder(R.drawable.poster_placeholder)
                     .into(iv_poster_horizontal)
 
-                //If data loaded too fast causing awkward animation/view
-                val minShimmerTime = if (!isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
+                //Delay for shimmer animation
+                val minShimmerTime = getMinShimmerTime(isAlreadyShimmer)
                 Handler(Looper.getMainLooper()).postDelayed({
                     iv_poster_horizontal.stopLoading()
                 }, minShimmerTime)
 
+                //Set poster click listener
                 cv_poster_horizontal.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
 

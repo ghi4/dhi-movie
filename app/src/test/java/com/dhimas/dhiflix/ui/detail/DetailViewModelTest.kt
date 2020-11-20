@@ -23,6 +23,7 @@ import org.mockito.junit.MockitoJUnitRunner
 internal class DetailViewModelTest {
 
     private lateinit var viewModel: DetailViewModel
+    private lateinit var showId: String
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -36,20 +37,23 @@ internal class DetailViewModelTest {
     @Before
     fun setUp() {
         viewModel = DetailViewModel(showRepository)
+        showId = "123"
     }
 
     @Test
     fun getMovieDetail() {
-        val dummyMovie1 = Resource.success(DummyData.generateDummyMovies()[0])
+        val dummyMovieResource = Resource.success(DummyData.generateDummyMovies()[0])
         val movie = MutableLiveData<Resource<ShowEntity>>()
-        movie.value = dummyMovie1
-        val dummyMovie = dummyMovie1.data
+        movie.value = dummyMovieResource
+        val dummyMovie = dummyMovieResource.data as ShowEntity
 
-        `when`(showRepository.getMovieDetail(dummyMovie!!.id)).thenReturn(movie)
+        viewModel.setDoubleTrigger(showId, Constant.MOVIE_TYPE)
+        `when`(showRepository.getMovieDetail(showId)).thenReturn(movie)
+        viewModel.getShowEntityById().observeForever(observer)
+        verify(observer).onChanged(dummyMovieResource)
 
-        val movieEntity =
-            viewModel.getShowEntityById(dummyMovie.id, Constant.MOVIE_TYPE).value?.data
-        verify(showRepository).getMovieDetail(dummyMovie.id)
+        val movieEntity = viewModel.getShowEntityById().value?.data
+        verify(showRepository).getMovieDetail(showId)
 
         assertNotNull(movieEntity)
         assertNotNull(movieEntity?.id)
@@ -66,27 +70,23 @@ internal class DetailViewModelTest {
         assertEquals(dummyMovie.overview, movieEntity?.overview)
         assertEquals(dummyMovie.posterPath, movieEntity?.posterPath)
         assertEquals(dummyMovie.backdropPath, movieEntity?.backdropPath)
-
-        viewModel.getShowEntityById(dummyMovie.id, Constant.MOVIE_TYPE)
-            .observeForever(observer)
-        verify(observer).onChanged(dummyMovie1)
     }
 
     @Test
     fun getSeriesDetail() {
-        val dummySeries1 = Resource.success(DummyData.generateDummySeries()[0])
+        val dummySeriesResource = Resource.success(DummyData.generateDummySeries()[0])
         val series = MutableLiveData<Resource<ShowEntity>>()
-        series.value = dummySeries1
-        val dummySeries = dummySeries1.data
+        series.value = dummySeriesResource
+        val dummySeries = dummySeriesResource.data as ShowEntity
 
-        `when`(showRepository.getSeriesDetail(dummySeries!!.id)).thenReturn(series)
+        viewModel.setDoubleTrigger(showId, Constant.SERIES_TYPE)
+        `when`(showRepository.getSeriesDetail(showId)).thenReturn(series)
+        viewModel.getShowEntityById().observeForever(observer)
+        verify(observer).onChanged(dummySeriesResource)
 
-        val seriesEntity =
-            viewModel.getShowEntityById(
-                dummySeries.id,
-                Constant.SERIES_TYPE
-            ).value?.data
-        verify(showRepository).getSeriesDetail(dummySeries.id)
+
+        val seriesEntity = viewModel.getShowEntityById().value?.data
+        verify(showRepository).getSeriesDetail(showId)
 
         assertNotNull(seriesEntity)
         assertNotNull(seriesEntity?.id)
@@ -103,10 +103,5 @@ internal class DetailViewModelTest {
         assertEquals(dummySeries.overview, seriesEntity?.overview)
         assertEquals(dummySeries.posterPath, seriesEntity?.posterPath)
         assertEquals(dummySeries.backdropPath, seriesEntity?.backdropPath)
-
-        viewModel.getShowEntityById(dummySeries.id, Constant.SERIES_TYPE)
-            .observeForever(observer)
-        verify(observer).onChanged(dummySeries1)
-
     }
 }

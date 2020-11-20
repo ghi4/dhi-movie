@@ -48,6 +48,9 @@ class FavoriteFragmentTest {
         movie.value = dummyMovieList
 
         `when`(showRepository.getFavoriteMovieList()).thenReturn(movie)
+        viewModel.getFavoriteMovies().observeForever(observer)
+        verify(observer).onChanged(dummyMovieList)
+
         val movieEntities = viewModel.getFavoriteMovies().value?.data
         verify(showRepository).getFavoriteMovieList()
 
@@ -70,9 +73,6 @@ class FavoriteFragmentTest {
         assertEquals(dummyMovie?.posterPath, movieEntity?.posterPath)
         assertEquals(dummyMovie?.backdropPath, movieEntity?.backdropPath)
         assertEquals(dummyMovieList.data?.size, movieEntities?.size)
-
-        viewModel.getFavoriteMovies().observeForever(observer)
-        verify(observer).onChanged(dummyMovieList)
     }
 
     @Test
@@ -84,6 +84,9 @@ class FavoriteFragmentTest {
         series.value = dummySeriesList
 
         `when`(showRepository.getFavoriteSeriesList()).thenReturn(series)
+        viewModel.getFavoriteSeries().observeForever(observer)
+        verify(observer).onChanged(dummySeriesList)
+
         val seriesEntities = viewModel.getFavoriteSeries().value?.data
         verify(showRepository).getFavoriteSeriesList()
 
@@ -106,9 +109,6 @@ class FavoriteFragmentTest {
         assertEquals(dummySeries?.posterPath, seriesEntity?.posterPath)
         assertEquals(dummySeries?.backdropPath, seriesEntity?.backdropPath)
         assertEquals(dummySeriesList.data?.size, seriesEntities?.size)
-
-        viewModel.getFavoriteSeries().observeForever(observer)
-        verify(observer).onChanged(dummySeriesList)
     }
 
 

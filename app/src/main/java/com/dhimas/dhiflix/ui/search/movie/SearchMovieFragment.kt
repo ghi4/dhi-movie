@@ -40,18 +40,14 @@ class SearchMovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         movieAdapter = MovieAdapter()
-        Log.d("Garongx","In VCreated")
 
         viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
-            Log.d("Garongx","In Observe")
             when (movieList.status) {
                 Status.SUCCESS -> {
-                    Log.d("Garongx","In Success")
                     movieAdapter.submitList(movieList.data)
                     movieAdapter.notifyDataSetChanged()
 
                     if (movieList.data != null) {
-                        Log.d("Garongx","In Not Null")
                         setViewVisibility(
                             loading = false,
                             rvMovie = true,
@@ -59,7 +55,6 @@ class SearchMovieFragment : Fragment() {
                             tvInfo = false
                         )
                         if (movieList.data.isNullOrEmpty()) {
-                            Log.d("Garongx","In Null")
                             setViewVisibility(
                                 loading = false,
                                 rvMovie = false,
@@ -72,7 +67,6 @@ class SearchMovieFragment : Fragment() {
                             )
                         }
                     } else {
-                        Log.d("Garongx","In Null 2")
                         setViewVisibility(
                             loading = false,
                             rvMovie = false,
@@ -84,7 +78,6 @@ class SearchMovieFragment : Fragment() {
                 }
 
                 Status.LOADING -> {
-                    Log.d("Garongx","In Loading")
                     setViewVisibility(
                         loading = true,
                         rvMovie = true,
@@ -94,7 +87,6 @@ class SearchMovieFragment : Fragment() {
                 }
 
                 Status.ERROR -> {
-                    Log.d("Garongx","In Error")
                     setViewVisibility(
                         loading = false,
                         rvMovie = false,
@@ -142,30 +134,6 @@ class SearchMovieFragment : Fragment() {
         super.onResume()
 
         Log.d("Garongx", "ON Resume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        Log.d("Garongx", "ON Pause")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Log.d("Garongx", "ON Destroy")
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        Log.d("Garongx", "ON Start")
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        Log.d("Garongx", "ON Stop")
     }
 
 }

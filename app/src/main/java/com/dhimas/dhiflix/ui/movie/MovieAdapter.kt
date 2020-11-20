@@ -11,7 +11,7 @@ import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Constant
-import com.dhimas.dhiflix.utils.Utils
+import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
@@ -50,7 +50,7 @@ class MovieAdapter internal constructor() :
         fun bind(movie: ShowEntity) {
             with(itemView) {
                 tv_title.text = movie.title
-                tv_release_date.text = Utils.dateParseToMonthAndYear(movie.releaseDate)
+                tv_release_date.text = dateParseToMonthAndYear(movie.releaseDate)
 
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + movie.posterPath)
@@ -62,13 +62,8 @@ class MovieAdapter internal constructor() :
                 itemView.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
                     intent.putExtra(DetailActivity.EXTRA_SHOW_ID, movie.id)
-
                     //Used for checking if the show entity is from movie page
-                    intent.putExtra(
-                        DetailActivity.EXTRA_SHOW_TYPE,
-                        movie.show_type
-                    )
-
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, movie.show_type)
                     context.startActivity(intent)
                 }
             }

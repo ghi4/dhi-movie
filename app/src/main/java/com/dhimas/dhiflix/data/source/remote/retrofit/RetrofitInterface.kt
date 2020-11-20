@@ -11,11 +11,11 @@ import retrofit2.http.Query
 
 interface RetrofitInterface {
 
-    @GET("movie/popular?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US&page=1")
-    fun getMovieList(): Call<MovieListResponse>
+    @GET("movie/popular?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US")
+    fun getMovieList(@Query("page") page: Int): Call<MovieListResponse>
 
     @GET("tv/popular?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US&page=1")
-    fun getSeriesList(): Call<SeriesListResponse>
+    fun getSeriesList(@Query("page") page: Int): Call<SeriesListResponse>
 
     @GET("movie/{movie_id}?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US")
     fun getMovieDetail(@Path("movie_id") movie_id: String?): Call<MovieResponse>

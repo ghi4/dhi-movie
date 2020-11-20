@@ -24,8 +24,8 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
     }
 
-    fun getMovieList(): LiveData<ApiResponse<List<MovieResponse>>> {
-        val call = retrofitService.getMovieList()
+    fun getMovieList(page: Int): LiveData<ApiResponse<List<MovieResponse>>> {
+        val call = retrofitService.getMovieList(page)
         val resultMovie = MutableLiveData<ApiResponse<List<MovieResponse>>>()
         var movieListResponse = ArrayList<MovieResponse>()
 
@@ -55,15 +55,15 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-                resultMovie.value = ApiResponse.error(movieListResponse, "An error occurred.")
+                resultMovie.value = ApiResponse.error(movieListResponse, "No internet connection!")
             }
         })
 
         return resultMovie
     }
 
-    fun getSeriesList(): LiveData<ApiResponse<List<SeriesResponse>>> {
-        val call = retrofitService.getSeriesList()
+    fun getSeriesList(page: Int): LiveData<ApiResponse<List<SeriesResponse>>> {
+        val call = retrofitService.getSeriesList(page)
         val resultSeries = MutableLiveData<ApiResponse<List<SeriesResponse>>>()
         var seriesListResponse = ArrayList<SeriesResponse>()
 
@@ -83,14 +83,15 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                     } else {
                         seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
                         resultSeries.value =
-                            ApiResponse.empty(seriesListResponse, "No series found.")
+                            ApiResponse.error(seriesListResponse, "No series found.")
                     }
                 }
                 EspressoIdlingResource.decrement()
             }
 
             override fun onFailure(call: Call<SeriesListResponse>, t: Throwable) {
-                resultSeries.value = ApiResponse.error(seriesListResponse, "An error occurred.")
+                resultSeries.value =
+                    ApiResponse.error(seriesListResponse, "No internet connection!")
             }
         })
 
@@ -119,7 +120,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                resultMovie.value = ApiResponse.error(MovieResponse(), "An error occurred.")
+                resultMovie.value = ApiResponse.error(MovieResponse(), "No internet connection!")
             }
         })
 
@@ -151,7 +152,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<SeriesResponse>, t: Throwable) {
-                resultSeries.value = ApiResponse.error(SeriesResponse(), "An error occurred.")
+                resultSeries.value = ApiResponse.error(SeriesResponse(), "No internet connection!")
             }
 
         })
@@ -190,7 +191,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-                resultMovie.value = ApiResponse.error(movieListResponse, "An error occurred.")
+                resultMovie.value = ApiResponse.error(movieListResponse, "No internet connection!")
             }
         })
 
@@ -225,7 +226,8 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<SeriesListResponse>, t: Throwable) {
-                resultSeries.value = ApiResponse.error(seriesListResponse, "An error occurred.")
+                resultSeries.value =
+                    ApiResponse.error(seriesListResponse, "No internet connection!")
             }
         })
 
@@ -260,7 +262,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-                resultMovie.value = ApiResponse.error(movieListResponse, "" + t.localizedMessage)
+                resultMovie.value = ApiResponse.error(movieListResponse, "No internet connection!")
             }
         })
 
@@ -296,7 +298,8 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
 
             override fun onFailure(call: Call<SeriesListResponse>, t: Throwable) {
-                resultSeries.value = ApiResponse.error(seriesListResponse, "An error occurred.")
+                resultSeries.value =
+                    ApiResponse.error(seriesListResponse, "No internet connection!")
             }
         })
 

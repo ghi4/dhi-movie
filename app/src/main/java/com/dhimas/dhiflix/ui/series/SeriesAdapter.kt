@@ -11,7 +11,7 @@ import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Constant
-import com.dhimas.dhiflix.utils.Utils
+import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
@@ -44,7 +44,7 @@ class SeriesAdapter : PagedListAdapter<ShowEntity, SeriesAdapter.SeriesViewHolde
         fun bind(series: ShowEntity) {
             with(itemView) {
                 tv_title.text = series.title
-                tv_release_date.text = Utils.dateParseToMonthAndYear(series.releaseDate)
+                tv_release_date.text = dateParseToMonthAndYear(series.releaseDate)
 
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + series.posterPath)
@@ -55,10 +55,8 @@ class SeriesAdapter : PagedListAdapter<ShowEntity, SeriesAdapter.SeriesViewHolde
 
                 cv_poster.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java)
-
                     intent.putExtra(DetailActivity.EXTRA_SHOW_ID, series.id)
                     intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, series.show_type)
-
                     context.startActivity(intent)
                 }
             }
