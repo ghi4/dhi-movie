@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,18 +77,13 @@ class MovieFragment : Fragment() {
         nestedScrollMovie.setOnScrollChangeListener(
             NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
                 val height = (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
-                Log.d(
-                    "GGA",
-                    "$scrollY == ${v?.getChildAt(0)?.measuredHeight} == ${v?.measuredHeight} == $height"
-                )
+
                 if (scrollY == height && scrollY > scrollLocation) {
                     if (page < 5) {
                         page++
                         viewModel.setPage(page)
                         scrollLocation = scrollY
                         showToast(requireContext(), "Load more.")
-                        Log.d("GGX", "PAGE: $page")
-                        Log.d("GGA", "=========================")
                     } else {
                         showToast(requireContext(), "Max page.")
                     }

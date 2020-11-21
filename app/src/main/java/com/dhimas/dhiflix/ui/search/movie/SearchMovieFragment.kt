@@ -1,7 +1,6 @@
 package com.dhimas.dhiflix.ui.search.movie
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,14 +47,12 @@ class SearchMovieFragment : Fragment() {
 //        viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
 
         vm.getMovies().observe(viewLifecycleOwner, { movieList ->
-            Log.d("Garongxx", "MOV VM IN")
             when (movieList.status) {
                 Status.SUCCESS -> {
                     movieAdapter.addMovie(movieList.data as ArrayList<ShowEntity>)
                     movieAdapter.notifyDataSetChanged()
 
                     if (!movieList.data.isNullOrEmpty()) {
-                        Log.d("Garongxx", "MOV VM N NULL")
                         setViewVisibility(
                             loading = false,
                             rvMovie = true,
@@ -63,7 +60,6 @@ class SearchMovieFragment : Fragment() {
                             tvInfo = false
                         )
                     } else {
-                        Log.d("Garongxx", "MOV VM NULL")
                         setViewVisibility(
                             loading = false,
                             rvMovie = false,
@@ -76,7 +72,6 @@ class SearchMovieFragment : Fragment() {
                 }
 
                 Status.LOADING -> {
-                    Log.d("Garongxx", "MOV VM LOAD")
                     setViewVisibility(
                         loading = true,
                         rvMovie = true,
@@ -86,7 +81,6 @@ class SearchMovieFragment : Fragment() {
                 }
 
                 Status.ERROR -> {
-                    Log.d("Garongxx", "MOV VM ERR")
                     setViewVisibility(
                         loading = false,
                         rvMovie = false,

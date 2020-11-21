@@ -1,7 +1,6 @@
 package com.dhimas.dhiflix.ui.search.series
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,14 +46,12 @@ class SearchSeriesFragment : Fragment() {
 //        viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
 
         vm.getSeries().observe(viewLifecycleOwner, { seriesList ->
-            Log.d("Garongxx", "SER VM IN")
             when (seriesList.status) {
                 Status.SUCCESS -> {
                     seriesAdapter.addSeries(seriesList.data as ArrayList<ShowEntity>)
                     seriesAdapter.notifyDataSetChanged()
 
                     if (!seriesList.data.isNullOrEmpty()) {
-                        Log.d("Garongxx", "SER VM N NULL")
                         setViewVisibility(
                             loading = false,
                             rvSeries = true,
@@ -62,7 +59,6 @@ class SearchSeriesFragment : Fragment() {
                             tvInfo = false
                         )
                     } else {
-                        Log.d("Garongxx", "SER VM NULL")
                         setViewVisibility(
                             loading = false,
                             rvSeries = false,
@@ -74,7 +70,6 @@ class SearchSeriesFragment : Fragment() {
                 }
 
                 Status.LOADING -> {
-                    Log.d("Garongxx", "SER VM LOAD")
                     setViewVisibility(
                         loading = true,
                         rvSeries = false,
@@ -84,7 +79,6 @@ class SearchSeriesFragment : Fragment() {
                 }
 
                 Status.ERROR -> {
-                    Log.d("Garongxx", "SER VM ERR")
                     setViewVisibility(
                         loading = false,
                         rvSeries = false,

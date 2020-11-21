@@ -1,6 +1,5 @@
 package com.dhimas.dhiflix.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +15,6 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
     private var doubleTrigger = MutableLiveData<DoubleTrigger>()
 
     private var showEntity = doubleTrigger.switchMap {
-        Log.d("PPW", "ENTITY")
         when (it.showType) {
             Constant.MOVIE_TYPE -> showRepository.getMovieDetail(it.showId)
             else -> showRepository.getSeriesDetail(it.showId)
@@ -24,7 +22,6 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
     }
 
     private var showList = showEntity.switchMap {
-        Log.d("PPW", "LIST")
         val showId = it.data?.id ?: "671039"
         when (it.data?.show_type) {
             Constant.MOVIE_TYPE -> {

@@ -3,7 +3,6 @@ package com.dhimas.dhiflix.ui.detail
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -53,7 +52,6 @@ class DetailActivity : AppCompatActivity() {
         setupUI()
 
         //Delay for shimmer animation
-        Log.d("JJK", "STARTED")
         waitDelay()
         val minShimmerTime = getMinShimmerTime(viewModel.isAlreadyShimmer)
         Handler(Looper.getMainLooper()).postDelayed({
@@ -92,7 +90,6 @@ class DetailActivity : AppCompatActivity() {
 
                     stopShimmering()
                     doneDelay()
-                    Log.d("JJK", "STOPPED LST")
                 }
 
                 Status.ERROR -> {
@@ -100,7 +97,6 @@ class DetailActivity : AppCompatActivity() {
                     showSnackBar(scrollView, movieList.message ?: "Unknown Error") {
                         viewModel.setDoubleTrigger(showId, showType)
                     }
-                    Log.d("JJK", "STOPPED LST")
                     doneDelay()
                 }
             }
