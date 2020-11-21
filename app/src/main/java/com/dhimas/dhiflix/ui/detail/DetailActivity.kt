@@ -77,7 +77,7 @@ class DetailActivity : AppCompatActivity() {
         viewModel.getShowList().observe(this, { movieList ->
             when (movieList.status) {
                 Status.LOADING -> {
-                    startShimmering()
+                    //startShimmering()
                 }
 
                 Status.SUCCESS -> {

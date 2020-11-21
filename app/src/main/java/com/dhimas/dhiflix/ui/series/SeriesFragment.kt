@@ -44,7 +44,7 @@ class SeriesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val factory = ViewModelFactory.getInstance(requireContext())
-        viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity(), factory)[SeriesViewModel::class.java]
         seriesAdapter = SeriesAdapter()
         sliderAdapter = SliderAdapter(requireContext())
         viewModel.setPage(page)

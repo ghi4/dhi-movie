@@ -44,7 +44,7 @@ class MovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val factory = ViewModelFactory.getInstance(requireContext())
-        viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity(), factory)[MovieViewModel::class.java]
         movieAdapter = MovieAdapter()
         sliderAdapter = SliderAdapter(requireContext())
         viewModel.setPage(page)
