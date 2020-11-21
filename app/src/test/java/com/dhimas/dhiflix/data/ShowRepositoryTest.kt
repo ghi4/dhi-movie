@@ -43,12 +43,12 @@ internal class ShowRepositoryTest {
     @Test
     fun getAllMovies() {
         val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.getAllMovie(page)).thenReturn(dataSourceFactory)
+        `when`(local.getMovies(page)).thenReturn(dataSourceFactory)
         showRepository.getMovieList(page)
 
         val movieEntities =
             Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
-        verify(local).getAllMovie(page)
+        verify(local).getMovies(page)
 
         assertNotNull(movieEntities.data)
         assertEquals(movieResponses.size.toLong(), movieEntities.data?.size?.toLong())
@@ -66,12 +66,12 @@ internal class ShowRepositoryTest {
     @Test
     fun getAllSeries() {
         val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.getAllSeries(page)).thenReturn(dataSourceFactory)
+        `when`(local.getSeries(page)).thenReturn(dataSourceFactory)
         showRepository.getSeriesList(page)
 
         val seriesEntities =
             Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
-        verify(local).getAllSeries(page)
+        verify(local).getSeries(page)
 
         assertNotNull(seriesEntities.data)
         assertEquals(seriesResponses.size, seriesEntities.data?.size)
@@ -149,12 +149,12 @@ internal class ShowRepositoryTest {
     @Test
     fun getAllFavoriteMovie() {
         val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.getAllFavoriteMovie()).thenReturn(dataSourceFactory)
+        `when`(local.getFavoriteMovies()).thenReturn(dataSourceFactory)
         showRepository.getFavoriteMovieList()
 
         val movieEntities =
             Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
-        verify(local).getAllFavoriteMovie()
+        verify(local).getFavoriteMovies()
 
         assertNotNull(movieEntities.data)
         assertEquals(movieResponses.size.toLong(), movieEntities.data?.size?.toLong())
@@ -172,12 +172,12 @@ internal class ShowRepositoryTest {
     @Test
     fun getAllFavoriteSeries() {
         val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.getAllFavoriteSeries()).thenReturn(dataSourceFactory)
+        `when`(local.getFavoriteSeries()).thenReturn(dataSourceFactory)
         showRepository.getFavoriteSeriesList()
 
         val seriesEntities =
             Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
-        verify(local).getAllFavoriteSeries()
+        verify(local).getFavoriteSeries()
 
         assertNotNull(seriesEntities.data)
         assertEquals(seriesResponses.size, seriesEntities.data?.size)
@@ -245,12 +245,12 @@ internal class ShowRepositoryTest {
     fun getSearchMovie() {
         val keyword = "T"
         val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.searchMovie("$keyword%")).thenReturn(dataSourceFactory)
+        `when`(local.searchMovies("$keyword%")).thenReturn(dataSourceFactory)
         showRepository.searchMovie(keyword)
 
         val movieEntities =
             Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
-        verify(local).searchMovie("$keyword%")
+        verify(local).searchMovies("$keyword%")
 
         assertNotNull(movieEntities.data)
         assertEquals(movieResponses.size.toLong(), movieEntities.data?.size?.toLong())

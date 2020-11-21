@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.ui.series.SeriesAdapter
 import com.dhimas.dhiflix.vo.Status
@@ -15,6 +17,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.search_series_fragment.*
 
 class SearchSeriesFragment : Fragment() {
+    private val vm: SearchViewModel by viewModels({requireParentFragment()})
     private lateinit var seriesAdapter: SeriesAdapter
 
     companion object {
@@ -41,25 +44,30 @@ class SearchSeriesFragment : Fragment() {
 
         seriesAdapter = SeriesAdapter()
 
-        viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
+        vm.getSeries().observe(viewLifecycleOwner, { seriesList ->
+            Log.d("Garongxx", "SER VM IN")
             when (seriesList.status) {
                 Status.SUCCESS -> {
-                    seriesAdapter.submitList(seriesList.data)
+                    seriesAdapter.addSeries(seriesList.data as ArrayList<ShowEntity>)
                     seriesAdapter.notifyDataSetChanged()
 
-                    if (seriesList.data != null) {
+                    if (!seriesList.data.isNullOrEmpty()) {
+                        Log.d("Garongxx", "SER VM N NULL")
                         setViewVisibility(loading = false, ivIllustration = false, tvInfo = false)
                     } else {
+                        Log.d("Garongxx", "SER VM NULL")
                         setViewVisibility(loading = false, ivIllustration = true, tvInfo = true)
                         setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, "No series found.")
                     }
                 }
 
                 Status.LOADING -> {
+                    Log.d("Garongxx", "SER VM LOAD")
                     setViewVisibility(loading = true, ivIllustration = false, tvInfo = false)
                 }
 
                 Status.ERROR -> {
+                    Log.d("Garongxx", "SER VM ERR")
                     setViewVisibility(loading = false, ivIllustration = true, tvInfo = true)
                     setInfoImageAndMessage(
                         R.drawable.undraw_not_found_60pq,
@@ -92,10 +100,29 @@ class SearchSeriesFragment : Fragment() {
         tv_series_info.text = message
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        Log.d("Garongx", "SER Start")
+    }
+
     override fun onResume() {
         super.onResume()
+//        if(!vm.getSearchQuery().value.isNullOrEmpty())
+//            vm.triggerSeries()
+        Log.d("Garongx", "SER Resume")
+    }
 
-        Log.d("Garongx", "ON Resume")
+    override fun onStop() {
+        super.onStop()
+
+        Log.d("Garongx", "SER Stop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Log.d("Garongx", "SER Destroy")
     }
 
 }

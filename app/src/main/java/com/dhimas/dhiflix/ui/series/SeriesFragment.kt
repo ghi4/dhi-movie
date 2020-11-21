@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.ui.SliderAdapter
 import com.dhimas.dhiflix.utils.Utils.doneDelay
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
@@ -92,7 +93,7 @@ class SeriesFragment : Fragment() {
 
                     Status.SUCCESS -> {
                         if (seriesList.data != null) {
-                            seriesAdapter.submitList(seriesList.data)
+                            seriesAdapter.addSeries(seriesList.data as ArrayList<ShowEntity>)
                             seriesAdapter.notifyDataSetChanged()
 
                             sliderAdapter.sliderEntities.clear()

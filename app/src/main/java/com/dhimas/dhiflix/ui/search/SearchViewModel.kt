@@ -4,28 +4,40 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
-import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.vo.Resource
 
 class SearchViewModel(private val showRepository: ShowRepository) : ViewModel() {
     private var searchQuery = MutableLiveData<String>()
-    private var movieList: LiveData<Resource<PagedList<ShowEntity>>> =
-        searchQuery.switchMap { mSearchQuery ->
-            showRepository.searchMovie(mSearchQuery)
+    private var triggerSeries = MutableLiveData<Unit>()
+    private var triggerMovie = MutableLiveData<Unit>()
+
+    private var movieList: LiveData<Resource<List<ShowEntity>>> =
+        triggerMovie.switchMap {
+            showRepository.searchMovie(searchQuery.value.toString())
         }
 
-    private var seriesList: LiveData<Resource<PagedList<ShowEntity>>> =
-        searchQuery.switchMap { mSearchQuery ->
-            showRepository.searchSeries(mSearchQuery)
+    private var seriesList: LiveData<Resource<List<ShowEntity>>> =
+        triggerSeries.switchMap {
+            showRepository.searchSeries(searchQuery.value.toString())
         }
 
     fun setSearchQuery(searchQuery: String) {
         this.searchQuery.postValue(searchQuery)
     }
 
-    fun getSeries() = seriesList
+    fun getSearchQuery() = searchQuery
 
-    fun getMovies() = movieList
+    fun getSeries(): LiveData<Resource<List<ShowEntity>>> = seriesList
+
+    fun getMovies(): LiveData<Resource<List<ShowEntity>>> = movieList
+
+    fun triggerMovie(){
+        triggerMovie.postValue(Unit)
+    }
+
+    fun triggerSeries(){
+        triggerSeries.postValue(Unit)
+    }
 }

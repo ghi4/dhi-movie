@@ -35,7 +35,7 @@ class FakeShowRepository constructor(
             public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
                 val config = pagedListConfigBuilder()
 
-                return LivePagedListBuilder(localDataSource.getAllMovie(page), config).build()
+                return LivePagedListBuilder(localDataSource.getMovies(page), config).build()
             }
 
             override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean =
@@ -73,7 +73,7 @@ class FakeShowRepository constructor(
             public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
                 val config = pagedListConfigBuilder()
 
-                return LivePagedListBuilder(localDataSource.getAllSeries(page), config).build()
+                return LivePagedListBuilder(localDataSource.getSeries(page), config).build()
             }
 
             override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean =
@@ -167,7 +167,7 @@ class FakeShowRepository constructor(
                     .setPageSize(4)
                     .build()
 
-                return LivePagedListBuilder(localDataSource.getAllFavoriteMovie(), config).build()
+                return LivePagedListBuilder(localDataSource.getFavoriteMovies(), config).build()
             }
 
             override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = false
@@ -187,7 +187,7 @@ class FakeShowRepository constructor(
             public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
                 val config = pagedListConfigBuilder()
 
-                return LivePagedListBuilder(localDataSource.getAllFavoriteSeries(), config).build()
+                return LivePagedListBuilder(localDataSource.getFavoriteSeries(), config).build()
             }
 
             override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = false
@@ -285,7 +285,7 @@ class FakeShowRepository constructor(
                 val config = pagedListConfigBuilder()
 
                 return LivePagedListBuilder(
-                    localDataSource.searchMovie("$keyword%"),
+                    localDataSource.searchMovies("$keyword%"),
                     config
                 ).build()
             }

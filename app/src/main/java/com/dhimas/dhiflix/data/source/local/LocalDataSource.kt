@@ -16,23 +16,21 @@ class LocalDataSource private constructor(private val showDao: ShowDao) {
             INSTANCE ?: LocalDataSource(showDao)
     }
 
-    fun getAllMovie(page: Int): DataSource.Factory<Int, ShowEntity> = showDao.getMovies(page)
+    fun getMovies(page: Int): LiveData<List<ShowEntity>> = showDao.getMovies(page)
 
-    fun getAllSeries(page: Int): DataSource.Factory<Int, ShowEntity> = showDao.getSeries(page)
+    fun getSeries(page: Int): LiveData<List<ShowEntity>> = showDao.getSeries(page)
 
-    fun getAllFavoriteMovie(): DataSource.Factory<Int, ShowEntity> = showDao.getFavoriteMovies()
+    fun getFavoriteMovies(): DataSource.Factory<Int, ShowEntity> = showDao.getFavoriteMovies()
 
-    fun getAllFavoriteSeries(): DataSource.Factory<Int, ShowEntity> = showDao.getFavoriteSeries()
+    fun getFavoriteSeries(): DataSource.Factory<Int, ShowEntity> = showDao.getFavoriteSeries()
 
     fun getSimilarMovies(): DataSource.Factory<Int, ShowEntity> = showDao.getSimilarMovies()
 
     fun getSimilarSeries(): DataSource.Factory<Int, ShowEntity> = showDao.getSimilarSeries()
 
-    fun searchMovie(keyword: String): DataSource.Factory<Int, ShowEntity> =
-        showDao.searchMovies(keyword)
+    fun searchMovies(keyword: String): LiveData<List<ShowEntity>> = showDao.searchMovies(keyword)
 
-    fun searchSeries(keyword: String): DataSource.Factory<Int, ShowEntity> =
-        showDao.searchSeries(keyword)
+    fun searchSeries(keyword: String): LiveData<List<ShowEntity>> = showDao.searchSeries(keyword)
 
     fun getShowById(showId: String): LiveData<ShowEntity> = showDao.getShowById(showId)
 

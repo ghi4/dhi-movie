@@ -12,10 +12,10 @@ import com.dhimas.dhiflix.utils.Constant
 interface ShowDao {
 
     @Query("SELECT * FROM showtable WHERE show_type = ${Constant.MOVIE_TYPE} AND page BETWEEN 1 AND :page")
-    fun getMovies(page: Int): DataSource.Factory<Int, ShowEntity>
+    fun getMovies(page: Int): LiveData<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE show_type = ${Constant.SERIES_TYPE} AND page BETWEEN 1 AND :page")
-    fun getSeries(page: Int): DataSource.Factory<Int, ShowEntity>
+    fun getSeries(page: Int): LiveData<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE show_type = ${Constant.MOVIE_TYPE} AND isFavorite = 1")
     fun getFavoriteMovies(): DataSource.Factory<Int, ShowEntity>
@@ -30,10 +30,10 @@ interface ShowDao {
     fun getSimilarSeries(): DataSource.Factory<Int, ShowEntity>
 
     @Query("SELECT * FROM searchshowtable WHERE show_type = ${Constant.MOVIE_TYPE} AND title LIKE :keyword")
-    fun searchMovies(keyword: String): DataSource.Factory<Int, ShowEntity>
+    fun searchMovies(keyword: String): LiveData<List<ShowEntity>>
 
     @Query("SELECT * FROM searchshowtable WHERE show_type = ${Constant.SERIES_TYPE} AND title LIKE :keyword")
-    fun searchSeries(keyword: String): DataSource.Factory<Int, ShowEntity>
+    fun searchSeries(keyword: String): LiveData<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE id = :showId")
     fun getShowById(showId: String): LiveData<ShowEntity>

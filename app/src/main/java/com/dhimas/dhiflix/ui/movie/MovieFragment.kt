@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,8 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.ui.SliderAdapter
 import com.dhimas.dhiflix.utils.Utils.doneDelay
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
@@ -27,12 +28,13 @@ import kotlinx.android.synthetic.main.fragment_movie.*
 class MovieFragment : Fragment() {
 
     private lateinit var viewModel: MovieViewModel
-    private lateinit var movieAdapter: MovieAdapter
+    //private lateinit var movieAdapter: MovieAdapter
+    private lateinit var movieAdapterz: MovieAdapter
     private lateinit var sliderAdapter: SliderAdapter
     private var page = 1
-    private var isBottom = false
     private var scrollLocation = 0
     private var stateScroll: Parcelable? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,7 +48,8 @@ class MovieFragment : Fragment() {
 
         val factory = ViewModelFactory.getInstance(requireContext())
         viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
-        movieAdapter = MovieAdapter()
+        //movieAdapter = MovieAdapter()
+        movieAdapterz = MovieAdapter()
         sliderAdapter = SliderAdapter(requireContext())
         viewModel.setPage(page)
 
@@ -72,34 +75,42 @@ class MovieFragment : Fragment() {
         val spanCount = if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
         rv_movie.layoutManager = GridLayoutManager(context, spanCount)
         rv_movie.hasFixedSize()
-        rv_movie.adapter = movieAdapter
+        rv_movie.adapter = movieAdapterz
         rv_movie.isNestedScrollingEnabled = false
 
         vp_slider.adapter = sliderAdapter
         dots_indicator.setViewPager2(vp_slider)
 
+        var savedS = false
+
         nestedScrollMovie.setOnScrollChangeListener(
             NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
-                if (scrollY == (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0) && !isBottom) {
-                    page++
-                    viewModel.setPage(page)
-
-                    isBottom = true
-                    scrollLocation = scrollY
-                    showToast(requireContext(), "Load more.")
-
-                    stateScroll = rv_movie.layoutManager?.onSaveInstanceState()
+                val height = (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
+                Log.d("GGA", "$scrollY == ${v?.getChildAt(0)?.measuredHeight} == ${v?.measuredHeight} == $height")
+                if (scrollY == height && scrollY > scrollLocation) {
+                    if(page < 5){
+                        page++
+                        viewModel.setPage(page)
+                        scrollLocation = scrollY
+                        showToast(requireContext(), "Load more.")
+                        Log.d("GGX", "PAGE: $page")
+                        Log.d("GGA", "=========================")
+                        savedS = false
+                    } else {
+                        savedS = true
+                        showToast(requireContext(), "Max page.")
+                    }
                 }
+
+//                if(!savedS && scrollY < scrollLocation){
+//                    Log.d("GGA", "GO GO GO")
+//                    nestedScrollMovie.scrollTo(0, scrollLocation)
+//                    if(scrollY == scrollLocation) {
+//                        savedS = true
+//                        Log.d("GGA", "GO GO SAVED")
+//                    }
+//                }
             })
-
-
-        movieAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver(){
-            override fun onChanged() {
-                rv_movie.layoutManager?.onRestoreInstanceState(stateScroll)
-                nestedScrollMovie.scrollTo(0, scrollLocation )
-                rv_movie.scrollToPosition(20 * (page - 1))
-            }
-        })
     }
 
     private fun viewModelObserver() {
@@ -112,7 +123,9 @@ class MovieFragment : Fragment() {
 
                     Status.SUCCESS -> {
                         if (movieList.data != null) {
-                            movieAdapter.submitList(movieList.data)
+                            //movieAdapter.submitList(movieList.data)
+                            movieAdapterz.addMovie(movieList.data as ArrayList<ShowEntity>)
+                            movieAdapterz.notifyDataSetChanged()
 
                             sliderAdapter.sliderEntities.clear()
                             for (i in 0..4)

@@ -22,10 +22,10 @@
         android:id="@+id/iv_series_illustration"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/illustration"
         android:src="@drawable/undraw_find"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

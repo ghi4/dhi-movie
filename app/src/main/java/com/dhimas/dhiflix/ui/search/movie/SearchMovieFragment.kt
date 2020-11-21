@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.ui.movie.MovieAdapter
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.vo.Status
@@ -15,6 +17,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.search_movie_fragment.*
 
 class SearchMovieFragment : Fragment() {
+    private val vm: SearchViewModel by viewModels({requireParentFragment()})
     private lateinit var movieAdapter: MovieAdapter
 
     companion object {
@@ -41,32 +44,23 @@ class SearchMovieFragment : Fragment() {
 
         movieAdapter = MovieAdapter()
 
-        viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
+        vm.getMovies().observe(viewLifecycleOwner, { movieList ->
+            Log.d("Garongxx", "MOV VM IN")
             when (movieList.status) {
                 Status.SUCCESS -> {
-                    movieAdapter.submitList(movieList.data)
+                    movieAdapter.addMovie(movieList.data as ArrayList<ShowEntity>)
                     movieAdapter.notifyDataSetChanged()
 
-                    if (movieList.data != null) {
+                    if (!movieList.data.isNullOrEmpty()) {
+                        Log.d("Garongxx", "MOV VM N NULL")
                         setViewVisibility(
                             loading = false,
                             rvMovie = true,
                             ivIllustration = false,
                             tvInfo = false
                         )
-                        if (movieList.data.isNullOrEmpty()) {
-                            setViewVisibility(
-                                loading = false,
-                                rvMovie = false,
-                                ivIllustration = true,
-                                tvInfo = true
-                            )
-                            setInfoImageAndMessage(
-                                R.drawable.undraw_not_found_60pq,
-                                "No movie found."
-                            )
-                        }
                     } else {
+                        Log.d("Garongxx", "MOV VM NULL")
                         setViewVisibility(
                             loading = false,
                             rvMovie = false,
@@ -78,6 +72,7 @@ class SearchMovieFragment : Fragment() {
                 }
 
                 Status.LOADING -> {
+                    Log.d("Garongxx", "MOV VM LOAD")
                     setViewVisibility(
                         loading = true,
                         rvMovie = true,
@@ -87,6 +82,7 @@ class SearchMovieFragment : Fragment() {
                 }
 
                 Status.ERROR -> {
+                    Log.d("Garongxx", "MOV VM ERR")
                     setViewVisibility(
                         loading = false,
                         rvMovie = false,
@@ -130,10 +126,30 @@ class SearchMovieFragment : Fragment() {
         tv_movie_info.text = message
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        Log.d("Garongx", "MOV Start")
+    }
+
     override fun onResume() {
         super.onResume()
 
-        Log.d("Garongx", "ON Resume")
+//        if(!vm.getSearchQuery().value.isNullOrEmpty())
+//            vm.triggerMovie()
+        Log.d("Garongx", "MOV Resume")
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        Log.d("Garongx", "MOV Stop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Log.d("Garongx", "MOV Destroy")
     }
 
 }

@@ -8,7 +8,6 @@ import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.ui.movie.MovieAdapter
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -16,7 +15,6 @@ import kotlinx.android.synthetic.main.fragment_search.*
 class SearchFragment : Fragment() {
 
     private lateinit var viewModel: SearchViewModel
-    private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,7 +29,6 @@ class SearchFragment : Fragment() {
 
         val factory = ViewModelFactory.getInstance(requireContext())
         viewModel = ViewModelProvider(this, factory)[SearchViewModel::class.java]
-        movieAdapter = MovieAdapter()
 
         viewPager2.adapter = ViewPagerAdapter(childFragmentManager, lifecycle, viewModel)
 
@@ -41,11 +38,15 @@ class SearchFragment : Fragment() {
                 1 -> tab.text = "Series"
             }
         }.attach()
+        viewPager2.offscreenPageLimit = 2
 
         searchingX.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.toString().isNotEmpty()) {
                     viewModel.setSearchQuery(query.toString())
+                    viewModel.triggerMovie()
+                    Thread.sleep(500L)
+                    viewModel.triggerSeries()
                 }
 
                 return false

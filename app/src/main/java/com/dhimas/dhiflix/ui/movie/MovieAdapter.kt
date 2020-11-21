@@ -4,53 +4,39 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Constant
-import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
+import com.dhimas.dhiflix.utils.Utils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class MovieAdapter internal constructor() :
-    PagedListAdapter<ShowEntity, MovieAdapter.MovieViewHolder>(
-        DIFF_CALLBACK
-    ) {
+class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+    private var movieList = ArrayList<ShowEntity>()
 
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShowEntity>() {
-            override fun areItemsTheSame(oldItem: ShowEntity, newItem: ShowEntity): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: ShowEntity, newItem: ShowEntity): Boolean {
-                return oldItem == newItem
-            }
-
-        }
+    fun addMovie(movies: ArrayList<ShowEntity>){
+        movieList.clear()
+        movieList.addAll(movies)
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): MovieViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
         return MovieViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val movieEntity = getItem(position) as ShowEntity
-        holder.bind(movieEntity)
+        holder.bind(movieList[position])
     }
 
-    class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(movie: ShowEntity) {
-            with(itemView) {
+    override fun getItemCount(): Int = movieList.size
+
+    inner class MovieViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        fun bind(movie: ShowEntity){
+            with(itemView){
                 tv_title.text = movie.title
-                tv_release_date.text = dateParseToMonthAndYear(movie.releaseDate)
+                tv_release_date.text = Utils.dateParseToMonthAndYear(movie.releaseDate)
 
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + movie.posterPath)
@@ -69,5 +55,4 @@ class MovieAdapter internal constructor() :
             }
         }
     }
-
 }
