@@ -14,7 +14,7 @@ import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_movie_horizontal.view.*
+import kotlinx.android.synthetic.main.item_show_horizontal.view.*
 
 class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolder>(DIFF_CALLBACK) {
     private var listType = Constant.MOVIE_TYPE //Default type is movie
@@ -40,7 +40,7 @@ class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolde
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_movie_horizontal, parent, false)
+            .inflate(R.layout.item_show_horizontal, parent, false)
         return DetailViewHolder(view)
     }
 

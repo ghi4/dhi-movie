@@ -49,6 +49,8 @@ class DetailActivity : AppCompatActivity() {
         showType = intent.getIntExtra(EXTRA_SHOW_TYPE, 0)
         viewModel.setDoubleTrigger(showId, showType)
 
+        similar_shimmer.startShimmer()
+
         setupUI()
 
         //Delay for shimmer animation
@@ -65,6 +67,7 @@ class DetailActivity : AppCompatActivity() {
         rv_other_movie.layoutManager = layoutManager
         rv_other_movie.hasFixedSize()
         rv_other_movie.adapter = detailAdapter
+        rv_other_movie.visibility = View.VISIBLE
 
         bt_favorite.setOnClickListener {
             viewModel.setFavorite(showEntity1)
@@ -75,7 +78,7 @@ class DetailActivity : AppCompatActivity() {
         viewModel.getShowList().observe(this, { movieList ->
             when (movieList.status) {
                 Status.LOADING -> {
-                    //startShimmering()
+                    startShimmerList()
                 }
 
                 Status.SUCCESS -> {
@@ -88,7 +91,7 @@ class DetailActivity : AppCompatActivity() {
                         showToast(this, "List failed to load.")
                     }
 
-                    stopShimmering()
+                    stopShimmerList()
                     doneDelay()
                 }
 
@@ -184,5 +187,15 @@ class DetailActivity : AppCompatActivity() {
         tv_detail_overview.startLoading()
         tv_interest.startLoading()
         bt_favorite.startLoading()
+    }
+
+    private fun startShimmerList() {
+        similar_shimmer.visibility = View.VISIBLE
+        similar_shimmer.startShimmer()
+    }
+
+    private fun stopShimmerList() {
+        similar_shimmer.visibility = View.GONE
+        similar_shimmer.stopShimmer()
     }
 }

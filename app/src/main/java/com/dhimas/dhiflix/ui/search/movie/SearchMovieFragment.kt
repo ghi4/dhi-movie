@@ -13,7 +13,7 @@ import com.dhimas.dhiflix.ui.movie.MovieAdapter
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.search_movie_fragment.*
+import kotlinx.android.synthetic.main.fragment_search_movie.*
 
 class SearchMovieFragment : Fragment() {
     private val vm: SearchViewModel by viewModels({ requireParentFragment() })
@@ -33,7 +33,7 @@ class SearchMovieFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.search_movie_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_search_movie, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

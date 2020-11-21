@@ -48,9 +48,11 @@ class MovieFragment : Fragment() {
         sliderAdapter = SliderAdapter(requireContext())
         viewModel.setPage(page)
 
+        stopShimmer()
+
         //Delay for shimmer animation
         waitDelay()
-        val minShimmerTime = getMinShimmerTime(viewModel.isAlreadyShimmer)
+        val minShimmerTime = getMinShimmerTime(viewModel.getIsAlreadyShimmer())
         Handler(Looper.getMainLooper()).postDelayed({
             viewModelObserver()
         }, minShimmerTime)
@@ -60,7 +62,7 @@ class MovieFragment : Fragment() {
 
     private fun setupUI() {
         //Prevent re-shimmer
-        if (viewModel.isAlreadyShimmer)
+        if (viewModel.getIsAlreadyShimmer())
             stopShimmer()
 
         //Change grid layout spanCount when Landscape/Portrait
@@ -97,7 +99,7 @@ class MovieFragment : Fragment() {
             viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
                 when (movieList.status) {
                     Status.LOADING -> {
-                        if (scrollLocation == 0)
+                        if (scrollLocation == 0 && !viewModel.getIsAlreadyShimmer())
                             startShimmer()
                     }
 
@@ -113,7 +115,7 @@ class MovieFragment : Fragment() {
 
                             textView3.visibility = View.VISIBLE
                             stopShimmer()
-                            if (!viewModel.isAlreadyShimmer)
+                            if (!viewModel.getIsAlreadyShimmer())
                                 doneDelay()
                         } else {
                             showToast(requireContext(), "No movie found.")

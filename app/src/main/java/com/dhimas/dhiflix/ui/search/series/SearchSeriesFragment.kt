@@ -13,7 +13,7 @@ import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.ui.series.SeriesAdapter
 import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.search_series_fragment.*
+import kotlinx.android.synthetic.main.fragment_search_series.*
 
 class SearchSeriesFragment : Fragment() {
     private val vm: SearchViewModel by viewModels({ requireParentFragment() })
@@ -32,7 +32,7 @@ class SearchSeriesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.search_series_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_search_series, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

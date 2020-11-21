@@ -39,6 +39,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <include layout="@layout/shimmer_banner" />
+
                     <include layout="@layout/shimmer_item_show_grid3" />
 
                     <include layout="@layout/shimmer_item_show_grid3" />
@@ -100,7 +102,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4"
                 app:spanCount="3"
-                tools:listitem="@layout/item_movie" />
+                tools:listitem="@layout/item_show" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

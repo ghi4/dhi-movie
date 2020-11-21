@@ -4,23 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.search.movie.SearchMovieFragment">
+    tools:context=".ui.search.series.SearchSeriesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_search_movies"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/rv_search_series"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:spanCount="3"
-        tools:listitem="@layout/item_movie" />
-
+        tools:listitem="@layout/item_show" />
 
     <ImageView
-        android:id="@+id/iv_movie_illustration"
+        android:id="@+id/iv_series_illustration"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
@@ -32,14 +31,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_movie_info"
+        android:id="@+id/tv_series_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/lets_search_the_movie"
-        app:layout_constraintEnd_toEndOf="@+id/iv_movie_illustration"
-        app:layout_constraintStart_toStartOf="@+id/iv_movie_illustration"
-        app:layout_constraintTop_toBottomOf="@+id/iv_movie_illustration" />
-
+        app:layout_constraintEnd_toEndOf="@+id/iv_series_illustration"
+        app:layout_constraintStart_toStartOf="@+id/iv_series_illustration"
+        app:layout_constraintTop_toBottomOf="@+id/iv_series_illustration" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -51,5 +49,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

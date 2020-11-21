@@ -15,7 +15,7 @@ import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_movie_horizontal.view.*
+import kotlinx.android.synthetic.main.item_show_horizontal.view.*
 
 class FavoriteAdapter internal constructor() :
     PagedListAdapter<ShowEntity, FavoriteAdapter.ShowViewHolder>(DIFF_CALLBACK) {
@@ -41,7 +41,7 @@ class FavoriteAdapter internal constructor() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_movie_horizontal, parent, false)
+            .inflate(R.layout.item_show_horizontal, parent, false)
 
         return ShowViewHolder(view)
     }
