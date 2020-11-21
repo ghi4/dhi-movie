@@ -17,20 +17,17 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.search_series_fragment.*
 
 class SearchSeriesFragment : Fragment() {
-    private val vm: SearchViewModel by viewModels({requireParentFragment()})
+    private val vm: SearchViewModel by viewModels({ requireParentFragment() })
     private lateinit var seriesAdapter: SeriesAdapter
 
-    companion object {
-        private lateinit var viewModel: SearchViewModel
-
-        fun newInstance(viewModel: SearchViewModel): SearchSeriesFragment {
-            val fragment = SearchSeriesFragment()
-
-            Companion.viewModel = viewModel
-
-            return fragment
-        }
-    }
+//    //TEKNIK 2
+//    companion object{
+//        private lateinit var viewModel: SearchSeriesViewModel
+//
+//        fun setSearch(search: String){
+//            viewModel.setSearch(search)
+//        }
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +41,11 @@ class SearchSeriesFragment : Fragment() {
 
         seriesAdapter = SeriesAdapter()
 
+//        //TEKNIK 2
+//        val factory = ViewModelFactory.getInstance(requireContext())
+//        viewModel = ViewModelProvider(this, factory)[SearchSeriesViewModel::class.java]
+//        viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
+
         vm.getSeries().observe(viewLifecycleOwner, { seriesList ->
             Log.d("Garongxx", "SER VM IN")
             when (seriesList.status) {
@@ -53,22 +55,42 @@ class SearchSeriesFragment : Fragment() {
 
                     if (!seriesList.data.isNullOrEmpty()) {
                         Log.d("Garongxx", "SER VM N NULL")
-                        setViewVisibility(loading = false, ivIllustration = false, tvInfo = false)
+                        setViewVisibility(
+                            loading = false,
+                            rvSeries = true,
+                            ivIllustration = false,
+                            tvInfo = false
+                        )
                     } else {
                         Log.d("Garongxx", "SER VM NULL")
-                        setViewVisibility(loading = false, ivIllustration = true, tvInfo = true)
+                        setViewVisibility(
+                            loading = false,
+                            rvSeries = false,
+                            ivIllustration = true,
+                            tvInfo = true
+                        )
                         setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, "No series found.")
                     }
                 }
 
                 Status.LOADING -> {
                     Log.d("Garongxx", "SER VM LOAD")
-                    setViewVisibility(loading = true, ivIllustration = false, tvInfo = false)
+                    setViewVisibility(
+                        loading = true,
+                        rvSeries = false,
+                        ivIllustration = false,
+                        tvInfo = false
+                    )
                 }
 
                 Status.ERROR -> {
                     Log.d("Garongxx", "SER VM ERR")
-                    setViewVisibility(loading = false, ivIllustration = true, tvInfo = true)
+                    setViewVisibility(
+                        loading = false,
+                        rvSeries = false,
+                        ivIllustration = true,
+                        tvInfo = true
+                    )
                     setInfoImageAndMessage(
                         R.drawable.undraw_not_found_60pq,
                         seriesList.message.toString()
@@ -82,8 +104,14 @@ class SearchSeriesFragment : Fragment() {
         rv_search_series.adapter = seriesAdapter
     }
 
-    private fun setViewVisibility(loading: Boolean, ivIllustration: Boolean, tvInfo: Boolean) {
+    private fun setViewVisibility(
+        loading: Boolean,
+        rvSeries: Boolean,
+        ivIllustration: Boolean,
+        tvInfo: Boolean
+    ) {
         progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+        rv_search_series.visibility = if (rvSeries) View.VISIBLE else View.INVISIBLE
         iv_series_illustration.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
         tv_series_info.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
     }
@@ -100,29 +128,19 @@ class SearchSeriesFragment : Fragment() {
         tv_series_info.text = message
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        Log.d("Garongx", "SER Start")
-    }
-
     override fun onResume() {
         super.onResume()
+
+        if (!vm.getSearchQuery().value.isNullOrEmpty())
+            vm.triggerSeries()
+    }
+
+
+//    override fun onPause() {
+//        super.onPause()
+//
 //        if(!vm.getSearchQuery().value.isNullOrEmpty())
-//            vm.triggerSeries()
-        Log.d("Garongx", "SER Resume")
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        Log.d("Garongx", "SER Stop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Log.d("Garongx", "SER Destroy")
-    }
+//            vm.triggerMovie()
+//    }
 
 }

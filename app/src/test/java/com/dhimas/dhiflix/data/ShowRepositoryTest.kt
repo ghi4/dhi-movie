@@ -42,8 +42,9 @@ internal class ShowRepositoryTest {
 
     @Test
     fun getAllMovies() {
-        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.getMovies(page)).thenReturn(dataSourceFactory)
+        val dummyMovies = MutableLiveData<List<ShowEntity>>()
+        dummyMovies.value = DummyData.generateDummyMovies()
+        `when`(local.getMovies(page)).thenReturn(dummyMovies)
         showRepository.getMovieList(page)
 
         val movieEntities =
@@ -65,8 +66,9 @@ internal class ShowRepositoryTest {
 
     @Test
     fun getAllSeries() {
-        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.getSeries(page)).thenReturn(dataSourceFactory)
+        val dummySeries = MutableLiveData<List<ShowEntity>>()
+        dummySeries.value = DummyData.generateDummyMovies()
+        `when`(local.getSeries(page)).thenReturn(dummySeries)
         showRepository.getSeriesList(page)
 
         val seriesEntities =
@@ -244,8 +246,9 @@ internal class ShowRepositoryTest {
     @Test
     fun getSearchMovie() {
         val keyword = "T"
-        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.searchMovies("$keyword%")).thenReturn(dataSourceFactory)
+        val dummyMovies = MutableLiveData<List<ShowEntity>>()
+        dummyMovies.value = DummyData.generateDummyMovies()
+        `when`(local.searchMovies("$keyword%")).thenReturn(dummyMovies)
         showRepository.searchMovie(keyword)
 
         val movieEntities =
@@ -268,8 +271,9 @@ internal class ShowRepositoryTest {
     @Test
     fun getSearchSeries() {
         val keyword = "T"
-        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.searchSeries("$keyword%")).thenReturn(dataSourceFactory)
+        val dummySeries = MutableLiveData<List<ShowEntity>>()
+        dummySeries.value = DummyData.generateDummyMovies()
+        `when`(local.searchSeries("$keyword%")).thenReturn(dummySeries)
         showRepository.searchSeries(keyword)
 
         val seriesEntities =

@@ -3,11 +3,9 @@ package com.dhimas.dhiflix.ui.search
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.DummyData
-import com.dhimas.dhiflix.utils.PagedListUtil
 import com.dhimas.dhiflix.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
@@ -32,7 +30,7 @@ class SearchViewModelTest {
     private lateinit var showRepository: ShowRepository
 
     @Mock
-    private lateinit var observer: Observer<Resource<PagedList<ShowEntity>>>
+    private lateinit var observer: Observer<Resource<List<ShowEntity>>>
 
     @Before
     fun setUp() {
@@ -44,10 +42,11 @@ class SearchViewModelTest {
     @Test
     fun getMovies() {
         val dummyMovieList =
-            Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummyMovies()))
-        val movie = MutableLiveData<Resource<PagedList<ShowEntity>>>()
+            Resource.success(DummyData.generateDummyMovies())
+        val movie = MutableLiveData<Resource<List<ShowEntity>>>()
         movie.value = dummyMovieList
 
+        viewModel.triggerMovie()
         `when`(showRepository.searchMovie(keyword)).thenReturn(movie)
         viewModel.getMovies().observeForever(observer)
         verify(observer).onChanged(dummyMovieList)
@@ -79,10 +78,11 @@ class SearchViewModelTest {
     @Test
     fun getSeries() {
         val dummySeriesList =
-            Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
-        val series = MutableLiveData<Resource<PagedList<ShowEntity>>>()
+            Resource.success(DummyData.generateDummySeries())
+        val series = MutableLiveData<Resource<List<ShowEntity>>>()
         series.value = dummySeriesList
 
+        viewModel.triggerSeries()
         `when`(showRepository.searchSeries(keyword)).thenReturn(series)
         viewModel.getSeries().observeForever(observer)
         verify(observer).onChanged(dummySeriesList)

@@ -48,10 +48,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
                         resultMovie.value = ApiResponse.empty(movieListResponse, "No movie found.")
                     }
                 }
-
-
                 EspressoIdlingResource.decrement()
-
             }
 
             override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {

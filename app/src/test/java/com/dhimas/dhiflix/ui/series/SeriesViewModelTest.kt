@@ -3,11 +3,9 @@ package com.dhimas.dhiflix.ui.series
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.utils.DummyData
-import com.dhimas.dhiflix.utils.PagedListUtil
 import com.dhimas.dhiflix.vo.Resource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -32,7 +30,7 @@ internal class SeriesViewModelTest {
     private lateinit var showRepository: ShowRepository
 
     @Mock
-    private lateinit var observer: Observer<Resource<PagedList<ShowEntity>>>
+    private lateinit var observer: Observer<Resource<List<ShowEntity>>>
 
     @Before
     fun setUp() {
@@ -43,9 +41,9 @@ internal class SeriesViewModelTest {
     fun getSeriesList() {
         val page = 1
         val dummySeriesList =
-            Resource.success(PagedListUtil.mockPagedList(DummyData.generateDummySeries()))
+            Resource.success(DummyData.generateDummySeries())
 
-        val series = MutableLiveData<Resource<PagedList<ShowEntity>>>()
+        val series = MutableLiveData<Resource<List<ShowEntity>>>()
         series.value = dummySeriesList
 
         `when`(showRepository.getSeriesList(page)).thenReturn(series)

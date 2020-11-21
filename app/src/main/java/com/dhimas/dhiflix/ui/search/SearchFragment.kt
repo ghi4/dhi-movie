@@ -30,7 +30,7 @@ class SearchFragment : Fragment() {
         val factory = ViewModelFactory.getInstance(requireContext())
         viewModel = ViewModelProvider(this, factory)[SearchViewModel::class.java]
 
-        viewPager2.adapter = ViewPagerAdapter(childFragmentManager, lifecycle, viewModel)
+        viewPager2.adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
 
         TabLayoutMediator(tabs, viewPager2) { tab, position ->
             when (position) {
@@ -44,19 +44,26 @@ class SearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.toString().isNotEmpty()) {
                     viewModel.setSearchQuery(query.toString())
-                    viewModel.triggerMovie()
-                    Thread.sleep(500L)
-                    viewModel.triggerSeries()
-                }
 
+                    if (viewPager2.currentItem == 0)
+                        viewModel.triggerMovie()
+                    else
+                        viewModel.triggerSeries()
+
+//                    //TEKNIK 2
+//                    if(viewPager2.currentItem == 0)
+//                        SearchMovieFragment.setSearch(query.toString())
+//                    else
+//                        SearchSeriesFragment.setSearch(query.toString())
+
+
+                }
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
-
         })
-
     }
 }

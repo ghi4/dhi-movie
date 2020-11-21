@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.ui.detail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,17 +15,22 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
     var isAlreadyShimmer: Boolean = false
     private var doubleTrigger = MutableLiveData<DoubleTrigger>()
 
-    private var showEntity1 = doubleTrigger.switchMap {
+    private var showEntity = doubleTrigger.switchMap {
+        Log.d("PPW", "ENTITY")
         when (it.showType) {
             Constant.MOVIE_TYPE -> showRepository.getMovieDetail(it.showId)
             else -> showRepository.getSeriesDetail(it.showId)
         }
     }
 
-    private var showList1 = doubleTrigger.switchMap {
-        when (it.showType) {
-            Constant.MOVIE_TYPE -> showRepository.getSimilarMovieList(it.showId)
-            else -> showRepository.getSimilarSeriesList(it.showId)
+    private var showList = showEntity.switchMap {
+        Log.d("PPW", "LIST")
+        val showId = it.data?.id ?: "671039"
+        when (it.data?.show_type) {
+            Constant.MOVIE_TYPE -> {
+                showRepository.getSimilarMovieList(showId)
+            }
+            else -> showRepository.getSimilarSeriesList(showId)
         }
     }
 
@@ -36,9 +42,9 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
         doubleTrigger.postValue(DoubleTrigger(show_id, show_type))
     }
 
-    fun getShowEntityById(): LiveData<Resource<ShowEntity>> = showEntity1
+    fun getShowEntityById(): LiveData<Resource<ShowEntity>> = showEntity
 
-    fun getShowList(): LiveData<Resource<PagedList<ShowEntity>>> = showList1
+    fun getShowList(): LiveData<Resource<PagedList<ShowEntity>>> = showList
 
     fun setFavorite(showEntity: ShowEntity) {
         showRepository.setFavorite(showEntity)

@@ -3,6 +3,7 @@ package com.dhimas.dhiflix.ui.main
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -31,17 +32,17 @@ class MainActivityTest {
         IdlingRegistry.getInstance().unregister(EspressoIdlingResource.testIdlingResource)
     }
 
-    @Test
-    fun loadMovies() {
-        waitHandler()
-        onView(withId(R.id.rv_movie)).check(matches(isDisplayed()))
-        onView(withId(R.id.rv_movie)).perform(
-            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                7
-            )
-        )
-    }
-
+//    @Test
+//    fun loadMovies() {
+//        waitHandler()
+//        onView(withId(R.id.rv_movie)).check(matches(isDisplayed()))
+//        onView(withId(R.id.rv_movie)).perform(
+//            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+//                7
+//            )
+//        )
+//    }
+//
 //    @Test
 //    fun loadSeries() {
 //        onView(withId(R.id.navigation_series)).perform(click())
@@ -60,96 +61,96 @@ class MainActivityTest {
 //
 //        onView(withId(R.id.rv_favorite_movie)).check(matches(not(isDisplayed())))
 //    }
-//
-//    @Test
-//    fun loadDetailMovie() {
-//        waitHandler()
-//
-//        onView(withId(R.id.rv_movie)).perform(
-//            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-//                7,
-//                click()
-//            )
-//        )
-//
-//        waitHandler()
-//        onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
-//        onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
-//        onView(withId(R.id.rv_other_movie)).perform(
-//            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-//                7
-//            )
-//        )
-//
-//        onView(withId(R.id.rv_other_movie)).perform(
-//            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-//                7,
-//                click()
-//            )
-//        )
-//
-//        waitHandler()
-//        onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
-//        onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
-//        onView(withId(R.id.rv_other_movie)).perform(
-//            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-//                7
-//            )
-//        )
-//    }
-//
-//    @Test
-//    fun loadDetailSeries() {
-//        waitHandler()
-//        onView(withId(R.id.navigation_series)).perform(click())
-//
-//        waitHandler()
-//        onView(withId(R.id.rv_series)).perform(
-//            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-//                7,
-//                click()
-//            )
-//        )
-//
-//        waitHandler()
-//        onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
-//        onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
-//        onView(withId(R.id.rv_other_movie)).perform(
-//            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-//                7
-//            )
-//        )
-//
-//        onView(withId(R.id.rv_other_movie)).perform(
-//            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-//                7,
-//                click()
-//            )
-//        )
-//
-//        waitHandler()
-//        onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
-//        onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
-//        onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
-//        onView(withId(R.id.rv_other_movie)).perform(
-//            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-//                7
-//            )
-//        )
-//    }
+
+    @Test
+    fun loadDetailMovie() {
+        waitHandler()
+
+        onView(withId(R.id.rv_movie)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                1,
+                click()
+            )
+        )
+
+        waitHandler()
+        onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
+        onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_other_movie)).perform(
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                1
+            )
+        )
+
+        onView(withId(R.id.rv_other_movie)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                1,
+                click()
+            )
+        )
+
+        waitHandler()
+        onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
+        onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_other_movie)).perform(
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                1
+            )
+        )
+    }
+
+    @Test
+    fun loadDetailSeries() {
+        waitHandler()
+        onView(withId(R.id.navigation_series)).perform(click())
+
+        waitHandler()
+        onView(withId(R.id.rv_series)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                1,
+                click()
+            )
+        )
+
+        waitHandler()
+        onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
+        onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_other_movie)).perform(
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                7
+            )
+        )
+
+        onView(withId(R.id.rv_other_movie)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                7,
+                click()
+            )
+        )
+
+        waitHandler()
+        onView(withId(R.id.iv_detail_backdrop)).check(matches(isDisplayed()))
+        onView(withId(R.id.iv_detail_poster)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_release_date)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_detail_overview)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_other_movie)).perform(
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                7
+            )
+        )
+    }
 
     private fun waitHandler() {
-        Thread.sleep(2000L)
+        Thread.sleep(3000L)
     }
 }

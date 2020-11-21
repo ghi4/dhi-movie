@@ -9,8 +9,7 @@ import com.dhimas.dhiflix.ui.search.series.SearchSeriesFragment
 
 class ViewPagerAdapter(
     fm: FragmentManager,
-    lifecycle: Lifecycle,
-    private val viewModel: SearchViewModel
+    lifecycle: Lifecycle
 ) :
     FragmentStateAdapter(fm, lifecycle) {
 
@@ -20,8 +19,8 @@ class ViewPagerAdapter(
         var fragment: Fragment? = null
 
         when (position) {
-            0 -> fragment = SearchMovieFragment.newInstance(viewModel)
-            1 -> fragment = SearchSeriesFragment.newInstance(viewModel)
+            0 -> fragment = SearchMovieFragment()
+            1 -> fragment = SearchSeriesFragment()
         }
 
         return fragment as Fragment

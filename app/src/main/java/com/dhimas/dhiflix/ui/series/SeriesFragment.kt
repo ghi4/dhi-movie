@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.dhimas.dhiflix.utils.Utils.doneDelay
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
 import com.dhimas.dhiflix.utils.Utils.showSnackBar
 import com.dhimas.dhiflix.utils.Utils.showToast
+import com.dhimas.dhiflix.utils.Utils.waitDelay
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import kotlinx.android.synthetic.main.fragment_series.*
@@ -28,7 +30,7 @@ class SeriesFragment : Fragment() {
     private lateinit var seriesAdapter: SeriesAdapter
     private lateinit var sliderAdapter: SliderAdapter
     private var page = 1
-    private var isBottom = false
+    private var scrollLocation = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +52,7 @@ class SeriesFragment : Fragment() {
         setupUI()
 
         //Delay for shimmer animation
+        waitDelay()
         val minShimmerTime = getMinShimmerTime(viewModel.isAlreadyShimmer)
         Handler(Looper.getMainLooper()).postDelayed({
             viewModelObserver()
@@ -73,14 +76,27 @@ class SeriesFragment : Fragment() {
         dots_indicator_series.setViewPager2(vp_series_slider)
 
         nestedScrollSeries.setOnScrollChangeListener(
-            NestedScrollView.OnScrollChangeListener{ v, _, scrollY, _, _ ->
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
                 if (scrollY == (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)) {
-                    page++
-                    viewModel.setPage(page)
-
-                    showToast(requireContext(), "Load more.")
+                    val height = (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
+                    Log.d(
+                        "GGA",
+                        "$scrollY == ${v?.getChildAt(0)?.measuredHeight} == ${v?.measuredHeight} == $height"
+                    )
+                    if (scrollY == height && scrollY > scrollLocation) {
+                        if (page < 5) {
+                            page++
+                            viewModel.setPage(page)
+                            scrollLocation = scrollY
+                            showToast(requireContext(), "Load more.")
+                            Log.d("GGX", "PAGE: $page")
+                            Log.d("GGA", "=========================")
+                        } else {
+                            showToast(requireContext(), "Max page.")
+                        }
+                    }
                 }
-        })
+            })
     }
 
     private fun viewModelObserver() {
@@ -88,7 +104,8 @@ class SeriesFragment : Fragment() {
             viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
                 when (seriesList.status) {
                     Status.LOADING -> {
-                        startShimmer()
+                        if (scrollLocation == 0)
+                            startShimmer()
                     }
 
                     Status.SUCCESS -> {
@@ -98,13 +115,14 @@ class SeriesFragment : Fragment() {
 
                             sliderAdapter.sliderEntities.clear()
                             for (i in 0..4)
-                                seriesList.data[i]?.let { sliderAdapter.sliderEntities.add(it) }
+                                seriesList.data[i].let { sliderAdapter.sliderEntities.add(it) }
                             sliderAdapter.notifyDataSetChanged()
 
-                            isBottom = false
                             textView4.visibility = View.VISIBLE
                             stopShimmer()
-                            doneDelay()
+
+                            if (!viewModel.isAlreadyShimmer)
+                                doneDelay()
                         } else {
                             showToast(requireContext(), "No Series Found.")
                             showSnackBar(requireView(), "Do you want to retry?") {
@@ -112,7 +130,6 @@ class SeriesFragment : Fragment() {
                             }
                         }
                         viewModel.setAlreadyShimmer()
-
                     }
 
                     Status.ERROR -> {

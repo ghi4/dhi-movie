@@ -3,6 +3,8 @@ package com.dhimas.dhiflix.ui.detail
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +31,6 @@ class DetailActivity : AppCompatActivity() {
     private var showType: Int = 0
     private var detailAdapter: DetailAdapter = DetailAdapter()
 
-
     companion object {
         //For sending Show ID
         const val EXTRA_SHOW_ID = "extra_show_id"
@@ -52,6 +53,8 @@ class DetailActivity : AppCompatActivity() {
         setupUI()
 
         //Delay for shimmer animation
+        Log.d("JJK", "STARTED")
+        waitDelay()
         val minShimmerTime = getMinShimmerTime(viewModel.isAlreadyShimmer)
         Handler(Looper.getMainLooper()).postDelayed({
             viewModelObserveDetail()
@@ -83,21 +86,22 @@ class DetailActivity : AppCompatActivity() {
                     detailAdapter.notifyDataSetChanged()
 
                     if (movieList.data.isNullOrEmpty()) {
+                        tv_interest.visibility = View.GONE
                         showToast(this, "List failed to load.")
-                        showSnackBar(scrollView, movieList.message.toString()) {
-                            val default = "671039"
-                            viewModel.setDoubleTrigger(default, showType)
-                        }
                     }
 
                     stopShimmering()
+                    doneDelay()
+                    Log.d("JJK", "STOPPED LST")
                 }
 
                 Status.ERROR -> {
                     showToast(this, "List failed to load.")
-                    showSnackBar(scrollView, movieList.message.toString()) {
+                    showSnackBar(scrollView, movieList.message ?: "Unknown Error") {
                         viewModel.setDoubleTrigger(showId, showType)
                     }
+                    Log.d("JJK", "STOPPED LST")
+                    doneDelay()
                 }
             }
         })
@@ -174,11 +178,9 @@ class DetailActivity : AppCompatActivity() {
         tv_detail_overview.stopLoading()
         tv_interest.stopLoading()
         bt_favorite.stopLoading()
-        doneDelay()
     }
 
     private fun startShimmering() {
-        waitDelay()
         iv_detail_poster.startLoading()
         tv_detail_title.startLoading()
         tv_detail_release_date.startLoading()
