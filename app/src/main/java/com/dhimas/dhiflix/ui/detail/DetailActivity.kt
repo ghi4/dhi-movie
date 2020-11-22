@@ -119,7 +119,6 @@ class DetailActivity : AppCompatActivity() {
             Log.d("WKS", "IN POPULAR")
             when (movieList.status) {
                 Status.LOADING -> {
-
                     startShimmerList()
                 }
 

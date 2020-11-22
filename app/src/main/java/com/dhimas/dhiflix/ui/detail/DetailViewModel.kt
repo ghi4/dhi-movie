@@ -42,7 +42,7 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
         Log.d("WKVM", "IN VM POP")
         val showType = doubleTrigger.value?.showType
         Log.d("WKVM", "IN VM POP: " + showType)
-        val page = 3
+        val page = 1
         when (Constant.MOVIE_TYPE) {
             Constant.MOVIE_TYPE ->
                 showRepository.getMovieList(page)
