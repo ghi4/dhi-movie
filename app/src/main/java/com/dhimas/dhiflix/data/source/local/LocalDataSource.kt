@@ -24,9 +24,9 @@ class LocalDataSource private constructor(private val showDao: ShowDao) {
 
     fun getFavoriteSeries(): DataSource.Factory<Int, ShowEntity> = showDao.getFavoriteSeries()
 
-    fun getSimilarMovies(): DataSource.Factory<Int, ShowEntity> = showDao.getSimilarMovies()
+    fun getSimilarMovies(): LiveData<List<ShowEntity>> = showDao.getSimilarMovies()
 
-    fun getSimilarSeries(): DataSource.Factory<Int, ShowEntity> = showDao.getSimilarSeries()
+    fun getSimilarSeries(): LiveData<List<ShowEntity>> = showDao.getSimilarSeries()
 
     fun searchMovies(keyword: String): LiveData<List<ShowEntity>> = showDao.searchMovies(keyword)
 

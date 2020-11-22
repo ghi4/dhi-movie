@@ -3,12 +3,14 @@ package com.dhimas.dhiflix.ui.detail
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.databinding.ActivityDetailBinding
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
 import com.dhimas.dhiflix.utils.Utils.doneDelay
@@ -19,10 +21,9 @@ import com.dhimas.dhiflix.utils.Utils.waitDelay
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : AppCompatActivity() {
-
+    private lateinit var binding: ActivityDetailBinding
     private lateinit var viewModel: DetailViewModel
     private lateinit var showId: String
     private lateinit var showEntity1: ShowEntity
@@ -42,6 +43,9 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+        binding = ActivityDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
 
@@ -49,7 +53,7 @@ class DetailActivity : AppCompatActivity() {
         showType = intent.getIntExtra(EXTRA_SHOW_TYPE, 0)
         viewModel.setDoubleTrigger(showId, showType)
 
-        similar_shimmer.startShimmer()
+        binding.similarShimmer.startShimmer()
 
         setupUI()
 
@@ -58,46 +62,95 @@ class DetailActivity : AppCompatActivity() {
         val minShimmerTime = getMinShimmerTime(viewModel.isAlreadyShimmer)
         Handler(Looper.getMainLooper()).postDelayed({
             viewModelObserveDetail()
-            viewModelObserveList()
+            //viewModelObserveSimilarList()
+            viewModelObservePopularList()
+            viewModel.listEmptyTrigger()
         }, minShimmerTime)
     }
 
     private fun setupUI() {
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        rv_other_movie.layoutManager = layoutManager
-        rv_other_movie.hasFixedSize()
-        rv_other_movie.adapter = detailAdapter
-        rv_other_movie.visibility = View.VISIBLE
+        with(binding) {
+            rvOtherMovie.layoutManager = layoutManager
+            rvOtherMovie.hasFixedSize()
+            rvOtherMovie.adapter = detailAdapter
+            rvOtherMovie.visibility = View.VISIBLE
 
-        bt_favorite.setOnClickListener {
-            viewModel.setFavorite(showEntity1)
+            btFavorite.setOnClickListener {
+                viewModel.setFavorite(showEntity1)
+            }
         }
     }
 
-    private fun viewModelObserveList() {
-        viewModel.getShowList().observe(this, { movieList ->
+    private fun viewModelObserveSimilarList() {
+        viewModel.getSimilarList().observe(this, { movieList ->
+            Log.d("WKS", "IN SIMILAR")
             when (movieList.status) {
                 Status.LOADING -> {
                     startShimmerList()
                 }
 
                 Status.SUCCESS -> {
-                    detailAdapter.setMovies(showType, viewModel.isAlreadyShimmer)
-                    detailAdapter.submitList(movieList.data)
+                    detailAdapter.setMovies(viewModel.isAlreadyShimmer)
+                    detailAdapter.setList(movieList.data as ArrayList<ShowEntity>)
                     detailAdapter.notifyDataSetChanged()
-
-                    if (movieList.data.isNullOrEmpty()) {
-                        tv_interest.visibility = View.GONE
-                        showToast(this, "List failed to load.")
-                    }
-
                     stopShimmerList()
                     doneDelay()
+                    if (movieList.data.isNullOrEmpty()) {
+                        //tv_interest.visibility = View.GONE
+                        showToast(this, "No similar list found.")
+                        viewModel.listEmptyTrigger()
+                    }
                 }
 
                 Status.ERROR -> {
                     showToast(this, "List failed to load.")
-                    showSnackBar(scrollView, movieList.message ?: "Unknown Error") {
+                    showSnackBar(binding.scrollView, movieList.message ?: "Unknown Error") {
+                        viewModel.setDoubleTrigger(showId, showType)
+                    }
+                    doneDelay()
+                }
+            }
+        })
+    }
+
+    private fun viewModelObservePopularList() {
+        viewModel.getPopularList().observe(this, { movieList ->
+            Log.d("WKS", "IN POPULAR")
+            when (movieList.status) {
+                Status.LOADING -> {
+
+                    startShimmerList()
+                }
+
+                Status.SUCCESS -> {
+                    Log.d("KKK", "SIZE: " + movieList.data?.size)
+                    Log.d("KKK", "MSG: " + movieList.message)
+
+                    detailAdapter.setMovies(viewModel.isAlreadyShimmer)
+                    detailAdapter.setList(movieList.data as ArrayList<ShowEntity>)
+                    detailAdapter.notifyDataSetChanged()
+//                    stopShimmerList()
+                    doneDelay()
+
+                    Log.d("KKK", "SIZE: " + movieList.data.size)
+                    Log.d("KKK", "MSG: " + movieList.message)
+
+                    if (movieList.data.isNullOrEmpty()) {
+                        //tv_interest.visibility = View.GONE
+                        showToast(this, "No popular list found.")
+                    } else {
+                        detailAdapter.setMovies(viewModel.isAlreadyShimmer)
+                        detailAdapter.setList(movieList.data)
+                        detailAdapter.notifyDataSetChanged()
+                        stopShimmerList()
+                        doneDelay()
+                    }
+                }
+
+                Status.ERROR -> {
+                    showToast(this, "List failed to load.")
+                    showSnackBar(binding.scrollView, movieList.message ?: "Unknown Error") {
                         viewModel.setDoubleTrigger(showId, showType)
                     }
                     doneDelay()
@@ -108,6 +161,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun viewModelObserveDetail() {
         viewModel.getShowEntityById().observe(this, { showEntity ->
+            Log.d("WKS", "DETAIL")
             when (showEntity.status) {
                 Status.LOADING -> {
                     startShimmering()
@@ -124,42 +178,44 @@ class DetailActivity : AppCompatActivity() {
                             else
                                 getString(R.string.remove_from_favorite)
 
-                        tv_detail_title.text = showEntity1.title
-                        tv_detail_release_date.text =
-                            dateParseToMonthAndYear(showEntity1.releaseDate)
-                        tv_detail_overview.text = showEntity1.overview
-                        bt_favorite.text = btFavoriteText
+                        with(binding) {
+                            tvDetailTitle.text = showEntity1.title
+                            tvDetailReleaseDate.text =
+                                dateParseToMonthAndYear(showEntity1.releaseDate)
+                            tvDetailOverview.text = showEntity1.overview
+                            btFavorite.text = btFavoriteText
 
-                        Picasso.get()
-                            .load(Constant.URL_BASE_IMAGE + showEntity1.backdropPath)
-                            .placeholder(R.drawable.backdrop_placeholder)
-                            .error(R.drawable.image_error)
-                            .resize(
-                                Constant.BACKDROP_TARGET_WIDTH,
-                                Constant.BACKDROP_TARGET_HEIGHT
-                            )
-                            .into(iv_detail_backdrop)
+                            Picasso.get()
+                                .load(Constant.URL_BASE_IMAGE + showEntity1.backdropPath)
+                                .placeholder(R.drawable.backdrop_placeholder)
+                                .error(R.drawable.image_error)
+                                .resize(
+                                    Constant.BACKDROP_TARGET_WIDTH,
+                                    Constant.BACKDROP_TARGET_HEIGHT
+                                )
+                                .into(ivDetailBackdrop)
 
-                        Picasso.get()
-                            .load(Constant.URL_BASE_IMAGE + showEntity1.posterPath)
-                            .placeholder(R.drawable.poster_placeholder)
-                            .error(R.drawable.poster_error)
-                            .resize(
-                                Constant.POSTER_TARGET_WIDTH,
-                                Constant.POSTER_TARGET_HEIGHT
-                            )
-                            .into(iv_detail_poster)
+                            Picasso.get()
+                                .load(Constant.URL_BASE_IMAGE + showEntity1.posterPath)
+                                .placeholder(R.drawable.poster_placeholder)
+                                .error(R.drawable.poster_error)
+                                .resize(
+                                    Constant.POSTER_TARGET_WIDTH,
+                                    Constant.POSTER_TARGET_HEIGHT
+                                )
+                                .into(ivDetailPoster)
+                        }
 
                         stopShimmering()
                     } else {
-                        showSnackBar(scrollView, showEntity.message.toString()) {
+                        showSnackBar(binding.scrollView, showEntity.message.toString()) {
                             viewModel.setDoubleTrigger(showId, showType)
                         }
                     }
                 }
 
                 Status.ERROR -> {
-                    showSnackBar(scrollView, showEntity.message.toString()) {
+                    showSnackBar(binding.scrollView, showEntity.message.toString()) {
                         viewModel.setDoubleTrigger(showId, showType)
                     }
                 }
@@ -170,32 +226,40 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun stopShimmering() {
-        iv_detail_poster.stopLoading()
-        tv_detail_title.stopLoading()
-        tv_detail_release_date.stopLoading()
-        tv_overview.stopLoading()
-        tv_detail_overview.stopLoading()
-        tv_interest.stopLoading()
-        bt_favorite.stopLoading()
+        with(binding) {
+            ivDetailPoster.stopLoading()
+            tvDetailTitle.stopLoading()
+            tvDetailReleaseDate.stopLoading()
+            tvOverview.stopLoading()
+            tvDetailOverview.stopLoading()
+            tvInterest.stopLoading()
+            btFavorite.stopLoading()
+        }
     }
 
     private fun startShimmering() {
-        iv_detail_poster.startLoading()
-        tv_detail_title.startLoading()
-        tv_detail_release_date.startLoading()
-        tv_overview.startLoading()
-        tv_detail_overview.startLoading()
-        tv_interest.startLoading()
-        bt_favorite.startLoading()
+        with(binding) {
+            ivDetailPoster.startLoading()
+            tvDetailTitle.startLoading()
+            tvDetailReleaseDate.startLoading()
+            tvOverview.startLoading()
+            tvDetailOverview.startLoading()
+            tvInterest.startLoading()
+            btFavorite.startLoading()
+        }
     }
 
     private fun startShimmerList() {
-        similar_shimmer.visibility = View.VISIBLE
-        similar_shimmer.startShimmer()
+        with(binding) {
+            similarShimmer.visibility = View.VISIBLE
+            similarShimmer.startShimmer()
+        }
     }
 
     private fun stopShimmerList() {
-        similar_shimmer.visibility = View.GONE
-        similar_shimmer.stopShimmer()
+        with(binding) {
+            similarShimmer.visibility = View.GONE
+            similarShimmer.stopShimmer()
+        }
     }
 }

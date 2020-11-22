@@ -7,16 +7,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.databinding.ItemShowBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.Utils
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_show.view.*
 
 class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     private var movieList = ArrayList<ShowEntity>()
 
-    fun addMovie(movies: ArrayList<ShowEntity>){
+    fun addMovies(movies: ArrayList<ShowEntity>) {
         movieList.clear()
         movieList.addAll(movies)
     }
@@ -33,24 +33,25 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     override fun getItemCount(): Int = movieList.size
 
     inner class MovieViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bind(movie: ShowEntity){
-            with(itemView){
-                tv_title.text = movie.title
-                tv_release_date.text = Utils.dateParseToMonthAndYear(movie.releaseDate)
+        private val binding = ItemShowBinding.bind(itemView)
+        fun bind(movie: ShowEntity) {
+            with(binding) {
+                tvTitle.text = movie.title
+                tvReleaseDate.text = Utils.dateParseToMonthAndYear(movie.releaseDate)
 
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + movie.posterPath)
                     .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.poster_error)
                     .placeholder(R.drawable.poster_placeholder)
-                    .into(iv_poster)
+                    .into(ivPoster)
 
-                itemView.setOnClickListener {
-                    val intent = Intent(context, DetailActivity::class.java)
+                root.setOnClickListener {
+                    val intent = Intent(itemView.context, DetailActivity::class.java)
                     intent.putExtra(DetailActivity.EXTRA_SHOW_ID, movie.id)
                     //Used for checking if the show entity is from movie page
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, movie.show_type)
-                    context.startActivity(intent)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, movie.showType)
+                    itemView.context.startActivity(intent)
                 }
             }
         }

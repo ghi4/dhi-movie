@@ -9,21 +9,24 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.databinding.FragmentSearchMovieBinding
 import com.dhimas.dhiflix.ui.movie.MovieAdapter
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_search_movie.*
 
 class SearchMovieFragment : Fragment() {
     private val vm: SearchViewModel by viewModels({ requireParentFragment() })
+    private lateinit var binding: FragmentSearchMovieBinding
     private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_search_movie, container, false)
+//        return inflater.inflate(R.layout.fragment_search_movie, container, false)
+        binding = FragmentSearchMovieBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,7 +37,7 @@ class SearchMovieFragment : Fragment() {
         vm.getMovies().observe(viewLifecycleOwner, { movieList ->
             when (movieList.status) {
                 Status.SUCCESS -> {
-                    movieAdapter.addMovie(movieList.data as ArrayList<ShowEntity>)
+                    movieAdapter.addMovies(movieList.data as ArrayList<ShowEntity>)
                     movieAdapter.notifyDataSetChanged()
 
                     if (!movieList.data.isNullOrEmpty()) {
@@ -80,9 +83,11 @@ class SearchMovieFragment : Fragment() {
             }
         })
 
-        rv_search_movies.layoutManager = GridLayoutManager(requireContext(), 3)
-        rv_search_movies.hasFixedSize()
-        rv_search_movies.adapter = movieAdapter
+        with(binding) {
+            rvSearchMovies.layoutManager = GridLayoutManager(requireContext(), 3)
+            rvSearchMovies.hasFixedSize()
+            rvSearchMovies.adapter = movieAdapter
+        }
     }
 
     private fun setViewVisibility(
@@ -91,10 +96,12 @@ class SearchMovieFragment : Fragment() {
         ivIllustration: Boolean,
         tvInfo: Boolean
     ) {
-        progressBar.visibility = if (loading) View.VISIBLE else View.GONE
-        rv_search_movies.visibility = if (rvMovie) View.VISIBLE else View.INVISIBLE
-        iv_movie_illustration.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
-        tv_movie_info.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
+        with(binding) {
+            progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+            rvSearchMovies.visibility = if (rvMovie) View.VISIBLE else View.INVISIBLE
+            ivMovieIllustration.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
+            tvMovieInfo.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
+        }
     }
 
     private fun setInfoImageAndMessage(image: Int, message: String) {
@@ -105,8 +112,8 @@ class SearchMovieFragment : Fragment() {
             .placeholder(R.drawable.backdrop_placeholder)
             .error(R.drawable.image_error)
             .resize(targetWidth, targetHeight)
-            .into(iv_movie_illustration)
-        tv_movie_info.text = message
+            .into(binding.ivMovieIllustration)
+        binding.tvMovieInfo.text = message
     }
 
 }

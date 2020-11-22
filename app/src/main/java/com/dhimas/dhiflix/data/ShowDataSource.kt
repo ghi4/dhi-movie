@@ -19,9 +19,9 @@ interface ShowDataSource {
 
     fun getFavoriteSeriesList(): LiveData<Resource<PagedList<ShowEntity>>>
 
-    fun getSimilarMovieList(movie_id: String): LiveData<Resource<PagedList<ShowEntity>>>
+    fun getSimilarMovieList(movie_id: String): LiveData<Resource<List<ShowEntity>>>
 
-    fun getSimilarSeriesList(series_id: String): LiveData<Resource<PagedList<ShowEntity>>>
+    fun getSimilarSeriesList(series_id: String): LiveData<Resource<List<ShowEntity>>>
 
     fun searchMovie(keyword: String): LiveData<Resource<List<ShowEntity>>>
 

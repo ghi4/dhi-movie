@@ -46,7 +46,7 @@ class SearchViewModelTest {
         val movie = MutableLiveData<Resource<List<ShowEntity>>>()
         movie.value = dummyMovieList
 
-        viewModel.triggerMovie()
+        viewModel.setSearchQuery(keyword)
         `when`(showRepository.searchMovie(keyword)).thenReturn(movie)
         viewModel.getMovies().observeForever(observer)
         verify(observer).onChanged(dummyMovieList)
@@ -82,7 +82,7 @@ class SearchViewModelTest {
         val series = MutableLiveData<Resource<List<ShowEntity>>>()
         series.value = dummySeriesList
 
-        viewModel.triggerSeries()
+        viewModel.setSearchQuery(keyword)
         `when`(showRepository.searchSeries(keyword)).thenReturn(series)
         viewModel.getSeries().observeForever(observer)
         verify(observer).onChanged(dummySeriesList)

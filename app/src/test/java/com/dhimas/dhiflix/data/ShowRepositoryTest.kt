@@ -199,8 +199,9 @@ internal class ShowRepositoryTest {
 
     @Test
     fun getSimilarMovieList() {
-        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.getSimilarMovies()).thenReturn(dataSourceFactory)
+        val dummyMovies = MutableLiveData<List<ShowEntity>>()
+        dummyMovies.value = DummyData.generateDummyMovies()
+        `when`(local.getSimilarMovies()).thenReturn(dummyMovies)
         showRepository.getSimilarMovieList(movieId)
 
         val movieEntities =
@@ -222,8 +223,9 @@ internal class ShowRepositoryTest {
 
     @Test
     fun getSimilarSeriesList() {
-        val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
-        `when`(local.getSimilarSeries()).thenReturn(dataSourceFactory)
+        val dummySeries = MutableLiveData<List<ShowEntity>>()
+        dummySeries.value = DummyData.generateDummyMovies()
+        `when`(local.getSimilarSeries()).thenReturn(dummySeries)
         showRepository.getSimilarSeriesList(seriesId)
 
         val seriesEntities =

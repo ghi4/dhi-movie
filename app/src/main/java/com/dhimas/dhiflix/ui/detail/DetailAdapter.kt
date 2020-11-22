@@ -6,35 +6,24 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.databinding.ItemShowHorizontalBinding
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_show_horizontal.view.*
 
-class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolder>(DIFF_CALLBACK) {
-    private var listType = Constant.MOVIE_TYPE //Default type is movie
+class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     private var isAlreadyShimmer: Boolean = false
+    private var showList = ArrayList<ShowEntity>()
 
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShowEntity>() {
-            override fun areItemsTheSame(oldItem: ShowEntity, newItem: ShowEntity): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: ShowEntity, newItem: ShowEntity): Boolean {
-                return oldItem == newItem
-            }
-
-        }
+    fun setList(showList: ArrayList<ShowEntity>) {
+        showList.clear()
+        showList.addAll(showList)
     }
 
-    fun setMovies(listType: Int, isAlreadyShimmer: Boolean) {
-        this.listType = listType
+    fun setMovies(isAlreadyShimmer: Boolean) {
         this.isAlreadyShimmer = isAlreadyShimmer
     }
 
@@ -45,16 +34,19 @@ class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolde
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
-        val movie = getItem(position) as ShowEntity
-        holder.bind(movie, listType, isAlreadyShimmer)
+        val movie = showList[position]
+        holder.bind(movie, isAlreadyShimmer)
     }
 
+    override fun getItemCount(): Int = showList.size
+
     class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(showEntity: ShowEntity, type: Int, isAlreadyShimmer: Boolean) {
-            with(itemView) {
+        private val binding = ItemShowHorizontalBinding.bind(itemView)
+        fun bind(showEntity: ShowEntity, isAlreadyShimmer: Boolean) {
+            with(binding) {
 
                 //Start shimmer
-                iv_poster_horizontal.startLoading()
+                ivPosterHorizontal.startLoading()
 
                 //Horizontal Poster
                 Picasso.get()
@@ -62,26 +54,24 @@ class DetailAdapter : PagedListAdapter<ShowEntity, DetailAdapter.DetailViewHolde
                     .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.poster_error)
                     .placeholder(R.drawable.poster_placeholder)
-                    .into(iv_poster_horizontal)
+                    .into(ivPosterHorizontal)
 
                 //Delay for shimmer animation
                 val minShimmerTime = getMinShimmerTime(isAlreadyShimmer)
                 Handler(Looper.getMainLooper()).postDelayed({
-                    iv_poster_horizontal.stopLoading()
+                    ivPosterHorizontal.stopLoading()
                 }, minShimmerTime)
 
                 //Set poster click listener
-                cv_poster_horizontal.setOnClickListener {
-                    val intent = Intent(context, DetailActivity::class.java)
+                cvPosterHorizontal.setOnClickListener {
+                    val intent = Intent(itemView.context, DetailActivity::class.java)
 
                     intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, type)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, showEntity.showType)
 
-                    context.startActivity(intent)
+                    itemView.context.startActivity(intent)
                 }
             }
         }
     }
-
-
 }

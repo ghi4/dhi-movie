@@ -1,12 +1,9 @@
 package com.dhimas.dhiflix.data.source.local.entity
 
-import android.os.Parcelable
 import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 @Entity(tableName = "showtable")
 data class ShowEntity(
 
@@ -24,10 +21,10 @@ data class ShowEntity(
 
     var backdropPath: String? = null,
 
-    var show_type: Int? = 0,
+    var showType: Int? = 0,
 
     var page: Int? = 0,
 
     var isFavorite: Int? = 0
 
-) : Parcelable
+)

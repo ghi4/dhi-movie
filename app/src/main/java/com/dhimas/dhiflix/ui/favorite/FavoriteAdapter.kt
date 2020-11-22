@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.databinding.ItemShowHorizontalBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_show_horizontal.view.*
 
 class FavoriteAdapter internal constructor() :
     PagedListAdapter<ShowEntity, FavoriteAdapter.ShowViewHolder>(DIFF_CALLBACK) {
@@ -54,11 +54,12 @@ class FavoriteAdapter internal constructor() :
     }
 
     class ShowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val binding = ItemShowHorizontalBinding.bind(itemView)
         fun bind(showEntity: ShowEntity, type: Int, isAlreadyShimmer: Boolean) {
-            with(itemView) {
+            with(binding) {
 
                 //Start shimmer
-                iv_poster_horizontal.startLoading()
+                ivPosterHorizontal.startLoading()
 
                 //Horizontal Poster
                 Picasso.get()
@@ -66,22 +67,22 @@ class FavoriteAdapter internal constructor() :
                     .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.poster_error)
                     .placeholder(R.drawable.poster_placeholder)
-                    .into(iv_poster_horizontal)
+                    .into(ivPosterHorizontal)
 
                 //Delay for shimmer animation
                 val minShimmerTime = getMinShimmerTime(isAlreadyShimmer)
                 Handler(Looper.getMainLooper()).postDelayed({
-                    iv_poster_horizontal.stopLoading()
+                    ivPosterHorizontal.stopLoading()
                 }, minShimmerTime)
 
                 //Set poster click listener
-                cv_poster_horizontal.setOnClickListener {
-                    val intent = Intent(context, DetailActivity::class.java)
+                cvPosterHorizontal.setOnClickListener {
+                    val intent = Intent(itemView.context, DetailActivity::class.java)
 
                     intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
                     intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, type)
 
-                    context.startActivity(intent)
+                    itemView.context.startActivity(intent)
                 }
             }
         }

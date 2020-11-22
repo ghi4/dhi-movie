@@ -202,23 +202,19 @@ class FakeShowRepository constructor(
         }.asLiveData()
     }
 
-    override fun getSimilarMovieList(movie_id: String): LiveData<Resource<PagedList<ShowEntity>>> {
+    override fun getSimilarMovieList(movie_id: String): LiveData<Resource<List<ShowEntity>>> {
         return object :
-            NetworkBoundResource<PagedList<ShowEntity>, List<MovieResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
-                val config = pagedListConfigBuilder()
-
-                return LivePagedListBuilder(localDataSource.getSimilarMovies(), config).build()
+            NetworkBoundResource<List<ShowEntity>, List<MovieResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<List<ShowEntity>> {
+                return localDataSource.getSimilarMovies()
             }
 
-            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = true
+            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
 
             override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
                 remoteDataSource.getSimilarMovieList(movie_id)
 
             override fun saveCallResult(data: List<MovieResponse>) {
-                localDataSource.deleteAllSimilarShow()
-
                 val movieList = ArrayList<SimilarShowEntity>()
 
                 for (response in data) {
@@ -235,28 +231,28 @@ class FakeShowRepository constructor(
                     movieList.add(movie)
                 }
 
+                if (!movieList.isNullOrEmpty())
+                    localDataSource.deleteAllSimilarShow(Constant.MOVIE_TYPE)
+
                 localDataSource.insertSimilarShows(movieList)
             }
         }.asLiveData()
     }
 
-    override fun getSimilarSeriesList(series_id: String): LiveData<Resource<PagedList<ShowEntity>>> {
+    override fun getSimilarSeriesList(series_id: String): LiveData<Resource<List<ShowEntity>>> {
         return object :
-            NetworkBoundResource<PagedList<ShowEntity>, List<SeriesResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
-                val config = pagedListConfigBuilder()
+            NetworkBoundResource<List<ShowEntity>, List<SeriesResponse>>(appExecutors) {
 
-                return LivePagedListBuilder(localDataSource.getSimilarSeries(), config).build()
+            public override fun loadFromDB(): LiveData<List<ShowEntity>> {
+                return localDataSource.getSimilarSeries()
             }
 
-            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = true
+            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
 
             override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
                 remoteDataSource.getSimilarSeriesList(series_id)
 
             override fun saveCallResult(data: List<SeriesResponse>) {
-                localDataSource.deleteAllSimilarShow()
-
                 val seriesList = ArrayList<SimilarShowEntity>()
 
                 for (response in data) {
@@ -272,6 +268,9 @@ class FakeShowRepository constructor(
 
                     seriesList.add(series)
                 }
+
+                if (!seriesList.isNullOrEmpty())
+                    localDataSource.deleteAllSimilarShow(Constant.SERIES_TYPE)
 
                 localDataSource.insertSimilarShows(seriesList)
             }
@@ -293,8 +292,6 @@ class FakeShowRepository constructor(
             override fun saveCallResult(data: List<MovieResponse>) {
                 val movieList = ArrayList<SearchShowEntity>()
 
-                localDataSource.deleteAllSearchShow()
-
                 for (response in data) {
                     val movie = SearchShowEntity(
                         response.movie_id,
@@ -308,6 +305,8 @@ class FakeShowRepository constructor(
 
                     movieList.add(movie)
                 }
+
+                localDataSource.deleteAllSearchShow(Constant.MOVIE_TYPE)
 
                 localDataSource.insertSearchShows(movieList)
             }
@@ -329,8 +328,6 @@ class FakeShowRepository constructor(
             override fun saveCallResult(data: List<SeriesResponse>) {
                 val seriesList = ArrayList<SearchShowEntity>()
 
-                localDataSource.deleteAllSearchShow()
-
                 for (response in data) {
                     val series = SearchShowEntity(
                         response.series_id,
@@ -344,6 +341,8 @@ class FakeShowRepository constructor(
 
                     seriesList.add(series)
                 }
+
+                localDataSource.deleteAllSearchShow(Constant.SERIES_TYPE)
 
                 localDataSource.insertSearchShows(seriesList)
             }

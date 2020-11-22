@@ -11,8 +11,8 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.databinding.FragmentSeriesBinding
 import com.dhimas.dhiflix.ui.SliderAdapter
 import com.dhimas.dhiflix.utils.Utils.doneDelay
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
@@ -21,10 +21,10 @@ import com.dhimas.dhiflix.utils.Utils.showToast
 import com.dhimas.dhiflix.utils.Utils.waitDelay
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
-import kotlinx.android.synthetic.main.fragment_series.*
 
 class SeriesFragment : Fragment() {
 
+    private lateinit var binding: FragmentSeriesBinding
     private lateinit var viewModel: SeriesViewModel
     private lateinit var seriesAdapter: SeriesAdapter
     private lateinit var sliderAdapter: SliderAdapter
@@ -36,7 +36,10 @@ class SeriesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_series, container, false)
+//        return inflater.inflate(R.layout.fragment_series, container, false)
+
+        binding = FragmentSeriesBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,31 +69,36 @@ class SeriesFragment : Fragment() {
         //Change grid layout spanCount when Landscape/Portrait
         val phoneOrientation = requireActivity().resources.configuration.orientation
         val spanCount = if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
-        rv_series.layoutManager = GridLayoutManager(context, spanCount)
-        rv_series.hasFixedSize()
-        rv_series.adapter = seriesAdapter
-        rv_series.isNestedScrollingEnabled = false
+        with(binding) {
+            rvSeries.layoutManager = GridLayoutManager(context, spanCount)
+            rvSeries.hasFixedSize()
+            rvSeries.adapter = seriesAdapter
+            rvSeries.isNestedScrollingEnabled = false
 
-        vp_series_slider.adapter = sliderAdapter
-        dots_indicator_series.setViewPager2(vp_series_slider)
+            vpSeriesSlider.adapter = sliderAdapter
+            dotsIndicatorSeries.setViewPager2(vpSeriesSlider)
 
-        nestedScrollSeries.setOnScrollChangeListener(
-            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
-                if (scrollY == (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)) {
-                    val height = (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
+            nestedScrollSeries.setOnScrollChangeListener(
+                NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+                    if (scrollY == (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight
+                            ?: 0)
+                    ) {
+                        val height =
+                            (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
 
-                    if (scrollY == height && scrollY > scrollLocation) {
-                        if (page < 5) {
-                            page++
-                            viewModel.setPage(page)
-                            scrollLocation = scrollY
-                            showToast(requireContext(), "Load more.")
-                        } else {
-                            showToast(requireContext(), "Max page.")
+                        if (scrollY == height && scrollY > scrollLocation) {
+                            if (page < 5) {
+                                page++
+                                viewModel.setPage(page)
+                                scrollLocation = scrollY
+                                showToast(requireContext(), "Load more.")
+                            } else {
+                                showToast(requireContext(), "Max page.")
+                            }
                         }
                     }
-                }
-            })
+                })
+        }
     }
 
     private fun viewModelObserver() {
@@ -112,7 +120,7 @@ class SeriesFragment : Fragment() {
                                 seriesList.data[i].let { sliderAdapter.sliderEntities.add(it) }
                             sliderAdapter.notifyDataSetChanged()
 
-                            textView4.visibility = View.VISIBLE
+                            binding.textView4.visibility = View.VISIBLE
                             stopShimmer()
 
                             if (!viewModel.isAlreadyShimmer)
@@ -137,13 +145,17 @@ class SeriesFragment : Fragment() {
     }
 
     private fun startShimmer() {
-        seriesShimmerLayout.startShimmer()
-        seriesShimmerLayout.visibility = View.VISIBLE
+        with(binding) {
+            seriesShimmerLayout.startShimmer()
+            seriesShimmerLayout.visibility = View.VISIBLE
+        }
     }
 
     private fun stopShimmer() {
-        seriesShimmerLayout.stopShimmer()
-        seriesShimmerLayout.visibility = View.GONE
+        with(binding) {
+            seriesShimmerLayout.stopShimmer()
+            seriesShimmerLayout.visibility = View.GONE
+        }
     }
 
 }

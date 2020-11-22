@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.databinding.ItemShowBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Constant
 import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_show.view.*
 
 class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>(){
     private var seriesList = ArrayList<ShowEntity>()
@@ -33,23 +33,24 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>(){
     override fun getItemCount(): Int = seriesList.size
 
     class SeriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val binding = ItemShowBinding.bind(itemView)
         fun bind(series: ShowEntity) {
-            with(itemView) {
-                tv_title.text = series.title
-                tv_release_date.text = dateParseToMonthAndYear(series.releaseDate)
+            with(binding) {
+                tvTitle.text = series.title
+                tvReleaseDate.text = dateParseToMonthAndYear(series.releaseDate)
 
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + series.posterPath)
                     .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.poster_error)
                     .placeholder(R.drawable.poster_placeholder)
-                    .into(iv_poster)
+                    .into(ivPoster)
 
-                cv_poster.setOnClickListener {
-                    val intent = Intent(context, DetailActivity::class.java)
+                cvPoster.setOnClickListener {
+                    val intent = Intent(itemView.context, DetailActivity::class.java)
                     intent.putExtra(DetailActivity.EXTRA_SHOW_ID, series.id)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, series.show_type)
-                    context.startActivity(intent)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, series.showType)
+                    itemView.context.startActivity(intent)
                 }
             }
         }

@@ -216,16 +216,14 @@ class ShowRepository private constructor(
         }.asLiveData()
     }
 
-    override fun getSimilarMovieList(movie_id: String): LiveData<Resource<PagedList<ShowEntity>>> {
+    override fun getSimilarMovieList(movie_id: String): LiveData<Resource<List<ShowEntity>>> {
         return object :
-            NetworkBoundResource<PagedList<ShowEntity>, List<MovieResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
-                val config = pagedListConfigBuilder()
-
-                return LivePagedListBuilder(localDataSource.getSimilarMovies(), config).build()
+            NetworkBoundResource<List<ShowEntity>, List<MovieResponse>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<List<ShowEntity>> {
+                return localDataSource.getSimilarMovies()
             }
 
-            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = true
+            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
 
             override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
                 remoteDataSource.getSimilarMovieList(movie_id)
@@ -255,16 +253,15 @@ class ShowRepository private constructor(
         }.asLiveData()
     }
 
-    override fun getSimilarSeriesList(series_id: String): LiveData<Resource<PagedList<ShowEntity>>> {
+    override fun getSimilarSeriesList(series_id: String): LiveData<Resource<List<ShowEntity>>> {
         return object :
-            NetworkBoundResource<PagedList<ShowEntity>, List<SeriesResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<PagedList<ShowEntity>> {
-                val config = pagedListConfigBuilder()
+            NetworkBoundResource<List<ShowEntity>, List<SeriesResponse>>(appExecutors) {
 
-                return LivePagedListBuilder(localDataSource.getSimilarSeries(), config).build()
+            public override fun loadFromDB(): LiveData<List<ShowEntity>> {
+                return localDataSource.getSimilarSeries()
             }
 
-            override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = true
+            override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
 
             override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
                 remoteDataSource.getSimilarSeriesList(series_id)

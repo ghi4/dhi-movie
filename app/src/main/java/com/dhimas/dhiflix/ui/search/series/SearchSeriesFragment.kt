@@ -9,21 +9,25 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.databinding.FragmentSearchSeriesBinding
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.ui.series.SeriesAdapter
 import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_search_series.*
 
 class SearchSeriesFragment : Fragment() {
     private val vm: SearchViewModel by viewModels({ requireParentFragment() })
+    private lateinit var binding: FragmentSearchSeriesBinding
     private lateinit var seriesAdapter: SeriesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_search_series, container, false)
+//        return inflater.inflate(R.layout.fragment_search_series, container, false)
+
+        binding = FragmentSearchSeriesBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,9 +83,12 @@ class SearchSeriesFragment : Fragment() {
             }
         })
 
-        rv_search_series.layoutManager = GridLayoutManager(requireContext(), 3)
-        rv_search_series.hasFixedSize()
-        rv_search_series.adapter = seriesAdapter
+
+        with(binding) {
+            rvSearchSeries.layoutManager = GridLayoutManager(requireContext(), 3)
+            rvSearchSeries.hasFixedSize()
+            rvSearchSeries.adapter = seriesAdapter
+        }
     }
 
     private fun setViewVisibility(
@@ -90,10 +97,12 @@ class SearchSeriesFragment : Fragment() {
         ivIllustration: Boolean,
         tvInfo: Boolean
     ) {
-        progressBar.visibility = if (loading) View.VISIBLE else View.GONE
-        rv_search_series.visibility = if (rvSeries) View.VISIBLE else View.INVISIBLE
-        iv_series_illustration.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
-        tv_series_info.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
+        with(binding) {
+            progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+            rvSearchSeries.visibility = if (rvSeries) View.VISIBLE else View.INVISIBLE
+            ivSeriesIllustration.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
+            tvSeriesInfo.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
+        }
     }
 
     private fun setInfoImageAndMessage(image: Int, message: String) {
@@ -104,8 +113,8 @@ class SearchSeriesFragment : Fragment() {
             .placeholder(R.drawable.backdrop_placeholder)
             .error(R.drawable.image_error)
             .resize(targetWidth, targetHeight)
-            .into(iv_series_illustration)
-        tv_series_info.text = message
+            .into(binding.ivSeriesIllustration)
+        binding.tvSeriesInfo.text = message
     }
 
 }

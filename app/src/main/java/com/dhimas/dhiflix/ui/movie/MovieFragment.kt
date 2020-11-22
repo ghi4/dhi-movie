@@ -11,8 +11,8 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.databinding.FragmentMovieBinding
 import com.dhimas.dhiflix.ui.SliderAdapter
 import com.dhimas.dhiflix.utils.Utils.doneDelay
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
@@ -21,9 +21,10 @@ import com.dhimas.dhiflix.utils.Utils.showToast
 import com.dhimas.dhiflix.utils.Utils.waitDelay
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
-import kotlinx.android.synthetic.main.fragment_movie.*
 
 class MovieFragment : Fragment() {
+
+    private lateinit var binding: FragmentMovieBinding
 
     private lateinit var viewModel: MovieViewModel
     private lateinit var movieAdapter: MovieAdapter
@@ -36,7 +37,8 @@ class MovieFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_movie, container, false)
+        binding = FragmentMovieBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,30 +70,31 @@ class MovieFragment : Fragment() {
         //Change grid layout spanCount when Landscape/Portrait
         val phoneOrientation = requireActivity().resources.configuration.orientation
         val spanCount = if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
-        rv_movie.layoutManager = GridLayoutManager(context, spanCount)
-        rv_movie.hasFixedSize()
-        rv_movie.adapter = movieAdapter
-        rv_movie.isNestedScrollingEnabled = false
+        with(binding) {
+            rvMovie.layoutManager = GridLayoutManager(context, spanCount)
+            rvMovie.hasFixedSize()
+            rvMovie.adapter = movieAdapter
+            rvMovie.isNestedScrollingEnabled = false
 
-        vp_slider.adapter = sliderAdapter
-        dots_indicator.setViewPager2(vp_slider)
+            vpSlider.adapter = sliderAdapter
+            dotsIndicator.setViewPager2(vpSlider)
 
-        nestedScrollMovie.setOnScrollChangeListener(
-            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
-                val height = (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
+            nestedScrollMovie.setOnScrollChangeListener(
+                NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+                    val height = (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
 
-                if (scrollY == height && scrollY > scrollLocation) {
-                    if (page < 5) {
-                        page++
-                        viewModel.setPage(page)
-                        scrollLocation = scrollY
-                        showToast(requireContext(), "Load more.")
-                    } else {
-                        showToast(requireContext(), "Max page.")
+                    if (scrollY == height && scrollY > scrollLocation) {
+                        if (page < 5) {
+                            page++
+                            viewModel.setPage(page)
+                            scrollLocation = scrollY
+                            showToast(requireContext(), "Load more.")
+                        } else {
+                            showToast(requireContext(), "Max page.")
+                        }
                     }
-                }
-            })
-
+                })
+        }
     }
 
     private fun viewModelObserver() {
@@ -105,7 +108,7 @@ class MovieFragment : Fragment() {
 
                     Status.SUCCESS -> {
                         if (movieList.data != null) {
-                            movieAdapter.addMovie(movieList.data as ArrayList<ShowEntity>)
+                            movieAdapter.addMovies(movieList.data as ArrayList<ShowEntity>)
                             movieAdapter.notifyDataSetChanged()
 
                             sliderAdapter.sliderEntities.clear()
@@ -113,7 +116,7 @@ class MovieFragment : Fragment() {
                                 movieList.data[i].let { sliderAdapter.sliderEntities.add(it) }
                             sliderAdapter.notifyDataSetChanged()
 
-                            textView3.visibility = View.VISIBLE
+                            binding.textView3.visibility = View.VISIBLE
                             stopShimmer()
                             if (!viewModel.getIsAlreadyShimmer())
                                 doneDelay()
@@ -137,12 +140,16 @@ class MovieFragment : Fragment() {
     }
 
     private fun startShimmer() {
-        movieShimmerLayout.startShimmer()
-        movieShimmerLayout.visibility = View.VISIBLE
+        with(binding) {
+            movieShimmerLayout.startShimmer()
+            movieShimmerLayout.visibility = View.VISIBLE
+        }
     }
 
     private fun stopShimmer() {
-        movieShimmerLayout.stopShimmer()
-        movieShimmerLayout.visibility = View.GONE
+        with(binding) {
+            movieShimmerLayout.stopShimmer()
+            movieShimmerLayout.visibility = View.GONE
+        }
     }
 }

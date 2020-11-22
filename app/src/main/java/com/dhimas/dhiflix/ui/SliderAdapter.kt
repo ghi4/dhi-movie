@@ -9,10 +9,10 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.databinding.SliderFragmentBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Constant
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.slider_fragment.view.*
 
 class SliderAdapter(val context: Context) : RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
     var sliderEntities = ArrayList<ShowEntity>()
@@ -29,23 +29,24 @@ class SliderAdapter(val context: Context) : RecyclerView.Adapter<SliderAdapter.S
     override fun getItemCount(): Int = sliderEntities.size
 
     class SliderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val binding = SliderFragmentBinding.bind(itemView)
         fun bind(showEntity: ShowEntity) {
-            with(itemView) {
+            with(binding) {
                 Picasso.get()
                     .load(Constant.URL_BASE_IMAGE + showEntity.backdropPath)
                     .placeholder(R.drawable.backdrop_placeholder)
                     .error(R.drawable.image_error)
-                    .into(iv_slider)
+                    .into(ivSlider)
 
-                tv_slider_title.text = showEntity.title
+                tvSliderTitle.text = showEntity.title
 
-                setOnClickListener {
-                    val intent = Intent(context, DetailActivity::class.java)
+                root.setOnClickListener {
+                    val intent = Intent(itemView.context, DetailActivity::class.java)
 
                     intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, showEntity.show_type)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, showEntity.showType)
 
-                    startActivity(context, intent, null)
+                    startActivity(itemView.context, intent, null)
                 }
             }
         }

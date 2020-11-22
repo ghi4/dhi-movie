@@ -11,28 +11,28 @@ import com.dhimas.dhiflix.utils.Constant
 @Dao
 interface ShowDao {
 
-    @Query("SELECT * FROM showtable WHERE show_type = ${Constant.MOVIE_TYPE} AND page BETWEEN 1 AND :page")
+    @Query("SELECT * FROM showtable WHERE showType = ${Constant.MOVIE_TYPE} AND page BETWEEN 1 AND :page")
     fun getMovies(page: Int): LiveData<List<ShowEntity>>
 
-    @Query("SELECT * FROM showtable WHERE show_type = ${Constant.SERIES_TYPE} AND page BETWEEN 1 AND :page")
+    @Query("SELECT * FROM showtable WHERE showType = ${Constant.SERIES_TYPE} AND page BETWEEN 1 AND :page")
     fun getSeries(page: Int): LiveData<List<ShowEntity>>
 
-    @Query("SELECT * FROM showtable WHERE show_type = ${Constant.MOVIE_TYPE} AND isFavorite = 1")
+    @Query("SELECT * FROM showtable WHERE showType = ${Constant.MOVIE_TYPE} AND isFavorite = 1")
     fun getFavoriteMovies(): DataSource.Factory<Int, ShowEntity>
 
-    @Query("SELECT * FROM showtable WHERE show_type = ${Constant.SERIES_TYPE} AND isFavorite = 1")
+    @Query("SELECT * FROM showtable WHERE showType = ${Constant.SERIES_TYPE} AND isFavorite = 1")
     fun getFavoriteSeries(): DataSource.Factory<Int, ShowEntity>
 
-    @Query("SELECT * FROM similarshowtable WHERE show_type = ${Constant.MOVIE_TYPE}")
-    fun getSimilarMovies(): DataSource.Factory<Int, ShowEntity>
+    @Query("SELECT * FROM similarshowtable WHERE showType = ${Constant.MOVIE_TYPE}")
+    fun getSimilarMovies(): LiveData<List<ShowEntity>>
 
-    @Query("SELECT * FROM similarshowtable WHERE show_type = ${Constant.SERIES_TYPE}")
-    fun getSimilarSeries(): DataSource.Factory<Int, ShowEntity>
+    @Query("SELECT * FROM similarshowtable WHERE showType = ${Constant.SERIES_TYPE}")
+    fun getSimilarSeries(): LiveData<List<ShowEntity>>
 
-    @Query("SELECT * FROM searchshowtable WHERE show_type = ${Constant.MOVIE_TYPE} AND title LIKE :keyword")
+    @Query("SELECT * FROM searchshowtable WHERE showType = ${Constant.MOVIE_TYPE} AND title LIKE :keyword")
     fun searchMovies(keyword: String): LiveData<List<ShowEntity>>
 
-    @Query("SELECT * FROM searchshowtable WHERE show_type = ${Constant.SERIES_TYPE} AND title LIKE :keyword")
+    @Query("SELECT * FROM searchshowtable WHERE showType = ${Constant.SERIES_TYPE} AND title LIKE :keyword")
     fun searchSeries(keyword: String): LiveData<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE id = :showId")
@@ -50,12 +50,9 @@ interface ShowDao {
     @Update
     fun updateShow(show: ShowEntity)
 
-    @Delete
-    fun deleteShow(show: ShowEntity)
-
-    @Query("DELETE FROM similarshowtable WHERE show_type = :showType")
+    @Query("DELETE FROM similarshowtable WHERE showType = :showType")
     fun deleteAllSimilar(showType: Int)
 
-    @Query("DELETE FROM searchshowtable WHERE show_type = :showType")
+    @Query("DELETE FROM searchshowtable WHERE showType = :showType")
     fun deleteAllSearch(showType: Int)
 }

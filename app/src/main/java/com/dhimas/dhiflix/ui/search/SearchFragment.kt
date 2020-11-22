@@ -7,13 +7,12 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.databinding.FragmentSearchBinding
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.fragment_search.*
 
 class SearchFragment : Fragment() {
-
+    private lateinit var binding: FragmentSearchBinding
     private lateinit var viewModel: SearchViewModel
 
     override fun onCreateView(
@@ -21,7 +20,10 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_search, container, false)
+//        val inflaterz = inflater.inflate(R.layout.fragment_search, container, false)
+//        binding = FragmentSearchBinding.bind(inflaterz)
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,33 +32,21 @@ class SearchFragment : Fragment() {
         val factory = ViewModelFactory.getInstance(requireContext())
         viewModel = ViewModelProvider(this, factory)[SearchViewModel::class.java]
 
-        viewPager2.adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
 
-        TabLayoutMediator(tabs, viewPager2) { tab, position ->
+        binding.viewPager2.adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
+
+        TabLayoutMediator(binding.tabs, binding.viewPager2) { tab, position ->
             when (position) {
                 0 -> tab.text = "Movies"
                 1 -> tab.text = "Series"
             }
         }.attach()
-        viewPager2.offscreenPageLimit = 2
+        binding.viewPager2.offscreenPageLimit = 2
 
-        searchingX.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.searchingX.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.toString().isNotEmpty()) {
                     viewModel.setSearchQuery(query.toString())
-
-//                    if (viewPager2.currentItem == 0)
-//                        viewModel.triggerMovie()
-//                    else
-//                        viewModel.triggerSeries()
-
-//                    //TEKNIK 2
-//                    if(viewPager2.currentItem == 0)
-//                        SearchMovieFragment.setSearch(query.toString())
-//                    else
-//                        SearchSeriesFragment.setSearch(query.toString())
-
-
                 }
                 return false
             }

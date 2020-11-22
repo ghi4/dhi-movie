@@ -1,10 +1,7 @@
 package com.dhimas.dhiflix.data.source.remote.response
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 data class MovieResponse(
 
     @SerializedName("id")
@@ -25,6 +22,6 @@ data class MovieResponse(
     @SerializedName("backdrop_path")
     var backdropPath: String
 
-) : Parcelable {
+) {
     constructor() : this("", "", "", "", "", "")
 }

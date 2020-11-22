@@ -42,11 +42,11 @@ object Utils {
     }
 
     fun waitDelay() {
-        EspressoIdlingResource.increment()
+        //EspressoIdlingResource.increment()
     }
 
     fun doneDelay() {
-        EspressoIdlingResource.decrement()
+        //EspressoIdlingResource.decrement()
     }
 
 }
