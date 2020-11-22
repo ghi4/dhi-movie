@@ -17,16 +17,6 @@ import kotlinx.android.synthetic.main.fragment_search_movie.*
 
 class SearchMovieFragment : Fragment() {
     private val vm: SearchViewModel by viewModels({ requireParentFragment() })
-
-//    //TEKNIK 2
-//    companion object {
-//        private lateinit var viewModel: SearchMovieViewModel
-//
-//        fun setSearch(search: String){
-//            viewModel.setSearch(search)
-//        }
-//    }
-
     private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreateView(
@@ -40,11 +30,6 @@ class SearchMovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         movieAdapter = MovieAdapter()
-
-//        //TEKNIK 2
-//        val factory = ViewModelFactory.getInstance(requireContext())
-//        viewModel = ViewModelProvider(this, factory)[SearchMovieViewModel::class.java]
-//        viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
 
         vm.getMovies().observe(viewLifecycleOwner, { movieList ->
             when (movieList.status) {
@@ -123,19 +108,5 @@ class SearchMovieFragment : Fragment() {
             .into(iv_movie_illustration)
         tv_movie_info.text = message
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        if (!vm.getSearchQuery().value.isNullOrEmpty())
-            vm.triggerMovie()
-    }
-
-//    override fun onPause() {
-//        super.onPause()
-//
-//        if(!vm.getSearchQuery().value.isNullOrEmpty())
-//            vm.triggerSeries()
-//    }
 
 }

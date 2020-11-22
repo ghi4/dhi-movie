@@ -231,8 +231,6 @@ class ShowRepository private constructor(
                 remoteDataSource.getSimilarMovieList(movie_id)
 
             override fun saveCallResult(data: List<MovieResponse>) {
-                localDataSource.deleteAllSimilarShow()
-
                 val movieList = ArrayList<SimilarShowEntity>()
 
                 for (response in data) {
@@ -248,6 +246,9 @@ class ShowRepository private constructor(
 
                     movieList.add(movie)
                 }
+
+                if (!movieList.isNullOrEmpty())
+                    localDataSource.deleteAllSimilarShow(Constant.MOVIE_TYPE)
 
                 localDataSource.insertSimilarShows(movieList)
             }
@@ -269,8 +270,6 @@ class ShowRepository private constructor(
                 remoteDataSource.getSimilarSeriesList(series_id)
 
             override fun saveCallResult(data: List<SeriesResponse>) {
-                localDataSource.deleteAllSimilarShow()
-
                 val seriesList = ArrayList<SimilarShowEntity>()
 
                 for (response in data) {
@@ -286,6 +285,9 @@ class ShowRepository private constructor(
 
                     seriesList.add(series)
                 }
+
+                if (!seriesList.isNullOrEmpty())
+                    localDataSource.deleteAllSimilarShow(Constant.SERIES_TYPE)
 
                 localDataSource.insertSimilarShows(seriesList)
             }
@@ -307,8 +309,6 @@ class ShowRepository private constructor(
             override fun saveCallResult(data: List<MovieResponse>) {
                 val movieList = ArrayList<SearchShowEntity>()
 
-                localDataSource.deleteAllSearchShow()
-
                 for (response in data) {
                     val movie = SearchShowEntity(
                         response.movie_id,
@@ -322,6 +322,8 @@ class ShowRepository private constructor(
 
                     movieList.add(movie)
                 }
+
+                localDataSource.deleteAllSearchShow(Constant.MOVIE_TYPE)
 
                 localDataSource.insertSearchShows(movieList)
             }
@@ -343,8 +345,6 @@ class ShowRepository private constructor(
             override fun saveCallResult(data: List<SeriesResponse>) {
                 val seriesList = ArrayList<SearchShowEntity>()
 
-                localDataSource.deleteAllSearchShow()
-
                 for (response in data) {
                     val series = SearchShowEntity(
                         response.series_id,
@@ -358,6 +358,8 @@ class ShowRepository private constructor(
 
                     seriesList.add(series)
                 }
+
+                localDataSource.deleteAllSearchShow(Constant.SERIES_TYPE)
 
                 localDataSource.insertSearchShows(seriesList)
             }

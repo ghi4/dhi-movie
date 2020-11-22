@@ -19,15 +19,6 @@ class SearchSeriesFragment : Fragment() {
     private val vm: SearchViewModel by viewModels({ requireParentFragment() })
     private lateinit var seriesAdapter: SeriesAdapter
 
-//    //TEKNIK 2
-//    companion object{
-//        private lateinit var viewModel: SearchSeriesViewModel
-//
-//        fun setSearch(search: String){
-//            viewModel.setSearch(search)
-//        }
-//    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,11 +30,6 @@ class SearchSeriesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         seriesAdapter = SeriesAdapter()
-
-//        //TEKNIK 2
-//        val factory = ViewModelFactory.getInstance(requireContext())
-//        viewModel = ViewModelProvider(this, factory)[SearchSeriesViewModel::class.java]
-//        viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
 
         vm.getSeries().observe(viewLifecycleOwner, { seriesList ->
             when (seriesList.status) {
@@ -121,20 +107,5 @@ class SearchSeriesFragment : Fragment() {
             .into(iv_series_illustration)
         tv_series_info.text = message
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        if (!vm.getSearchQuery().value.isNullOrEmpty())
-            vm.triggerSeries()
-    }
-
-
-//    override fun onPause() {
-//        super.onPause()
-//
-//        if(!vm.getSearchQuery().value.isNullOrEmpty())
-//            vm.triggerMovie()
-//    }
 
 }

@@ -45,10 +45,10 @@ class SearchFragment : Fragment() {
                 if (query.toString().isNotEmpty()) {
                     viewModel.setSearchQuery(query.toString())
 
-                    if (viewPager2.currentItem == 0)
-                        viewModel.triggerMovie()
-                    else
-                        viewModel.triggerSeries()
+//                    if (viewPager2.currentItem == 0)
+//                        viewModel.triggerMovie()
+//                    else
+//                        viewModel.triggerSeries()
 
 //                    //TEKNIK 2
 //                    if(viewPager2.currentItem == 0)

@@ -9,8 +9,6 @@ import com.dhimas.dhiflix.ui.detail.DetailViewModel
 import com.dhimas.dhiflix.ui.favorite.FavoriteViewModel
 import com.dhimas.dhiflix.ui.movie.MovieViewModel
 import com.dhimas.dhiflix.ui.search.SearchViewModel
-import com.dhimas.dhiflix.ui.search.movie.SearchMovieViewModel
-import com.dhimas.dhiflix.ui.search.series.SearchSeriesViewModel
 import com.dhimas.dhiflix.ui.series.SeriesViewModel
 
 class ViewModelFactory private constructor(private val showRepository: ShowRepository) :
@@ -47,14 +45,6 @@ class ViewModelFactory private constructor(private val showRepository: ShowRepos
 
             modelClass.isAssignableFrom(SearchViewModel::class.java) -> {
                 SearchViewModel(showRepository) as T
-            }
-
-            modelClass.isAssignableFrom(SearchMovieViewModel::class.java) -> {
-                SearchMovieViewModel(showRepository) as T
-            }
-
-            modelClass.isAssignableFrom(SearchSeriesViewModel::class.java) -> {
-                SearchSeriesViewModel(showRepository) as T
             }
 
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)

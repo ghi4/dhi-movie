@@ -40,9 +40,9 @@ class LocalDataSource private constructor(private val showDao: ShowDao) {
 
     fun insertSearchShows(shows: List<SearchShowEntity>) = showDao.insertSearchShows(shows)
 
-    fun deleteAllSimilarShow() = showDao.deleteAllSimilar()
+    fun deleteAllSimilarShow(showType: Int) = showDao.deleteAllSimilar(showType)
 
-    fun deleteAllSearchShow() = showDao.deleteAllSearch()
+    fun deleteAllSearchShow(showType: Int) = showDao.deleteAllSearch(showType)
 
     fun setFavorite(showEntity: ShowEntity) {
         showEntity.isFavorite = if (showEntity.isFavorite == 0) 1 else 0
