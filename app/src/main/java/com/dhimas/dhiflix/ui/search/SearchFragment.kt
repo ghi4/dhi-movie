@@ -19,9 +19,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-//        val inflaterz = inflater.inflate(R.layout.fragment_search, container, false)
-//        binding = FragmentSearchBinding.bind(inflaterz)
+    ): View {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }

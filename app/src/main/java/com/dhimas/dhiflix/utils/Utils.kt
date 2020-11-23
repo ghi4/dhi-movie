@@ -38,7 +38,7 @@ object Utils {
     }
 
     fun getMinShimmerTime(isAlreadyShimmer: Boolean): Long {
-        return if (!isAlreadyShimmer) Constant.MINIMUM_SHIMMER_TIME else 100
+        return if (!isAlreadyShimmer) Const.MINIMUM_SHIMMER_TIME else 100
     }
 
     fun waitDelay() {

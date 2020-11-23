@@ -2,9 +2,7 @@ package com.dhimas.dhiflix.data.source.local
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
-import com.dhimas.dhiflix.data.source.local.entity.SearchShowEntity
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
-import com.dhimas.dhiflix.data.source.local.entity.SimilarShowEntity
 import com.dhimas.dhiflix.data.source.local.room.ShowDao
 
 class LocalDataSource private constructor(private val showDao: ShowDao) {
@@ -35,10 +33,6 @@ class LocalDataSource private constructor(private val showDao: ShowDao) {
     fun getShowById(showId: String): LiveData<ShowEntity> = showDao.getShowById(showId)
 
     fun insertShows(shows: List<ShowEntity>) = showDao.insertShows(shows)
-
-    fun insertSimilarShows(shows: List<SimilarShowEntity>) = showDao.insertSimilarShows(shows)
-
-    fun insertSearchShows(shows: List<SearchShowEntity>) = showDao.insertSearchShows(shows)
 
     fun deleteAllSimilarShow(showType: Int) = showDao.deleteAllSimilar(showType)
 

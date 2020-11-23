@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.dhimas.dhiflix.data.ShowRepository
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
-import com.dhimas.dhiflix.utils.Constant
+import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.utils.DummyData
 import com.dhimas.dhiflix.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
@@ -47,7 +47,7 @@ internal class DetailViewModelTest {
         movie.value = dummyMovieResource
         val dummyMovie = dummyMovieResource.data as ShowEntity
 
-        viewModel.setDoubleTrigger(showId, Constant.MOVIE_TYPE)
+        viewModel.setDoubleTrigger(showId, Const.MOVIE_TYPE)
         `when`(showRepository.getMovieDetail(showId)).thenReturn(movie)
         viewModel.getShowEntityById().observeForever(observer)
         verify(observer).onChanged(dummyMovieResource)
@@ -79,7 +79,7 @@ internal class DetailViewModelTest {
         series.value = dummySeriesResource
         val dummySeries = dummySeriesResource.data as ShowEntity
 
-        viewModel.setDoubleTrigger(showId, Constant.SERIES_TYPE)
+        viewModel.setDoubleTrigger(showId, Const.SERIES_TYPE)
         `when`(showRepository.getSeriesDetail(showId)).thenReturn(series)
         viewModel.getShowEntityById().observeForever(observer)
         verify(observer).onChanged(dummySeriesResource)

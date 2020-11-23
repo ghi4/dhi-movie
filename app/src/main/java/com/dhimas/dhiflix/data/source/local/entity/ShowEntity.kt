@@ -25,6 +25,10 @@ data class ShowEntity(
 
     var page: Int? = 0,
 
-    var isFavorite: Int? = 0
+    var isFavorite: Int? = 0,
+
+    var isSimilar: Int? = 0,
+
+    var isSearch: Int? = 0
 
 )

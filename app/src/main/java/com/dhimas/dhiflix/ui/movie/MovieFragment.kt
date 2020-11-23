@@ -36,7 +36,7 @@ class MovieFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMovieBinding.inflate(inflater, container, false)
         return binding.root
     }

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.databinding.ActivityDetailBinding
-import com.dhimas.dhiflix.utils.Constant
+import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
 import com.dhimas.dhiflix.utils.Utils.doneDelay
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
@@ -62,9 +62,9 @@ class DetailActivity : AppCompatActivity() {
         val minShimmerTime = getMinShimmerTime(viewModel.isAlreadyShimmer)
         Handler(Looper.getMainLooper()).postDelayed({
             viewModelObserveDetail()
-            //viewModelObserveSimilarList()
+            viewModelObserveSimilarList()
             viewModelObservePopularList()
-            viewModel.listEmptyTrigger()
+//            viewModel.listEmptyTrigger()
         }, minShimmerTime)
     }
 
@@ -185,22 +185,22 @@ class DetailActivity : AppCompatActivity() {
                             btFavorite.text = btFavoriteText
 
                             Picasso.get()
-                                .load(Constant.URL_BASE_IMAGE + showEntity1.backdropPath)
+                                .load(Const.URL_BASE_IMAGE + showEntity1.backdropPath)
                                 .placeholder(R.drawable.backdrop_placeholder)
                                 .error(R.drawable.image_error)
                                 .resize(
-                                    Constant.BACKDROP_TARGET_WIDTH,
-                                    Constant.BACKDROP_TARGET_HEIGHT
+                                    Const.BACKDROP_TARGET_WIDTH,
+                                    Const.BACKDROP_TARGET_HEIGHT
                                 )
                                 .into(ivDetailBackdrop)
 
                             Picasso.get()
-                                .load(Constant.URL_BASE_IMAGE + showEntity1.posterPath)
+                                .load(Const.URL_BASE_IMAGE + showEntity1.posterPath)
                                 .placeholder(R.drawable.poster_placeholder)
                                 .error(R.drawable.poster_error)
                                 .resize(
-                                    Constant.POSTER_TARGET_WIDTH,
-                                    Constant.POSTER_TARGET_HEIGHT
+                                    Const.POSTER_TARGET_WIDTH,
+                                    Const.POSTER_TARGET_HEIGHT
                                 )
                                 .into(ivDetailPoster)
                         }

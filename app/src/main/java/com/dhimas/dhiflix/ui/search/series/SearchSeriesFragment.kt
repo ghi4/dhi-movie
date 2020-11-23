@@ -23,7 +23,7 @@ class SearchSeriesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 //        return inflater.inflate(R.layout.fragment_search_series, container, false)
 
         binding = FragmentSearchSeriesBinding.inflate(inflater, container, false)

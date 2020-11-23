@@ -23,7 +23,7 @@ class SearchMovieFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 //        return inflater.inflate(R.layout.fragment_search_movie, container, false)
         binding = FragmentSearchMovieBinding.inflate(inflater, container, false)
         return binding.root

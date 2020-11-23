@@ -13,13 +13,13 @@ import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.databinding.ItemShowHorizontalBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
-import com.dhimas.dhiflix.utils.Constant
+import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
 import com.squareup.picasso.Picasso
 
 class FavoriteAdapter internal constructor() :
     PagedListAdapter<ShowEntity, FavoriteAdapter.ShowViewHolder>(DIFF_CALLBACK) {
-    private var listType = Constant.MOVIE_TYPE //Default type is movie
+    private var listType = Const.MOVIE_TYPE //Default type is movie
     private var isAlreadyShimmer: Boolean = false
 
     companion object {
@@ -63,8 +63,8 @@ class FavoriteAdapter internal constructor() :
 
                 //Horizontal Poster
                 Picasso.get()
-                    .load(Constant.URL_BASE_IMAGE + showEntity.posterPath!!)
-                    .resize(Constant.POSTER_TARGET_WIDTH, Constant.POSTER_TARGET_HEIGHT)
+                    .load(Const.URL_BASE_IMAGE + showEntity.posterPath!!)
+                    .resize(Const.POSTER_TARGET_WIDTH, Const.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.poster_error)
                     .placeholder(R.drawable.poster_placeholder)
                     .into(ivPosterHorizontal)

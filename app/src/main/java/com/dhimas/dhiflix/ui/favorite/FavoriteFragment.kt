@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.databinding.FragmentFavoriteBinding
-import com.dhimas.dhiflix.utils.Constant
+import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 
@@ -21,7 +21,7 @@ class FavoriteFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 //        inflater.inflate(R.layout.fragment_favorite, container, false)
         binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         return binding.root
@@ -49,7 +49,7 @@ class FavoriteFragment : Fragment() {
                     }
                     Status.SUCCESS -> {
                         favoriteMovieAdapter.submitList(favoriteMovieList.data)
-                        favoriteMovieAdapter.setMovies(Constant.MOVIE_TYPE, true)
+                        favoriteMovieAdapter.setMovies(Const.MOVIE_TYPE, true)
                         favoriteMovieAdapter.notifyDataSetChanged()
 
                         binding.progressBar2.visibility = View.GONE
@@ -85,7 +85,7 @@ class FavoriteFragment : Fragment() {
                     }
                     Status.SUCCESS -> {
                         favoriteSeriesAdapter.submitList(favoriteSeriesList.data)
-                        favoriteSeriesAdapter.setMovies(Constant.SERIES_TYPE, true)
+                        favoriteSeriesAdapter.setMovies(Const.SERIES_TYPE, true)
                         favoriteSeriesAdapter.notifyDataSetChanged()
 
                         binding.progressBar2.visibility = View.GONE

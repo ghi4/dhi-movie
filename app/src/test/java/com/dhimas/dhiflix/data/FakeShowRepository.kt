@@ -4,15 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.dhimas.dhiflix.data.source.local.LocalDataSource
-import com.dhimas.dhiflix.data.source.local.entity.SearchShowEntity
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
-import com.dhimas.dhiflix.data.source.local.entity.SimilarShowEntity
 import com.dhimas.dhiflix.data.source.remote.ApiResponse
 import com.dhimas.dhiflix.data.source.remote.RemoteDataSource
 import com.dhimas.dhiflix.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.data.source.remote.response.SeriesResponse
 import com.dhimas.dhiflix.utils.AppExecutors
-import com.dhimas.dhiflix.utils.Constant
+import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.vo.Resource
 
 class FakeShowRepository constructor(
@@ -55,7 +53,7 @@ class FakeShowRepository constructor(
                         response.overview,
                         response.posterPath,
                         response.backdropPath,
-                        Constant.MOVIE_TYPE,
+                        Const.MOVIE_TYPE,
                         page
                     )
 
@@ -92,7 +90,7 @@ class FakeShowRepository constructor(
                         response.overview,
                         response.posterPath,
                         response.backdropPath,
-                        Constant.SERIES_TYPE,
+                        Const.SERIES_TYPE,
                         page
                     )
 
@@ -124,7 +122,7 @@ class FakeShowRepository constructor(
                     data.overview,
                     data.posterPath,
                     data.backdropPath,
-                    Constant.MOVIE_TYPE
+                    Const.MOVIE_TYPE
                 )
                 localDataSource.insertShows(listOf(movie))
             }
@@ -150,7 +148,7 @@ class FakeShowRepository constructor(
                     data.overview,
                     data.posterPath,
                     data.backdropPath,
-                    Constant.MOVIE_TYPE
+                    Const.MOVIE_TYPE
                 )
                 localDataSource.insertShows(listOf(series))
             }
@@ -215,26 +213,28 @@ class FakeShowRepository constructor(
                 remoteDataSource.getSimilarMovieList(movie_id)
 
             override fun saveCallResult(data: List<MovieResponse>) {
-                val movieList = ArrayList<SimilarShowEntity>()
+                val movieList = ArrayList<ShowEntity>()
+                val isSimilar = 1
 
                 for (response in data) {
-                    val movie = SimilarShowEntity(
+                    val movie = ShowEntity(
                         response.movie_id,
                         response.title,
                         response.releaseDate,
                         response.overview,
                         response.posterPath,
                         response.backdropPath,
-                        Constant.MOVIE_TYPE
+                        Const.MOVIE_TYPE,
+                        isSimilar = isSimilar
                     )
 
                     movieList.add(movie)
                 }
 
                 if (!movieList.isNullOrEmpty())
-                    localDataSource.deleteAllSimilarShow(Constant.MOVIE_TYPE)
+                    localDataSource.deleteAllSimilarShow(Const.MOVIE_TYPE)
 
-                localDataSource.insertSimilarShows(movieList)
+                localDataSource.insertShows(movieList)
             }
         }.asLiveData()
     }
@@ -253,26 +253,28 @@ class FakeShowRepository constructor(
                 remoteDataSource.getSimilarSeriesList(series_id)
 
             override fun saveCallResult(data: List<SeriesResponse>) {
-                val seriesList = ArrayList<SimilarShowEntity>()
+                val seriesList = ArrayList<ShowEntity>()
+                val isSimilar = 1
 
                 for (response in data) {
-                    val series = SimilarShowEntity(
+                    val series = ShowEntity(
                         response.series_id,
                         response.name,
                         response.releaseDate,
                         response.overview,
                         response.posterPath,
                         response.backdropPath,
-                        Constant.SERIES_TYPE
+                        Const.SERIES_TYPE,
+                        isSimilar = isSimilar
                     )
 
                     seriesList.add(series)
                 }
 
                 if (!seriesList.isNullOrEmpty())
-                    localDataSource.deleteAllSimilarShow(Constant.SERIES_TYPE)
+                    localDataSource.deleteAllSimilarShow(Const.SERIES_TYPE)
 
-                localDataSource.insertSimilarShows(seriesList)
+                localDataSource.insertShows(seriesList)
             }
         }.asLiveData()
     }
@@ -290,25 +292,27 @@ class FakeShowRepository constructor(
                 remoteDataSource.searchMovie(keyword)
 
             override fun saveCallResult(data: List<MovieResponse>) {
-                val movieList = ArrayList<SearchShowEntity>()
+                val movieList = ArrayList<ShowEntity>()
+                val isSearch = 1
 
                 for (response in data) {
-                    val movie = SearchShowEntity(
+                    val movie = ShowEntity(
                         response.movie_id,
                         response.title,
                         response.releaseDate,
                         response.overview,
                         response.posterPath,
                         response.backdropPath,
-                        Constant.MOVIE_TYPE
+                        Const.MOVIE_TYPE,
+                        isSearch = isSearch
                     )
 
                     movieList.add(movie)
                 }
 
-                localDataSource.deleteAllSearchShow(Constant.MOVIE_TYPE)
+                localDataSource.deleteAllSearchShow(Const.MOVIE_TYPE)
 
-                localDataSource.insertSearchShows(movieList)
+                localDataSource.insertShows(movieList)
             }
         }.asLiveData()
     }
@@ -326,25 +330,27 @@ class FakeShowRepository constructor(
                 remoteDataSource.searchSeries(keyword)
 
             override fun saveCallResult(data: List<SeriesResponse>) {
-                val seriesList = ArrayList<SearchShowEntity>()
+                val seriesList = ArrayList<ShowEntity>()
+                val isSearch = 1
 
                 for (response in data) {
-                    val series = SearchShowEntity(
+                    val series = ShowEntity(
                         response.series_id,
                         response.name,
                         response.releaseDate,
                         response.overview,
                         response.posterPath,
                         response.backdropPath,
-                        Constant.SERIES_TYPE
+                        Const.SERIES_TYPE,
+                        isSearch = isSearch
                     )
 
                     seriesList.add(series)
                 }
 
-                localDataSource.deleteAllSearchShow(Constant.SERIES_TYPE)
+                localDataSource.deleteAllSearchShow(Const.SERIES_TYPE)
 
-                localDataSource.insertSearchShows(seriesList)
+                localDataSource.insertShows(seriesList)
             }
         }.asLiveData()
     }

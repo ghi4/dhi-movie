@@ -11,7 +11,7 @@ import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.databinding.SliderFragmentBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
-import com.dhimas.dhiflix.utils.Constant
+import com.dhimas.dhiflix.utils.Const
 import com.squareup.picasso.Picasso
 
 class SliderAdapter(val context: Context) : RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
@@ -33,7 +33,7 @@ class SliderAdapter(val context: Context) : RecyclerView.Adapter<SliderAdapter.S
         fun bind(showEntity: ShowEntity) {
             with(binding) {
                 Picasso.get()
-                    .load(Constant.URL_BASE_IMAGE + showEntity.backdropPath)
+                    .load(Const.URL_BASE_IMAGE + showEntity.backdropPath)
                     .placeholder(R.drawable.backdrop_placeholder)
                     .error(R.drawable.image_error)
                     .into(ivSlider)

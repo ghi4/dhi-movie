@@ -1,6 +1,6 @@
 package com.dhimas.dhiflix.utils
 
-class Constant {
+class Const {
     companion object {
         //For load image
         const val URL_BASE_IMAGE = "https://image.tmdb.org/t/p/w500"
