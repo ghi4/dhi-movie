@@ -13,7 +13,7 @@ import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.utils.Utils
 import com.squareup.picasso.Picasso
 
-class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     private var movieList = ArrayList<ShowEntity>()
 
     fun addMovies(movies: ArrayList<ShowEntity>) {
@@ -32,7 +32,7 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     override fun getItemCount(): Int = movieList.size
 
-    inner class MovieViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemShowBinding.bind(itemView)
         fun bind(movie: ShowEntity) {
             with(binding) {

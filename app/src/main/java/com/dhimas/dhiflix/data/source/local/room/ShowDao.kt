@@ -33,7 +33,7 @@ interface ShowDao {
     @Query("SELECT * FROM showtable WHERE showType = ${Const.SERIES_TYPE} AND title LIKE :keyword AND isSearch = 1")
     fun searchSeries(keyword: String): LiveData<List<ShowEntity>>
 
-    @Query("SELECT * FROM showtable WHERE id = :showId")
+    @Query("SELECT * FROM showtable WHERE id = :showId AND isSimilar = 0")
     fun getShowById(showId: String): LiveData<ShowEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

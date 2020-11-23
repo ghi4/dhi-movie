@@ -50,8 +50,6 @@ class MovieFragment : Fragment() {
         sliderAdapter = SliderAdapter(requireContext())
         viewModel.setPage(page)
 
-        stopShimmer()
-
         //Delay for shimmer animation
         waitDelay()
         val minShimmerTime = getMinShimmerTime(viewModel.getIsAlreadyShimmer())
@@ -102,7 +100,7 @@ class MovieFragment : Fragment() {
             viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
                 when (movieList.status) {
                     Status.LOADING -> {
-                        if (scrollLocation == 0 && !viewModel.getIsAlreadyShimmer())
+                        if (scrollLocation == 0)
                             startShimmer()
                     }
 

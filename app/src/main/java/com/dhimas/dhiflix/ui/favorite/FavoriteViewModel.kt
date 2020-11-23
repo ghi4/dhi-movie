@@ -11,9 +11,11 @@ import com.dhimas.dhiflix.vo.Resource
 
 class FavoriteViewModel(private val showRepository: ShowRepository) : ViewModel() {
     private val refreshTrigger = MutableLiveData(Unit)
+
     private var movieList = refreshTrigger.switchMap {
         showRepository.getFavoriteMovieList()
     }
+
     private var seriesList = refreshTrigger.switchMap {
         showRepository.getFavoriteSeriesList()
     }

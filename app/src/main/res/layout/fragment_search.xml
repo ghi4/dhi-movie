@@ -15,7 +15,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/search_shape" />
+            android:background="@drawable/search_shape"
+            android:iconifiedByDefault="false" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"

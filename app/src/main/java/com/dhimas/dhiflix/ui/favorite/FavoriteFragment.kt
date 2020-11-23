@@ -22,7 +22,6 @@ class FavoriteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        inflater.inflate(R.layout.fragment_favorite, container, false)
         binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -33,7 +32,9 @@ class FavoriteFragment : Fragment() {
         if (activity != null) {
             val factory = ViewModelFactory.getInstance(requireContext())
             viewModel = ViewModelProvider(this, factory)[FavoriteViewModel::class.java]
-            viewModel.refresh()
+            //viewModel.refresh()
+
+            setViewVisibility(loading = true, ivIllustration = false, tvInfo = false)
 
             favoriteMovieAdapter = FavoriteAdapter()
             favoriteSeriesAdapter = FavoriteAdapter()
@@ -119,10 +120,10 @@ class FavoriteFragment : Fragment() {
             rvFavoriteMovie.hasFixedSize()
             rvFavoriteMovie.adapter = favoriteMovieAdapter
 
-            rvFavoriteMovie.layoutManager =
+            rvFavoriteSeries.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            rvFavoriteMovie.hasFixedSize()
-            rvFavoriteMovie.adapter = favoriteSeriesAdapter
+            rvFavoriteSeries.hasFixedSize()
+            rvFavoriteSeries.adapter = favoriteSeriesAdapter
         }
     }
 

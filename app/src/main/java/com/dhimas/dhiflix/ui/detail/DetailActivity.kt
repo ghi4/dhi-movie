@@ -3,7 +3,6 @@ package com.dhimas.dhiflix.ui.detail
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -64,7 +63,6 @@ class DetailActivity : AppCompatActivity() {
             viewModelObserveDetail()
             viewModelObserveSimilarList()
             viewModelObservePopularList()
-//            viewModel.listEmptyTrigger()
         }, minShimmerTime)
     }
 
@@ -84,7 +82,6 @@ class DetailActivity : AppCompatActivity() {
 
     private fun viewModelObserveSimilarList() {
         viewModel.getSimilarList().observe(this, { movieList ->
-            Log.d("WKS", "IN SIMILAR")
             when (movieList.status) {
                 Status.LOADING -> {
                     startShimmerList()
@@ -99,13 +96,16 @@ class DetailActivity : AppCompatActivity() {
                     if (movieList.data.isNullOrEmpty()) {
                         //tv_interest.visibility = View.GONE
                         showToast(this, "No similar list found.")
-                        viewModel.listEmptyTrigger()
+                        viewModel.setListEmptyTrigger()
                     }
                 }
 
                 Status.ERROR -> {
                     showToast(this, "List failed to load.")
-                    showSnackBar(binding.scrollView, movieList.message ?: "Unknown Error") {
+                    showSnackBar(
+                        binding.scrollView,
+                        movieList.message ?: "nSimilar: Internet Problem"
+                    ) {
                         viewModel.setDoubleTrigger(showId, showType)
                     }
                     doneDelay()
@@ -116,24 +116,17 @@ class DetailActivity : AppCompatActivity() {
 
     private fun viewModelObservePopularList() {
         viewModel.getPopularList().observe(this, { movieList ->
-            Log.d("WKS", "IN POPULAR")
             when (movieList.status) {
                 Status.LOADING -> {
                     startShimmerList()
                 }
 
                 Status.SUCCESS -> {
-                    Log.d("KKK", "SIZE: " + movieList.data?.size)
-                    Log.d("KKK", "MSG: " + movieList.message)
-
                     detailAdapter.setMovies(viewModel.isAlreadyShimmer)
                     detailAdapter.setList(movieList.data as ArrayList<ShowEntity>)
                     detailAdapter.notifyDataSetChanged()
 //                    stopShimmerList()
                     doneDelay()
-
-                    Log.d("KKK", "SIZE: " + movieList.data.size)
-                    Log.d("KKK", "MSG: " + movieList.message)
 
                     if (movieList.data.isNullOrEmpty()) {
                         //tv_interest.visibility = View.GONE
@@ -149,7 +142,10 @@ class DetailActivity : AppCompatActivity() {
 
                 Status.ERROR -> {
                     showToast(this, "List failed to load.")
-                    showSnackBar(binding.scrollView, movieList.message ?: "Unknown Error") {
+                    showSnackBar(
+                        binding.scrollView,
+                        movieList.message ?: "nPopular: Internet Problem"
+                    ) {
                         viewModel.setDoubleTrigger(showId, showType)
                     }
                     doneDelay()
@@ -160,7 +156,6 @@ class DetailActivity : AppCompatActivity() {
 
     private fun viewModelObserveDetail() {
         viewModel.getShowEntityById().observe(this, { showEntity ->
-            Log.d("WKS", "DETAIL")
             when (showEntity.status) {
                 Status.LOADING -> {
                     startShimmering()
@@ -206,15 +201,14 @@ class DetailActivity : AppCompatActivity() {
                         }
 
                         stopShimmering()
-                    } else {
-                        showSnackBar(binding.scrollView, showEntity.message.toString()) {
-                            viewModel.setDoubleTrigger(showId, showType)
-                        }
                     }
                 }
 
                 Status.ERROR -> {
-                    showSnackBar(binding.scrollView, showEntity.message.toString()) {
+                    showSnackBar(
+                        binding.scrollView,
+                        showEntity.message ?: "nDetail: Internet Problem"
+                    ) {
                         viewModel.setDoubleTrigger(showId, showType)
                     }
                 }

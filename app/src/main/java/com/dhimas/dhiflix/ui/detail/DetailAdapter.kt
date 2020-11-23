@@ -21,7 +21,6 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     fun setList(showList: ArrayList<ShowEntity>) {
         this.showList.clear()
         this.showList.addAll(showList)
-        this.showList.shuffle()
     }
 
     fun setMovies(isAlreadyShimmer: Boolean) {

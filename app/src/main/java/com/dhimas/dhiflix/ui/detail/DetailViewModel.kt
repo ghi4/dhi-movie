@@ -1,6 +1,5 @@
 package com.dhimas.dhiflix.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,10 +25,6 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
     }
 
     private var similarList = doubleTrigger.switchMap {
-        Log.d("WKVM", "IN VM SIMILAR")
-        Log.d("WKVM", "IN VM SIMILAR ID: ${it.showId}")
-        Log.d("WKVM", "IN VM SIMILAR TY: ${it.showType}")
-
         when (it.showType) {
             Const.MOVIE_TYPE ->
                 showRepository.getSimilarMovieList(it.showId)
@@ -41,8 +36,6 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
     private var popularList = listEmptyTrigger.switchMap {
         val showType = doubleTrigger.value?.showType
         val page = 1
-        Log.d("WKVM", "IN VM POP")
-        Log.d("WKVM", "IN VM POP: $showType")
 
         when (showType) {
             Const.MOVIE_TYPE ->
@@ -60,7 +53,7 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
         doubleTrigger.postValue(DoubleTrigger(show_id, show_type))
     }
 
-    fun listEmptyTrigger() {
+    fun setListEmptyTrigger() {
         listEmptyTrigger.postValue(Unit)
     }
 

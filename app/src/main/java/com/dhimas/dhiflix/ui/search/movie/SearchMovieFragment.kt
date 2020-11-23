@@ -24,7 +24,6 @@ class SearchMovieFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        return inflater.inflate(R.layout.fragment_search_movie, container, false)
         binding = FragmentSearchMovieBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -33,6 +32,8 @@ class SearchMovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         movieAdapter = MovieAdapter()
+
+        setupUI()
 
         vm.getMovies().observe(viewLifecycleOwner, { movieList ->
             when (movieList.status) {
@@ -82,7 +83,9 @@ class SearchMovieFragment : Fragment() {
                 }
             }
         })
+    }
 
+    private fun setupUI() {
         with(binding) {
             rvSearchMovies.layoutManager = GridLayoutManager(requireContext(), 3)
             rvSearchMovies.hasFixedSize()
@@ -97,7 +100,7 @@ class SearchMovieFragment : Fragment() {
         tvInfo: Boolean
     ) {
         with(binding) {
-            progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+            progressBarMovie.visibility = if (loading) View.VISIBLE else View.GONE
             rvSearchMovies.visibility = if (rvMovie) View.VISIBLE else View.INVISIBLE
             ivMovieIllustration.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
             tvMovieInfo.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE

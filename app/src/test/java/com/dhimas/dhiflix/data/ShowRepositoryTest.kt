@@ -11,13 +11,11 @@ import com.dhimas.dhiflix.utils.DummyData
 import com.dhimas.dhiflix.utils.LiveDataTest
 import com.dhimas.dhiflix.utils.PagedListUtil
 import com.dhimas.dhiflix.vo.Resource
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.*
 
 internal class ShowRepositoryTest {
 
@@ -149,7 +147,7 @@ internal class ShowRepositoryTest {
     }
 
     @Test
-    fun getAllFavoriteMovie() {
+    fun getFavoriteMovieList() {
         val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
         `when`(local.getFavoriteMovies()).thenReturn(dataSourceFactory)
         showRepository.getFavoriteMovieList()
@@ -172,7 +170,7 @@ internal class ShowRepositoryTest {
     }
 
     @Test
-    fun getAllFavoriteSeries() {
+    fun getFavoriteSeriesList() {
         val dataSourceFactory = mock(Factory::class.java) as Factory<Int, ShowEntity>
         `when`(local.getFavoriteSeries()).thenReturn(dataSourceFactory)
         showRepository.getFavoriteSeriesList()

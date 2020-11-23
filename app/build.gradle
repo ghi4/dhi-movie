@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'de.mannodermaus.android-junit5'
 }
 
 android {
@@ -18,8 +17,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
     }
 
     buildFeatures {
@@ -93,7 +90,9 @@ dependencies {
     //Mockito
     testImplementation "org.mockito:mockito-core:3.6.0"
     testImplementation "org.mockito:mockito-inline:3.6.0"
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+
+    //Roboelectric
+    testImplementation "org.robolectric:robolectric:4.4"
 
     //Idling
     implementation "androidx.test.espresso:espresso-idling-resource:3.3.0"
@@ -108,6 +107,4 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation "de.mannodermaus.junit5:android-test-core:1.0.0"
-    androidTestRuntimeOnly "de.mannodermaus.junit5:android-test-runner:1.0.0"
 }

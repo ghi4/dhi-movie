@@ -13,10 +13,10 @@ import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
 import com.squareup.picasso.Picasso
 
-class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>(){
+class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
     private var seriesList = ArrayList<ShowEntity>()
 
-    fun addSeries(series: ArrayList<ShowEntity>){
+    fun addSeries(series: ArrayList<ShowEntity>) {
         seriesList.clear()
         seriesList.addAll(series)
     }
@@ -36,7 +36,8 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>(){
         private val binding = ItemShowBinding.bind(itemView)
         fun bind(series: ShowEntity) {
             with(binding) {
-                tvTitle.text = series.title
+
+            tvTitle.text = series.title
                 tvReleaseDate.text = dateParseToMonthAndYear(series.releaseDate)
 
                 Picasso.get()
@@ -54,6 +55,5 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>(){
                 }
             }
         }
-
     }
 }

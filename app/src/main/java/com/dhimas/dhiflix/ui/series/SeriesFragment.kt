@@ -102,7 +102,7 @@ class SeriesFragment : Fragment() {
     }
 
     private fun viewModelObserver() {
-        if(view != null) {
+        if (view != null) {
             viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
                 when (seriesList.status) {
                     Status.LOADING -> {

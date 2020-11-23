@@ -49,7 +49,7 @@ class ShowRepository private constructor(
             }
 
             override fun shouldFetch(data: List<ShowEntity>?): Boolean {
-               return data == null || data.isEmpty() || data.size != page*20
+                return data == null || data.isEmpty() || data.size != page * 20
             }
 
             override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> {
@@ -88,7 +88,7 @@ class ShowRepository private constructor(
             }
 
             override fun shouldFetch(data: List<ShowEntity>?): Boolean =
-                data == null || data.isEmpty() || data.size != page*20
+                data == null || data.isEmpty() || data.size != page * 20
 
             override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
                 remoteDataSource.getSeriesList(page)

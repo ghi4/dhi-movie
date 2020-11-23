@@ -11,6 +11,7 @@ import com.dhimas.dhiflix.vo.Resource
 class MovieViewModel(private val showRepository: ShowRepository) : ViewModel() {
     private var isAlreadyShimmer: Boolean = false
     private val page = MutableLiveData<Int>()
+
     private var movieList = page.switchMap {
         showRepository.getMovieList(it)
     }
@@ -19,11 +20,11 @@ class MovieViewModel(private val showRepository: ShowRepository) : ViewModel() {
         isAlreadyShimmer = true
     }
 
-    fun getIsAlreadyShimmer() = isAlreadyShimmer
-
     fun setPage(page: Int) {
         this.page.postValue(page)
     }
+
+    fun getIsAlreadyShimmer() = isAlreadyShimmer
 
     fun getMovies(): LiveData<Resource<List<ShowEntity>>> = movieList
 

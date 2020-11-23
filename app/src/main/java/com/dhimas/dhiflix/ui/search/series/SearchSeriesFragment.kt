@@ -24,8 +24,6 @@ class SearchSeriesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        return inflater.inflate(R.layout.fragment_search_series, container, false)
-
         binding = FragmentSearchSeriesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -98,7 +96,7 @@ class SearchSeriesFragment : Fragment() {
         tvInfo: Boolean
     ) {
         with(binding) {
-            progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+            progressBarSeries.visibility = if (loading) View.VISIBLE else View.GONE
             rvSearchSeries.visibility = if (rvSeries) View.VISIBLE else View.INVISIBLE
             ivSeriesIllustration.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
             tvSeriesInfo.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
