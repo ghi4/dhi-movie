@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">dhiFlix</string>
     <string name="content_description_movie_poster">Movie poster</string>
-    <string name="poster_example_title">Welcome to Sudden Death</string>
-    <string name="poster_example_release_year">2019\-08\-18</string>
+    <string name="poster_example_title">Title Should be Here</string>
+    <string name="poster_example_release_year">September 4037</string>
     <string name="movie_example_overview">When Grizz, Panda, and Ice Bear\'s love of food trucks and viral videos went out of hand, it catches the attention of Agent Trout from the National Wildlife Control, who pledges to restore the “natural order” by separating them forever. Chased away from their home, the Bears embark on an epic road trip as they seek refuge in Canada, with their journey being filled with new friends, perilous obstacles, and huge parties. The risky journey also forces the Bears to face how they first met and became brothers, in order to keep their family bond from splitting apart.</string>
     <string name="overview">Overview</string>
     <string name="content_description_movie_backdrop">Movie backdrop</string>
-    <string name="nav_movie">Movie</string>
+    <string name="nav_movie">Movies</string>
     <string name="nav_series">Series</string>
     <string name="maybe_you_re_interested">Maybe you\'re interested</string>
     <string name="splash_logo">Splash Logo</string>
@@ -16,7 +16,7 @@
     <string name="my_favorite_series">My Favorite Series</string>
     <string name="remove_from_favorite">Remove from favorite</string>
     <string name="search">Search</string>
-    <string name="movie">Movie</string>
+    <string name="movies">Movies</string>
     <string name="series">Series</string>
     <string name="lets_search_the_movie">Lets search the movie!</string>
     <string name="illustration">Illustration</string>
@@ -25,4 +25,13 @@
     <string name="image_slider">Image slider</string>
     <string name="title_here">Title Here</string>
     <string name="trending_now">Trending Now</string>
+    <string name="no_series_found">No series found.</string>
+    <string name="unknown_error">Unknown error.</string>
+    <string name="load_more">Load more.</string>
+    <string name="max_page">Max page.</string>
+    <string name="no_movie_found">No movie found.</string>
+    <string name="do_you_want_retry">Do you want to retry?</string>
+    <string name="no_similar_list_found">No similar list found.</string>
+    <string name="list_failed_to_load">List failed to load.</string>
+    <string name="no_popular_list_found">No popular list found.</string>
 </resources>

@@ -15,7 +15,15 @@ import com.dhimas.dhiflix.utils.Const
 import com.squareup.picasso.Picasso
 
 class SliderAdapter(val context: Context) : RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
-    var sliderEntities = ArrayList<ShowEntity>()
+    private var sliderEntities = ArrayList<ShowEntity>()
+
+    fun addBanner(showEntity: ShowEntity) {
+        this.sliderEntities.add(showEntity)
+    }
+
+    fun clearBanner() {
+        this.sliderEntities.clear()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.slider_fragment, parent, false)
@@ -36,9 +44,9 @@ class SliderAdapter(val context: Context) : RecyclerView.Adapter<SliderAdapter.S
                     .load(Const.URL_BASE_IMAGE + showEntity.backdropPath)
                     .placeholder(R.drawable.backdrop_placeholder)
                     .error(R.drawable.image_error)
-                    .into(ivSlider)
+                    .into(ivBanner)
 
-                tvSliderTitle.text = showEntity.title
+                tvBannerTitle.text = showEntity.title
 
                 root.setOnClickListener {
                     val intent = Intent(itemView.context, DetailActivity::class.java)
@@ -46,7 +54,7 @@ class SliderAdapter(val context: Context) : RecyclerView.Adapter<SliderAdapter.S
                     intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
                     intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, showEntity.showType)
 
-                    startActivity(itemView.context, intent, null)
+                    itemView.context.startActivity(intent)
                 }
             }
         }

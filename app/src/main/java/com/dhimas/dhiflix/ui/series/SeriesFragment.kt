@@ -11,14 +11,13 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.databinding.FragmentSeriesBinding
 import com.dhimas.dhiflix.ui.SliderAdapter
-import com.dhimas.dhiflix.utils.Utils.doneDelay
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
 import com.dhimas.dhiflix.utils.Utils.showSnackBar
 import com.dhimas.dhiflix.utils.Utils.showToast
-import com.dhimas.dhiflix.utils.Utils.waitDelay
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 
@@ -28,16 +27,15 @@ class SeriesFragment : Fragment() {
     private lateinit var viewModel: SeriesViewModel
     private lateinit var seriesAdapter: SeriesAdapter
     private lateinit var sliderAdapter: SliderAdapter
-    private var page = 1
-    private var scrollLocation = 0
+    private var currentPage = 1
+    private var maxPage = 6
+    private var lastBottomLocation = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        return inflater.inflate(R.layout.fragment_series, container, false)
-
         binding = FragmentSeriesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -46,16 +44,13 @@ class SeriesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val factory = ViewModelFactory.getInstance(requireContext())
-        viewModel = ViewModelProvider(requireActivity(), factory)[SeriesViewModel::class.java]
-        seriesAdapter = SeriesAdapter()
-        sliderAdapter = SliderAdapter(requireContext())
-        viewModel.setPage(page)
+        viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
+        viewModel.setPage(currentPage)
 
         setupUI()
 
         //Delay for shimmer animation
-        waitDelay()
-        val minShimmerTime = getMinShimmerTime(viewModel.isAlreadyShimmer)
+        val minShimmerTime = getMinShimmerTime(viewModel.getIsAlreadyShimmer())
         Handler(Looper.getMainLooper()).postDelayed({
             viewModelObserver()
         }, minShimmerTime)
@@ -63,8 +58,13 @@ class SeriesFragment : Fragment() {
 
     private fun setupUI() {
         //Prevent re-shimmer
-        if (viewModel.isAlreadyShimmer)
+        if (viewModel.getIsAlreadyShimmer())
             stopShimmer()
+        else
+            startShimmer()
+
+        seriesAdapter = SeriesAdapter()
+        sliderAdapter = SliderAdapter(requireContext())
 
         //Change grid layout spanCount when Landscape/Portrait
         val phoneOrientation = requireActivity().resources.configuration.orientation
@@ -75,26 +75,20 @@ class SeriesFragment : Fragment() {
             rvSeries.adapter = seriesAdapter
             rvSeries.isNestedScrollingEnabled = false
 
-            vpSeriesSlider.adapter = sliderAdapter
-            dotsIndicatorSeries.setViewPager2(vpSeriesSlider)
+            vpSeriesBanner.adapter = sliderAdapter
+            dotsIndicatorSeries.setViewPager2(vpSeriesBanner)
 
             nestedScrollSeries.setOnScrollChangeListener(
                 NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
-                    if (scrollY == (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight
-                            ?: 0)
-                    ) {
-                        val height =
-                            (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
+                    val height = (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
 
-                        if (scrollY == height && scrollY > scrollLocation) {
-                            if (page < 5) {
-                                page++
-                                viewModel.setPage(page)
-                                scrollLocation = scrollY
-                                showToast(requireContext(), "Load more.")
-                            } else {
-                                showToast(requireContext(), "Max page.")
-                            }
+                    if (scrollY == height && scrollY > lastBottomLocation) {
+                        if (currentPage < maxPage) {
+                            viewModel.setPage(++currentPage)
+                            lastBottomLocation = scrollY
+                            showToast(requireContext(), getString(R.string.load_more))
+                        } else {
+                            showToast(requireContext(), getString(R.string.max_page))
                         }
                     }
                 })
@@ -106,7 +100,7 @@ class SeriesFragment : Fragment() {
             viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
                 when (seriesList.status) {
                     Status.LOADING -> {
-                        if (scrollLocation == 0)
+                        if (lastBottomLocation == 0)
                             startShimmer()
                     }
 
@@ -115,19 +109,15 @@ class SeriesFragment : Fragment() {
                             seriesAdapter.addSeries(seriesList.data as ArrayList<ShowEntity>)
                             seriesAdapter.notifyDataSetChanged()
 
-                            sliderAdapter.sliderEntities.clear()
+                            sliderAdapter.clearBanner()
                             for (i in 0..4)
-                                seriesList.data[i].let { sliderAdapter.sliderEntities.add(it) }
+                                seriesList.data[i].let { sliderAdapter.addBanner(it) }
                             sliderAdapter.notifyDataSetChanged()
 
-                            binding.textView4.visibility = View.VISIBLE
                             stopShimmer()
-
-                            if (!viewModel.isAlreadyShimmer)
-                                doneDelay()
                         } else {
-                            showToast(requireContext(), "No Series Found.")
-                            showSnackBar(requireView(), "Do you want to retry?") {
+                            showToast(requireContext(), getString(R.string.no_series_found))
+                            showSnackBar(requireView(), getString(R.string.do_you_want_retry)) {
                                 viewModel.refresh()
                             }
                         }
@@ -135,7 +125,7 @@ class SeriesFragment : Fragment() {
                     }
 
                     Status.ERROR -> {
-                        showSnackBar(requireView(), seriesList.message.toString()) {
+                        showSnackBar(requireView(), seriesList.message ?: getString(R.string.unknown_error)) {
                             viewModel.refresh()
                         }
                     }
@@ -146,15 +136,16 @@ class SeriesFragment : Fragment() {
 
     private fun startShimmer() {
         with(binding) {
-            seriesShimmerLayout.startShimmer()
-            seriesShimmerLayout.visibility = View.VISIBLE
+            shimmerLayoutSeries.startShimmer()
+            shimmerLayoutSeries.visibility = View.VISIBLE
         }
     }
 
     private fun stopShimmer() {
         with(binding) {
-            seriesShimmerLayout.stopShimmer()
-            seriesShimmerLayout.visibility = View.GONE
+            shimmerLayoutSeries.stopShimmer()
+            shimmerLayoutSeries.visibility = View.GONE
+            tvSeriesPopularTitle.visibility = View.VISIBLE
         }
     }
 

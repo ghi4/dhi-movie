@@ -14,7 +14,8 @@ class Const {
         const val BACKDROP_TARGET_HEIGHT = 720
 
         //If loading too fast. Shimmer look awkward.
-        const val MINIMUM_SHIMMER_TIME = 1000L
+        const val SHIMMER_TIME = 0L
+        const val MINIMUM_SHIMMER_TIME = 0L
 
         //For knowing the show type (Movie/Series)
         const val MOVIE_TYPE = 0

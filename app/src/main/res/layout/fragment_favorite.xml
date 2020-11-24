@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_movie_title" />
 
     <TextView
-        android:id="@+id/tv_series_title"
+        android:id="@+id/tv_favorite_series_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -56,10 +56,10 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_series_title" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_favorite_series_title" />
 
     <ProgressBar
-        android:id="@+id/progressBar2"
+        android:id="@+id/pb_favorite"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_favorite"
+        android:id="@+id/iv_favorite_info"
         android:layout_width="230dp"
         android:layout_height="230dp"
         android:contentDescription="@string/favorite_empty"
@@ -87,8 +87,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/you_have_no_favorite_movie_series"
-        app:layout_constraintEnd_toEndOf="@+id/iv_favorite"
-        app:layout_constraintStart_toStartOf="@+id/iv_favorite"
-        app:layout_constraintTop_toBottomOf="@+id/iv_favorite" />
+        app:layout_constraintEnd_toEndOf="@+id/iv_favorite_info"
+        app:layout_constraintStart_toStartOf="@+id/iv_favorite_info"
+        app:layout_constraintTop_toBottomOf="@+id/iv_favorite_info" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

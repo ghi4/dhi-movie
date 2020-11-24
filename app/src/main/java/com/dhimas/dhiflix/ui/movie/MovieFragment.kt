@@ -10,27 +10,31 @@ import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.databinding.FragmentMovieBinding
 import com.dhimas.dhiflix.ui.SliderAdapter
-import com.dhimas.dhiflix.utils.Utils.doneDelay
 import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
 import com.dhimas.dhiflix.utils.Utils.showSnackBar
 import com.dhimas.dhiflix.utils.Utils.showToast
-import com.dhimas.dhiflix.utils.Utils.waitDelay
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
+import java.util.*
 
 class MovieFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieBinding
-
     private lateinit var viewModel: MovieViewModel
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var sliderAdapter: SliderAdapter
-    private var page = 1
-    private var scrollLocation = 0
+    private lateinit var bottomNavigationView: BottomNavigationView
+    private var currentPage = 1
+    private var maxPage = 6
+    private var lastBottomLocation = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,25 +49,30 @@ class MovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val factory = ViewModelFactory.getInstance(requireContext())
-        viewModel = ViewModelProvider(requireActivity(), factory)[MovieViewModel::class.java]
-        movieAdapter = MovieAdapter()
-        sliderAdapter = SliderAdapter(requireContext())
-        viewModel.setPage(page)
+        viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
+        viewModel.setPage(currentPage)
+
+        bottomNavigationView = requireActivity().findViewById(R.id.nav_view)
+
+        setupUI()
 
         //Delay for shimmer animation
-        waitDelay()
         val minShimmerTime = getMinShimmerTime(viewModel.getIsAlreadyShimmer())
         Handler(Looper.getMainLooper()).postDelayed({
             viewModelObserver()
         }, minShimmerTime)
 
-        setupUI()
     }
 
     private fun setupUI() {
         //Prevent re-shimmer
         if (viewModel.getIsAlreadyShimmer())
             stopShimmer()
+        else
+            startShimmer()
+
+        movieAdapter = MovieAdapter()
+        sliderAdapter = SliderAdapter(requireContext())
 
         //Change grid layout spanCount when Landscape/Portrait
         val phoneOrientation = requireActivity().resources.configuration.orientation
@@ -74,21 +83,20 @@ class MovieFragment : Fragment() {
             rvMovie.adapter = movieAdapter
             rvMovie.isNestedScrollingEnabled = false
 
-            vpSlider.adapter = sliderAdapter
-            dotsIndicator.setViewPager2(vpSlider)
+            vpMovieBanner.adapter = sliderAdapter
+            dotsIndicatorMovie.setViewPager2(vpMovieBanner)
 
             nestedScrollMovie.setOnScrollChangeListener(
                 NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
                     val height = (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
 
-                    if (scrollY == height && scrollY > scrollLocation) {
-                        if (page < 5) {
-                            page++
-                            viewModel.setPage(page)
-                            scrollLocation = scrollY
-                            showToast(requireContext(), "Load more.")
+                    if (scrollY == height && scrollY > lastBottomLocation) {
+                        if (currentPage < maxPage) {
+                            viewModel.setPage(++currentPage)
+                            lastBottomLocation = scrollY
+                            showToast(requireContext(), getString(R.string.load_more))
                         } else {
-                            showToast(requireContext(), "Max page.")
+                            showToast(requireContext(), getString(R.string.max_page))
                         }
                     }
                 })
@@ -100,7 +108,7 @@ class MovieFragment : Fragment() {
             viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
                 when (movieList.status) {
                     Status.LOADING -> {
-                        if (scrollLocation == 0)
+                        if (lastBottomLocation == 0)
                             startShimmer()
                     }
 
@@ -109,18 +117,15 @@ class MovieFragment : Fragment() {
                             movieAdapter.addMovies(movieList.data as ArrayList<ShowEntity>)
                             movieAdapter.notifyDataSetChanged()
 
-                            sliderAdapter.sliderEntities.clear()
+                            sliderAdapter.clearBanner()
                             for (i in 0..4)
-                                movieList.data[i].let { sliderAdapter.sliderEntities.add(it) }
+                                movieList.data[i].let { sliderAdapter.addBanner(it) }
                             sliderAdapter.notifyDataSetChanged()
 
-                            binding.textView3.visibility = View.VISIBLE
                             stopShimmer()
-                            if (!viewModel.getIsAlreadyShimmer())
-                                doneDelay()
                         } else {
-                            showToast(requireContext(), "No movie found.")
-                            showSnackBar(requireView(), "Do you want to retry?") {
+                            showToast(requireContext(), getString(R.string.no_movie_found))
+                            showSnackBar(requireView(), getString(R.string.do_you_want_retry)) {
                                 viewModel.refresh()
                             }
                         }
@@ -128,7 +133,7 @@ class MovieFragment : Fragment() {
                     }
 
                     Status.ERROR -> {
-                        showSnackBar(requireView(), movieList.message.toString()) {
+                        showSnackBar(bottomNavigationView, movieList.message ?: getString(R.string.unknown_error)) {
                             viewModel.refresh()
                         }
                     }
@@ -139,15 +144,16 @@ class MovieFragment : Fragment() {
 
     private fun startShimmer() {
         with(binding) {
-            movieShimmerLayout.startShimmer()
-            movieShimmerLayout.visibility = View.VISIBLE
+            shimmerLayoutMovie.startShimmer()
+            shimmerLayoutMovie.visibility = View.VISIBLE
         }
     }
 
     private fun stopShimmer() {
         with(binding) {
-            movieShimmerLayout.stopShimmer()
-            movieShimmerLayout.visibility = View.GONE
+            shimmerLayoutMovie.stopShimmer()
+            shimmerLayoutMovie.visibility = View.GONE
+            tvMoviePopularTitle.visibility = View.VISIBLE
         }
     }
 }

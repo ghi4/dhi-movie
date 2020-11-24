@@ -9,7 +9,7 @@ import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.vo.Resource
 
 class SeriesViewModel(private val showRepository: ShowRepository) : ViewModel() {
-    var isAlreadyShimmer: Boolean = false
+    private var isAlreadyShimmer: Boolean = false
     private var page = MutableLiveData<Int>()
     private var seriesList = page.switchMap {
         showRepository.getSeriesList(it)
@@ -22,6 +22,8 @@ class SeriesViewModel(private val showRepository: ShowRepository) : ViewModel() 
     fun setPage(page: Int) {
         this.page.postValue(page)
     }
+
+    fun getIsAlreadyShimmer() = isAlreadyShimmer
 
     fun getSeries(): LiveData<Resource<List<ShowEntity>>> = seriesList
 

@@ -87,11 +87,13 @@ class ShowRepository private constructor(
                 return localDataSource.getSeries(page)
             }
 
-            override fun shouldFetch(data: List<ShowEntity>?): Boolean =
-                data == null || data.isEmpty() || data.size != page * 20
+            override fun shouldFetch(data: List<ShowEntity>?): Boolean {
+                return data == null || data.isEmpty() || data.size != page * 20
+            }
 
-            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
-                remoteDataSource.getSeriesList(page)
+            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> {
+                return remoteDataSource.getSeriesList(page)
+            }
 
             override fun saveCallResult(data: List<SeriesResponse>) {
                 val seriesList = ArrayList<ShowEntity>()
@@ -119,14 +121,17 @@ class ShowRepository private constructor(
 
     override fun getMovieDetail(movie_id: String): LiveData<Resource<ShowEntity>> {
         return object : NetworkBoundResource<ShowEntity, MovieResponse>(appExecutors) {
-            public override fun loadFromDB(): LiveData<ShowEntity> =
-                localDataSource.getShowById(movie_id)
+            public override fun loadFromDB(): LiveData<ShowEntity> {
+                return localDataSource.getShowById(movie_id)
+            }
 
-            override fun shouldFetch(data: ShowEntity?): Boolean =
-                data == null
+            override fun shouldFetch(data: ShowEntity?): Boolean {
+                return data == null
+            }
 
-            override fun createCall(): LiveData<ApiResponse<MovieResponse>> =
-                remoteDataSource.getMovieDetail(movie_id)
+            override fun createCall(): LiveData<ApiResponse<MovieResponse>> {
+                return remoteDataSource.getMovieDetail(movie_id)
+            }
 
             override fun saveCallResult(data: MovieResponse) {
                 val movie = ShowEntity(
@@ -145,14 +150,17 @@ class ShowRepository private constructor(
 
     override fun getSeriesDetail(series_id: String): LiveData<Resource<ShowEntity>> {
         return object : NetworkBoundResource<ShowEntity, SeriesResponse>(appExecutors) {
-            public override fun loadFromDB(): LiveData<ShowEntity> =
-                localDataSource.getShowById(series_id)
+            public override fun loadFromDB(): LiveData<ShowEntity> {
+                return localDataSource.getShowById(series_id)
+            }
 
-            override fun shouldFetch(data: ShowEntity?): Boolean =
-                data == null
+            override fun shouldFetch(data: ShowEntity?): Boolean {
+                return data == null
+            }
 
-            override fun createCall(): LiveData<ApiResponse<SeriesResponse>> =
-                remoteDataSource.getSeriesDetail(series_id)
+            override fun createCall(): LiveData<ApiResponse<SeriesResponse>> {
+                return remoteDataSource.getSeriesDetail(series_id)
+            }
 
             override fun saveCallResult(data: SeriesResponse) {
                 val series = ShowEntity(

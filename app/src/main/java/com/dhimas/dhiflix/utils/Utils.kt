@@ -34,19 +34,14 @@ object Utils {
             .setAction("RETRY") {
                 runnable.run()
             }
+            .apply {
+                anchorView = view
+            }
             .show()
     }
 
     fun getMinShimmerTime(isAlreadyShimmer: Boolean): Long {
-        return if (!isAlreadyShimmer) Const.MINIMUM_SHIMMER_TIME else 100
-    }
-
-    fun waitDelay() {
-        //EspressoIdlingResource.increment()
-    }
-
-    fun doneDelay() {
-        //EspressoIdlingResource.decrement()
+        return if (isAlreadyShimmer) Const.MINIMUM_SHIMMER_TIME else Const.SHIMMER_TIME
     }
 
 }

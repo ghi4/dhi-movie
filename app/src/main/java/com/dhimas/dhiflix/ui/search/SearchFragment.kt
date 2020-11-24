@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.databinding.FragmentSearchBinding
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.google.android.material.tabs.TabLayoutMediator
@@ -30,18 +31,17 @@ class SearchFragment : Fragment() {
         val factory = ViewModelFactory.getInstance(requireContext())
         viewModel = ViewModelProvider(this, factory)[SearchViewModel::class.java]
 
+        binding.vpSearch.adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
 
-        binding.viewPager2.adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
-
-        TabLayoutMediator(binding.tabs, binding.viewPager2) { tab, position ->
+        TabLayoutMediator(binding.tabsSearch, binding.vpSearch) { tab, position ->
             when (position) {
-                0 -> tab.text = "Movies"
-                1 -> tab.text = "Series"
+                0 -> tab.text = getString(R.string.movies)
+                1 -> tab.text = getString(R.string.series)
             }
         }.attach()
-        binding.viewPager2.offscreenPageLimit = 2
+        binding.vpSearch.offscreenPageLimit = 2
 
-        binding.searchingX.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.svSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.toString().isNotEmpty()) {
                     viewModel.setSearchQuery(query.toString())

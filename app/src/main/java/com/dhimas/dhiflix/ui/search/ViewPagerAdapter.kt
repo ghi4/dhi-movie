@@ -10,8 +10,7 @@ import com.dhimas.dhiflix.ui.search.series.SearchSeriesFragment
 class ViewPagerAdapter(
     fm: FragmentManager,
     lifecycle: Lifecycle
-) :
-    FragmentStateAdapter(fm, lifecycle) {
+) : FragmentStateAdapter(fm, lifecycle) {
 
     override fun getItemCount(): Int = 2
 

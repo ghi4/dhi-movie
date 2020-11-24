@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollView"
+    android:id="@+id/scrollview_detail"
     style="@style/ScrollViewDetailPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -35,6 +35,7 @@
             android:adjustViewBounds="true"
             android:background="@drawable/poster_placeholder"
             android:contentDescription="@string/content_description_movie_poster"
+            app:autoStart="false"
             app:layout_constraintBottom_toBottomOf="@+id/iv_detail_backdrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_detail_backdrop"
@@ -42,11 +43,12 @@
             app:srcCompat="@drawable/poster_placeholder" />
 
         <aglibs.loading.skeleton.view.SkeletonTextView
-            android:id="@+id/tv_detail_release_date"
+            android:id="@+id/tv_detail_releaseDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/poster_example_release_year"
+            app:autoStart="false"
             app:layout_constraintStart_toStartOf="@+id/tv_detail_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_detail_title"
             app:skeletonColor="@color/skeleton_grey_light" />
@@ -62,13 +64,14 @@
             android:text="@string/poster_example_title"
             android:textSize="28sp"
             android:textStyle="bold"
+            app:autoStart="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_detail_poster"
             app:layout_constraintTop_toTopOf="@+id/iv_detail_poster"
             app:skeletonColor="@color/skeleton_grey_light" />
 
         <aglibs.loading.skeleton.view.SkeletonTextView
-            android:id="@+id/tv_overview"
+            android:id="@+id/tv_detail_overviewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -76,6 +79,7 @@
             android:text="@string/overview"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:autoStart="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_detail_poster"
             app:skeletonColor="@color/skeleton_grey_light" />
@@ -89,14 +93,15 @@
             android:layout_marginEnd="16dp"
             android:lineSpacingExtra="2dp"
             android:text="@string/movie_example_overview"
+            app:autoStart="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_overview"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_overviewTitle"
             app:shimmerLightenFactor="0.7"
             app:skeletonColor="@color/skeleton_grey_light" />
 
         <aglibs.loading.skeleton.view.SkeletonTextView
-            android:id="@+id/tv_interest"
+            android:id="@+id/tv_detail_interestTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -104,21 +109,23 @@
             android:text="@string/maybe_you_re_interested"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:autoStart="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_detail_overview"
             app:skeletonColor="@color/skeleton_grey_light" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/similar_shimmer"
+            android:id="@+id/shimmerLayout_detail_otherShows"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
             android:visibility="visible"
+            app:autoStart="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_interest"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_interestTitle"
             app:shimmer_auto_start="true"
             app:shimmer_base_color="#E4DDDD"
             app:shimmer_duration="1000">
@@ -146,7 +153,7 @@
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_other_movie"
+            android:id="@+id/rv_detail_other_shows"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
@@ -158,20 +165,21 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_interest"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_interestTitle"
             tools:itemCount="20"
             tools:listitem="@layout/item_show_horizontal" />
 
 
         <aglibs.loading.skeleton.view.SkeletonButtonView
-            android:id="@+id/bt_favorite"
+            android:id="@+id/bt_detail_favorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="#FBA526"
             android:text="@string/add_to_favorite"
-            app:layout_constraintStart_toStartOf="@+id/tv_detail_release_date"
-            app:layout_constraintTop_toBottomOf="@+id/tv_detail_release_date"
+            app:autoStart="false"
+            app:layout_constraintStart_toStartOf="@+id/tv_detail_releaseDate"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_releaseDate"
             app:skeletonColor="@color/skeleton_grey_light" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

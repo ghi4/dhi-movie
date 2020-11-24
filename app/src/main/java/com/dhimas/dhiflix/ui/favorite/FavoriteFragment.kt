@@ -53,7 +53,7 @@ class FavoriteFragment : Fragment() {
                         favoriteMovieAdapter.setMovies(Const.MOVIE_TYPE, true)
                         favoriteMovieAdapter.notifyDataSetChanged()
 
-                        binding.progressBar2.visibility = View.GONE
+                        binding.pbFavorite.visibility = View.GONE
 
                         if (!favoriteMovieList.data.isNullOrEmpty()) {
                             setMovieViewVisibility(tvMovie = true, rvMovie = true)
@@ -89,7 +89,7 @@ class FavoriteFragment : Fragment() {
                         favoriteSeriesAdapter.setMovies(Const.SERIES_TYPE, true)
                         favoriteSeriesAdapter.notifyDataSetChanged()
 
-                        binding.progressBar2.visibility = View.GONE
+                        binding.pbFavorite.visibility = View.GONE
 
                         if (!favoriteSeriesList.data.isNullOrEmpty()) {
                             setSeriesViewVisibility(tvSeries = true, rvSeries = true)
@@ -129,8 +129,8 @@ class FavoriteFragment : Fragment() {
 
     private fun setViewVisibility(loading: Boolean, ivIllustration: Boolean, tvInfo: Boolean) {
         with(binding) {
-            progressBar2.visibility = if (loading) View.VISIBLE else View.GONE
-            ivFavorite.visibility = if (ivIllustration) View.VISIBLE else View.GONE
+            pbFavorite.visibility = if (loading) View.VISIBLE else View.GONE
+            ivFavoriteInfo.visibility = if (ivIllustration) View.VISIBLE else View.GONE
             tvFavoriteInfo.visibility = if (tvInfo) View.VISIBLE else View.GONE
         }
     }
@@ -144,7 +144,7 @@ class FavoriteFragment : Fragment() {
 
     private fun setSeriesViewVisibility(tvSeries: Boolean, rvSeries: Boolean) {
         with(binding) {
-            tvSeriesTitle.visibility = if (tvSeries) View.VISIBLE else View.GONE
+            tvFavoriteSeriesTitle.visibility = if (tvSeries) View.VISIBLE else View.GONE
             rvFavoriteSeries.visibility = if (rvSeries) View.VISIBLE else View.GONE
         }
     }

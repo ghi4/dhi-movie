@@ -16,7 +16,7 @@ import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
 
 class SearchMovieFragment : Fragment() {
-    private val vm: SearchViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: SearchViewModel by viewModels({ requireParentFragment() })
     private lateinit var binding: FragmentSearchMovieBinding
     private lateinit var movieAdapter: MovieAdapter
 
@@ -31,11 +31,9 @@ class SearchMovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        movieAdapter = MovieAdapter()
-
         setupUI()
 
-        vm.getMovies().observe(viewLifecycleOwner, { movieList ->
+        viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
             when (movieList.status) {
                 Status.SUCCESS -> {
                     movieAdapter.addMovies(movieList.data as ArrayList<ShowEntity>)
@@ -55,9 +53,8 @@ class SearchMovieFragment : Fragment() {
                             ivIllustration = true,
                             tvInfo = true
                         )
-                        setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, "No movie found.")
+                        setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, getString(R.string.no_movie_found))
                     }
-
                 }
 
                 Status.LOADING -> {
@@ -77,8 +74,8 @@ class SearchMovieFragment : Fragment() {
                         tvInfo = true
                     )
                     setInfoImageAndMessage(
-                        R.drawable.undraw_not_found_60pq,
-                        movieList.message.toString()
+                        R.drawable.undraw_signal_searching_bhpc,
+                        movieList.message ?: getString(R.string.unknown_error)
                     )
                 }
             }
@@ -86,10 +83,12 @@ class SearchMovieFragment : Fragment() {
     }
 
     private fun setupUI() {
+        movieAdapter = MovieAdapter()
+
         with(binding) {
-            rvSearchMovies.layoutManager = GridLayoutManager(requireContext(), 3)
-            rvSearchMovies.hasFixedSize()
-            rvSearchMovies.adapter = movieAdapter
+            rvSearchMovie.layoutManager = GridLayoutManager(requireContext(), 3)
+            rvSearchMovie.hasFixedSize()
+            rvSearchMovie.adapter = movieAdapter
         }
     }
 
@@ -100,10 +99,10 @@ class SearchMovieFragment : Fragment() {
         tvInfo: Boolean
     ) {
         with(binding) {
-            progressBarMovie.visibility = if (loading) View.VISIBLE else View.GONE
-            rvSearchMovies.visibility = if (rvMovie) View.VISIBLE else View.INVISIBLE
-            ivMovieIllustration.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
-            tvMovieInfo.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
+            pbSearchMovie.visibility = if (loading) View.VISIBLE else View.GONE
+            rvSearchMovie.visibility = if (rvMovie) View.VISIBLE else View.VISIBLE
+            ivSearchMovieInfo.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
+            tvSearchMovieInfo.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
         }
     }
 
@@ -115,8 +114,8 @@ class SearchMovieFragment : Fragment() {
             .placeholder(R.drawable.backdrop_placeholder)
             .error(R.drawable.image_error)
             .resize(targetWidth, targetHeight)
-            .into(binding.ivMovieIllustration)
-        binding.tvMovieInfo.text = message
+            .into(binding.ivSearchMovieInfo)
+        binding.tvSearchMovieInfo.text = message
     }
 
 }

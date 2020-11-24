@@ -37,7 +37,7 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
         fun bind(series: ShowEntity) {
             with(binding) {
 
-            tvTitle.text = series.title
+                tvTitle.text = series.title
                 tvReleaseDate.text = dateParseToMonthAndYear(series.releaseDate)
 
                 Picasso.get()

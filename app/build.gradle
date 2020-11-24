@@ -9,7 +9,6 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        testInstrumentationRunnerArguments
         applicationId "com.dhimas.dhiflix"
         minSdkVersion 23
         targetSdkVersion 30
@@ -39,10 +38,6 @@ android {
         jvmTarget = '1.8'
     }
 
-    packagingOptions {
-        exclude 'META-INF/LICENSE.md'
-        exclude 'META-INF/LICENSE-notice.md'
-    }
 }
 
 
@@ -80,9 +75,9 @@ dependencies {
     //Paging
     implementation "androidx.paging:paging-runtime-ktx:2.1.2"
 
-    //Hilt
-    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
-    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
+//    //Hilt
+//    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
+//    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
 
     //Dots Indicator
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
@@ -90,9 +85,6 @@ dependencies {
     //Mockito
     testImplementation "org.mockito:mockito-core:3.6.0"
     testImplementation "org.mockito:mockito-inline:3.6.0"
-
-    //Roboelectric
-    testImplementation "org.robolectric:robolectric:4.4"
 
     //Idling
     implementation "androidx.test.espresso:espresso-idling-resource:3.3.0"

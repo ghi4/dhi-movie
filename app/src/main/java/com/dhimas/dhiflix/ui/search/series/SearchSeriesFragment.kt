@@ -16,9 +16,9 @@ import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
 
 class SearchSeriesFragment : Fragment() {
-    private val vm: SearchViewModel by viewModels({ requireParentFragment() })
     private lateinit var binding: FragmentSearchSeriesBinding
     private lateinit var seriesAdapter: SeriesAdapter
+    private val viewModel: SearchViewModel by viewModels({ requireParentFragment() })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,56 +31,42 @@ class SearchSeriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        seriesAdapter = SeriesAdapter()
+        setupUI()
 
-        vm.getSeries().observe(viewLifecycleOwner, { seriesList ->
+        viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
             when (seriesList.status) {
+                Status.LOADING -> {
+                    setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
+                }
+
                 Status.SUCCESS -> {
                     seriesAdapter.addSeries(seriesList.data as ArrayList<ShowEntity>)
                     seriesAdapter.notifyDataSetChanged()
 
-                    if (!seriesList.data.isNullOrEmpty()) {
-                        setViewVisibility(
-                            loading = false,
-                            rvSeries = true,
-                            ivIllustration = false,
-                            tvInfo = false
+                    if (seriesList.data.isNullOrEmpty()) {
+                        setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
+                        setInfoImageAndMessage(
+                            R.drawable.undraw_not_found_60pq,
+                            getString(R.string.no_series_found)
                         )
                     } else {
-                        setViewVisibility(
-                            loading = false,
-                            rvSeries = false,
-                            ivIllustration = true,
-                            tvInfo = true
-                        )
-                        setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, "No series found.")
+                        setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
                     }
                 }
 
-                Status.LOADING -> {
-                    setViewVisibility(
-                        loading = true,
-                        rvSeries = false,
-                        ivIllustration = false,
-                        tvInfo = false
-                    )
-                }
-
                 Status.ERROR -> {
-                    setViewVisibility(
-                        loading = false,
-                        rvSeries = false,
-                        ivIllustration = true,
-                        tvInfo = true
-                    )
+                    setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                     setInfoImageAndMessage(
-                        R.drawable.undraw_not_found_60pq,
-                        seriesList.message.toString()
+                        R.drawable.undraw_signal_searching_bhpc,
+                        seriesList.message ?: getString(R.string.unknown_error)
                     )
                 }
             }
         })
+    }
 
+    private fun setupUI() {
+        seriesAdapter = SeriesAdapter()
 
         with(binding) {
             rvSearchSeries.layoutManager = GridLayoutManager(requireContext(), 3)
@@ -89,17 +75,11 @@ class SearchSeriesFragment : Fragment() {
         }
     }
 
-    private fun setViewVisibility(
-        loading: Boolean,
-        rvSeries: Boolean,
-        ivIllustration: Boolean,
-        tvInfo: Boolean
-    ) {
+    private fun setViewVisibility(loading: Boolean, ivInfo: Boolean, tvInfo: Boolean) {
         with(binding) {
-            progressBarSeries.visibility = if (loading) View.VISIBLE else View.GONE
-            rvSearchSeries.visibility = if (rvSeries) View.VISIBLE else View.INVISIBLE
-            ivSeriesIllustration.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
-            tvSeriesInfo.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
+            pbSearchSeries.visibility = if (loading) View.VISIBLE else View.GONE
+            ivSearchSeriesInfo.visibility = if (ivInfo) View.VISIBLE else View.INVISIBLE
+            tvSearchSeriesInfo.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
         }
     }
 
@@ -111,8 +91,8 @@ class SearchSeriesFragment : Fragment() {
             .placeholder(R.drawable.backdrop_placeholder)
             .error(R.drawable.image_error)
             .resize(targetWidth, targetHeight)
-            .into(binding.ivSeriesIllustration)
-        binding.tvSeriesInfo.text = message
+            .into(binding.ivSearchSeriesInfo)
+        binding.tvSearchSeriesInfo.text = message
     }
 
 }

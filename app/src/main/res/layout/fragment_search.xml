@@ -9,7 +9,7 @@
         android:layout_height="wrap_content">
 
         <SearchView
-            android:id="@+id/searchingX"
+            android:id="@+id/sv_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -19,7 +19,7 @@
             android:iconifiedByDefault="false" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+            android:id="@+id/tabs_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fadeScrollbars="false"
-                android:text="@string/movie" />
+                android:text="@string/movies" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager2"
+            android:id="@+id/vp_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.core.widget.NestedScrollView>
