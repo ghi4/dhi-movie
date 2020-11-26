@@ -1,8 +1,6 @@
 package com.dhimas.dhiflix.ui.favorite
 
 import android.content.Intent
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +12,6 @@ import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.databinding.ItemShowHorizontalBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Const
-import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
 import com.squareup.picasso.Picasso
 
 class FavoriteAdapter internal constructor() :
@@ -59,7 +56,8 @@ class FavoriteAdapter internal constructor() :
             with(binding) {
 
                 //Start shimmer
-                ivPosterHorizontal.startLoading()
+                if (isAlreadyShimmer)
+                    ivPosterHorizontal.startLoading()
 
                 //Horizontal Poster
                 Picasso.get()
@@ -69,11 +67,8 @@ class FavoriteAdapter internal constructor() :
                     .placeholder(R.drawable.poster_placeholder)
                     .into(ivPosterHorizontal)
 
-                //Delay for shimmer animation
-                val minShimmerTime = getMinShimmerTime(isAlreadyShimmer)
-                Handler(Looper.getMainLooper()).postDelayed({
-                    ivPosterHorizontal.stopLoading()
-                }, minShimmerTime)
+                //Stop shimmer
+                ivPosterHorizontal.stopLoading()
 
                 //Set poster click listener
                 cvPosterHorizontal.setOnClickListener {

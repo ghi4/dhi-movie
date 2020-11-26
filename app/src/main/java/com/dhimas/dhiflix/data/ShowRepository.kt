@@ -192,8 +192,9 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = false
 
-            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
-                remoteDataSource.getMovieList(1)
+            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> {
+                return remoteDataSource.getMovieList(1)
+            }
 
             override fun saveCallResult(data: List<MovieResponse>) {
 
@@ -212,8 +213,9 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: PagedList<ShowEntity>?): Boolean = false
 
-            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
-                remoteDataSource.getSeriesList(1)
+            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> {
+                return remoteDataSource.getSeriesList(1)
+            }
 
             override fun saveCallResult(data: List<SeriesResponse>) {
 
@@ -231,8 +233,9 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
-                remoteDataSource.getSimilarMovieList(movie_id)
+            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> {
+                return remoteDataSource.getSimilarMovieList(movie_id)
+            }
 
             override fun saveCallResult(data: List<MovieResponse>) {
                 val movieList = ArrayList<ShowEntity>()
@@ -271,8 +274,9 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
-                remoteDataSource.getSimilarSeriesList(series_id)
+            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> {
+                return remoteDataSource.getSimilarSeriesList(series_id)
+            }
 
             override fun saveCallResult(data: List<SeriesResponse>) {
                 val seriesList = ArrayList<ShowEntity>()
@@ -310,8 +314,9 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
-                remoteDataSource.searchMovie(keyword)
+            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> {
+                return remoteDataSource.searchMovie(keyword)
+            }
 
             override fun saveCallResult(data: List<MovieResponse>) {
                 val movieList = ArrayList<ShowEntity>()
@@ -348,8 +353,9 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: List<ShowEntity>?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> =
-                remoteDataSource.searchSeries(keyword)
+            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> {
+                return remoteDataSource.searchSeries(keyword)
+            }
 
             override fun saveCallResult(data: List<SeriesResponse>) {
                 val seriesList = ArrayList<ShowEntity>()

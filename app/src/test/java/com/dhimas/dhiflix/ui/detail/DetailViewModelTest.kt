@@ -50,12 +50,12 @@ internal class DetailViewModelTest {
         movie.value = dummyMovieResource
         val dummyMovie = dummyMovieResource.data as ShowEntity
 
-        viewModel.setDoubleTrigger(showId, Const.MOVIE_TYPE)
+        viewModel.setShowIdAndType(showId, Const.MOVIE_TYPE)
         `when`(showRepository.getMovieDetail(showId)).thenReturn(movie)
-        viewModel.getShowEntityById().observeForever(observer)
+        viewModel.getShowEntity().observeForever(observer)
         verify(observer).onChanged(dummyMovieResource)
 
-        val movieEntity = viewModel.getShowEntityById().value?.data
+        val movieEntity = viewModel.getShowEntity().value?.data
         verify(showRepository).getMovieDetail(showId)
 
         assertNotNull(movieEntity)
@@ -84,12 +84,12 @@ internal class DetailViewModelTest {
 
         `when`(showRepository.getSeriesDetail(showId)).thenReturn(series)
 
-        viewModel.setDoubleTrigger(showId, Const.SERIES_TYPE)
-        viewModel.getShowEntityById().observeForever(observer)
+        viewModel.setShowIdAndType(showId, Const.SERIES_TYPE)
+        viewModel.getShowEntity().observeForever(observer)
         verify(observer).onChanged(dummySeriesResource)
 
 
-        val seriesEntity = viewModel.getShowEntityById().value?.data
+        val seriesEntity = viewModel.getShowEntity().value?.data
         verify(showRepository).getSeriesDetail(showId)
 
         assertNotNull(seriesEntity)
@@ -117,7 +117,7 @@ internal class DetailViewModelTest {
 
         `when`(showRepository.getSimilarMovieList(showId)).thenReturn(movie)
 
-        viewModel.setDoubleTrigger(showId, Const.MOVIE_TYPE)
+        viewModel.setShowIdAndType(showId, Const.MOVIE_TYPE)
         viewModel.getSimilarList().observeForever(observerList)
         verify(observerList).onChanged(dummyMovieList)
 
@@ -154,7 +154,7 @@ internal class DetailViewModelTest {
 
         `when`(showRepository.getMovieList(page)).thenReturn(movie)
 
-        viewModel.setDoubleTrigger(showId, Const.MOVIE_TYPE)
+        viewModel.setShowIdAndType(showId, Const.MOVIE_TYPE)
         viewModel.setListEmptyTrigger()
         viewModel.getPopularList().observeForever(observerList)
         verify(observerList).onChanged(dummyMovieList)

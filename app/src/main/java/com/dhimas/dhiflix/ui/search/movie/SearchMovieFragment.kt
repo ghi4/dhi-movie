@@ -40,39 +40,22 @@ class SearchMovieFragment : Fragment() {
                     movieAdapter.notifyDataSetChanged()
 
                     if (!movieList.data.isNullOrEmpty()) {
-                        setViewVisibility(
-                            loading = false,
-                            rvMovie = true,
-                            ivIllustration = false,
-                            tvInfo = false
-                        )
+                        setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
                     } else {
-                        setViewVisibility(
-                            loading = false,
-                            rvMovie = false,
-                            ivIllustration = true,
-                            tvInfo = true
+                        setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
+                        setInfoImageAndMessage(
+                            R.drawable.undraw_not_found_60pq,
+                            getString(R.string.no_movie_found)
                         )
-                        setInfoImageAndMessage(R.drawable.undraw_not_found_60pq, getString(R.string.no_movie_found))
                     }
                 }
 
                 Status.LOADING -> {
-                    setViewVisibility(
-                        loading = true,
-                        rvMovie = true,
-                        ivIllustration = false,
-                        tvInfo = false
-                    )
+                    setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
                 }
 
                 Status.ERROR -> {
-                    setViewVisibility(
-                        loading = false,
-                        rvMovie = false,
-                        ivIllustration = true,
-                        tvInfo = true
-                    )
+                    setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                     setInfoImageAndMessage(
                         R.drawable.undraw_signal_searching_bhpc,
                         movieList.message ?: getString(R.string.unknown_error)
@@ -94,14 +77,12 @@ class SearchMovieFragment : Fragment() {
 
     private fun setViewVisibility(
         loading: Boolean,
-        rvMovie: Boolean,
-        ivIllustration: Boolean,
+        ivInfo: Boolean,
         tvInfo: Boolean
     ) {
         with(binding) {
             pbSearchMovie.visibility = if (loading) View.VISIBLE else View.GONE
-            rvSearchMovie.visibility = if (rvMovie) View.VISIBLE else View.VISIBLE
-            ivSearchMovieInfo.visibility = if (ivIllustration) View.VISIBLE else View.INVISIBLE
+            ivSearchMovieInfo.visibility = if (ivInfo) View.VISIBLE else View.INVISIBLE
             tvSearchMovieInfo.visibility = if (tvInfo) View.VISIBLE else View.INVISIBLE
         }
     }

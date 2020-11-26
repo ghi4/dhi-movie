@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.data.source.remote.retrofit
 
+import com.dhimas.dhiflix.BuildConfig
 import com.dhimas.dhiflix.data.source.remote.response.MovieListResponse
 import com.dhimas.dhiflix.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.data.source.remote.response.SeriesListResponse
@@ -11,27 +12,51 @@ import retrofit2.http.Query
 
 interface RetrofitInterface {
 
-    @GET("movie/popular?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US")
-    fun getMovieList(@Query("page") page: Int): Call<MovieListResponse>
+    @GET("movie/popular")
+    fun getMovieList(
+        @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY,
+        @Query("page") page: Int
+    ): Call<MovieListResponse>
 
-    @GET("tv/popular?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US")
-    fun getSeriesList(@Query("page") page: Int): Call<SeriesListResponse>
+    @GET("tv/popular")
+    fun getSeriesList(
+        @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY,
+        @Query("page") page: Int
+    ): Call<SeriesListResponse>
 
-    @GET("movie/{movie_id}?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US")
-    fun getMovieDetail(@Path("movie_id") movie_id: String?): Call<MovieResponse>
+    @GET("movie/{movie_id}")
+    fun getMovieDetail(
+        @Path("movie_id") movieId: String,
+        @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY
+    ): Call<MovieResponse>
 
-    @GET("tv/{movie_id}?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US")
-    fun getSeriesDetail(@Path("movie_id") movie_id: String?): Call<SeriesResponse>
+    @GET("tv/{tv_id}")
+    fun getSeriesDetail(
+        @Path("tv_id") tvId: String,
+        @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY
+    ): Call<SeriesResponse>
 
-    @GET("movie/{movie_id}/similar?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US&page=1")
-    fun getSimilarMovie(@Path("movie_id") movie_id: String?): Call<MovieListResponse>
+    @GET("movie/{movie_id}/similar")
+    fun getSimilarMovie(
+        @Path("movie_id") movieId: String,
+        @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY
+    ): Call<MovieListResponse>
 
-    @GET("tv/{tv_id}/similar?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US&page=1")
-    fun getSimilarSeries(@Path("tv_id") tv_id: String?): Call<SeriesListResponse>
+    @GET("tv/{tv_id}/similar")
+    fun getSimilarSeries(
+        @Path("tv_id") tvId: String,
+        @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY
+    ): Call<SeriesListResponse>
 
-    @GET("/3/search/movie?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US")
-    fun searchMovie(@Query("query") keyword: String?): Call<MovieListResponse>
+    @GET("/3/search/movie")
+    fun searchMovie(
+        @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY,
+        @Query("query") keyword: String
+    ): Call<MovieListResponse>
 
-    @GET("/3/search/tv?api_key=ce041f4e3f3987fb8580b0cf374393a6&language=en-US")
-    fun searchSeries(@Query("query") keyword: String?): Call<SeriesListResponse>
+    @GET("/3/search/tv")
+    fun searchSeries(
+        @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY,
+        @Query("query") keyword: String
+    ): Call<SeriesListResponse>
 }

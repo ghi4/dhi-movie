@@ -15,7 +15,7 @@
         android:theme="@style/Theme.DhiFlix">
 
         <activity
-            android:name=".ui.main.SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:theme="@style/SplashPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

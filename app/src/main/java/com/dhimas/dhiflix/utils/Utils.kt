@@ -40,8 +40,4 @@ object Utils {
             .show()
     }
 
-    fun getMinShimmerTime(isAlreadyShimmer: Boolean): Long {
-        return if (isAlreadyShimmer) Const.MINIMUM_SHIMMER_TIME else Const.SHIMMER_TIME
-    }
-
 }

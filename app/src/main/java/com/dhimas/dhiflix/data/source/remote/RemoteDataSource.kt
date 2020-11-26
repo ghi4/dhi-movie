@@ -28,7 +28,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
     }
 
     fun getMovieList(page: Int): LiveData<ApiResponse<List<MovieResponse>>> {
-        val call = retrofitService.getMovieList(page)
+        val call = retrofitService.getMovieList(page = page)
         val resultMovie = MutableLiveData<ApiResponse<List<MovieResponse>>>()
         var movieListResponse = ArrayList<MovieResponse>()
 
@@ -65,7 +65,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
     }
 
     fun getSeriesList(page: Int): LiveData<ApiResponse<List<SeriesResponse>>> {
-        val call = retrofitService.getSeriesList(page)
+        val call = retrofitService.getSeriesList(page = page)
         val resultSeries = MutableLiveData<ApiResponse<List<SeriesResponse>>>()
         var seriesListResponse = ArrayList<SeriesResponse>()
 
@@ -102,7 +102,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
     }
 
     fun getMovieDetail(movie_id: String): LiveData<ApiResponse<MovieResponse>> {
-        val call = retrofitService.getMovieDetail(movie_id)
+        val call = retrofitService.getMovieDetail(movieId = movie_id)
         val resultMovie = MutableLiveData<ApiResponse<MovieResponse>>()
 
         EspressoIdlingResource.increment()
@@ -132,7 +132,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
     }
 
     fun getSeriesDetail(series_id: String): LiveData<ApiResponse<SeriesResponse>> {
-        val call = retrofitService.getSeriesDetail(series_id)
+        val call = retrofitService.getSeriesDetail(tvId = series_id)
         val resultSeries = MutableLiveData<ApiResponse<SeriesResponse>>()
 
         EspressoIdlingResource.increment()
@@ -166,7 +166,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
     }
 
     fun getSimilarMovieList(movie_id: String): LiveData<ApiResponse<List<MovieResponse>>> {
-        val call = retrofitService.getSimilarMovie(movie_id)
+        val call = retrofitService.getSimilarMovie(movieId = movie_id)
         val resultMovie = MutableLiveData<ApiResponse<List<MovieResponse>>>()
         var movieListResponse = ArrayList<MovieResponse>()
 
@@ -205,7 +205,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
     }
 
     fun getSimilarSeriesList(series_id: String): LiveData<ApiResponse<List<SeriesResponse>>> {
-        val call = retrofitService.getSimilarSeries(series_id)
+        val call = retrofitService.getSimilarSeries(tvId = series_id)
         val resultSeries = MutableLiveData<ApiResponse<List<SeriesResponse>>>()
         var seriesListResponse = ArrayList<SeriesResponse>()
 
@@ -242,7 +242,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
     }
 
     fun searchMovie(keyword: String): LiveData<ApiResponse<List<MovieResponse>>> {
-        val call = retrofitService.searchMovie(keyword)
+        val call = retrofitService.searchMovie(keyword = keyword)
         val resultMovie = MutableLiveData<ApiResponse<List<MovieResponse>>>()
         var movieListResponse = ArrayList<MovieResponse>()
 
@@ -278,7 +278,7 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
     }
 
     fun searchSeries(keyword: String): LiveData<ApiResponse<List<SeriesResponse>>> {
-        val call = retrofitService.searchSeries(keyword)
+        val call = retrofitService.searchSeries(keyword = keyword)
         val resultSeries = MutableLiveData<ApiResponse<List<SeriesResponse>>>()
         var seriesListResponse = ArrayList<SeriesResponse>()
 

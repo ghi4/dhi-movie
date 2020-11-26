@@ -42,9 +42,9 @@ interface ShowDao {
     @Update
     fun updateShow(show: ShowEntity)
 
-    @Query("DELETE FROM showtable WHERE showType = :showType AND isSimilar = 1")
+    @Query("DELETE FROM showtable WHERE showType = :showType AND isSimilar = 1 AND isFavorite = 0")
     fun deleteAllSimilar(showType: Int)
 
-    @Query("DELETE FROM showtable WHERE showType = :showType AND isSearch = 1")
+    @Query("DELETE FROM showtable WHERE showType = :showType AND isSearch = 1 AND isFavorite = 0")
     fun deleteAllSearch(showType: Int)
 }

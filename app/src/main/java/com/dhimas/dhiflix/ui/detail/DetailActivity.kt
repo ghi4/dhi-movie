@@ -1,8 +1,6 @@
 package com.dhimas.dhiflix.ui.detail
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -12,11 +10,10 @@ import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.databinding.ActivityDetailBinding
 import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
-import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
-import com.dhimas.dhiflix.utils.Utils.showSnackBar
 import com.dhimas.dhiflix.utils.Utils.showToast
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 
 class DetailActivity : AppCompatActivity() {
@@ -40,30 +37,31 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+        //Binding
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Get intent showId and showType
         showId = intent.getStringExtra(EXTRA_SHOW_ID).toString()
         showType = intent.getIntExtra(EXTRA_SHOW_TYPE, 0)
 
+        //Initialize viewModel
         val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
-        viewModel.setDoubleTrigger(showId, showType)
+
+        //Set showId and showType
+        viewModel.setShowIdAndType(showId, showType)
 
         setupUI()
 
-        //Delay for shimmer animation
-        val minShimmerTime = getMinShimmerTime(viewModel.isAlreadyShimmer)
-        Handler(Looper.getMainLooper()).postDelayed({
-            viewModelObserveDetail()
-            viewModelObserveSimilarList()
-            viewModelObservePopularList()
-        }, minShimmerTime)
+        viewModelObserveDetail()
+        viewModelObserveSimilarList()
+        viewModelObservePopularList() //Backup when similar list is empty
     }
 
     private fun setupUI() {
-        startShimmering()
-        startShimmerList()
+        startShimmering() //Shimmer for detail show
+        startShimmerList() //Shimmer for similar list
 
         detailAdapter = DetailAdapter()
 
@@ -81,7 +79,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun viewModelObserveDetail() {
-        viewModel.getShowEntityById().observe(this, { mShowEntity ->
+        viewModel.getShowEntity().observe(this, { mShowEntity ->
             when (mShowEntity.status) {
                 Status.LOADING -> {
                     startShimmering()
@@ -100,7 +98,8 @@ class DetailActivity : AppCompatActivity() {
 
                         with(binding) {
                             tvDetailTitle.text = showEntity.title
-                            tvDetailReleaseDate.text = dateParseToMonthAndYear(showEntity.releaseDate)
+                            tvDetailReleaseDate.text =
+                                dateParseToMonthAndYear(showEntity.releaseDate)
                             tvDetailOverview.text = showEntity.overview
                             btDetailFavorite.text = btFavoriteText
 
@@ -130,12 +129,14 @@ class DetailActivity : AppCompatActivity() {
                 }
 
                 Status.ERROR -> {
-                    showSnackBar(
-                        binding.scrollviewDetail,
-                        mShowEntity.message ?: getString(R.string.unknown_error)
-                    ) {
-                        viewModel.setDoubleTrigger(showId, showType)
-                    }
+                    Snackbar.make(
+                        binding.root,
+                        mShowEntity.message ?: getString(R.string.unknown_error),
+                        Snackbar.LENGTH_INDEFINITE
+                    )
+                        .setAction("RETRY") {
+                            viewModel.setShowIdAndType(showId, showType)
+                        }.show()
                 }
             }
         })
@@ -155,7 +156,7 @@ class DetailActivity : AppCompatActivity() {
                         showToast(this, getString(R.string.no_similar_list_found))
                         viewModel.setListEmptyTrigger()
                     } else {
-                        detailAdapter.setMovies(viewModel.isAlreadyShimmer)
+                        detailAdapter.setShimmer(viewModel.isAlreadyShimmer)
                         detailAdapter.setList(movieList.data as ArrayList<ShowEntity>)
                         detailAdapter.notifyDataSetChanged()
                         stopShimmerList()
@@ -164,12 +165,14 @@ class DetailActivity : AppCompatActivity() {
 
                 Status.ERROR -> {
                     showToast(this, getString(R.string.list_failed_to_load))
-                    showSnackBar(
-                        binding.scrollviewDetail,
-                        movieList.message ?: getString(R.string.unknown_error)
-                    ) {
-                        viewModel.setDoubleTrigger(showId, showType)
-                    }
+                    Snackbar.make(
+                        binding.root,
+                        movieList.message ?: getString(R.string.unknown_error),
+                        Snackbar.LENGTH_INDEFINITE
+                    )
+                        .setAction("RETRY") {
+                            viewModel.setShowIdAndType(showId, showType)
+                        }.show()
                 }
             }
         })
@@ -187,7 +190,7 @@ class DetailActivity : AppCompatActivity() {
                         binding.tvDetailInterestTitle.visibility = View.GONE
                         showToast(this, getString(R.string.no_popular_list_found))
                     } else {
-                        detailAdapter.setMovies(viewModel.isAlreadyShimmer)
+                        detailAdapter.setShimmer(viewModel.isAlreadyShimmer)
                         detailAdapter.setList(movieList.data as ArrayList<ShowEntity>)
                         detailAdapter.notifyDataSetChanged()
                         stopShimmerList()
@@ -196,12 +199,14 @@ class DetailActivity : AppCompatActivity() {
 
                 Status.ERROR -> {
                     showToast(this, getString(R.string.list_failed_to_load))
-                    showSnackBar(
-                        binding.scrollviewDetail,
-                        movieList.message ?: getString(R.string.unknown_error)
-                    ) {
-                        viewModel.setDoubleTrigger(showId, showType)
-                    }
+                    Snackbar.make(
+                        binding.root,
+                        movieList.message ?: getString(R.string.unknown_error),
+                        Snackbar.LENGTH_INDEFINITE
+                    )
+                        .setAction("RETRY") {
+                            viewModel.setShowIdAndType(showId, showType)
+                        }.show()
                 }
             }
         })
@@ -209,11 +214,10 @@ class DetailActivity : AppCompatActivity() {
 
     private fun stopShimmering() {
         with(binding) {
-            if (ivDetailPoster.isLoading())
-                ivDetailPoster.stopLoading()
+            ivDetailPoster.stopLoading()
             tvDetailTitle.stopLoading()
             tvDetailReleaseDate.stopLoading()
-            tvDetailOverview.stopLoading()
+            tvDetailOverviewTitle.stopLoading()
             tvDetailOverview.stopLoading()
             tvDetailInterestTitle.stopLoading()
             btDetailFavorite.stopLoading()

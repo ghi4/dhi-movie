@@ -43,17 +43,6 @@
             app:srcCompat="@drawable/poster_placeholder" />
 
         <aglibs.loading.skeleton.view.SkeletonTextView
-            android:id="@+id/tv_detail_releaseDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/poster_example_release_year"
-            app:autoStart="false"
-            app:layout_constraintStart_toStartOf="@+id/tv_detail_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_detail_title"
-            app:skeletonColor="@color/skeleton_grey_light" />
-
-        <aglibs.loading.skeleton.view.SkeletonTextView
             android:id="@+id/tv_detail_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -68,6 +57,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_detail_poster"
             app:layout_constraintTop_toTopOf="@+id/iv_detail_poster"
+            app:skeletonColor="@color/skeleton_grey_light" />
+
+        <aglibs.loading.skeleton.view.SkeletonTextView
+            android:id="@+id/tv_detail_releaseDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/poster_example_release_year"
+            app:autoStart="false"
+            app:layout_constraintStart_toStartOf="@+id/tv_detail_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_title"
             app:skeletonColor="@color/skeleton_grey_light" />
 
         <aglibs.loading.skeleton.view.SkeletonTextView
@@ -172,12 +172,13 @@
 
         <aglibs.loading.skeleton.view.SkeletonButtonView
             android:id="@+id/bt_detail_favorite"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="#FBA526"
             android:text="@string/add_to_favorite"
             app:autoStart="false"
+            app:layout_constraintEnd_toEndOf="@+id/tv_detail_title"
             app:layout_constraintStart_toStartOf="@+id/tv_detail_releaseDate"
             app:layout_constraintTop_toBottomOf="@+id/tv_detail_releaseDate"
             app:skeletonColor="@color/skeleton_grey_light" />

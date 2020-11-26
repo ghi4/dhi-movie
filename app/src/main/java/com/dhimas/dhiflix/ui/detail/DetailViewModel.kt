@@ -49,7 +49,7 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
         isAlreadyShimmer = true
     }
 
-    fun setDoubleTrigger(show_id: String, show_type: Int) {
+    fun setShowIdAndType(show_id: String, show_type: Int) {
         doubleTrigger.postValue(DoubleTrigger(show_id, show_type))
     }
 
@@ -57,7 +57,7 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
         listEmptyTrigger.postValue(Unit)
     }
 
-    fun getShowEntityById(): LiveData<Resource<ShowEntity>> = showEntity
+    fun getShowEntity(): LiveData<Resource<ShowEntity>> = showEntity
 
     fun getSimilarList(): LiveData<Resource<List<ShowEntity>>> = similarList
 

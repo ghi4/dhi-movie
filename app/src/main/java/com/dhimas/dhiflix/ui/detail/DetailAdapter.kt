@@ -1,8 +1,6 @@
 package com.dhimas.dhiflix.ui.detail
 
 import android.content.Intent
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +9,6 @@ import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.databinding.ItemShowHorizontalBinding
 import com.dhimas.dhiflix.utils.Const
-import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
 import com.squareup.picasso.Picasso
 
 class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
@@ -23,7 +20,7 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
         this.showList.addAll(showList)
     }
 
-    fun setMovies(isAlreadyShimmer: Boolean) {
+    fun setShimmer(isAlreadyShimmer: Boolean) {
         this.isAlreadyShimmer = isAlreadyShimmer
     }
 
@@ -46,7 +43,8 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
             with(binding) {
 
                 //Start shimmer
-                ivPosterHorizontal.startLoading()
+                if (!isAlreadyShimmer)
+                    ivPosterHorizontal.startLoading()
 
                 //Horizontal Poster
                 Picasso.get()
@@ -56,11 +54,8 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                     .placeholder(R.drawable.poster_placeholder)
                     .into(ivPosterHorizontal)
 
-                //Delay for shimmer animation
-                val minShimmerTime = getMinShimmerTime(isAlreadyShimmer)
-                Handler(Looper.getMainLooper()).postDelayed({
-                    ivPosterHorizontal.stopLoading()
-                }, minShimmerTime)
+                //Stop shimmer
+                ivPosterHorizontal.stopLoading()
 
                 //Set poster click listener
                 cvPosterHorizontal.setOnClickListener {

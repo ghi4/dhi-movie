@@ -7,7 +7,7 @@
     tools:context=".ui.favorite.FavoriteFragment">
 
     <TextView
-        android:id="@+id/tv_movie_title"
+        android:id="@+id/tv_favorite_movie_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -30,7 +30,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_movie_title" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_favorite_movie_title" />
 
     <TextView
         android:id="@+id/tv_favorite_series_title"
@@ -75,6 +75,7 @@
         android:layout_height="230dp"
         android:contentDescription="@string/favorite_empty"
         android:src="@drawable/undraw_tree"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -87,6 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/you_have_no_favorite_movie_series"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/iv_favorite_info"
         app:layout_constraintStart_toStartOf="@+id/iv_favorite_info"
         app:layout_constraintTop_toBottomOf="@+id/iv_favorite_info" />

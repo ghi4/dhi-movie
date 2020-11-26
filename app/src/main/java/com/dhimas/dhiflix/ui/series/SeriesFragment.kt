@@ -2,8 +2,6 @@ package com.dhimas.dhiflix.ui.series
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,19 +12,20 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.databinding.FragmentSeriesBinding
-import com.dhimas.dhiflix.ui.SliderAdapter
-import com.dhimas.dhiflix.utils.Utils.getMinShimmerTime
+import com.dhimas.dhiflix.ui.BannerAdapter
 import com.dhimas.dhiflix.utils.Utils.showSnackBar
 import com.dhimas.dhiflix.utils.Utils.showToast
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SeriesFragment : Fragment() {
 
     private lateinit var binding: FragmentSeriesBinding
     private lateinit var viewModel: SeriesViewModel
     private lateinit var seriesAdapter: SeriesAdapter
-    private lateinit var sliderAdapter: SliderAdapter
+    private lateinit var bannerAdapter: BannerAdapter
+    private lateinit var bottomNavigationView: BottomNavigationView
     private var currentPage = 1
     private var maxPage = 6
     private var lastBottomLocation = 0
@@ -48,15 +47,12 @@ class SeriesFragment : Fragment() {
         viewModel.setPage(currentPage)
 
         setupUI()
-
-        //Delay for shimmer animation
-        val minShimmerTime = getMinShimmerTime(viewModel.getIsAlreadyShimmer())
-        Handler(Looper.getMainLooper()).postDelayed({
-            viewModelObserver()
-        }, minShimmerTime)
+        viewModelObserver()
     }
 
     private fun setupUI() {
+        bottomNavigationView = requireActivity().findViewById(R.id.nav_view)
+
         //Prevent re-shimmer
         if (viewModel.getIsAlreadyShimmer())
             stopShimmer()
@@ -64,7 +60,7 @@ class SeriesFragment : Fragment() {
             startShimmer()
 
         seriesAdapter = SeriesAdapter()
-        sliderAdapter = SliderAdapter(requireContext())
+        bannerAdapter = BannerAdapter(requireContext())
 
         //Change grid layout spanCount when Landscape/Portrait
         val phoneOrientation = requireActivity().resources.configuration.orientation
@@ -75,7 +71,7 @@ class SeriesFragment : Fragment() {
             rvSeries.adapter = seriesAdapter
             rvSeries.isNestedScrollingEnabled = false
 
-            vpSeriesBanner.adapter = sliderAdapter
+            vpSeriesBanner.adapter = bannerAdapter
             dotsIndicatorSeries.setViewPager2(vpSeriesBanner)
 
             nestedScrollSeries.setOnScrollChangeListener(
@@ -96,42 +92,43 @@ class SeriesFragment : Fragment() {
     }
 
     private fun viewModelObserver() {
-        if (view != null) {
-            viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
-                when (seriesList.status) {
-                    Status.LOADING -> {
-                        if (lastBottomLocation == 0)
-                            startShimmer()
-                    }
+        viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
+            when (seriesList.status) {
+                Status.LOADING -> {
+                    if (lastBottomLocation == 0)
+                        startShimmer()
+                }
 
-                    Status.SUCCESS -> {
-                        if (seriesList.data != null) {
-                            seriesAdapter.addSeries(seriesList.data as ArrayList<ShowEntity>)
-                            seriesAdapter.notifyDataSetChanged()
+                Status.SUCCESS -> {
+                    if (seriesList.data != null) {
+                        seriesAdapter.addSeries(seriesList.data as ArrayList<ShowEntity>)
+                        seriesAdapter.notifyDataSetChanged()
 
-                            sliderAdapter.clearBanner()
-                            for (i in 0..4)
-                                seriesList.data[i].let { sliderAdapter.addBanner(it) }
-                            sliderAdapter.notifyDataSetChanged()
+                        bannerAdapter.clearBanner()
+                        for (i in 0..4)
+                            seriesList.data[i].let { bannerAdapter.addBanner(it) }
+                        bannerAdapter.notifyDataSetChanged()
 
-                            stopShimmer()
-                        } else {
-                            showToast(requireContext(), getString(R.string.no_series_found))
-                            showSnackBar(requireView(), getString(R.string.do_you_want_retry)) {
-                                viewModel.refresh()
-                            }
-                        }
-                        viewModel.setAlreadyShimmer()
-                    }
-
-                    Status.ERROR -> {
-                        showSnackBar(requireView(), seriesList.message ?: getString(R.string.unknown_error)) {
+                        stopShimmer()
+                    } else {
+                        showToast(requireContext(), getString(R.string.no_series_found))
+                        showSnackBar(requireView(), getString(R.string.do_you_want_retry)) {
                             viewModel.refresh()
                         }
                     }
+                    viewModel.setAlreadyShimmer()
                 }
-            })
-        }
+
+                Status.ERROR -> {
+                    showSnackBar(
+                        bottomNavigationView,
+                        seriesList.message ?: getString(R.string.unknown_error)
+                    ) {
+                        viewModel.refresh()
+                    }
+                }
+            }
+        })
     }
 
     private fun startShimmer() {
