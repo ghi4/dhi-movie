@@ -40,6 +40,7 @@ class LocalDataSource private constructor(private val showDao: ShowDao) {
 
     fun setFavorite(showEntity: ShowEntity) {
         showEntity.isFavorite = if (showEntity.isFavorite == 0) 1 else 0
+        showEntity.page = 0
         showDao.updateShow(showEntity)
     }
 }

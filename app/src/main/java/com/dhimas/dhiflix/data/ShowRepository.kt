@@ -256,8 +256,8 @@ class ShowRepository private constructor(
                     movieList.add(movie)
                 }
 
-                if (!movieList.isNullOrEmpty())
-                    localDataSource.deleteAllSimilarShow(Const.MOVIE_TYPE)
+//                if (!movieList.isNullOrEmpty())
+//                    localDataSource.deleteAllSimilarShow(Const.MOVIE_TYPE)
 
                 localDataSource.insertShows(movieList)
             }
@@ -297,8 +297,8 @@ class ShowRepository private constructor(
                     seriesList.add(series)
                 }
 
-                if (!seriesList.isNullOrEmpty())
-                    localDataSource.deleteAllSimilarShow(Const.SERIES_TYPE)
+//                if (!seriesList.isNullOrEmpty())
+//                    localDataSource.deleteAllSimilarShow(Const.SERIES_TYPE)
 
                 localDataSource.insertShows(seriesList)
             }
@@ -337,7 +337,7 @@ class ShowRepository private constructor(
                     movieList.add(movie)
                 }
 
-                localDataSource.deleteAllSearchShow(Const.MOVIE_TYPE)
+//                localDataSource.deleteAllSearchShow(Const.MOVIE_TYPE)
 
                 localDataSource.insertShows(movieList)
             }
@@ -376,7 +376,7 @@ class ShowRepository private constructor(
                     seriesList.add(series)
                 }
 
-                localDataSource.deleteAllSearchShow(Const.SERIES_TYPE)
+//                localDataSource.deleteAllSearchShow(Const.SERIES_TYPE)
 
                 localDataSource.insertShows(seriesList)
             }

@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".App"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher_dhiflix"
@@ -32,7 +31,6 @@
             android:name=".ui.detail.DetailActivity"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/Theme.DetailPage" />
-
 
     </application>
 

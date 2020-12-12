@@ -1,3 +1,7 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="dots_corner_radius_8dp">8dp</dimen>
+    <dimen name="dots_size">8dp</dimen>
+    <dimen name="dots_spacing">4dp</dimen>
+    <dimen name="dots_stroke_width">2dp</dimen>
 </resources>

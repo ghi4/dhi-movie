@@ -55,8 +55,8 @@
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_movie_banner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -66,11 +66,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:dotsColor="@color/black"
-                app:dotsCornerRadius="8dp"
-                app:dotsSize="8dp"
-                app:dotsSpacing="4dp"
+                app:dotsCornerRadius="@dimen/dots_corner_radius_8dp"
+                app:dotsSize="@dimen/dots_size"
+                app:dotsSpacing="@dimen/dots_spacing"
                 app:dotsStrokeColor="@color/black"
-                app:dotsStrokeWidth="2dp"
+                app:dotsStrokeWidth="@dimen/dots_stroke_width"
                 app:layout_constraintBottom_toBottomOf="@id/vp_movie_banner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -79,9 +79,9 @@
                 android:id="@+id/tv_movie_popular_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginEnd="16dp"
                 android:text="@string/trending_now"
                 android:textSize="24sp"
                 android:visibility="invisible"
@@ -91,10 +91,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_movie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:descendantFocusability="blocksDescendants"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
