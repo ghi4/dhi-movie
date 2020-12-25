@@ -7,17 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.ItemBannerBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
-import com.dhimas.dhiflix.utils.Const
+import com.dhimas.dhiflix.core.utils.Const
 import com.squareup.picasso.Picasso
 
 class BannerAdapter(val context: Context) : RecyclerView.Adapter<BannerAdapter.BannerViewHolder>() {
-    private var bannerEntities = ArrayList<ShowEntity>()
+    private var bannerEntities = ArrayList<Show>()
 
-    fun addBanner(showEntity: ShowEntity) {
-        this.bannerEntities.add(showEntity)
+    fun addBanner(show: Show) {
+        this.bannerEntities.add(show)
     }
 
     fun clearBanner() {
@@ -37,21 +37,21 @@ class BannerAdapter(val context: Context) : RecyclerView.Adapter<BannerAdapter.B
 
     class BannerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemBannerBinding.bind(itemView)
-        fun bind(showEntity: ShowEntity) {
+        fun bind(show: Show) {
             with(binding) {
                 Picasso.get()
-                    .load(Const.URL_BASE_IMAGE + showEntity.backdropPath)
+                    .load(Const.URL_BASE_IMAGE + show.backdropPath)
                     .placeholder(R.drawable.backdrop_placeholder)
                     .error(R.drawable.image_error)
                     .into(ivBanner)
 
-                tvBannerTitle.text = showEntity.title
+                tvBannerTitle.text = show.title
 
                 root.setOnClickListener {
                     val intent = Intent(itemView.context, DetailActivity::class.java)
 
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, showEntity.showType)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, show.id)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, show.showType)
 
                     itemView.context.startActivity(intent)
                 }

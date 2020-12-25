@@ -6,16 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.ItemShowHorizontalBinding
-import com.dhimas.dhiflix.utils.Const
+import com.dhimas.dhiflix.core.utils.Const
 import com.squareup.picasso.Picasso
 
 class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     private var isAlreadyShimmer: Boolean = false
-    private var showList = ArrayList<ShowEntity>()
+    private var showList = ArrayList<Show>()
 
-    fun setList(showList: ArrayList<ShowEntity>) {
+    fun setList(showList: ArrayList<Show>) {
         this.showList.clear()
         this.showList.addAll(showList)
     }
@@ -39,7 +39,7 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
 
     class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemShowHorizontalBinding.bind(itemView)
-        fun bind(showEntity: ShowEntity, isAlreadyShimmer: Boolean) {
+        fun bind(show: Show, isAlreadyShimmer: Boolean) {
             with(binding) {
 
                 //Start shimmer
@@ -48,7 +48,7 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
 
                 //Horizontal Poster
                 Picasso.get()
-                    .load(Const.URL_BASE_IMAGE + showEntity.posterPath)
+                    .load(Const.URL_BASE_IMAGE + show.posterPath)
                     .resize(Const.POSTER_TARGET_WIDTH, Const.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.poster_error)
                     .placeholder(R.drawable.poster_placeholder)
@@ -61,8 +61,8 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                 cvPosterHorizontal.setOnClickListener {
                     val intent = Intent(itemView.context, DetailActivity::class.java)
 
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, showEntity.id)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, showEntity.showType)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, show.id)
+                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, show.showType)
 
                     itemView.context.startActivity(intent)
                 }

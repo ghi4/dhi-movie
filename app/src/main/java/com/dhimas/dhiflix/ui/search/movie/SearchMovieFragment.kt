@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentSearchMovieBinding
 import com.dhimas.dhiflix.ui.movie.MovieAdapter
 import com.dhimas.dhiflix.ui.search.SearchViewModel
@@ -36,7 +36,7 @@ class SearchMovieFragment : Fragment() {
         viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
             when (movieList.status) {
                 Status.SUCCESS -> {
-                    movieAdapter.addMovies(movieList.data as ArrayList<ShowEntity>)
+                    movieAdapter.addMovies(movieList.data as ArrayList<Show>)
                     movieAdapter.notifyDataSetChanged()
 
                     if (!movieList.data.isNullOrEmpty()) {

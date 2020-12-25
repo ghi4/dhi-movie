@@ -4,15 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
-import com.dhimas.dhiflix.data.ShowRepository
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
-import com.dhimas.dhiflix.vo.Resource
+import com.dhimas.dhiflix.core.data.Resource
+import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
 
-class SeriesViewModel(private val showRepository: ShowRepository) : ViewModel() {
+class SeriesViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
     private var isAlreadyShimmer: Boolean = false
     private var page = MutableLiveData<Int>()
     private var seriesList = page.switchMap {
-        showRepository.getSeriesList(it)
+        showUseCase.getSeriesList(it)
     }
 
     fun setAlreadyShimmer() {
@@ -25,7 +25,7 @@ class SeriesViewModel(private val showRepository: ShowRepository) : ViewModel() 
 
     fun getIsAlreadyShimmer() = isAlreadyShimmer
 
-    fun getSeries(): LiveData<Resource<List<ShowEntity>>> = seriesList
+    fun getSeries(): LiveData<Resource<List<Show>>> = seriesList
 
     fun refresh() {
         page.postValue(page.value)

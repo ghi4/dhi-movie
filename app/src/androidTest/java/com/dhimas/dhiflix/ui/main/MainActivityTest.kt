@@ -10,7 +10,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.utils.EspressoIdlingResource
+import com.dhimas.dhiflix.core.utils.EspressoIdlingResource
 import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before

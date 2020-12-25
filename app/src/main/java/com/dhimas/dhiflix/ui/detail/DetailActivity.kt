@@ -6,11 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.ActivityDetailBinding
-import com.dhimas.dhiflix.utils.Const
-import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
-import com.dhimas.dhiflix.utils.Utils.showToast
+import com.dhimas.dhiflix.core.utils.Const
+import com.dhimas.dhiflix.core.utils.Utils.dateParseToMonthAndYear
+import com.dhimas.dhiflix.core.utils.Utils.showToast
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import com.google.android.material.snackbar.Snackbar
@@ -20,7 +20,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var viewModel: DetailViewModel
     private lateinit var showId: String
-    private lateinit var showEntity: ShowEntity
+    private lateinit var show: Show
 
     private var showType: Int = 0
     private lateinit var detailAdapter: DetailAdapter
@@ -73,38 +73,38 @@ class DetailActivity : AppCompatActivity() {
             rvDetailOtherShows.visibility = View.VISIBLE
 
             btDetailFavorite.setOnClickListener {
-                viewModel.setFavorite(showEntity)
+                viewModel.setFavorite(show)
             }
         }
     }
 
     private fun viewModelObserveDetail() {
-        viewModel.getShowEntity().observe(this, { mShowEntity ->
-            when (mShowEntity.status) {
+        viewModel.getShow().observe(this, { mShow ->
+            when (mShow.status) {
                 Status.LOADING -> {
                     startShimmering()
                 }
 
                 Status.SUCCESS -> {
-                    if (mShowEntity.data != null) {
+                    if (mShow.data != null) {
 
-                        showEntity = mShowEntity.data
+                        show = mShow.data
 
                         val btFavoriteText =
-                            if (showEntity.isFavorite == 0)
+                            if (show.isFavorite == 0)
                                 getString(R.string.add_to_favorite)
                             else
                                 getString(R.string.remove_from_favorite)
 
                         with(binding) {
-                            tvDetailTitle.text = showEntity.title
+                            tvDetailTitle.text = show.title
                             tvDetailReleaseDate.text =
-                                dateParseToMonthAndYear(showEntity.releaseDate)
-                            tvDetailOverview.text = showEntity.overview
+                                dateParseToMonthAndYear(show.releaseDate)
+                            tvDetailOverview.text = show.overview
                             btDetailFavorite.text = btFavoriteText
 
                             Picasso.get()
-                                .load(Const.URL_BASE_IMAGE + showEntity.backdropPath)
+                                .load(Const.URL_BASE_IMAGE + show.backdropPath)
                                 .placeholder(R.drawable.backdrop_placeholder)
                                 .error(R.drawable.image_error)
                                 .resize(
@@ -114,7 +114,7 @@ class DetailActivity : AppCompatActivity() {
                                 .into(ivDetailBackdrop)
 
                             Picasso.get()
-                                .load(Const.URL_BASE_IMAGE + showEntity.posterPath)
+                                .load(Const.URL_BASE_IMAGE + show.posterPath)
                                 .placeholder(R.drawable.poster_placeholder)
                                 .error(R.drawable.poster_error)
                                 .resize(
@@ -131,7 +131,7 @@ class DetailActivity : AppCompatActivity() {
                 Status.ERROR -> {
                     Snackbar.make(
                         binding.root,
-                        mShowEntity.message ?: getString(R.string.unknown_error),
+                        mShow.message ?: getString(R.string.unknown_error),
                         Snackbar.LENGTH_INDEFINITE
                     )
                         .setAction("RETRY") {
@@ -157,7 +157,7 @@ class DetailActivity : AppCompatActivity() {
                         viewModel.setListEmptyTrigger()
                     } else {
                         detailAdapter.setShimmer(viewModel.isAlreadyShimmer)
-                        detailAdapter.setList(movieList.data as ArrayList<ShowEntity>)
+                        detailAdapter.setList(movieList.data as ArrayList<Show>)
                         detailAdapter.notifyDataSetChanged()
                         stopShimmerList()
                     }
@@ -191,7 +191,7 @@ class DetailActivity : AppCompatActivity() {
                         showToast(this, getString(R.string.no_popular_list_found))
                     } else {
                         detailAdapter.setShimmer(viewModel.isAlreadyShimmer)
-                        detailAdapter.setList(movieList.data as ArrayList<ShowEntity>)
+                        detailAdapter.setList(movieList.data as ArrayList<Show>)
                         detailAdapter.notifyDataSetChanged()
                         stopShimmerList()
                     }

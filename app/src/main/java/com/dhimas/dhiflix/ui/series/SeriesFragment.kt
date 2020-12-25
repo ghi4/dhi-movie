@@ -10,11 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentSeriesBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
-import com.dhimas.dhiflix.utils.Utils.showSnackBar
-import com.dhimas.dhiflix.utils.Utils.showToast
+import com.dhimas.dhiflix.core.utils.Utils.showSnackBar
+import com.dhimas.dhiflix.core.utils.Utils.showToast
 import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.dhimas.dhiflix.vo.Status
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -101,7 +101,7 @@ class SeriesFragment : Fragment() {
 
                 Status.SUCCESS -> {
                     if (seriesList.data != null) {
-                        seriesAdapter.addSeries(seriesList.data as ArrayList<ShowEntity>)
+                        seriesAdapter.addSeries(seriesList.data as ArrayList<Show>)
                         seriesAdapter.notifyDataSetChanged()
 
                         bannerAdapter.clearBanner()

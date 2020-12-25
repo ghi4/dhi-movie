@@ -6,17 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.ItemShowBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
-import com.dhimas.dhiflix.utils.Const
-import com.dhimas.dhiflix.utils.Utils
+import com.dhimas.dhiflix.core.utils.Const
+import com.dhimas.dhiflix.core.utils.Utils
 import com.squareup.picasso.Picasso
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
-    private var movieList = ArrayList<ShowEntity>()
+    private var movieList = ArrayList<Show>()
 
-    fun addMovies(movies: ArrayList<ShowEntity>) {
+    fun addMovies(movies: ArrayList<Show>) {
         movieList.clear()
         movieList.addAll(movies)
     }
@@ -34,7 +34,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemShowBinding.bind(itemView)
-        fun bind(movie: ShowEntity) {
+        fun bind(movie: Show) {
             with(binding) {
                 tvTitle.text = movie.title
                 tvReleaseDate.text = Utils.dateParseToMonthAndYear(movie.releaseDate)

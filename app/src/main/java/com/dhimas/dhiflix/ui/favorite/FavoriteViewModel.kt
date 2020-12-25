@@ -5,24 +5,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
 import androidx.paging.PagedList
-import com.dhimas.dhiflix.data.ShowRepository
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
-import com.dhimas.dhiflix.vo.Resource
+import com.dhimas.dhiflix.core.data.Resource
+import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
 
-class FavoriteViewModel(private val showRepository: ShowRepository) : ViewModel() {
+class FavoriteViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
     private val refreshTrigger = MutableLiveData(Unit)
 
     private var movieList = refreshTrigger.switchMap {
-        showRepository.getFavoriteMovieList()
+        showUseCase.getFavoriteMovieList()
     }
 
     private var seriesList = refreshTrigger.switchMap {
-        showRepository.getFavoriteSeriesList()
+        showUseCase.getFavoriteSeriesList()
     }
 
-    fun getFavoriteMovies(): LiveData<Resource<PagedList<ShowEntity>>> = movieList
+    fun getFavoriteMovies(): LiveData<Resource<PagedList<Show>>> = movieList
 
-    fun getFavoriteSeries(): LiveData<Resource<PagedList<ShowEntity>>> = seriesList
+    fun getFavoriteSeries(): LiveData<Resource<PagedList<Show>>> = seriesList
 
     fun refresh() {
         refreshTrigger.value = Unit

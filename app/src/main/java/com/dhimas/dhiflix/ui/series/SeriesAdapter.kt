@@ -6,17 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.ItemShowBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
-import com.dhimas.dhiflix.utils.Const
-import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
+import com.dhimas.dhiflix.core.utils.Const
+import com.dhimas.dhiflix.core.utils.Utils.dateParseToMonthAndYear
 import com.squareup.picasso.Picasso
 
 class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
-    private var seriesList = ArrayList<ShowEntity>()
+    private var seriesList = ArrayList<Show>()
 
-    fun addSeries(series: ArrayList<ShowEntity>) {
+    fun addSeries(series: ArrayList<Show>) {
         seriesList.clear()
         seriesList.addAll(series)
     }
@@ -34,7 +34,7 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
 
     class SeriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemShowBinding.bind(itemView)
-        fun bind(series: ShowEntity) {
+        fun bind(series: Show) {
             with(binding) {
 
                 tvTitle.text = series.title

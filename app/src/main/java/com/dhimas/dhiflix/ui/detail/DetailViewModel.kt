@@ -4,32 +4,32 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
-import com.dhimas.dhiflix.data.ShowRepository
-import com.dhimas.dhiflix.data.source.local.entity.DoubleTrigger
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
-import com.dhimas.dhiflix.utils.Const
-import com.dhimas.dhiflix.vo.Resource
+import com.dhimas.dhiflix.core.data.source.local.entity.DoubleTrigger
+import com.dhimas.dhiflix.core.utils.Const
+import com.dhimas.dhiflix.core.data.Resource
+import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
 
-class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() {
+class DetailViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
     var isAlreadyShimmer: Boolean = false
     private var doubleTrigger = MutableLiveData<DoubleTrigger>()
     private var listEmptyTrigger = MutableLiveData<Unit>()
 
-    private var showEntity = doubleTrigger.switchMap {
+    private var show = doubleTrigger.switchMap {
         when (it.showType) {
             Const.MOVIE_TYPE ->
-                showRepository.getMovieDetail(it.showId)
+                showUseCase.getMovieDetail(it.showId)
             else ->
-                showRepository.getSeriesDetail(it.showId)
+                showUseCase.getSeriesDetail(it.showId)
         }
     }
 
     private var similarList = doubleTrigger.switchMap {
         when (it.showType) {
             Const.MOVIE_TYPE ->
-                showRepository.getSimilarMovieList(it.showId)
+                showUseCase.getSimilarMovieList(it.showId)
             else ->
-                showRepository.getSimilarSeriesList(it.showId)
+                showUseCase.getSimilarSeriesList(it.showId)
         }
     }
 
@@ -39,9 +39,9 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
 
         when (showType) {
             Const.MOVIE_TYPE ->
-                showRepository.getMovieList(page)
+                showUseCase.getMovieList(page)
             else ->
-                showRepository.getSeriesList(page)
+                showUseCase.getSeriesList(page)
         }
     }
 
@@ -57,14 +57,14 @@ class DetailViewModel(private val showRepository: ShowRepository) : ViewModel() 
         listEmptyTrigger.postValue(Unit)
     }
 
-    fun getShowEntity(): LiveData<Resource<ShowEntity>> = showEntity
+    fun getShow(): LiveData<Resource<Show>> = show
 
-    fun getSimilarList(): LiveData<Resource<List<ShowEntity>>> = similarList
+    fun getSimilarList(): LiveData<Resource<List<Show>>> = similarList
 
-    fun getPopularList(): LiveData<Resource<List<ShowEntity>>> = popularList
+    fun getPopularList(): LiveData<Resource<List<Show>>> = popularList
 
-    fun setFavorite(showEntity: ShowEntity) {
-        showRepository.setFavorite(showEntity)
+    fun setFavorite(show: Show) {
+        showUseCase.setFavorite(show)
     }
 
 }

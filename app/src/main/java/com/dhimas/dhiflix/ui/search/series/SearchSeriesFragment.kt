@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.data.source.local.entity.ShowEntity
+import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentSearchSeriesBinding
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.ui.series.SeriesAdapter
@@ -40,7 +40,7 @@ class SearchSeriesFragment : Fragment() {
                 }
 
                 Status.SUCCESS -> {
-                    seriesAdapter.addSeries(seriesList.data as ArrayList<ShowEntity>)
+                    seriesAdapter.addSeries(seriesList.data as ArrayList<Show>)
                     seriesAdapter.notifyDataSetChanged()
 
                     if (seriesList.data.isNullOrEmpty()) {
