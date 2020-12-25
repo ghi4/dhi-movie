@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentSearchSeriesBinding
 import com.dhimas.dhiflix.ui.search.SearchViewModel
@@ -34,12 +35,12 @@ class SearchSeriesFragment : Fragment() {
         setupUI()
 
         viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
-            when (seriesList.status) {
-                Status.LOADING -> {
+            when (seriesList) {
+                is Resource.Loading -> {
                     setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
                 }
 
-                Status.SUCCESS -> {
+                is Resource.Success -> {
                     seriesAdapter.addSeries(seriesList.data as ArrayList<Show>)
                     seriesAdapter.notifyDataSetChanged()
 
@@ -54,7 +55,7 @@ class SearchSeriesFragment : Fragment() {
                     }
                 }
 
-                Status.ERROR -> {
+                is Resource.Error -> {
                     setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                     setInfoImageAndMessage(
                         R.drawable.undraw_signal_searching_bhpc,

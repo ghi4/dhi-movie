@@ -1,43 +1,42 @@
 package com.dhimas.dhiflix.core.data.source.local.room
 
-import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
 import androidx.room.*
 import com.dhimas.dhiflix.core.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.core.utils.Const
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ShowDao {
 
     @Query("SELECT * FROM showtable WHERE showType = ${Const.MOVIE_TYPE} AND page BETWEEN 1 AND :page")
-    fun getMovies(page: Int): LiveData<List<ShowEntity>>
+    fun getMovies(page: Int): Flow<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE showType = ${Const.SERIES_TYPE} AND page BETWEEN 1 AND :page")
-    fun getSeries(page: Int): LiveData<List<ShowEntity>>
+    fun getSeries(page: Int): Flow<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE showType = ${Const.MOVIE_TYPE} AND isFavorite = 1")
-    fun getFavoriteMovies(): LiveData<List<ShowEntity>>
+    fun getFavoriteMovies(): Flow<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE showType = ${Const.SERIES_TYPE} AND isFavorite = 1")
-    fun getFavoriteSeries(): LiveData<List<ShowEntity>>
+    fun getFavoriteSeries(): Flow<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE showType = ${Const.MOVIE_TYPE} AND isSimilar = 1")
-    fun getSimilarMovies(): LiveData<List<ShowEntity>>
+    fun getSimilarMovies(): Flow<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE showType = ${Const.SERIES_TYPE} AND isSimilar = 1")
-    fun getSimilarSeries(): LiveData<List<ShowEntity>>
+    fun getSimilarSeries(): Flow<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE showType = ${Const.MOVIE_TYPE} AND title LIKE :keyword AND isSearch = 1")
-    fun searchMovies(keyword: String): LiveData<List<ShowEntity>>
+    fun searchMovies(keyword: String): Flow<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE showType = ${Const.SERIES_TYPE} AND title LIKE :keyword AND isSearch = 1")
-    fun searchSeries(keyword: String): LiveData<List<ShowEntity>>
+    fun searchSeries(keyword: String): Flow<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE id = :showId AND isSimilar = 0")
-    fun getShowById(showId: String): LiveData<ShowEntity>
+    fun getShowById(showId: String): Flow<ShowEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertShows(shows: List<ShowEntity>)
+    suspend fun insertShows(shows: List<ShowEntity>)
 
     @Update
     fun updateShow(show: ShowEntity)

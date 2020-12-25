@@ -1,9 +1,6 @@
 package com.dhimas.dhiflix.ui.series
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
@@ -12,7 +9,7 @@ class SeriesViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
     private var isAlreadyShimmer: Boolean = false
     private var page = MutableLiveData<Int>()
     private var seriesList = page.switchMap {
-        showUseCase.getSeriesList(it)
+        showUseCase.getSeriesList(it).asLiveData()
     }
 
     fun setAlreadyShimmer() {

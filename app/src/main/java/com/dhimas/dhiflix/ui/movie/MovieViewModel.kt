@@ -1,9 +1,6 @@
 package com.dhimas.dhiflix.ui.movie
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
@@ -13,7 +10,7 @@ class MovieViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
     private val page = MutableLiveData<Int>()
 
     private var movieList = page.switchMap {
-        showUseCase.getMovieList(it)
+        showUseCase.getMovieList(it).asLiveData()
     }
 
     fun setAlreadyShimmer() {

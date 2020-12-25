@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName
 data class SeriesListResponse(
 
     @SerializedName("results")
-    val seriesList: List<SeriesResponse>? = null
+    val seriesList: List<SeriesResponse>
 
 )

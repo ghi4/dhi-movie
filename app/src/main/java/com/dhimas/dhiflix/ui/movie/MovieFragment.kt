@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentMovieBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
@@ -94,13 +95,13 @@ class MovieFragment : Fragment() {
 
     private fun viewModelObserver() {
         viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
-            when (movieList.status) {
-                Status.LOADING -> {
+            when (movieList) {
+                is Resource.Loading -> {
                     if (lastBottomLocation == 0)
                         startShimmer()
                 }
 
-                Status.SUCCESS -> {
+                is Resource.Success -> {
                     if (movieList.data != null) {
                         movieAdapter.addMovies(movieList.data as ArrayList<Show>)
                         movieAdapter.notifyDataSetChanged()
@@ -120,7 +121,7 @@ class MovieFragment : Fragment() {
                     viewModel.setAlreadyShimmer()
                 }
 
-                Status.ERROR -> {
+                is Resource.Error -> {
                     showSnackBar(
                         bottomNavigationView,
                         movieList.message ?: getString(R.string.unknown_error)

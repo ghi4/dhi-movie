@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentFavoriteBinding
 import com.dhimas.dhiflix.core.utils.Const
@@ -61,11 +62,11 @@ class FavoriteFragment : Fragment() {
 
     private fun viewModelObserveMovies() {
         viewModel.getFavoriteMovies().observe(viewLifecycleOwner, { favoriteMovieList ->
-            when (favoriteMovieList.status) {
-                Status.LOADING -> {
+            when (favoriteMovieList) {
+                is Resource.Loading -> {
                     setViewVisibility(loading = true, ivInfo = true, tvInfo = true)
                 }
-                Status.SUCCESS -> {
+                is Resource.Success -> {
                     favoriteMovieAdapter.addMovies(favoriteMovieList.data as ArrayList<Show>)
                     favoriteMovieAdapter.notifyDataSetChanged()
 
@@ -76,7 +77,7 @@ class FavoriteFragment : Fragment() {
                         setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
                     }
                 }
-                Status.ERROR -> {
+                is Resource.Error -> {
                     setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                     binding.tvFavoriteInfo.text = favoriteMovieList.message
                 }
@@ -86,11 +87,11 @@ class FavoriteFragment : Fragment() {
 
     private fun viewModelObserveSeries() {
         viewModel.getFavoriteSeries().observe(viewLifecycleOwner, { favoriteSeriesList ->
-            when (favoriteSeriesList.status) {
-                Status.LOADING -> {
+            when (favoriteSeriesList) {
+                is Resource.Loading -> {
                     setViewVisibility(loading = true, ivInfo = true, tvInfo = true)
                 }
-                Status.SUCCESS -> {
+                is Resource.Success -> {
                     favoriteSeriesAdapter.addSeries(favoriteSeriesList.data as ArrayList<Show>)
                     favoriteSeriesAdapter.notifyDataSetChanged()
 
@@ -101,7 +102,7 @@ class FavoriteFragment : Fragment() {
                         setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
                     }
                 }
-                Status.ERROR -> {
+                is Resource.Error -> {
                     setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                     binding.tvFavoriteInfo.text = favoriteSeriesList.message
                 }

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentSearchMovieBinding
 import com.dhimas.dhiflix.ui.movie.MovieAdapter
@@ -34,8 +35,8 @@ class SearchMovieFragment : Fragment() {
         setupUI()
 
         viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
-            when (movieList.status) {
-                Status.SUCCESS -> {
+            when (movieList) {
+                is Resource.Loading -> {
                     movieAdapter.addMovies(movieList.data as ArrayList<Show>)
                     movieAdapter.notifyDataSetChanged()
 
@@ -50,11 +51,11 @@ class SearchMovieFragment : Fragment() {
                     }
                 }
 
-                Status.LOADING -> {
+                is Resource.Success -> {
                     setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
                 }
 
-                Status.ERROR -> {
+                is Resource.Error -> {
                     setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                     setInfoImageAndMessage(
                         R.drawable.undraw_signal_searching_bhpc,

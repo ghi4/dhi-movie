@@ -13,50 +13,50 @@ import retrofit2.http.Query
 interface RetrofitInterface {
 
     @GET("movie/popular")
-    fun getMovieList(
+    suspend fun getMovieList(
         @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY,
         @Query("page") page: Int
-    ): Call<MovieListResponse>
+    ): MovieListResponse
 
     @GET("tv/popular")
-    fun getSeriesList(
+    suspend fun getSeriesList(
         @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY,
         @Query("page") page: Int
-    ): Call<SeriesListResponse>
+    ): SeriesListResponse
 
     @GET("movie/{movie_id}")
-    fun getMovieDetail(
+    suspend fun getMovieDetail(
         @Path("movie_id") movieId: String,
         @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY
-    ): Call<MovieResponse>
+    ): MovieResponse
 
     @GET("tv/{tv_id}")
-    fun getSeriesDetail(
+    suspend fun getSeriesDetail(
         @Path("tv_id") tvId: String,
         @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY
-    ): Call<SeriesResponse>
+    ): SeriesResponse
 
     @GET("movie/{movie_id}/similar")
-    fun getSimilarMovie(
+    suspend fun getSimilarMovie(
         @Path("movie_id") movieId: String,
         @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY
-    ): Call<MovieListResponse>
+    ): MovieListResponse
 
     @GET("tv/{tv_id}/similar")
-    fun getSimilarSeries(
+    suspend fun getSimilarSeries(
         @Path("tv_id") tvId: String,
         @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY
-    ): Call<SeriesListResponse>
+    ): SeriesListResponse
 
     @GET("/3/search/movie")
-    fun searchMovie(
+    suspend fun searchMovie(
         @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY,
         @Query("query") keyword: String
-    ): Call<MovieListResponse>
+    ): MovieListResponse
 
     @GET("/3/search/tv")
-    fun searchSeries(
+    suspend fun searchSeries(
         @Query("api_key") api: String? = BuildConfig.TMDB_API_KEY,
         @Query("query") keyword: String
-    ): Call<SeriesListResponse>
+    ): SeriesListResponse
 }

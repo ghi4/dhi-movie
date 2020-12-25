@@ -1,6 +1,7 @@
 package com.dhimas.dhiflix.ui.series
 
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentSeriesBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
@@ -93,13 +95,13 @@ class SeriesFragment : Fragment() {
 
     private fun viewModelObserver() {
         viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
-            when (seriesList.status) {
-                Status.LOADING -> {
+            when (seriesList) {
+                is Resource.Loading -> {
                     if (lastBottomLocation == 0)
                         startShimmer()
                 }
 
-                Status.SUCCESS -> {
+                is Resource.Success -> {
                     if (seriesList.data != null && seriesList.data.isNotEmpty()) {
                         seriesAdapter.addSeries(seriesList.data as ArrayList<Show>)
                         seriesAdapter.notifyDataSetChanged()
@@ -119,7 +121,7 @@ class SeriesFragment : Fragment() {
                     viewModel.setAlreadyShimmer()
                 }
 
-                Status.ERROR -> {
+                is Resource.Error -> {
                     showSnackBar(
                         bottomNavigationView,
                         seriesList.message ?: getString(R.string.unknown_error)

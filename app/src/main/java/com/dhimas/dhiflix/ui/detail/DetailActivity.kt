@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.ActivityDetailBinding
 import com.dhimas.dhiflix.core.utils.Const
@@ -80,12 +81,12 @@ class DetailActivity : AppCompatActivity() {
 
     private fun viewModelObserveDetail() {
         viewModel.getShow().observe(this, { mShow ->
-            when (mShow.status) {
-                Status.LOADING -> {
+            when (mShow) {
+                is Resource.Loading -> {
                     startShimmering()
                 }
 
-                Status.SUCCESS -> {
+                is Resource.Success -> {
                     if (mShow.data != null) {
 
                         show = mShow.data
@@ -128,7 +129,7 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
 
-                Status.ERROR -> {
+                is Resource.Error -> {
                     Snackbar.make(
                         binding.root,
                         mShow.message ?: getString(R.string.unknown_error),
@@ -146,12 +147,12 @@ class DetailActivity : AppCompatActivity() {
 
     private fun viewModelObserveSimilarList() {
         viewModel.getSimilarList().observe(this, { movieList ->
-            when (movieList.status) {
-                Status.LOADING -> {
+            when (movieList) {
+                is Resource.Loading -> {
                     startShimmerList()
                 }
 
-                Status.SUCCESS -> {
+                is Resource.Success -> {
                     if (movieList.data.isNullOrEmpty()) {
                         showToast(this, getString(R.string.no_similar_list_found))
                         viewModel.setListEmptyTrigger()
@@ -163,7 +164,7 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
 
-                Status.ERROR -> {
+                is Resource.Error -> {
                     showToast(this, getString(R.string.list_failed_to_load))
                     Snackbar.make(
                         binding.root,
@@ -180,12 +181,12 @@ class DetailActivity : AppCompatActivity() {
 
     private fun viewModelObservePopularList() {
         viewModel.getPopularList().observe(this, { movieList ->
-            when (movieList.status) {
-                Status.LOADING -> {
+            when (movieList) {
+                is Resource.Loading -> {
                     startShimmerList()
                 }
 
-                Status.SUCCESS -> {
+                is Resource.Success -> {
                     if (movieList.data.isNullOrEmpty()) {
                         binding.tvDetailInterestTitle.visibility = View.GONE
                         showToast(this, getString(R.string.no_popular_list_found))
@@ -197,7 +198,7 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
 
-                Status.ERROR -> {
+                is Resource.Error -> {
                     showToast(this, getString(R.string.list_failed_to_load))
                     Snackbar.make(
                         binding.root,

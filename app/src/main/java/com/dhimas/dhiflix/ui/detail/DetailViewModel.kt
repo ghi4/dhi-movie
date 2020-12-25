@@ -1,9 +1,6 @@
 package com.dhimas.dhiflix.ui.detail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.dhimas.dhiflix.core.data.source.local.entity.DoubleTrigger
 import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.data.Resource
@@ -18,18 +15,18 @@ class DetailViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
     private var show = doubleTrigger.switchMap {
         when (it.showType) {
             Const.MOVIE_TYPE ->
-                showUseCase.getMovieDetail(it.showId)
+                showUseCase.getMovieDetail(it.showId).asLiveData()
             else ->
-                showUseCase.getSeriesDetail(it.showId)
+                showUseCase.getSeriesDetail(it.showId).asLiveData()
         }
     }
 
     private var similarList = doubleTrigger.switchMap {
         when (it.showType) {
             Const.MOVIE_TYPE ->
-                showUseCase.getSimilarMovieList(it.showId)
+                showUseCase.getSimilarMovieList(it.showId).asLiveData()
             else ->
-                showUseCase.getSimilarSeriesList(it.showId)
+                showUseCase.getSimilarSeriesList(it.showId).asLiveData()
         }
     }
 
@@ -39,9 +36,9 @@ class DetailViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
 
         when (showType) {
             Const.MOVIE_TYPE ->
-                showUseCase.getMovieList(page)
+                showUseCase.getMovieList(page).asLiveData()
             else ->
-                showUseCase.getSeriesList(page)
+                showUseCase.getSeriesList(page).asLiveData()
         }
     }
 

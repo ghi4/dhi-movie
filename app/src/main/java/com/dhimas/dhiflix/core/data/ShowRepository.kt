@@ -1,8 +1,5 @@
 package com.dhimas.dhiflix.core.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.map
 import com.dhimas.dhiflix.core.data.source.local.LocalDataSource
 import com.dhimas.dhiflix.core.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.core.data.source.remote.ApiResponse
@@ -13,6 +10,8 @@ import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.repository.ShowDataSource
 import com.dhimas.dhiflix.core.utils.AppExecutors
 import com.dhimas.dhiflix.core.utils.DataMapper
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class ShowRepository private constructor(
     private val remoteDataSource: RemoteDataSource,
@@ -34,10 +33,10 @@ class ShowRepository private constructor(
             }
     }
 
-    override fun getMovieList(page: Int): LiveData<Resource<List<Show>>> {
+    override fun getMovieList(page: Int): Flow<Resource<List<Show>>> {
         return object :
-            NetworkBoundResource<List<Show>, List<MovieResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<Show>> {
+            NetworkBoundResource<List<Show>, List<MovieResponse>>() {
+            public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.getMovies(page).map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
@@ -47,11 +46,11 @@ class ShowRepository private constructor(
                 return data == null || data.isEmpty() || data.size != page * 20
             }
 
-            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> {
+            override suspend fun createCall(): Flow<ApiResponse<List<MovieResponse>>> {
                 return remoteDataSource.getMovieList(page)
             }
 
-            override fun saveCallResult(data: List<MovieResponse>) {
+            override suspend fun saveCallResult(data: List<MovieResponse>) {
                 val movieList = ArrayList<ShowEntity>()
 
                 data.map {
@@ -61,14 +60,14 @@ class ShowRepository private constructor(
 
                 localDataSource.insertShows(movieList)
             }
-        }.asLiveData()
+        }.asFlow()
 
     }
 
-    override fun getSeriesList(page: Int): LiveData<Resource<List<Show>>> {
+    override fun getSeriesList(page: Int): Flow<Resource<List<Show>>> {
         return object :
-            NetworkBoundResource<List<Show>, List<SeriesResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<Show>> {
+            NetworkBoundResource<List<Show>, List<SeriesResponse>>() {
+            public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.getSeries(page).map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
@@ -78,11 +77,11 @@ class ShowRepository private constructor(
                 return data == null || data.isEmpty() || data.size != page * 20
             }
 
-            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> {
+            override suspend fun createCall(): Flow<ApiResponse<List<SeriesResponse>>> {
                 return remoteDataSource.getSeriesList(page)
             }
 
-            override fun saveCallResult(data: List<SeriesResponse>) {
+            override suspend fun saveCallResult(data: List<SeriesResponse>) {
                 val seriesList = ArrayList<ShowEntity>()
 
                 data.map {
@@ -92,14 +91,14 @@ class ShowRepository private constructor(
 
                 localDataSource.insertShows(seriesList)
             }
-        }.asLiveData()
+        }.asFlow()
 
     }
 
-    override fun getMovieDetail(movie_id: String): LiveData<Resource<Show>> {
-        return object : NetworkBoundResource<Show, MovieResponse>(appExecutors) {
-            public override fun loadFromDB(): LiveData<Show> {
-                return Transformations.map(localDataSource.getShowById(movie_id)){
+    override fun getMovieDetail(movie_id: String): Flow<Resource<Show>> {
+        return object : NetworkBoundResource<Show, MovieResponse>() {
+            public override fun loadFromDB(): Flow<Show> {
+                return localDataSource.getShowById(movie_id).map {
                     DataMapper.mapEntityToDomain(it)
                 }
             }
@@ -108,21 +107,21 @@ class ShowRepository private constructor(
                 return data == null
             }
 
-            override fun createCall(): LiveData<ApiResponse<MovieResponse>> {
+            override suspend fun createCall(): Flow<ApiResponse<MovieResponse>> {
                 return remoteDataSource.getMovieDetail(movie_id)
             }
 
-            override fun saveCallResult(data: MovieResponse) {
+            override suspend fun saveCallResult(data: MovieResponse) {
                 val movie = DataMapper.mapMovieResponseToEntity(data)
                 localDataSource.insertShows(listOf(movie))
             }
-        }.asLiveData()
+        }.asFlow()
     }
 
-    override fun getSeriesDetail(series_id: String): LiveData<Resource<Show>> {
-        return object : NetworkBoundResource<Show, SeriesResponse>(appExecutors) {
-            public override fun loadFromDB(): LiveData<Show> {
-                return Transformations.map(localDataSource.getShowById(series_id)){
+    override fun getSeriesDetail(series_id: String): Flow<Resource<Show>> {
+        return object : NetworkBoundResource<Show, SeriesResponse>() {
+            public override fun loadFromDB(): Flow<Show> {
+                return localDataSource.getShowById(series_id).map {
                     DataMapper.mapEntityToDomain(it)
                 }
             }
@@ -131,21 +130,21 @@ class ShowRepository private constructor(
                 return data == null
             }
 
-            override fun createCall(): LiveData<ApiResponse<SeriesResponse>> {
+            override suspend fun createCall(): Flow<ApiResponse<SeriesResponse>> {
                 return remoteDataSource.getSeriesDetail(series_id)
             }
 
-            override fun saveCallResult(data: SeriesResponse) {
+            override suspend fun saveCallResult(data: SeriesResponse) {
                 val series = DataMapper.mapSeriesResponseToEntity(data)
                 localDataSource.insertShows(listOf(series))
             }
-        }.asLiveData()
+        }.asFlow()
     }
 
-    override fun getFavoriteMovieList(): LiveData<Resource<List<Show>>> {
+    override fun getFavoriteMovieList(): Flow<Resource<List<Show>>> {
         return object :
-            NetworkBoundResource<List<Show>, List<MovieResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<Show>> {
+            NetworkBoundResource<List<Show>, List<MovieResponse>>() {
+            public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.getFavoriteMovies().map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
@@ -153,20 +152,20 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: List<Show>?): Boolean = false
 
-            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> {
+            override suspend fun createCall(): Flow<ApiResponse<List<MovieResponse>>> {
                 return remoteDataSource.getMovieList(1)
             }
 
-            override fun saveCallResult(data: List<MovieResponse>) {
+            override suspend fun saveCallResult(data: List<MovieResponse>) {
 
             }
-        }.asLiveData()
+        }.asFlow()
     }
 
-    override fun getFavoriteSeriesList(): LiveData<Resource<List<Show>>> {
+    override fun getFavoriteSeriesList(): Flow<Resource<List<Show>>> {
         return object :
-            NetworkBoundResource<List<Show>, List<SeriesResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<Show>> {
+            NetworkBoundResource<List<Show>, List<SeriesResponse>>() {
+            public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.getFavoriteSeries().map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
@@ -174,21 +173,21 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: List<Show>?): Boolean = false
 
-            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> {
+            override suspend fun createCall(): Flow<ApiResponse<List<SeriesResponse>>> {
                 return remoteDataSource.getSeriesList(1)
             }
 
-            override fun saveCallResult(data: List<SeriesResponse>) {
+            override suspend fun saveCallResult(data: List<SeriesResponse>) {
 
             }
 
-        }.asLiveData()
+        }.asFlow()
     }
 
-    override fun getSimilarMovieList(movie_id: String): LiveData<Resource<List<Show>>> {
+    override fun getSimilarMovieList(movie_id: String): Flow<Resource<List<Show>>> {
         return object :
-            NetworkBoundResource<List<Show>, List<MovieResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<Show>> {
+            NetworkBoundResource<List<Show>, List<MovieResponse>>() {
+            public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.getSimilarMovies().map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
@@ -196,11 +195,11 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: List<Show>?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> {
+            override suspend fun createCall(): Flow<ApiResponse<List<MovieResponse>>> {
                 return remoteDataSource.getSimilarMovieList(movie_id)
             }
 
-            override fun saveCallResult(data: List<MovieResponse>) {
+            override suspend fun saveCallResult(data: List<MovieResponse>) {
                 val movieList = ArrayList<ShowEntity>()
                 val isSimilar = 1
 
@@ -214,14 +213,14 @@ class ShowRepository private constructor(
 
                 localDataSource.insertShows(movieList)
             }
-        }.asLiveData()
+        }.asFlow()
     }
 
-    override fun getSimilarSeriesList(series_id: String): LiveData<Resource<List<Show>>> {
+    override fun getSimilarSeriesList(series_id: String): Flow<Resource<List<Show>>> {
         return object :
-            NetworkBoundResource<List<Show>, List<SeriesResponse>>(appExecutors) {
+            NetworkBoundResource<List<Show>, List<SeriesResponse>>() {
 
-            public override fun loadFromDB(): LiveData<List<Show>> {
+            public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.getSimilarSeries().map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
@@ -229,11 +228,11 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: List<Show>?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> {
+            override suspend fun createCall(): Flow<ApiResponse<List<SeriesResponse>>> {
                 return remoteDataSource.getSimilarSeriesList(series_id)
             }
 
-            override fun saveCallResult(data: List<SeriesResponse>) {
+            override suspend fun saveCallResult(data: List<SeriesResponse>) {
                 val seriesList = ArrayList<ShowEntity>()
                 val isSimilar = 1
 
@@ -247,13 +246,13 @@ class ShowRepository private constructor(
 
                 localDataSource.insertShows(seriesList)
             }
-        }.asLiveData()
+        }.asFlow()
     }
 
-    override fun searchMovie(keyword: String): LiveData<Resource<List<Show>>> {
+    override fun searchMovie(keyword: String): Flow<Resource<List<Show>>> {
         return object :
-            NetworkBoundResource<List<Show>, List<MovieResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<Show>> {
+            NetworkBoundResource<List<Show>, List<MovieResponse>>() {
+            public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.searchMovies("$keyword%").map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
@@ -261,11 +260,11 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: List<Show>?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> {
+            override suspend fun createCall(): Flow<ApiResponse<List<MovieResponse>>> {
                 return remoteDataSource.searchMovie(keyword)
             }
 
-            override fun saveCallResult(data: List<MovieResponse>) {
+            override suspend fun saveCallResult(data: List<MovieResponse>) {
                 val movieList = ArrayList<ShowEntity>()
                 val isSearch = 1
 
@@ -278,13 +277,13 @@ class ShowRepository private constructor(
 
                 localDataSource.insertShows(movieList)
             }
-        }.asLiveData()
+        }.asFlow()
     }
 
-    override fun searchSeries(keyword: String): LiveData<Resource<List<Show>>> {
+    override fun searchSeries(keyword: String): Flow<Resource<List<Show>>> {
         return object :
-            NetworkBoundResource<List<Show>, List<SeriesResponse>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<Show>> {
+            NetworkBoundResource<List<Show>, List<SeriesResponse>>() {
+            public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.searchSeries("$keyword%").map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
@@ -292,11 +291,11 @@ class ShowRepository private constructor(
 
             override fun shouldFetch(data: List<Show>?): Boolean = true
 
-            override fun createCall(): LiveData<ApiResponse<List<SeriesResponse>>> {
+            override suspend fun createCall(): Flow<ApiResponse<List<SeriesResponse>>> {
                 return remoteDataSource.searchSeries(keyword)
             }
 
-            override fun saveCallResult(data: List<SeriesResponse>) {
+            override suspend fun saveCallResult(data: List<SeriesResponse>) {
                 val seriesList = ArrayList<ShowEntity>()
                 val isSearch = 1
 
@@ -309,7 +308,7 @@ class ShowRepository private constructor(
 
                 localDataSource.insertShows(seriesList)
             }
-        }.asLiveData()
+        }.asFlow()
     }
 
     override fun setFavorite(show: Show) {

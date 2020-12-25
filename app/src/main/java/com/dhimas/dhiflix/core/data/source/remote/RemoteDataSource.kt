@@ -1,21 +1,16 @@
 package com.dhimas.dhiflix.core.data.source.remote
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.dhimas.dhiflix.core.data.source.remote.response.MovieListResponse
+import android.util.Log
 import com.dhimas.dhiflix.core.data.source.remote.response.MovieResponse
-import com.dhimas.dhiflix.core.data.source.remote.response.SeriesListResponse
 import com.dhimas.dhiflix.core.data.source.remote.response.SeriesResponse
 import com.dhimas.dhiflix.core.data.source.remote.retrofit.RetrofitInterface
-import com.dhimas.dhiflix.core.utils.EspressoIdlingResource
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class RemoteDataSource private constructor(private val retrofitService: RetrofitInterface) {
-    val noInternet = "Internet connection issue."
-    val noMovies = "No movies found."
-    val noSeries = "No series found."
+    private val noInternet = "Internet connection issue."
 
     companion object {
         @Volatile
@@ -27,284 +22,127 @@ class RemoteDataSource private constructor(private val retrofitService: Retrofit
             }
     }
 
-    fun getMovieList(page: Int): LiveData<ApiResponse<List<MovieResponse>>> {
-        val call = retrofitService.getMovieList(page = page)
-        val resultMovie = MutableLiveData<ApiResponse<List<MovieResponse>>>()
-        var movieListResponse = ArrayList<MovieResponse>()
+    suspend fun getMovieList(page: Int): Flow<ApiResponse<List<MovieResponse>>> {
+        return flow {
+            try {
+                val response = retrofitService.getMovieList(page = page)
+                val data = response.movieList
 
-        EspressoIdlingResource.increment()
-
-        call.enqueue(object : Callback<MovieListResponse> {
-            override fun onResponse(
-                call: Call<MovieListResponse>,
-                response: Response<MovieListResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val mMovieListResponse = response.body()?.movieList
-
-                    if (!mMovieListResponse.isNullOrEmpty()) {
-                        movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
-                        resultMovie.value = ApiResponse.success(movieListResponse)
-                    } else {
-                        movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
-                        resultMovie.value = ApiResponse.empty(movieListResponse, noMovies)
-                    }
-                    EspressoIdlingResource.decrement()
+                if (data.isNotEmpty()){
+                    emit(ApiResponse.Success(data))
+                } else {
+                    emit(ApiResponse.Empty)
                 }
+            } catch (e : Exception) {
+                emit(ApiResponse.Error(noInternet))
             }
-
-            override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-                resultMovie.value = ApiResponse.error(movieListResponse, noInternet)
-                EspressoIdlingResource.decrement()
-            }
-        })
-
-        return resultMovie
+        }.flowOn(Dispatchers.IO)
     }
 
-    fun getSeriesList(page: Int): LiveData<ApiResponse<List<SeriesResponse>>> {
-        val call = retrofitService.getSeriesList(page = page)
-        val resultSeries = MutableLiveData<ApiResponse<List<SeriesResponse>>>()
-        var seriesListResponse = ArrayList<SeriesResponse>()
+    fun getSeriesList(page: Int): Flow<ApiResponse<List<SeriesResponse>>> {
+        return flow {
+            try {
+                val response = retrofitService.getSeriesList(page = page)
+                val data = response.seriesList
 
-        EspressoIdlingResource.increment()
-
-        call.enqueue(object : Callback<SeriesListResponse> {
-            override fun onResponse(
-                call: Call<SeriesListResponse>,
-                response: Response<SeriesListResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val mSeriesListResponse = response.body()?.seriesList
-
-                    if (!mSeriesListResponse.isNullOrEmpty()) {
-                        seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
-                        resultSeries.value = ApiResponse.success(seriesListResponse)
-                    } else {
-                        seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
-                        resultSeries.value =
-                            ApiResponse.error(seriesListResponse, noSeries)
-                    }
+                if (data.isNotEmpty()){
+                    emit(ApiResponse.Success(data))
+                } else {
+                    emit(ApiResponse.Empty)
                 }
-                EspressoIdlingResource.decrement()
+            } catch (e : Exception) {
+                emit(ApiResponse.Error(noInternet))
             }
-
-            override fun onFailure(call: Call<SeriesListResponse>, t: Throwable) {
-                resultSeries.value =
-                    ApiResponse.error(seriesListResponse, noInternet)
-                EspressoIdlingResource.decrement()
-            }
-        })
-
-        return resultSeries
+        }.flowOn(Dispatchers.IO)
     }
 
-    fun getMovieDetail(movie_id: String): LiveData<ApiResponse<MovieResponse>> {
-        val call = retrofitService.getMovieDetail(movieId = movie_id)
-        val resultMovie = MutableLiveData<ApiResponse<MovieResponse>>()
-
-        EspressoIdlingResource.increment()
-
-        call.enqueue(object : Callback<MovieResponse> {
-            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
-                if (response.isSuccessful) {
-                    val movieResponse = response.body()
-
-                    if (movieResponse != null) {
-                        resultMovie.value = ApiResponse.success(movieResponse)
-                    } else {
-                        resultMovie.value = ApiResponse.error(MovieResponse(), noMovies)
-                    }
-                }
-                EspressoIdlingResource.decrement()
+    fun getMovieDetail(movie_id: String): Flow<ApiResponse<MovieResponse>> {
+        return flow {
+            try {
+                val response = retrofitService.getMovieDetail(movie_id)
+                emit(ApiResponse.Success(response))
+            } catch (e : Exception) {
+                emit(ApiResponse.Error(noInternet))
             }
-
-            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                resultMovie.value = ApiResponse.error(MovieResponse(), noInternet)
-                EspressoIdlingResource.decrement()
-            }
-        })
-
-        return resultMovie
+        }.flowOn(Dispatchers.IO)
     }
 
-    fun getSeriesDetail(series_id: String): LiveData<ApiResponse<SeriesResponse>> {
-        val call = retrofitService.getSeriesDetail(tvId = series_id)
-        val resultSeries = MutableLiveData<ApiResponse<SeriesResponse>>()
-
-        EspressoIdlingResource.increment()
-
-        call.enqueue(object : Callback<SeriesResponse> {
-            override fun onResponse(
-                call: Call<SeriesResponse>,
-                response: Response<SeriesResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val seriesResponse = response.body()
-
-                    if (seriesResponse != null) {
-                        resultSeries.value = ApiResponse.success(seriesResponse)
-                    } else {
-                        resultSeries.value = ApiResponse.empty(SeriesResponse(), noSeries)
-                    }
-                }
-                EspressoIdlingResource.decrement()
+    fun getSeriesDetail(series_id: String): Flow<ApiResponse<SeriesResponse>> {
+        return flow {
+            try {
+                val response = retrofitService.getSeriesDetail(series_id)
+                emit(ApiResponse.Success(response))
+            } catch (e : Exception) {
+                emit(ApiResponse.Error(noInternet))
             }
-
-            override fun onFailure(call: Call<SeriesResponse>, t: Throwable) {
-                resultSeries.value = ApiResponse.error(SeriesResponse(), noInternet)
-                EspressoIdlingResource.decrement()
-            }
-
-        })
-
-        return resultSeries
+        }.flowOn(Dispatchers.IO)
     }
 
-    fun getSimilarMovieList(movie_id: String): LiveData<ApiResponse<List<MovieResponse>>> {
-        val call = retrofitService.getSimilarMovie(movieId = movie_id)
-        val resultMovie = MutableLiveData<ApiResponse<List<MovieResponse>>>()
-        var movieListResponse = ArrayList<MovieResponse>()
+    fun getSimilarMovieList(movie_id: String): Flow<ApiResponse<List<MovieResponse>>> {
+        return flow {
+            try {
+                val response = retrofitService.getSimilarMovie(movieId = movie_id)
+                val data = response.movieList
 
-        EspressoIdlingResource.increment()
-
-        call.enqueue(object : Callback<MovieListResponse> {
-            override fun onResponse(
-                call: Call<MovieListResponse>,
-                response: Response<MovieListResponse>
-            ) {
-
-                if (response.isSuccessful) {
-                    val mMovieListResponse = response.body()?.movieList
-
-                    if (!mMovieListResponse.isNullOrEmpty()) {
-                        movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
-                        resultMovie.value = ApiResponse.success(movieListResponse)
-                    } else {
-                        movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
-                        resultMovie.value = ApiResponse.empty(movieListResponse, noMovies)
-                    }
+                if (data.isNotEmpty()){
+                    emit(ApiResponse.Success(data))
+                } else {
+                    emit(ApiResponse.Empty)
                 }
-                EspressoIdlingResource.decrement()
+            } catch (e : Exception) {
+                emit(ApiResponse.Error(noInternet))
             }
-
-            override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-                resultMovie.value = ApiResponse.error(movieListResponse, noInternet)
-                EspressoIdlingResource.decrement()
-            }
-        })
-
-        return resultMovie
+        }.flowOn(Dispatchers.IO)
     }
 
-    fun getSimilarSeriesList(series_id: String): LiveData<ApiResponse<List<SeriesResponse>>> {
-        val call = retrofitService.getSimilarSeries(tvId = series_id)
-        val resultSeries = MutableLiveData<ApiResponse<List<SeriesResponse>>>()
-        var seriesListResponse = ArrayList<SeriesResponse>()
+    fun getSimilarSeriesList(series_id: String): Flow<ApiResponse<List<SeriesResponse>>> {
+        return flow {
+            try {
+                val response = retrofitService.getSimilarSeries(series_id)
+                val data = response.seriesList
 
-        EspressoIdlingResource.increment()
-
-        call.enqueue(object : Callback<SeriesListResponse> {
-            override fun onResponse(
-                call: Call<SeriesListResponse>,
-                response: Response<SeriesListResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val mSeriesListResponse = response.body()?.seriesList
-
-                    if (!mSeriesListResponse.isNullOrEmpty()) {
-                        seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
-                        resultSeries.value = ApiResponse.success(seriesListResponse)
-                    } else {
-                        seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
-                        resultSeries.value =
-                            ApiResponse.empty(seriesListResponse, noSeries)
-                    }
+                if (data.isNotEmpty()){
+                    emit(ApiResponse.Success(data))
+                } else {
+                    emit(ApiResponse.Empty)
                 }
-                EspressoIdlingResource.decrement()
+            } catch (e : Exception) {
+                emit(ApiResponse.Error(noInternet))
             }
-
-            override fun onFailure(call: Call<SeriesListResponse>, t: Throwable) {
-                resultSeries.value =
-                    ApiResponse.error(seriesListResponse, noInternet)
-                EspressoIdlingResource.decrement()
-            }
-        })
-
-        return resultSeries
+        }.flowOn(Dispatchers.IO)
     }
 
-    fun searchMovie(keyword: String): LiveData<ApiResponse<List<MovieResponse>>> {
-        val call = retrofitService.searchMovie(keyword = keyword)
-        val resultMovie = MutableLiveData<ApiResponse<List<MovieResponse>>>()
-        var movieListResponse = ArrayList<MovieResponse>()
+    fun searchMovie(keyword: String): Flow<ApiResponse<List<MovieResponse>>> {
+        return flow {
+            try {
+                val response = retrofitService.searchMovie(keyword = keyword)
+                val data = response.movieList
 
-        EspressoIdlingResource.increment()
-
-        call.enqueue(object : Callback<MovieListResponse> {
-            override fun onResponse(
-                call: Call<MovieListResponse>,
-                response: Response<MovieListResponse>
-            ) {
-
-                if (response.isSuccessful) {
-                    val mMovieListResponse = response.body()?.movieList
-
-                    if (!mMovieListResponse.isNullOrEmpty()) {
-                        movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
-                        resultMovie.value = ApiResponse.success(movieListResponse)
-                    } else {
-                        movieListResponse = mMovieListResponse as ArrayList<MovieResponse>
-                        resultMovie.value = ApiResponse.empty(movieListResponse, noMovies)
-                    }
+                if (data.isNotEmpty()){
+                    emit(ApiResponse.Success(data))
+                } else {
+                    emit(ApiResponse.Empty)
                 }
-                EspressoIdlingResource.decrement()
+            } catch (e : Exception) {
+                emit(ApiResponse.Error(noInternet))
             }
-
-            override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-                resultMovie.value = ApiResponse.error(movieListResponse, noInternet)
-                EspressoIdlingResource.decrement()
-            }
-        })
-
-        return resultMovie
+        }.flowOn(Dispatchers.IO)
     }
 
-    fun searchSeries(keyword: String): LiveData<ApiResponse<List<SeriesResponse>>> {
-        val call = retrofitService.searchSeries(keyword = keyword)
-        val resultSeries = MutableLiveData<ApiResponse<List<SeriesResponse>>>()
-        var seriesListResponse = ArrayList<SeriesResponse>()
+    fun searchSeries(keyword: String): Flow<ApiResponse<List<SeriesResponse>>> {
+        return flow {
+            try {
+                val response = retrofitService.searchSeries(keyword = keyword)
+                val data = response.seriesList
 
-        EspressoIdlingResource.increment()
-
-        call.enqueue(object : Callback<SeriesListResponse> {
-            override fun onResponse(
-                call: Call<SeriesListResponse>,
-                response: Response<SeriesListResponse>
-            ) {
-
-                if (response.isSuccessful) {
-                    val mSeriesListResponse = response.body()?.seriesList
-
-                    if (!mSeriesListResponse.isNullOrEmpty()) {
-                        seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
-                        resultSeries.value = ApiResponse.success(seriesListResponse)
-                    } else {
-                        seriesListResponse = mSeriesListResponse as ArrayList<SeriesResponse>
-                        resultSeries.value =
-                            ApiResponse.empty(seriesListResponse, noSeries)
-                    }
+                if (data.isNotEmpty()){
+                    emit(ApiResponse.Success(data))
+                } else {
+                    emit(ApiResponse.Empty)
                 }
-                EspressoIdlingResource.decrement()
+            } catch (e : Exception) {
+                emit(ApiResponse.Error(noInternet))
             }
-
-            override fun onFailure(call: Call<SeriesListResponse>, t: Throwable) {
-                resultSeries.value =
-                    ApiResponse.error(seriesListResponse, noInternet)
-                EspressoIdlingResource.decrement()
-            }
-        })
-
-        return resultSeries
+        }.flowOn(Dispatchers.IO)
     }
 }
