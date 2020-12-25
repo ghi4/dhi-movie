@@ -100,7 +100,7 @@ class SeriesFragment : Fragment() {
                 }
 
                 Status.SUCCESS -> {
-                    if (seriesList.data != null) {
+                    if (seriesList.data != null && seriesList.data.isNotEmpty()) {
                         seriesAdapter.addSeries(seriesList.data as ArrayList<Show>)
                         seriesAdapter.notifyDataSetChanged()
 

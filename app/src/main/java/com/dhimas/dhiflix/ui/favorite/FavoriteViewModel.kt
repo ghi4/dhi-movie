@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
-import androidx.paging.PagedList
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
@@ -20,9 +19,9 @@ class FavoriteViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
         showUseCase.getFavoriteSeriesList()
     }
 
-    fun getFavoriteMovies(): LiveData<Resource<PagedList<Show>>> = movieList
+    fun getFavoriteMovies(): LiveData<Resource<List<Show>>> = movieList
 
-    fun getFavoriteSeries(): LiveData<Resource<PagedList<Show>>> = seriesList
+    fun getFavoriteSeries(): LiveData<Resource<List<Show>>> = seriesList
 
     fun refresh() {
         refreshTrigger.value = Unit

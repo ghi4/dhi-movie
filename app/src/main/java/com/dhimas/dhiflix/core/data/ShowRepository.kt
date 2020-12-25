@@ -1,8 +1,8 @@
 package com.dhimas.dhiflix.core.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
-import androidx.paging.PagedList
 import com.dhimas.dhiflix.core.data.source.local.LocalDataSource
 import com.dhimas.dhiflix.core.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.core.data.source.remote.ApiResponse
@@ -86,7 +86,7 @@ class ShowRepository private constructor(
                 val seriesList = ArrayList<ShowEntity>()
 
                 data.map {
-                    val series = DataMapper.mapSeriesResponseToEntity(it)
+                    val series = DataMapper.mapSeriesResponseToEntity(it, page = page)
                     seriesList.add(series)
                 }
 
@@ -99,7 +99,7 @@ class ShowRepository private constructor(
     override fun getMovieDetail(movie_id: String): LiveData<Resource<Show>> {
         return object : NetworkBoundResource<Show, MovieResponse>(appExecutors) {
             public override fun loadFromDB(): LiveData<Show> {
-                return localDataSource.getShowById(movie_id).map {
+                return Transformations.map(localDataSource.getShowById(movie_id)){
                     DataMapper.mapEntityToDomain(it)
                 }
             }
@@ -122,7 +122,7 @@ class ShowRepository private constructor(
     override fun getSeriesDetail(series_id: String): LiveData<Resource<Show>> {
         return object : NetworkBoundResource<Show, SeriesResponse>(appExecutors) {
             public override fun loadFromDB(): LiveData<Show> {
-                return localDataSource.getShowById(series_id).map {
+                return Transformations.map(localDataSource.getShowById(series_id)){
                     DataMapper.mapEntityToDomain(it)
                 }
             }
@@ -313,9 +313,8 @@ class ShowRepository private constructor(
     }
 
     override fun setFavorite(show: Show) {
-        appExecutors.diskIO().execute {
-            localDataSource.setFavorite(DataMapper.mapDomainToEntity(show))
-        }
+        val showEntity = DataMapper.mapDomainToEntity(show)
+        appExecutors.diskIO().execute { localDataSource.setFavorite(showEntity) }
     }
 
 }

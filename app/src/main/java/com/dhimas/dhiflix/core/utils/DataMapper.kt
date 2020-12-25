@@ -73,7 +73,7 @@ object DataMapper {
         overview = input.overview,
         posterPath = input.posterPath,
         backdropPath = input.backdropPath,
-        showType = Const.MOVIE_TYPE,
+        showType = Const.SERIES_TYPE,
         page = page,
         isFavorite = isFavorite,
         isSimilar = isSimilar,
