@@ -54,12 +54,12 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
@@ -73,9 +73,9 @@ dependencies {
     implementation 'com.github.AgnaldoNP:AGSkeletonLoading:1.1'
 
     //Room
-    implementation "androidx.room:room-runtime:2.2.5"
+    implementation "androidx.room:room-runtime:2.2.6"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    kapt "androidx.room:room-compiler:2.2.5"
+    kapt "androidx.room:room-compiler:2.2.6"
 
     //Paging
     implementation "androidx.paging:paging-runtime-ktx:2.1.2"
