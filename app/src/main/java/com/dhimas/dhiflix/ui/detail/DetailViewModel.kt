@@ -1,11 +1,11 @@
 package com.dhimas.dhiflix.ui.detail
 
 import androidx.lifecycle.*
-import com.dhimas.dhiflix.core.data.source.local.entity.DoubleTrigger
-import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.data.Resource
+import com.dhimas.dhiflix.core.data.source.local.entity.DoubleTrigger
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
+import com.dhimas.dhiflix.core.utils.Const
 
 class DetailViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
     var isAlreadyShimmer: Boolean = false

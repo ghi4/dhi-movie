@@ -1,7 +1,7 @@
 package com.dhimas.dhiflix.core.domain.repository
 
-import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.data.Resource
+import com.dhimas.dhiflix.core.domain.model.Show
 import kotlinx.coroutines.flow.Flow
 
 interface ShowDataSource {

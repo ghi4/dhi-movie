@@ -5,19 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentFavoriteBinding
-import com.dhimas.dhiflix.ui.movie.MovieAdapter
-import com.dhimas.dhiflix.ui.series.SeriesAdapter
+import com.dhimas.dhiflix.ui.detail.DetailAdapter
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class FavoriteFragment : Fragment() {
     private lateinit var binding: FragmentFavoriteBinding
-    private lateinit var favoriteMovieAdapter: MovieAdapter
-    private lateinit var favoriteSeriesAdapter: SeriesAdapter
+
+    private lateinit var favoriteMovieAdapter: DetailAdapter
+    private lateinit var favoriteSeriesAdapter: DetailAdapter
     private val viewModel: FavoriteViewModel by viewModel()
 
     override fun onCreateView(
@@ -39,8 +38,8 @@ class FavoriteFragment : Fragment() {
     private fun setupUI() {
         setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
 
-        favoriteMovieAdapter = MovieAdapter()
-        favoriteSeriesAdapter = SeriesAdapter()
+        favoriteMovieAdapter = DetailAdapter()
+        favoriteSeriesAdapter = DetailAdapter()
 
         with(binding) {
             rvFavoriteMovie.layoutManager =
@@ -62,7 +61,8 @@ class FavoriteFragment : Fragment() {
                     setViewVisibility(loading = true, ivInfo = true, tvInfo = true)
                 }
                 is Resource.Success -> {
-                    favoriteMovieAdapter.addMovies(favoriteMovieList.data as ArrayList<Show>)
+                    favoriteMovieAdapter.setList(favoriteMovieList.data as ArrayList<Show>)
+                    favoriteMovieAdapter.setShimmer(false)
                     favoriteMovieAdapter.notifyDataSetChanged()
 
                     binding.pbFavorite.visibility = View.GONE
@@ -87,7 +87,8 @@ class FavoriteFragment : Fragment() {
                     setViewVisibility(loading = true, ivInfo = true, tvInfo = true)
                 }
                 is Resource.Success -> {
-                    favoriteSeriesAdapter.addSeries(favoriteSeriesList.data as ArrayList<Show>)
+                    favoriteSeriesAdapter.setList(favoriteSeriesList.data as ArrayList<Show>)
+                    favoriteSeriesAdapter.setShimmer(false)
                     favoriteSeriesAdapter.notifyDataSetChanged()
 
                     binding.pbFavorite.visibility = View.GONE

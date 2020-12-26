@@ -3,17 +3,13 @@ package com.dhimas.dhiflix.ui.main
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.core.utils.EspressoIdlingResource
 import org.hamcrest.Matchers.not
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -21,16 +17,6 @@ class MainActivityTest {
 
     @get:Rule
     var activityRule = ActivityScenarioRule(MainActivity::class.java)
-
-    @Before
-    fun setUp() {
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.testIdlingResource)
-    }
-
-    @After
-    fun tearDown() {
-        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.testIdlingResource)
-    }
 
     @Test
     fun loadMovies() {

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.dhimas.dhiflix.core.utils
 
 import android.os.Looper

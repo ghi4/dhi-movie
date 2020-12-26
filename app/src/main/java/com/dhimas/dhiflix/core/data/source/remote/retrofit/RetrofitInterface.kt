@@ -5,7 +5,6 @@ import com.dhimas.dhiflix.core.data.source.remote.response.MovieListResponse
 import com.dhimas.dhiflix.core.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.core.data.source.remote.response.SeriesListResponse
 import com.dhimas.dhiflix.core.data.source.remote.response.SeriesResponse
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

@@ -1,9 +1,9 @@
 package com.dhimas.dhiflix.core.utils
 
-import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.core.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.core.data.source.remote.response.SeriesResponse
+import com.dhimas.dhiflix.core.domain.model.Show
 
 object DataMapper {
 
@@ -52,7 +52,13 @@ object DataMapper {
             )
         }
 
-    fun mapMovieResponseToEntity(input: MovieResponse, page: Int? = 0, isFavorite: Int? = 0, isSimilar: Int? = 0, isSearch: Int? = 0) = ShowEntity(
+    fun mapMovieResponseToEntity(
+        input: MovieResponse,
+        page: Int? = 0,
+        isFavorite: Int? = 0,
+        isSimilar: Int? = 0,
+        isSearch: Int? = 0
+    ) = ShowEntity(
         id = input.movie_id,
         title = input.title,
         releaseDate = input.releaseDate,
@@ -66,7 +72,13 @@ object DataMapper {
         isSearch = isSearch
     )
 
-    fun mapSeriesResponseToEntity(input: SeriesResponse, page: Int? = 0, isFavorite: Int? = 0, isSimilar: Int? = 0, isSearch: Int? = 0) = ShowEntity(
+    fun mapSeriesResponseToEntity(
+        input: SeriesResponse,
+        page: Int? = 0,
+        isFavorite: Int? = 0,
+        isSimilar: Int? = 0,
+        isSearch: Int? = 0
+    ) = ShowEntity(
         id = input.series_id,
         title = input.name,
         releaseDate = input.releaseDate,

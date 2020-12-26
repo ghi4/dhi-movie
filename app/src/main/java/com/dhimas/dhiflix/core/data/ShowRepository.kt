@@ -20,20 +20,6 @@ class ShowRepository(
     private val appExecutors: AppExecutors
 ) : ShowDataSource {
 
-    companion object {
-        @Volatile
-        private var instance: ShowRepository? = null
-
-        fun getInstance(
-            remoteDataSource: RemoteDataSource,
-            localData: LocalDataSource,
-            appExecutors: AppExecutors
-        ): ShowRepository =
-            instance ?: synchronized(this) {
-                instance ?: ShowRepository(remoteDataSource, localData, appExecutors)
-            }
-    }
-
     override fun getMovieList(page: Int): Flow<Resource<List<Show>>> {
         return object :
             NetworkBoundResource<List<Show>, List<MovieResponse>>() {

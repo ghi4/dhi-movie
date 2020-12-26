@@ -1,6 +1,5 @@
 package com.dhimas.dhiflix.core.data.source.remote
 
-import android.util.Log
 import com.dhimas.dhiflix.core.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.core.data.source.remote.response.SeriesResponse
 import com.dhimas.dhiflix.core.data.source.remote.retrofit.RetrofitInterface
@@ -12,28 +11,18 @@ import kotlinx.coroutines.flow.flowOn
 class RemoteDataSource(private val retrofitService: RetrofitInterface) {
     private val noInternet = "Internet connection issue."
 
-    companion object {
-        @Volatile
-        private var instance: RemoteDataSource? = null
-
-        fun getInstance(retrofitService: RetrofitInterface): RemoteDataSource =
-            instance ?: synchronized(this) {
-                instance ?: RemoteDataSource(retrofitService)
-            }
-    }
-
     suspend fun getMovieList(page: Int): Flow<ApiResponse<List<MovieResponse>>> {
         return flow {
             try {
                 val response = retrofitService.getMovieList(page = page)
                 val data = response.movieList
 
-                if (data.isNotEmpty()){
+                if (data.isNotEmpty()) {
                     emit(ApiResponse.Success(data))
                 } else {
                     emit(ApiResponse.Empty)
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 emit(ApiResponse.Error(noInternet))
             }
         }.flowOn(Dispatchers.IO)
@@ -45,12 +34,12 @@ class RemoteDataSource(private val retrofitService: RetrofitInterface) {
                 val response = retrofitService.getSeriesList(page = page)
                 val data = response.seriesList
 
-                if (data.isNotEmpty()){
+                if (data.isNotEmpty()) {
                     emit(ApiResponse.Success(data))
                 } else {
                     emit(ApiResponse.Empty)
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 emit(ApiResponse.Error(noInternet))
             }
         }.flowOn(Dispatchers.IO)
@@ -61,7 +50,7 @@ class RemoteDataSource(private val retrofitService: RetrofitInterface) {
             try {
                 val response = retrofitService.getMovieDetail(movie_id)
                 emit(ApiResponse.Success(response))
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 emit(ApiResponse.Error(noInternet))
             }
         }.flowOn(Dispatchers.IO)
@@ -72,7 +61,7 @@ class RemoteDataSource(private val retrofitService: RetrofitInterface) {
             try {
                 val response = retrofitService.getSeriesDetail(series_id)
                 emit(ApiResponse.Success(response))
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 emit(ApiResponse.Error(noInternet))
             }
         }.flowOn(Dispatchers.IO)
@@ -84,12 +73,12 @@ class RemoteDataSource(private val retrofitService: RetrofitInterface) {
                 val response = retrofitService.getSimilarMovie(movieId = movie_id)
                 val data = response.movieList
 
-                if (data.isNotEmpty()){
+                if (data.isNotEmpty()) {
                     emit(ApiResponse.Success(data))
                 } else {
                     emit(ApiResponse.Empty)
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 emit(ApiResponse.Error(noInternet))
             }
         }.flowOn(Dispatchers.IO)
@@ -101,12 +90,12 @@ class RemoteDataSource(private val retrofitService: RetrofitInterface) {
                 val response = retrofitService.getSimilarSeries(series_id)
                 val data = response.seriesList
 
-                if (data.isNotEmpty()){
+                if (data.isNotEmpty()) {
                     emit(ApiResponse.Success(data))
                 } else {
                     emit(ApiResponse.Empty)
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 emit(ApiResponse.Error(noInternet))
             }
         }.flowOn(Dispatchers.IO)
@@ -118,12 +107,12 @@ class RemoteDataSource(private val retrofitService: RetrofitInterface) {
                 val response = retrofitService.searchMovie(keyword = keyword)
                 val data = response.movieList
 
-                if (data.isNotEmpty()){
+                if (data.isNotEmpty()) {
                     emit(ApiResponse.Success(data))
                 } else {
                     emit(ApiResponse.Empty)
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 emit(ApiResponse.Error(noInternet))
             }
         }.flowOn(Dispatchers.IO)
@@ -135,12 +124,12 @@ class RemoteDataSource(private val retrofitService: RetrofitInterface) {
                 val response = retrofitService.searchSeries(keyword = keyword)
                 val data = response.seriesList
 
-                if (data.isNotEmpty()){
+                if (data.isNotEmpty()) {
                     emit(ApiResponse.Success(data))
                 } else {
                     emit(ApiResponse.Empty)
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 emit(ApiResponse.Error(noInternet))
             }
         }.flowOn(Dispatchers.IO)

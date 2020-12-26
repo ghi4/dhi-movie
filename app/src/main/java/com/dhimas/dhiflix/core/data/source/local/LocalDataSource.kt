@@ -6,15 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 class LocalDataSource(private val showDao: ShowDao) {
 
-    companion object {
-        private var INSTANCE: LocalDataSource? = null
-
-        fun getInstance(showDao: ShowDao): LocalDataSource =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: LocalDataSource(showDao)
-            }
-    }
-
     fun getMovies(page: Int): Flow<List<ShowEntity>> = showDao.getMovies(page)
 
     fun getSeries(page: Int): Flow<List<ShowEntity>> = showDao.getSeries(page)
@@ -35,9 +26,9 @@ class LocalDataSource(private val showDao: ShowDao) {
 
     suspend fun insertShows(shows: List<ShowEntity>) = showDao.insertShows(shows)
 
-    fun deleteAllSimilarShow(showType: Int) = showDao.deleteAllSimilar(showType)
+    //fun deleteAllSimilarShow(showType: Int) = showDao.deleteAllSimilar(showType)
 
-    fun deleteAllSearchShow(showType: Int) = showDao.deleteAllSearch(showType)
+    //fun deleteAllSearchShow(showType: Int) = showDao.deleteAllSearch(showType)
 
     fun setFavorite(showEntity: ShowEntity) {
         showEntity.isFavorite = if (showEntity.isFavorite == 0) 1 else 0

@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.databinding.ItemBannerBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
-import com.dhimas.dhiflix.core.utils.Const
 import com.squareup.picasso.Picasso
 
 class BannerAdapter(val context: Context) : RecyclerView.Adapter<BannerAdapter.BannerViewHolder>() {

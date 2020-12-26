@@ -13,7 +13,6 @@ import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentSearchSeriesBinding
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.ui.series.SeriesAdapter
-import com.dhimas.dhiflix.vo.Status
 import com.squareup.picasso.Picasso
 
 class SearchSeriesFragment : Fragment() {

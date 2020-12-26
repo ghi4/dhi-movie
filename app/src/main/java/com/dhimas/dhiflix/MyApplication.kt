@@ -1,3 +1,5 @@
+@file:Suppress("unused") //This file used for Koin Dependency Injection
+
 package com.dhimas.dhiflix
 
 import android.app.Application

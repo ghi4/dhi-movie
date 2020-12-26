@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.databinding.FragmentSearchBinding
 import com.google.android.material.tabs.TabLayoutMediator
