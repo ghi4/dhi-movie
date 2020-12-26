@@ -3,7 +3,6 @@ package com.dhimas.dhiflix.ui.detail
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
@@ -12,16 +11,15 @@ import com.dhimas.dhiflix.databinding.ActivityDetailBinding
 import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.utils.Utils.dateParseToMonthAndYear
 import com.dhimas.dhiflix.core.utils.Utils.showToast
-import com.dhimas.dhiflix.viewmodel.ViewModelFactory
-import com.dhimas.dhiflix.vo.Status
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-    private lateinit var viewModel: DetailViewModel
     private lateinit var showId: String
     private lateinit var show: Show
+    private val viewModel: DetailViewModel by viewModel()
 
     private var showType: Int = 0
     private lateinit var detailAdapter: DetailAdapter
@@ -45,10 +43,6 @@ class DetailActivity : AppCompatActivity() {
         //Get intent showId and showType
         showId = intent.getStringExtra(EXTRA_SHOW_ID).toString()
         showType = intent.getIntExtra(EXTRA_SHOW_TYPE, 0)
-
-        //Initialize viewModel
-        val factory = ViewModelFactory.getInstance(this)
-        viewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
 
         //Set showId and showType
         viewModel.setShowIdAndType(showId, showType)

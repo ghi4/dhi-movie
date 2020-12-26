@@ -4,7 +4,7 @@ import com.dhimas.dhiflix.core.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.core.data.source.local.room.ShowDao
 import kotlinx.coroutines.flow.Flow
 
-class LocalDataSource private constructor(private val showDao: ShowDao) {
+class LocalDataSource(private val showDao: ShowDao) {
 
     companion object {
         private var INSTANCE: LocalDataSource? = null

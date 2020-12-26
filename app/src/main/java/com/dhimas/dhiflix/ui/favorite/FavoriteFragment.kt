@@ -10,17 +10,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentFavoriteBinding
-import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.ui.movie.MovieAdapter
 import com.dhimas.dhiflix.ui.series.SeriesAdapter
-import com.dhimas.dhiflix.viewmodel.ViewModelFactory
-import com.dhimas.dhiflix.vo.Status
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class FavoriteFragment : Fragment() {
     private lateinit var binding: FragmentFavoriteBinding
-    private lateinit var viewModel: FavoriteViewModel
     private lateinit var favoriteMovieAdapter: MovieAdapter
     private lateinit var favoriteSeriesAdapter: SeriesAdapter
+    private val viewModel: FavoriteViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,9 +30,6 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val factory = ViewModelFactory.getInstance(requireContext())
-        viewModel = ViewModelProvider(this, factory)[FavoriteViewModel::class.java]
 
         setupUI()
         viewModelObserveMovies()

@@ -3,9 +3,10 @@ package com.dhimas.dhiflix.core.domain.usecase
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.data.ShowRepository
+import com.dhimas.dhiflix.core.domain.repository.ShowDataSource
 import kotlinx.coroutines.flow.Flow
 
-class ShowInteractor(private val showRepository: ShowRepository): ShowUseCase {
+class ShowInteractor(private val showRepository: ShowDataSource): ShowUseCase {
     override fun getMovieList(page: Int): Flow<Resource<List<Show>>> {
         return showRepository.getMovieList(page)
     }

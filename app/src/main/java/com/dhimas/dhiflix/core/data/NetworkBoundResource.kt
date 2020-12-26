@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.core.data
 
+import android.util.Log
 import com.dhimas.dhiflix.core.data.source.remote.ApiResponse
 import kotlinx.coroutines.flow.*
 
@@ -12,17 +13,22 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
             emit(Resource.Loading())
             when(val apiResponse = createCall().first()) {
                 is ApiResponse.Success -> {
+                    Log.d("JJKA", "Bound: Success")
                     saveCallResult(apiResponse.data)
                     emitAll(loadFromDB().map { Resource.Success(it) })
                 }
                 is ApiResponse.Empty -> {
+                    Log.d("JJKA", "Bound: Empty")
                     emitAll(loadFromDB().map { Resource.Success(it) })
                 }
                 is ApiResponse.Error -> {
+                    Log.d("JJKA", "Bound: Error")
                     onFetchFailed()
                     emit(Resource.Error<ResultType>(apiResponse.message))
                 }
             }
+        } else {
+            emitAll(loadFromDB().map { Resource.Success(it) })
         }
     }
 

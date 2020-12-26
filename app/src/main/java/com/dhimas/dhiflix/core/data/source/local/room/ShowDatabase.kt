@@ -6,11 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.dhimas.dhiflix.core.data.source.local.entity.ShowEntity
 
-@Database(
-    entities = [ShowEntity::class],
-    version = 1,
-    exportSchema = false
-)
+@Database(entities = [ShowEntity::class], version = 1, exportSchema = false)
 abstract class ShowDatabase : RoomDatabase() {
 
     companion object {
@@ -23,7 +19,8 @@ abstract class ShowDatabase : RoomDatabase() {
                     if (INSTANCE == null) {
                         INSTANCE = Room.databaseBuilder(
                             context.applicationContext,
-                            ShowDatabase::class.java, "Shows.db"
+                            ShowDatabase::class.java,
+                            "Shows.db"
                         )
                             .build()
                     }

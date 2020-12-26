@@ -17,17 +17,16 @@ import com.dhimas.dhiflix.databinding.FragmentSeriesBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
 import com.dhimas.dhiflix.core.utils.Utils.showSnackBar
 import com.dhimas.dhiflix.core.utils.Utils.showToast
-import com.dhimas.dhiflix.viewmodel.ViewModelFactory
-import com.dhimas.dhiflix.vo.Status
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class SeriesFragment : Fragment() {
 
     private lateinit var binding: FragmentSeriesBinding
-    private lateinit var viewModel: SeriesViewModel
     private lateinit var seriesAdapter: SeriesAdapter
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
+    private val viewModel: SeriesViewModel by viewModel()
     private var currentPage = 1
     private var maxPage = 6
     private var lastBottomLocation = 0
@@ -44,8 +43,6 @@ class SeriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val factory = ViewModelFactory.getInstance(requireContext())
-        viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
         viewModel.setPage(currentPage)
 
         setupUI()

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class RemoteDataSource private constructor(private val retrofitService: RetrofitInterface) {
+class RemoteDataSource(private val retrofitService: RetrofitInterface) {
     private val noInternet = "Internet connection issue."
 
     companion object {

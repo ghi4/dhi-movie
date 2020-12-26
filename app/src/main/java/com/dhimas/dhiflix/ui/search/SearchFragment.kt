@@ -9,12 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.databinding.FragmentSearchBinding
-import com.dhimas.dhiflix.viewmodel.ViewModelFactory
 import com.google.android.material.tabs.TabLayoutMediator
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,9 +27,6 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val factory = ViewModelFactory.getInstance(requireContext())
-        viewModel = ViewModelProvider(this, factory)[SearchViewModel::class.java]
 
         binding.vpSearch.adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
 

@@ -5,7 +5,7 @@ import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
 
-class MovieViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
+class MovieViewModel(showUseCase: ShowUseCase) : ViewModel() {
     private var isAlreadyShimmer: Boolean = false
     private val page = MutableLiveData<Int>()
 

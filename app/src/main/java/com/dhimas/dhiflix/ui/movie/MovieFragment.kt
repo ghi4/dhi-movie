@@ -2,12 +2,12 @@ package com.dhimas.dhiflix.ui.movie
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
@@ -16,18 +16,17 @@ import com.dhimas.dhiflix.databinding.FragmentMovieBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
 import com.dhimas.dhiflix.core.utils.Utils.showSnackBar
 import com.dhimas.dhiflix.core.utils.Utils.showToast
-import com.dhimas.dhiflix.viewmodel.ViewModelFactory
-import com.dhimas.dhiflix.vo.Status
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
 
 class MovieFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieBinding
-    private lateinit var viewModel: MovieViewModel
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
+    private val viewModel: MovieViewModel by viewModel()
     private var currentPage = 1
     private var maxPage = 6
     private var lastBottomLocation = 0
@@ -44,8 +43,6 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val factory = ViewModelFactory.getInstance(requireContext())
-        viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
         viewModel.setPage(currentPage)
 
         setupUI()
@@ -97,11 +94,13 @@ class MovieFragment : Fragment() {
         viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
             when (movieList) {
                 is Resource.Loading -> {
+                    Log.d("JJMain", "UI: Loading")
                     if (lastBottomLocation == 0)
                         startShimmer()
                 }
 
                 is Resource.Success -> {
+                    Log.d("JJMain", "UI: Success")
                     if (movieList.data != null) {
                         movieAdapter.addMovies(movieList.data as ArrayList<Show>)
                         movieAdapter.notifyDataSetChanged()
@@ -122,6 +121,7 @@ class MovieFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
+                    Log.d("JJMain", "UI: Error")
                     showSnackBar(
                         bottomNavigationView,
                         movieList.message ?: getString(R.string.unknown_error)

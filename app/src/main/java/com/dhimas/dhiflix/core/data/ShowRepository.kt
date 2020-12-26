@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.core.data
 
+import android.util.Log
 import com.dhimas.dhiflix.core.data.source.local.LocalDataSource
 import com.dhimas.dhiflix.core.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.core.data.source.remote.ApiResponse
@@ -13,7 +14,7 @@ import com.dhimas.dhiflix.core.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class ShowRepository private constructor(
+class ShowRepository(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors
@@ -37,27 +38,34 @@ class ShowRepository private constructor(
         return object :
             NetworkBoundResource<List<Show>, List<MovieResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
+                Log.d("JJK", "Repo: LoadDB")
                 return localDataSource.getMovies(page).map {
+                    Log.d("JQA", "Repo: LoadDB - Mapper")
                     DataMapper.mapEntitiesToDomain(it)
                 }
             }
 
             override fun shouldFetch(data: List<Show>?): Boolean {
+                Log.d("JJK", "Repo: ShouldFetch - ${data?.isEmpty()} - ${data?.size}")
                 return data == null || data.isEmpty() || data.size != page * 20
             }
 
             override suspend fun createCall(): Flow<ApiResponse<List<MovieResponse>>> {
+                Log.d("JJK", "Repo: Call")
                 return remoteDataSource.getMovieList(page)
             }
 
             override suspend fun saveCallResult(data: List<MovieResponse>) {
+                Log.d("JJK", "Repo: SaveResult")
                 val movieList = ArrayList<ShowEntity>()
 
                 data.map {
+                    Log.d("JJK", "Repo: SaveResult - Mapper")
                     val movie = DataMapper.mapMovieResponseToEntity(it, page = page)
                     movieList.add(movie)
                 }
 
+                Log.d("JJK", "Repo: SaveResult - Mapper - ${movieList.size}")
                 localDataSource.insertShows(movieList)
             }
         }.asFlow()

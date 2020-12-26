@@ -85,6 +85,11 @@ dependencies {
     implementation "androidx.room:room-runtime:2.2.6"
     kapt "androidx.room:room-compiler:2.2.6"
 
+    //Koin
+    implementation "org.koin:koin-core:2.1.6"
+    implementation "org.koin:koin-android:2.1.6"
+    implementation "org.koin:koin-android-viewmodel:2.1.6"
+
     //Not used
     //Paging
     implementation "androidx.paging:paging-runtime-ktx:2.1.2"
