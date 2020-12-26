@@ -1,6 +1,6 @@
 package com.dhimas.dhiflix.core.data.source.remote.retrofit
 
-import com.dhimas.dhiflix.BuildConfig
+import com.dhimas.dhiflix.core.BuildConfig
 import com.dhimas.dhiflix.core.data.source.remote.response.MovieListResponse
 import com.dhimas.dhiflix.core.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.core.data.source.remote.response.SeriesListResponse

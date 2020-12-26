@@ -1,6 +1,7 @@
 package com.dhimas.dhiflix.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,7 @@ class SearchFragment : Fragment() {
         binding.svSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.toString().isNotEmpty()) {
+                    Log.d("KKWP", "Search - $query")
                     viewModel.setSearchQuery(query.toString())
                 }
                 return false

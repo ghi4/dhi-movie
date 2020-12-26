@@ -1,4 +1,4 @@
-package com.dhimas.dhiflix.core.utils
+package com.dhimas.dhiflix.utils
 
 import android.content.Context
 import android.view.View

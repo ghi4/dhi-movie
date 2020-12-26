@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.utils.Const
+import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.databinding.ItemShowHorizontalBinding
 import com.squareup.picasso.Picasso
 

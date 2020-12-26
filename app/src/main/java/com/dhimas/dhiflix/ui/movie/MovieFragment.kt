@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.utils.Utils.showSnackBar
-import com.dhimas.dhiflix.core.utils.Utils.showToast
+import com.dhimas.dhiflix.utils.Utils.showSnackBar
+import com.dhimas.dhiflix.utils.Utils.showToast
 import com.dhimas.dhiflix.databinding.FragmentMovieBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -107,7 +107,7 @@ class MovieFragment : Fragment() {
 
                         bannerAdapter.clearBanner()
                         for (i in 0..4)
-                            movieList.data[i].let { bannerAdapter.addBanner(it) }
+                            (movieList.data as ArrayList<Show>)[i].let { bannerAdapter.addBanner(it) }
                         bannerAdapter.notifyDataSetChanged()
 
                         stopShimmer()

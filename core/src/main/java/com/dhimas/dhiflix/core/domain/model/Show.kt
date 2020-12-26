@@ -1,14 +1,6 @@
-package com.dhimas.dhiflix.core.data.source.local.entity
+package com.dhimas.dhiflix.core.domain.model
 
-import androidx.annotation.NonNull
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity(tableName = "showtable")
-data class ShowEntity(
-
-    @PrimaryKey
-    @NonNull
+data class Show(
     var id: String,
 
     var title: String? = null,
@@ -23,12 +15,9 @@ data class ShowEntity(
 
     var showType: Int? = 0,
 
-    var page: Int? = 0,
-
     var isFavorite: Int? = 0,
 
     var isSimilar: Int? = 0,
 
     var isSearch: Int? = 0
-
 )

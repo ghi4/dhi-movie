@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
@@ -14,11 +13,12 @@ import com.dhimas.dhiflix.databinding.FragmentSearchSeriesBinding
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.ui.series.SeriesAdapter
 import com.squareup.picasso.Picasso
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class SearchSeriesFragment : Fragment() {
     private lateinit var binding: FragmentSearchSeriesBinding
     private lateinit var seriesAdapter: SeriesAdapter
-    private val viewModel: SearchViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: SearchViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

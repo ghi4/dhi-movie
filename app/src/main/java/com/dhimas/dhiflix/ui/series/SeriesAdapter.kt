@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.utils.Const
-import com.dhimas.dhiflix.core.utils.Utils.dateParseToMonthAndYear
+import com.dhimas.dhiflix.utils.Const
+import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
 import com.dhimas.dhiflix.databinding.ItemShowBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.squareup.picasso.Picasso

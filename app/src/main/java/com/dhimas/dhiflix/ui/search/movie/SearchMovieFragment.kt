@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
@@ -14,9 +13,10 @@ import com.dhimas.dhiflix.databinding.FragmentSearchMovieBinding
 import com.dhimas.dhiflix.ui.movie.MovieAdapter
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.squareup.picasso.Picasso
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class SearchMovieFragment : Fragment() {
-    private val viewModel: SearchViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: SearchViewModel by sharedViewModel()
     private lateinit var binding: FragmentSearchMovieBinding
     private lateinit var movieAdapter: MovieAdapter
 
@@ -36,6 +36,10 @@ class SearchMovieFragment : Fragment() {
         viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
             when (movieList) {
                 is Resource.Loading -> {
+                    setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
+                }
+
+                is Resource.Success -> {
                     movieAdapter.addMovies(movieList.data as ArrayList<Show>)
                     movieAdapter.notifyDataSetChanged()
 
@@ -48,10 +52,6 @@ class SearchMovieFragment : Fragment() {
                             getString(R.string.no_movie_found)
                         )
                     }
-                }
-
-                is Resource.Success -> {
-                    setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
                 }
 
                 is Resource.Error -> {

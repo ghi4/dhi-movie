@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ShowDao {
 
-    @Query("SELECT * FROM showtable WHERE showType = ${Const.MOVIE_TYPE} AND page BETWEEN 1 AND :page")
+    @Query("SELECT * FROM showtable WHERE showType = ${Const.MOVIE_TYPE} LIMIT :page")
     fun getMovies(page: Int): Flow<List<ShowEntity>>
 
-    @Query("SELECT * FROM showtable WHERE showType = ${Const.SERIES_TYPE} AND page BETWEEN 1 AND :page")
+    @Query("SELECT * FROM showtable WHERE showType = ${Const.SERIES_TYPE} LIMIT :page")
     fun getSeries(page: Int): Flow<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE showType = ${Const.MOVIE_TYPE} AND isFavorite = 1")
@@ -35,7 +35,7 @@ interface ShowDao {
     @Query("SELECT * FROM showtable WHERE id = :showId AND isSimilar = 0")
     fun getShowById(showId: String): Flow<ShowEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertShows(shows: List<ShowEntity>)
 
     @Update

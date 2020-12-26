@@ -25,7 +25,7 @@ class ShowRepository(
             NetworkBoundResource<List<Show>, List<MovieResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
                 Log.d("JJK", "Repo: LoadDB")
-                return localDataSource.getMovies(page).map {
+                return localDataSource.getMovies(page * 20).map {
                     Log.d("JQA", "Repo: LoadDB - Mapper")
                     DataMapper.mapEntitiesToDomain(it)
                 }
@@ -47,7 +47,7 @@ class ShowRepository(
 
                 data.map {
                     Log.d("JJK", "Repo: SaveResult - Mapper")
-                    val movie = DataMapper.mapMovieResponseToEntity(it, page = page)
+                    val movie = DataMapper.mapMovieResponseToEntity(it)
                     movieList.add(movie)
                 }
 
@@ -62,7 +62,7 @@ class ShowRepository(
         return object :
             NetworkBoundResource<List<Show>, List<SeriesResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
-                return localDataSource.getSeries(page).map {
+                return localDataSource.getSeries(page * 20).map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
             }
@@ -79,7 +79,7 @@ class ShowRepository(
                 val seriesList = ArrayList<ShowEntity>()
 
                 data.map {
-                    val series = DataMapper.mapSeriesResponseToEntity(it, page = page)
+                    val series = DataMapper.mapSeriesResponseToEntity(it)
                     seriesList.add(series)
                 }
 
@@ -248,6 +248,7 @@ class ShowRepository(
             NetworkBoundResource<List<Show>, List<MovieResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.searchMovies("$keyword%").map {
+                    Log.d("KKWP","REPO - LoadDB - $keyword")
                     DataMapper.mapEntitiesToDomain(it)
                 }
             }

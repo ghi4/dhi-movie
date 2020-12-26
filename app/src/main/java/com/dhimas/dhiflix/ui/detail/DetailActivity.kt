@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.utils.Const
-import com.dhimas.dhiflix.core.utils.Utils.dateParseToMonthAndYear
-import com.dhimas.dhiflix.core.utils.Utils.showToast
+import com.dhimas.dhiflix.utils.Const
+import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
+import com.dhimas.dhiflix.utils.Utils.showToast
 import com.dhimas.dhiflix.databinding.ActivityDetailBinding
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -82,8 +82,7 @@ class DetailActivity : AppCompatActivity() {
 
                 is Resource.Success -> {
                     if (mShow.data != null) {
-
-                        show = mShow.data
+                        show = mShow.data as Show
 
                         val btFavoriteText =
                             if (show.isFavorite == 0)

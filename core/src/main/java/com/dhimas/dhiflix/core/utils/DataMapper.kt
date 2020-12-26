@@ -15,7 +15,6 @@ object DataMapper {
         posterPath = input.posterPath,
         backdropPath = input.backdropPath,
         showType = input.showType,
-        page = input.page,
         isFavorite = input.isFavorite,
         isSimilar = input.isSimilar,
         isSearch = input.isSearch
@@ -29,7 +28,6 @@ object DataMapper {
         posterPath = input.posterPath,
         backdropPath = input.backdropPath,
         showType = input.showType,
-        page = input.page,
         isFavorite = input.isFavorite,
         isSimilar = input.isSimilar,
         isSearch = input.isSearch
@@ -45,7 +43,6 @@ object DataMapper {
                 posterPath = it.posterPath,
                 backdropPath = it.backdropPath,
                 showType = it.showType,
-                page = it.page,
                 isFavorite = it.isFavorite,
                 isSimilar = it.isSimilar,
                 isSearch = it.isSearch,
@@ -54,7 +51,6 @@ object DataMapper {
 
     fun mapMovieResponseToEntity(
         input: MovieResponse,
-        page: Int? = 0,
         isFavorite: Int? = 0,
         isSimilar: Int? = 0,
         isSearch: Int? = 0
@@ -66,7 +62,6 @@ object DataMapper {
         posterPath = input.posterPath,
         backdropPath = input.backdropPath,
         showType = Const.MOVIE_TYPE,
-        page = page,
         isFavorite = isFavorite,
         isSimilar = isSimilar,
         isSearch = isSearch
@@ -74,7 +69,6 @@ object DataMapper {
 
     fun mapSeriesResponseToEntity(
         input: SeriesResponse,
-        page: Int? = 0,
         isFavorite: Int? = 0,
         isSimilar: Int? = 0,
         isSearch: Int? = 0
@@ -86,7 +80,6 @@ object DataMapper {
         posterPath = input.posterPath,
         backdropPath = input.backdropPath,
         showType = Const.SERIES_TYPE,
-        page = page,
         isFavorite = isFavorite,
         isSimilar = isSimilar,
         isSearch = isSearch
