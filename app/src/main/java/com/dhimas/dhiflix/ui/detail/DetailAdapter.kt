@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.databinding.ItemShowHorizontalBinding
+import com.dhimas.dhiflix.utils.Const
 import com.squareup.picasso.Picasso
 
 class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {

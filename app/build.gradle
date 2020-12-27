@@ -37,6 +37,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    dynamicFeatures = [':favorite']
 
 }
 
@@ -48,7 +49,7 @@ dependencies {
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
-    
+
     //Dots Indicator
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
 

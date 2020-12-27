@@ -20,17 +20,17 @@ object DataMapper {
         isSearch = input.isSearch
     )
 
-    fun mapEntityToDomain(input: ShowEntity) = Show(
-        id = input.id,
-        title = input.title,
-        releaseDate = input.releaseDate,
-        overview = input.overview,
-        posterPath = input.posterPath,
-        backdropPath = input.backdropPath,
-        showType = input.showType,
-        isFavorite = input.isFavorite,
-        isSimilar = input.isSimilar,
-        isSearch = input.isSearch
+    fun mapEntityToDomain(input: ShowEntity?) = Show(
+        id = input?.id ?: "Unknown",
+        title = input?.title ?: "Unknown",
+        releaseDate = input?.releaseDate ?: "Unknown",
+        overview = input?.overview ?: "Unknown",
+        posterPath = input?.posterPath ?: "Unknown",
+        backdropPath = input?.backdropPath ?: "Unknown",
+        showType = input?.showType ?: 0,
+        isFavorite = input?.isFavorite ?: 0,
+        isSimilar = input?.isSimilar ?: 0,
+        isSearch = input?.isSearch ?: 0
     )
 
     fun mapEntitiesToDomain(input: List<ShowEntity>): List<Show> =
@@ -50,17 +50,17 @@ object DataMapper {
         }
 
     fun mapMovieResponseToEntity(
-        input: MovieResponse,
+        input: MovieResponse?,
         isFavorite: Int? = 0,
         isSimilar: Int? = 0,
         isSearch: Int? = 0
     ) = ShowEntity(
-        id = input.movie_id,
-        title = input.title,
-        releaseDate = input.releaseDate,
-        overview = input.overview,
-        posterPath = input.posterPath,
-        backdropPath = input.backdropPath,
+        id = input?.movie_id ?: "Unknown",
+        title = input?.title ?: "Unknown",
+        releaseDate = input?.releaseDate ?: "Unknown",
+        overview = input?.overview ?: "Unknown",
+        posterPath = input?.posterPath ?: "Unknown",
+        backdropPath = input?.backdropPath ?: "Unknown",
         showType = Const.MOVIE_TYPE,
         isFavorite = isFavorite,
         isSimilar = isSimilar,
@@ -68,17 +68,17 @@ object DataMapper {
     )
 
     fun mapSeriesResponseToEntity(
-        input: SeriesResponse,
+        input: SeriesResponse?,
         isFavorite: Int? = 0,
         isSimilar: Int? = 0,
         isSearch: Int? = 0
     ) = ShowEntity(
-        id = input.series_id,
-        title = input.name,
-        releaseDate = input.releaseDate,
-        overview = input.overview,
-        posterPath = input.posterPath,
-        backdropPath = input.backdropPath,
+        id = input?.series_id ?: "Unknown",
+        title = input?.name ?: "Unknown",
+        releaseDate = input?.releaseDate ?: "Unknown",
+        overview = input?.overview ?: "Unknown",
+        posterPath = input?.posterPath ?: "Unknown",
+        backdropPath = input?.backdropPath ?: "Unknown",
         showType = Const.SERIES_TYPE,
         isFavorite = isFavorite,
         isSimilar = isSimilar,

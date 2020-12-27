@@ -1,4 +1,4 @@
-package com.dhimas.dhiflix.ui.favorite
+package com.dhimas.dhiflix.favorite.favorite
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.databinding.FragmentFavoriteBinding
+import com.dhimas.dhiflix.favorite.databinding.FragmentFavoriteBinding
+import com.dhimas.dhiflix.favorite.di.favoriteModule
 import com.dhimas.dhiflix.ui.detail.DetailAdapter
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
 
 class FavoriteFragment : Fragment() {
     private lateinit var binding: FragmentFavoriteBinding
@@ -29,6 +31,8 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        loadKoinModules(favoriteModule)
 
         setupUI()
         viewModelObserveMovies()

@@ -6,8 +6,8 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.ui.main.MainActivity
+import com.dhimas.dhiflix.utils.Const
 
 class SplashActivity : AppCompatActivity() {
 

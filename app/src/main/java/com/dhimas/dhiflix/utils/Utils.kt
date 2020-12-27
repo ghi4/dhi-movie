@@ -11,14 +11,18 @@ object Utils {
 
     fun dateParseToMonthAndYear(date: String?): String {
         return if (!date.isNullOrEmpty()) {
-            val parser = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-            val formatter = SimpleDateFormat("MMMM yyyy", Locale.ENGLISH)
-            val newDate = parser.parse(date)
+            try {
+                val parser = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                val formatter = SimpleDateFormat("MMMM yyyy", Locale.ENGLISH)
+                val newDate = parser.parse(date)
 
-            if (newDate != null) {
-                formatter.format(newDate)
-            } else {
-                date
+                if (newDate != null) {
+                    formatter.format(newDate)
+                } else {
+                    date
+                }
+            } catch (e: Exception) {
+                "No Date"
             }
         } else {
             "No Date"

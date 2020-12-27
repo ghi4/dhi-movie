@@ -13,7 +13,11 @@ import com.dhimas.dhiflix.databinding.FragmentSearchMovieBinding
 import com.dhimas.dhiflix.ui.movie.MovieAdapter
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.FlowPreview
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.compat.ScopeCompat.viewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class SearchMovieFragment : Fragment() {
     private val viewModel: SearchViewModel by sharedViewModel()
@@ -28,6 +32,7 @@ class SearchMovieFragment : Fragment() {
         return binding.root
     }
 
+    @FlowPreview
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

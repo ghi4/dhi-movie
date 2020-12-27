@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.utils.Utils.showSnackBar
-import com.dhimas.dhiflix.utils.Utils.showToast
 import com.dhimas.dhiflix.databinding.FragmentSeriesBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
+import com.dhimas.dhiflix.utils.Utils.showSnackBar
+import com.dhimas.dhiflix.utils.Utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.android.viewmodel.ext.android.viewModel
 

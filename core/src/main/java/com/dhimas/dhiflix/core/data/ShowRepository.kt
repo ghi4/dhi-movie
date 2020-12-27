@@ -1,6 +1,5 @@
 package com.dhimas.dhiflix.core.data
 
-import android.util.Log
 import com.dhimas.dhiflix.core.data.source.local.LocalDataSource
 import com.dhimas.dhiflix.core.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.core.data.source.remote.ApiResponse
@@ -10,6 +9,7 @@ import com.dhimas.dhiflix.core.data.source.remote.response.SeriesResponse
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.repository.ShowDataSource
 import com.dhimas.dhiflix.core.utils.AppExecutors
+import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -24,34 +24,27 @@ class ShowRepository(
         return object :
             NetworkBoundResource<List<Show>, List<MovieResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
-                Log.d("JJK", "Repo: LoadDB")
                 return localDataSource.getMovies(page * 20).map {
-                    Log.d("JQA", "Repo: LoadDB - Mapper")
                     DataMapper.mapEntitiesToDomain(it)
                 }
             }
 
             override fun shouldFetch(data: List<Show>?): Boolean {
-                Log.d("JJK", "Repo: ShouldFetch - ${data?.isEmpty()} - ${data?.size}")
                 return data == null || data.isEmpty() || data.size != page * 20
             }
 
             override suspend fun createCall(): Flow<ApiResponse<List<MovieResponse>>> {
-                Log.d("JJK", "Repo: Call")
                 return remoteDataSource.getMovieList(page)
             }
 
             override suspend fun saveCallResult(data: List<MovieResponse>) {
-                Log.d("JJK", "Repo: SaveResult")
                 val movieList = ArrayList<ShowEntity>()
 
                 data.map {
-                    Log.d("JJK", "Repo: SaveResult - Mapper")
                     val movie = DataMapper.mapMovieResponseToEntity(it)
                     movieList.add(movie)
                 }
 
-                Log.d("JJK", "Repo: SaveResult - Mapper - ${movieList.size}")
                 localDataSource.insertShows(movieList)
             }
         }.asFlow()
@@ -182,7 +175,7 @@ class ShowRepository(
         return object :
             NetworkBoundResource<List<Show>, List<MovieResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
-                return localDataSource.getSimilarMovies().map {
+                return localDataSource.getSimilarMovies(movie_id).map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
             }
@@ -202,9 +195,10 @@ class ShowRepository(
                     movieList.add(movie)
                 }
 
-//                if (!movieList.isNullOrEmpty())
-//                    localDataSource.deleteAllSimilarShow(Const.MOVIE_TYPE)
+                //Delete old similar list
+                localDataSource.deleteSimilarExcept(movie_id, Const.MOVIE_TYPE)
 
+                //Insert new similar list
                 localDataSource.insertShows(movieList)
             }
         }.asFlow()
@@ -215,7 +209,7 @@ class ShowRepository(
             NetworkBoundResource<List<Show>, List<SeriesResponse>>() {
 
             public override fun loadFromDB(): Flow<List<Show>> {
-                return localDataSource.getSimilarSeries().map {
+                return localDataSource.getSimilarSeries(series_id).map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
             }
@@ -235,9 +229,10 @@ class ShowRepository(
                     seriesList.add(series)
                 }
 
-//                if (!seriesList.isNullOrEmpty())
-//                    localDataSource.deleteAllSimilarShow(Const.SERIES_TYPE)
+                //Delete old similar list
+                localDataSource.deleteSimilarExcept(series_id, Const.SERIES_TYPE)
 
+                //Insert new similar list
                 localDataSource.insertShows(seriesList)
             }
         }.asFlow()
@@ -248,7 +243,6 @@ class ShowRepository(
             NetworkBoundResource<List<Show>, List<MovieResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.searchMovies("$keyword%").map {
-                    Log.d("KKWP","REPO - LoadDB - $keyword")
                     DataMapper.mapEntitiesToDomain(it)
                 }
             }
@@ -268,8 +262,10 @@ class ShowRepository(
                     movieList.add(movie)
                 }
 
-//                localDataSource.deleteAllSearchShow(Const.MOVIE_TYPE)
+                //Delete old search result
+                localDataSource.deleteAllSearchShow(Const.MOVIE_TYPE)
 
+                //Insert new search result
                 localDataSource.insertShows(movieList)
             }
         }.asFlow()
@@ -299,8 +295,10 @@ class ShowRepository(
                     seriesList.add(series)
                 }
 
-//                localDataSource.deleteAllSearchShow(Const.SERIES_TYPE)
+                //Delete old search result
+                localDataSource.deleteAllSearchShow(Const.SERIES_TYPE)
 
+                //Insert new search result
                 localDataSource.insertShows(seriesList)
             }
         }.asFlow()

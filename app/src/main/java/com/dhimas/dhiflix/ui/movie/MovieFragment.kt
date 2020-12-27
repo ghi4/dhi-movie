@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.utils.Utils.showSnackBar
-import com.dhimas.dhiflix.utils.Utils.showToast
 import com.dhimas.dhiflix.databinding.FragmentMovieBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
+import com.dhimas.dhiflix.utils.Utils.showSnackBar
+import com.dhimas.dhiflix.utils.Utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
@@ -94,13 +94,11 @@ class MovieFragment : Fragment() {
         viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
             when (movieList) {
                 is Resource.Loading -> {
-                    Log.d("JJMain", "UI: Loading")
                     if (lastBottomLocation == 0)
                         startShimmer()
                 }
 
                 is Resource.Success -> {
-                    Log.d("JJMain", "UI: Success")
                     if (movieList.data != null) {
                         movieAdapter.addMovies(movieList.data as ArrayList<Show>)
                         movieAdapter.notifyDataSetChanged()
@@ -121,7 +119,6 @@ class MovieFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
-                    Log.d("JJMain", "UI: Error")
                     showSnackBar(
                         bottomNavigationView,
                         movieList.message ?: getString(R.string.unknown_error)
@@ -146,5 +143,23 @@ class MovieFragment : Fragment() {
             shimmerLayoutMovie.visibility = View.GONE
             tvMoviePopularTitle.visibility = View.VISIBLE
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.d("KEPOO", "MOVIE - Resume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Log.d("KEPOO", "MOVIE - Pause")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Log.d("KEPOO", "MOVIE - Destroy")
     }
 }

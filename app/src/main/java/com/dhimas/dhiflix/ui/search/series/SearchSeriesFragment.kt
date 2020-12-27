@@ -13,12 +13,15 @@ import com.dhimas.dhiflix.databinding.FragmentSearchSeriesBinding
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.dhimas.dhiflix.ui.series.SeriesAdapter
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.FlowPreview
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class SearchSeriesFragment : Fragment() {
+    private val viewModel: SearchViewModel by sharedViewModel()
     private lateinit var binding: FragmentSearchSeriesBinding
     private lateinit var seriesAdapter: SeriesAdapter
-    private val viewModel: SearchViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,6 +31,7 @@ class SearchSeriesFragment : Fragment() {
         return binding.root
     }
 
+    @FlowPreview
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

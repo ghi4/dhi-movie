@@ -34,4 +34,5 @@
     <string name="no_similar_list_found">No similar list found.</string>
     <string name="list_failed_to_load">List failed to load.</string>
     <string name="no_popular_list_found">No popular list found.</string>
+    <string name="title_favorite">Favorite</string>
 </resources>

@@ -14,9 +14,9 @@ class LocalDataSource(private val showDao: ShowDao) {
 
     fun getFavoriteSeries(): Flow<List<ShowEntity>> = showDao.getFavoriteSeries()
 
-    fun getSimilarMovies(): Flow<List<ShowEntity>> = showDao.getSimilarMovies()
+    fun getSimilarMovies(movieId: String): Flow<List<ShowEntity>> = showDao.getSimilarMovies(movieId)
 
-    fun getSimilarSeries(): Flow<List<ShowEntity>> = showDao.getSimilarSeries()
+    fun getSimilarSeries(seriesId: String): Flow<List<ShowEntity>> = showDao.getSimilarSeries(seriesId)
 
     fun searchMovies(keyword: String): Flow<List<ShowEntity>> = showDao.searchMovies(keyword)
 
@@ -26,9 +26,9 @@ class LocalDataSource(private val showDao: ShowDao) {
 
     suspend fun insertShows(shows: List<ShowEntity>) = showDao.insertShows(shows)
 
-    //fun deleteAllSimilarShow(showType: Int) = showDao.deleteAllSimilar(showType)
+    suspend fun deleteSimilarExcept(showId: String, showType: Int) = showDao.deleteSimilarExcept(showId, showType)
 
-    //fun deleteAllSearchShow(showType: Int) = showDao.deleteAllSearch(showType)
+    suspend fun deleteAllSearchShow(showType: Int) = showDao.deleteAllSearch(showType)
 
     fun setFavorite(showEntity: ShowEntity) {
         showEntity.isFavorite = if (showEntity.isFavorite == 0) 1 else 0

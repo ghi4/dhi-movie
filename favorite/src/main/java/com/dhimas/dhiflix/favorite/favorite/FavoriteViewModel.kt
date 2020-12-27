@@ -1,4 +1,4 @@
-package com.dhimas.dhiflix.ui.favorite
+package com.dhimas.dhiflix.favorite.favorite
 
 import androidx.lifecycle.*
 import com.dhimas.dhiflix.core.data.Resource

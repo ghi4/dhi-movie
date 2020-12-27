@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/navigation_favorite"
-        android:name="com.dhimas.dhiflix.ui.favorite.FavoriteFragment"
+        android:name="com.dhimas.dhiflix.favorite.favorite.FavoriteFragment"
         tools:layout="@layout/fragment_favorite" />
 
 </navigation>

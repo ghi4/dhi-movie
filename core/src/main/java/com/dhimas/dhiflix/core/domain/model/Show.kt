@@ -3,15 +3,15 @@ package com.dhimas.dhiflix.core.domain.model
 data class Show(
     var id: String,
 
-    var title: String? = null,
+    var title: String? = "Unknown",
 
-    var releaseDate: String? = null,
+    var releaseDate: String? = "Unknown",
 
-    var overview: String? = null,
+    var overview: String? = "Unknown",
 
-    var posterPath: String? = null,
+    var posterPath: String? = "Unknown",
 
-    var backdropPath: String? = null,
+    var backdropPath: String? = "Unknown",
 
     var showType: Int? = 0,
 
