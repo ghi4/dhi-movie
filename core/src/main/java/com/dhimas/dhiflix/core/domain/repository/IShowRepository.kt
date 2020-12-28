@@ -26,5 +26,5 @@ interface IShowRepository {
 
     fun searchSeries(keyword: String): Flow<Resource<List<Show>>>
 
-    fun setFavorite(show: Show)
+    suspend fun setFavorite(show: Show)
 }

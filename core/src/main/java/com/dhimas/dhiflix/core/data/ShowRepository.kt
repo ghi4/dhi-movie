@@ -10,6 +10,7 @@ import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.repository.IShowRepository
 import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.utils.DataMapper
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -305,6 +306,7 @@ class ShowRepository(
     override suspend fun setFavorite(show: Show) {
         val showEntity = DataMapper.mapDomainToEntity(show)
         localDataSource.setFavorite(showEntity)
+
     }
 
 }
