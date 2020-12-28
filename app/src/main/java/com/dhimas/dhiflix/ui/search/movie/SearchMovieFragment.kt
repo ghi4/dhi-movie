@@ -85,7 +85,7 @@ class SearchMovieFragment : Fragment() {
 
         with(binding) {
             rvSearchMovie.layoutManager = GridLayoutManager(requireContext(), 3)
-            rvSearchMovie.hasFixedSize()
+//            rvSearchMovie.hasFixedSize()
             rvSearchMovie.adapter = movieAdapter
         }
     }

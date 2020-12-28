@@ -80,7 +80,7 @@ class FavoriteFragment : Fragment() {
         viewModel.getFavoriteMovies().observe(viewLifecycleOwner, { favoriteMovieList ->
             when (favoriteMovieList) {
                 is Resource.Loading -> {
-                    setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
+                    setViewVisibility(loading = true, ivInfo = true, tvInfo = true)
                 }
                 is Resource.Success -> {
                     favoriteMovieAdapter.setList(favoriteMovieList.data as ArrayList<Show>)
@@ -109,7 +109,7 @@ class FavoriteFragment : Fragment() {
         viewModel.getFavoriteSeries().observe(viewLifecycleOwner, { favoriteSeriesList ->
             when (favoriteSeriesList) {
                 is Resource.Loading -> {
-                    setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
+                    setViewVisibility(loading = true, ivInfo = true, tvInfo = true)
                 }
                 is Resource.Success -> {
                     favoriteSeriesAdapter.setList(favoriteSeriesList.data as ArrayList<Show>)
