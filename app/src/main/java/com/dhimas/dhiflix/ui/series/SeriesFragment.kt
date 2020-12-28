@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.ui.series
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +12,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.ui.ShowsAdapter
 import com.dhimas.dhiflix.databinding.FragmentSeriesBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
+import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Utils.showSnackBar
 import com.dhimas.dhiflix.utils.Utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -21,7 +24,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class SeriesFragment : Fragment() {
 
     private lateinit var binding: FragmentSeriesBinding
-    private lateinit var seriesAdapter: SeriesAdapter
+    private lateinit var seriesAdapter: ShowsAdapter
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
     private val viewModel: SeriesViewModel by viewModel()
@@ -56,8 +59,16 @@ class SeriesFragment : Fragment() {
         else
             startShimmer()
 
-        seriesAdapter = SeriesAdapter()
         bannerAdapter = BannerAdapter(requireContext())
+        seriesAdapter = ShowsAdapter()
+        seriesAdapter.onItemClick = {selectedShow ->
+            val intent = Intent(requireContext(), DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedShow.id)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedShow.showType)
+            startActivity(intent)
+        }
+
+
 
         //Change grid layout spanCount when Landscape/Portrait
         val phoneOrientation = requireActivity().resources.configuration.orientation
@@ -98,7 +109,7 @@ class SeriesFragment : Fragment() {
 
                 is Resource.Success -> {
                     if (seriesList.data != null && seriesList.data!!.isNotEmpty()) {
-                        seriesAdapter.addSeries(seriesList.data as ArrayList<Show>)
+                        seriesAdapter.addMovies(seriesList.data as ArrayList<Show>)
                         seriesAdapter.notifyDataSetChanged()
 
                         bannerAdapter.clearBanner()

@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.ui.detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.ui.ShowsPosterAdapter
 import com.dhimas.dhiflix.databinding.ActivityDetailBinding
 import com.dhimas.dhiflix.utils.Const
 import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
@@ -22,7 +24,7 @@ class DetailActivity : AppCompatActivity() {
     private val viewModel: DetailViewModel by viewModel()
 
     private var showType: Int = 0
-    private lateinit var detailAdapter: DetailAdapter
+    private lateinit var showsPosterAdapter: ShowsPosterAdapter
 
     companion object {
         //For sending Show ID
@@ -58,13 +60,19 @@ class DetailActivity : AppCompatActivity() {
         startShimmering() //Shimmer for detail show
         startShimmerList() //Shimmer for similar list
 
-        detailAdapter = DetailAdapter()
+        showsPosterAdapter = ShowsPosterAdapter()
+        showsPosterAdapter.onItemClick = { selectedShow ->
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra(EXTRA_SHOW_ID, selectedShow.id)
+            intent.putExtra(EXTRA_SHOW_TYPE, selectedShow.showType)
+            startActivity(intent)
+        }
 
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         with(binding) {
             rvDetailOtherShows.layoutManager = layoutManager
             rvDetailOtherShows.hasFixedSize()
-            rvDetailOtherShows.adapter = detailAdapter
+            rvDetailOtherShows.adapter = showsPosterAdapter
             rvDetailOtherShows.visibility = View.VISIBLE
 
             btDetailFavorite.setOnClickListener {
@@ -150,9 +158,9 @@ class DetailActivity : AppCompatActivity() {
                         showToast(this, getString(R.string.no_similar_list_found))
                         viewModel.setListEmptyTrigger()
                     } else {
-                        detailAdapter.setShimmer(viewModel.isAlreadyShimmer)
-                        detailAdapter.setList(movieList.data as ArrayList<Show>)
-                        detailAdapter.notifyDataSetChanged()
+                        showsPosterAdapter.setShimmer(viewModel.isAlreadyShimmer)
+                        showsPosterAdapter.setList(movieList.data as ArrayList<Show>)
+                        showsPosterAdapter.notifyDataSetChanged()
                         stopShimmerList()
                     }
                 }
@@ -184,9 +192,9 @@ class DetailActivity : AppCompatActivity() {
                         binding.tvDetailInterestTitle.visibility = View.GONE
                         showToast(this, getString(R.string.no_popular_list_found))
                     } else {
-                        detailAdapter.setShimmer(viewModel.isAlreadyShimmer)
-                        detailAdapter.setList(movieList.data as ArrayList<Show>)
-                        detailAdapter.notifyDataSetChanged()
+                        showsPosterAdapter.setShimmer(viewModel.isAlreadyShimmer)
+                        showsPosterAdapter.setList(movieList.data as ArrayList<Show>)
+                        showsPosterAdapter.notifyDataSetChanged()
                         stopShimmerList()
                     }
                 }

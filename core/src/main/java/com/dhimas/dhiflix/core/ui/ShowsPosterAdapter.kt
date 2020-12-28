@@ -1,23 +1,24 @@
-package com.dhimas.dhiflix.ui.detail
+package com.dhimas.dhiflix.core.ui
 
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.core.R
+import com.dhimas.dhiflix.core.databinding.ItemShowHorizontalBinding
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.databinding.ItemShowHorizontalBinding
-import com.dhimas.dhiflix.utils.Const
-import com.squareup.picasso.Picasso
+import com.dhimas.dhiflix.core.utils.Const
 
-class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
+class ShowsPosterAdapter : RecyclerView.Adapter<ShowsPosterAdapter.DetailViewHolder>() {
     private var isAlreadyShimmer: Boolean = false
     private var showList = ArrayList<Show>()
+    var onItemClick: ((Show) -> Unit)? = null
 
     fun setList(showList: ArrayList<Show>) {
         this.showList.clear()
         this.showList.addAll(showList)
+        notifyDataSetChanged()
     }
 
     fun setShimmer(isAlreadyShimmer: Boolean) {
@@ -37,7 +38,7 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
 
     override fun getItemCount(): Int = showList.size
 
-    class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemShowHorizontalBinding.bind(itemView)
         fun bind(show: Show, isAlreadyShimmer: Boolean) {
             with(binding) {
@@ -47,7 +48,7 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                     ivPosterHorizontal.startLoading()
 
                 //Horizontal Poster
-                Picasso.get()
+                com.squareup.picasso.Picasso.get()
                     .load(Const.URL_BASE_IMAGE + show.posterPath)
                     .resize(Const.POSTER_TARGET_WIDTH, Const.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.poster_error)
@@ -56,16 +57,11 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
 
                 //Stop shimmer
                 ivPosterHorizontal.stopLoading()
-
-                //Set poster click listener
-                cvPosterHorizontal.setOnClickListener {
-                    val intent = Intent(itemView.context, DetailActivity::class.java)
-
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, show.id)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, show.showType)
-
-                    itemView.context.startActivity(intent)
-                }
+            }
+        }
+        init {
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(showList[adapterPosition])
             }
         }
     }

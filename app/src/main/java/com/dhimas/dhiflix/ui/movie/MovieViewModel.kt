@@ -33,7 +33,7 @@ class MovieViewModel(showUseCase: ShowUseCase) : ViewModel() {
     override fun onCleared() {
         super.onCleared()
 
-        Log.d("KEPOO", "MOVIE - ViewModel - Cleared")
+        Log.d("VMPROBLEM", "MOVIE - ViewModel - Cleared")
     }
 
 }

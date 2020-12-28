@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.favorite.favorite
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +11,16 @@ import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.favorite.databinding.FragmentFavoriteBinding
 import com.dhimas.dhiflix.favorite.di.favoriteModule
-import com.dhimas.dhiflix.ui.detail.DetailAdapter
+import com.dhimas.dhiflix.core.ui.ShowsPosterAdapter
+import com.dhimas.dhiflix.ui.detail.DetailActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
 class FavoriteFragment : Fragment() {
     private lateinit var binding: FragmentFavoriteBinding
 
-    private lateinit var favoriteMovieAdapter: DetailAdapter
-    private lateinit var favoriteSeriesAdapter: DetailAdapter
+    private lateinit var favoriteMovieAdapter: ShowsPosterAdapter
+    private lateinit var favoriteSeriesAdapter: ShowsPosterAdapter
     private val viewModel: FavoriteViewModel by viewModel()
 
     override fun onCreateView(
@@ -42,8 +44,22 @@ class FavoriteFragment : Fragment() {
     private fun setupUI() {
         setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
 
-        favoriteMovieAdapter = DetailAdapter()
-        favoriteSeriesAdapter = DetailAdapter()
+        favoriteMovieAdapter = ShowsPosterAdapter()
+        favoriteMovieAdapter.onItemClick = {selectedShow ->
+            val intent = Intent(requireContext(), DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedShow.id)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedShow.showType)
+            startActivity(intent)
+        }
+
+        favoriteSeriesAdapter = ShowsPosterAdapter()
+        favoriteSeriesAdapter.onItemClick = {selectedShow ->
+            val intent = Intent(requireContext(), DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedShow.id)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedShow.showType)
+            startActivity(intent)
+        }
+
 
         with(binding) {
             rvFavoriteMovie.layoutManager =

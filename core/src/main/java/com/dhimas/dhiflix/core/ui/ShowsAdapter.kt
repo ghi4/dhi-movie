@@ -1,24 +1,23 @@
-package com.dhimas.dhiflix.ui.movie
+package com.dhimas.dhiflix.core.ui
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.dhimas.dhiflix.R
+import com.dhimas.dhiflix.core.R
+import com.dhimas.dhiflix.core.databinding.ItemShowBinding
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.databinding.ItemShowBinding
-import com.dhimas.dhiflix.ui.detail.DetailActivity
-import com.dhimas.dhiflix.utils.Const
-import com.dhimas.dhiflix.utils.Utils
+import com.dhimas.dhiflix.core.utils.Const
+import com.dhimas.dhiflix.core.utils.Utils
 import com.squareup.picasso.Picasso
 
-class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
-    private var movieList = ArrayList<Show>()
+class ShowsAdapter : RecyclerView.Adapter<ShowsAdapter.MovieViewHolder>() {
+    private var showsList = ArrayList<Show>()
+    var onItemClick: ((Show) -> Unit)? = null
 
-    fun addMovies(movies: ArrayList<Show>) {
-        movieList.clear()
-        movieList.addAll(movies)
+    fun addMovies(shows: ArrayList<Show>) {
+        showsList.clear()
+        showsList.addAll(shows)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -27,10 +26,10 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bind(movieList[position])
+        holder.bind(showsList[position])
     }
 
-    override fun getItemCount(): Int = movieList.size
+    override fun getItemCount(): Int = showsList.size
 
     inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemShowBinding.bind(itemView)
@@ -38,21 +37,18 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
             with(binding) {
                 tvTitle.text = movie.title
                 tvReleaseDate.text = Utils.dateParseToMonthAndYear(movie.releaseDate)
-
                 Picasso.get()
                     .load(Const.URL_BASE_IMAGE + movie.posterPath)
                     .resize(Const.POSTER_TARGET_WIDTH, Const.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.poster_error)
                     .placeholder(R.drawable.poster_placeholder)
                     .into(ivPoster)
+            }
+        }
 
-                root.setOnClickListener {
-                    val intent = Intent(itemView.context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_ID, movie.id)
-                    //Used for checking if the show entity is from movie page
-                    intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, movie.showType)
-                    itemView.context.startActivity(intent)
-                }
+        init {
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(showsList[adapterPosition])
             }
         }
     }

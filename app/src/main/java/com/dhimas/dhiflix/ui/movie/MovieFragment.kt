@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.ui.movie
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -12,8 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.ui.ShowsAdapter
 import com.dhimas.dhiflix.databinding.FragmentMovieBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
+import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Utils.showSnackBar
 import com.dhimas.dhiflix.utils.Utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -23,7 +26,7 @@ import java.util.*
 class MovieFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieBinding
-    private lateinit var movieAdapter: MovieAdapter
+    private lateinit var movieAdapter: ShowsAdapter
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
     private val viewModel: MovieViewModel by viewModel()
@@ -58,8 +61,14 @@ class MovieFragment : Fragment() {
         else
             startShimmer()
 
-        movieAdapter = MovieAdapter()
         bannerAdapter = BannerAdapter(requireContext())
+        movieAdapter = ShowsAdapter()
+        movieAdapter.onItemClick = {selectedItem ->
+            val intent = Intent(requireContext(), DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedItem.id)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedItem.showType)
+            startActivity(intent)
+        }
 
         //Change grid layout spanCount when Landscape/Portrait
         val phoneOrientation = requireActivity().resources.configuration.orientation
@@ -148,18 +157,18 @@ class MovieFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        Log.d("KEPOO", "MOVIE - Resume")
+        Log.d("VMPROBLEM", "MOVIE - Resume")
     }
 
     override fun onPause() {
         super.onPause()
 
-        Log.d("KEPOO", "MOVIE - Pause")
+        Log.d("VMPROBLEM", "MOVIE - Pause")
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        Log.d("KEPOO", "MOVIE - Destroy")
+        Log.d("VMPROBLEM", "MOVIE - Destroy")
     }
 }

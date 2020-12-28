@@ -10,19 +10,19 @@ import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.databinding.FragmentSearchMovieBinding
-import com.dhimas.dhiflix.ui.movie.MovieAdapter
+import com.dhimas.dhiflix.core.ui.ShowsAdapter
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.compat.ScopeCompat.viewModel
-import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.getViewModel
 
 class SearchMovieFragment : Fragment() {
-    private val viewModel: SearchViewModel by sharedViewModel()
+    @ExperimentalCoroutinesApi
+    @FlowPreview
+    private val viewModel: SearchViewModel by lazy { requireParentFragment().getViewModel() }
     private lateinit var binding: FragmentSearchMovieBinding
-    private lateinit var movieAdapter: MovieAdapter
+    private lateinit var movieAdapter: ShowsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +32,7 @@ class SearchMovieFragment : Fragment() {
         return binding.root
     }
 
+    @ExperimentalCoroutinesApi
     @FlowPreview
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,7 +72,7 @@ class SearchMovieFragment : Fragment() {
     }
 
     private fun setupUI() {
-        movieAdapter = MovieAdapter()
+        movieAdapter = ShowsAdapter()
 
         with(binding) {
             rvSearchMovie.layoutManager = GridLayoutManager(requireContext(), 3)

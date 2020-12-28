@@ -48,6 +48,6 @@ class SearchViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
     override fun onCleared() {
         super.onCleared()
 
-        Log.d("KEPOO", "SEARCH - ViewModel - Cleared")
+        Log.d("VMPROBLEM", "SEARCH - ViewModel - Cleared")
     }
 }

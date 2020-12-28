@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.databinding.FragmentSearchBinding
@@ -22,7 +23,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 @FlowPreview
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
-    private val viewModel: SearchViewModel by sharedViewModel()
+    private val viewModel: SearchViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +52,7 @@ class SearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean = false
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                lifecycleScope.launch {
+                viewLifecycleOwner.lifecycleScope.launch {
                     viewModel.queryChannel.send(newText.toString())
                 }
                 return false
@@ -62,18 +63,18 @@ class SearchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        Log.d("KEPOO", "SEARCH - Resume")
+        Log.d("VMPROBLEM", "SEARCH - Resume")
     }
 
     override fun onPause() {
         super.onPause()
 
-        Log.d("KEPOO", "SEARCH - Pause")
+        Log.d("VMPROBLEM", "SEARCH - Pause")
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        Log.d("KEPOO", "SEARCH - Destroy")
+        Log.d("VMPROBLEM", "SEARCH - Destroy")
     }
 }

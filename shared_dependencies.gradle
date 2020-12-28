@@ -23,4 +23,12 @@ dependencies {
     implementation "org.koin:koin-core:2.1.6"
     implementation "org.koin:koin-android:2.1.6"
     implementation "org.koin:koin-android-viewmodel:2.1.6"
+
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //Shimmering
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation 'com.github.AgnaldoNP:AGSkeletonLoading:1.1'
+
 }

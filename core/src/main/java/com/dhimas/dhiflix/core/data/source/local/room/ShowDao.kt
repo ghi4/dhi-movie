@@ -20,10 +20,10 @@ interface ShowDao {
     @Query("SELECT * FROM showtable WHERE showType = ${Const.SERIES_TYPE} AND isFavorite = 1")
     fun getFavoriteSeries(): Flow<List<ShowEntity>>
 
-    @Query("SELECT * FROM showtable WHERE showType = ${Const.MOVIE_TYPE} AND isSimilar = 1 AND id NOT IN (:movieId)")
+    @Query("SELECT * FROM showtable WHERE showType = ${Const.MOVIE_TYPE} AND isSimilar = 1  AND isFavorite = 0 AND id NOT IN (:movieId)")
     fun getSimilarMovies(movieId: String): Flow<List<ShowEntity>>
 
-    @Query("SELECT * FROM showtable WHERE showType = ${Const.SERIES_TYPE} AND isSimilar = 1 AND id NOT IN (:seriesId)")
+    @Query("SELECT * FROM showtable WHERE showType = ${Const.SERIES_TYPE} AND isSimilar = 1 AND isFavorite = 0 AND id NOT IN (:seriesId)")
     fun getSimilarSeries(seriesId: String): Flow<List<ShowEntity>>
 
     @Query("SELECT * FROM showtable WHERE showType = ${Const.MOVIE_TYPE} AND  title LIKE :keyword")
