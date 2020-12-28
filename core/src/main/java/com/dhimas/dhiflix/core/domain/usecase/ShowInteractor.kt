@@ -2,10 +2,10 @@ package com.dhimas.dhiflix.core.domain.usecase
 
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.domain.repository.ShowDataSource
+import com.dhimas.dhiflix.core.domain.repository.IShowRepository
 import kotlinx.coroutines.flow.Flow
 
-class ShowInteractor(private val showRepository: ShowDataSource) : ShowUseCase {
+class ShowInteractor(private val showRepository: IShowRepository) : ShowUseCase {
     override fun getMovieList(page: Int): Flow<Resource<List<Show>>> {
         return showRepository.getMovieList(page)
     }
@@ -46,7 +46,7 @@ class ShowInteractor(private val showRepository: ShowDataSource) : ShowUseCase {
         return showRepository.searchSeries(keyword)
     }
 
-    override fun setFavorite(show: Show) {
+    override suspend fun setFavorite(show: Show) {
         showRepository.setFavorite(show)
     }
 }

@@ -8,6 +8,7 @@ import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
 class SeriesViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
     private var isAlreadyShimmer: Boolean = false
     private var page = MutableLiveData<Int>()
+
     private var seriesList = page.switchMap {
         showUseCase.getSeriesList(it).asLiveData()
     }

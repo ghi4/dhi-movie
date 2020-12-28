@@ -1,6 +1,5 @@
 package com.dhimas.dhiflix.ui.movie
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
@@ -28,12 +27,6 @@ class MovieViewModel(showUseCase: ShowUseCase) : ViewModel() {
 
     fun refresh() {
         page.postValue(page.value)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-
-        Log.d("VMPROBLEM", "MOVIE - ViewModel - Cleared")
     }
 
 }

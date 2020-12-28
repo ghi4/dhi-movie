@@ -2,6 +2,7 @@ package com.dhimas.dhiflix.ui.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,22 +10,24 @@ import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.ui.ShowsPosterAdapter
+import com.dhimas.dhiflix.core.utils.Const
+import com.dhimas.dhiflix.core.utils.Utils.dateParseToMonthAndYear
 import com.dhimas.dhiflix.databinding.ActivityDetailBinding
-import com.dhimas.dhiflix.utils.Const
-import com.dhimas.dhiflix.utils.Utils.dateParseToMonthAndYear
 import com.dhimas.dhiflix.utils.Utils.showToast
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.ext.scope
 
 class DetailActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityDetailBinding
+    private lateinit var similarShowsAdapter: ShowsPosterAdapter
     private lateinit var showId: String
     private lateinit var show: Show
     private val viewModel: DetailViewModel by viewModel()
-
     private var showType: Int = 0
-    private lateinit var showsPosterAdapter: ShowsPosterAdapter
+
 
     companion object {
         //For sending Show ID
@@ -46,22 +49,22 @@ class DetailActivity : AppCompatActivity() {
         showId = intent.getStringExtra(EXTRA_SHOW_ID).toString()
         showType = intent.getIntExtra(EXTRA_SHOW_TYPE, 0)
 
-        //Set showId and showType
+        //Set showId and showType for triggering load data
         viewModel.setShowIdAndType(showId, showType)
 
         setupUI()
 
-        viewModelObserveDetail()
-        viewModelObserveSimilarList()
-        viewModelObservePopularList() //Backup when similar list is empty
+        viewModelObserveDetail() //Load data for detail show
+        viewModelObserveSimilarList() //Load data for similar show
+        viewModelObservePopularList() //Backup data when similar list is empty or failed
     }
 
     private fun setupUI() {
         startShimmering() //Shimmer for detail show
         startShimmerList() //Shimmer for similar list
 
-        showsPosterAdapter = ShowsPosterAdapter()
-        showsPosterAdapter.onItemClick = { selectedShow ->
+        similarShowsAdapter = ShowsPosterAdapter()
+        similarShowsAdapter.onItemClick = { selectedShow ->
             val intent = Intent(this, DetailActivity::class.java)
             intent.putExtra(EXTRA_SHOW_ID, selectedShow.id)
             intent.putExtra(EXTRA_SHOW_TYPE, selectedShow.showType)
@@ -72,14 +75,16 @@ class DetailActivity : AppCompatActivity() {
         with(binding) {
             rvDetailOtherShows.layoutManager = layoutManager
             rvDetailOtherShows.hasFixedSize()
-            rvDetailOtherShows.adapter = showsPosterAdapter
-            rvDetailOtherShows.visibility = View.VISIBLE
+            rvDetailOtherShows.adapter = similarShowsAdapter
 
             btDetailFavorite.setOnClickListener {
+                Log.d("GGWP", "INSIDE")
+                show.isFavorite = if (show.isFavorite == 0) 1 else 0
                 viewModel.setFavorite(show)
             }
         }
     }
+
 
     private fun viewModelObserveDetail() {
         viewModel.getShow().observe(this, { mShow ->
@@ -89,56 +94,42 @@ class DetailActivity : AppCompatActivity() {
                 }
 
                 is Resource.Success -> {
-                    if (mShow.data != null) {
-                        show = mShow.data as Show
+                    show = mShow.data as Show
 
-                        val btFavoriteText =
-                            if (show.isFavorite == 0)
-                                getString(R.string.add_to_favorite)
-                            else
-                                getString(R.string.remove_from_favorite)
+                    //Favorite button text value
+                    val btFavoriteText =
+                        if (show.isFavorite == 0)
+                            getString(R.string.add_to_favorite)
+                        else
+                            getString(R.string.remove_from_favorite)
 
-                        with(binding) {
-                            tvDetailTitle.text = show.title
-                            tvDetailReleaseDate.text =
-                                dateParseToMonthAndYear(show.releaseDate)
-                            tvDetailOverview.text = show.overview
-                            btDetailFavorite.text = btFavoriteText
+                    with(binding) {
+                        tvDetailTitle.text = show.title
+                        tvDetailReleaseDate.text = dateParseToMonthAndYear(show.releaseDate)
+                        tvDetailOverview.text = show.overview
+                        btDetailFavorite.text = btFavoriteText
 
-                            Picasso.get()
-                                .load(Const.URL_BASE_IMAGE + show.backdropPath)
-                                .placeholder(R.drawable.backdrop_placeholder)
-                                .error(R.drawable.image_error)
-                                .resize(
-                                    Const.BACKDROP_TARGET_WIDTH,
-                                    Const.BACKDROP_TARGET_HEIGHT
-                                )
-                                .into(ivDetailBackdrop)
+                        //Backdrop
+                        Picasso.get()
+                            .load(Const.URL_BASE_IMAGE + show.backdropPath)
+                            .placeholder(R.drawable.backdrop_placeholder)
+                            .error(R.drawable.image_error)
+                            .resize(Const.BACKDROP_TARGET_WIDTH, Const.BACKDROP_TARGET_HEIGHT)
+                            .into(ivDetailBackdrop)
 
-                            Picasso.get()
-                                .load(Const.URL_BASE_IMAGE + show.posterPath)
-                                .placeholder(R.drawable.poster_placeholder)
-                                .error(R.drawable.poster_error)
-                                .resize(
-                                    Const.POSTER_TARGET_WIDTH,
-                                    Const.POSTER_TARGET_HEIGHT
-                                )
-                                .into(ivDetailPoster)
-                        }
-
-                        stopShimmering()
+                        //Poster
+                        Picasso.get()
+                            .load(Const.URL_BASE_IMAGE + show.posterPath)
+                            .placeholder(R.drawable.poster_placeholder)
+                            .error(R.drawable.poster_error)
+                            .resize(Const.POSTER_TARGET_WIDTH, Const.POSTER_TARGET_HEIGHT)
+                            .into(ivDetailPoster)
                     }
+                    stopShimmering()
                 }
 
                 is Resource.Error -> {
-                    Snackbar.make(
-                        binding.root,
-                        mShow.message ?: getString(R.string.unknown_error),
-                        Snackbar.LENGTH_INDEFINITE
-                    )
-                        .setAction("RETRY") {
-                            viewModel.setShowIdAndType(showId, showType)
-                        }.show()
+                    showSnackBar(mShow.message) //Show snackbar for retry load data
                 }
             }
         })
@@ -156,25 +147,17 @@ class DetailActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     if (movieList.data.isNullOrEmpty()) {
                         showToast(this, getString(R.string.no_similar_list_found))
-                        viewModel.setListEmptyTrigger()
+                        viewModel.setListEmptyTrigger() //Trigger popular list
                     } else {
-                        showsPosterAdapter.setShimmer(viewModel.isAlreadyShimmer)
-                        showsPosterAdapter.setList(movieList.data as ArrayList<Show>)
-                        showsPosterAdapter.notifyDataSetChanged()
+                        similarShowsAdapter.setShimmer(viewModel.getIsAlreadyShimmer())
+                        similarShowsAdapter.setList(movieList.data as ArrayList<Show>)
                         stopShimmerList()
                     }
                 }
 
                 is Resource.Error -> {
                     showToast(this, getString(R.string.list_failed_to_load))
-                    Snackbar.make(
-                        binding.root,
-                        movieList.message ?: getString(R.string.unknown_error),
-                        Snackbar.LENGTH_INDEFINITE
-                    )
-                        .setAction("RETRY") {
-                            viewModel.setShowIdAndType(showId, showType)
-                        }.show()
+                    showSnackBar(movieList.message) //Show snackbar for retry load data
                 }
             }
         })
@@ -192,26 +175,26 @@ class DetailActivity : AppCompatActivity() {
                         binding.tvDetailInterestTitle.visibility = View.GONE
                         showToast(this, getString(R.string.no_popular_list_found))
                     } else {
-                        showsPosterAdapter.setShimmer(viewModel.isAlreadyShimmer)
-                        showsPosterAdapter.setList(movieList.data as ArrayList<Show>)
-                        showsPosterAdapter.notifyDataSetChanged()
+                        similarShowsAdapter.setShimmer(viewModel.getIsAlreadyShimmer())
+                        similarShowsAdapter.setList(movieList.data as ArrayList<Show>)
                         stopShimmerList()
                     }
                 }
 
                 is Resource.Error -> {
                     showToast(this, getString(R.string.list_failed_to_load))
-                    Snackbar.make(
-                        binding.root,
-                        movieList.message ?: getString(R.string.unknown_error),
-                        Snackbar.LENGTH_INDEFINITE
-                    )
-                        .setAction("RETRY") {
-                            viewModel.setShowIdAndType(showId, showType)
-                        }.show()
+                    showSnackBar(movieList.message) //Show snackbar for retry load data
                 }
             }
         })
+    }
+
+    private fun showSnackBar(message: String?) {
+        val safeMessage = message ?: getString(R.string.unknown_error)
+        Snackbar.make(binding.root, safeMessage, Snackbar.LENGTH_INDEFINITE)
+            .setAction(getString(R.string.retry)) {
+                viewModel.setShowIdAndType(showId, showType)
+            }.show()
     }
 
     private fun stopShimmering() {

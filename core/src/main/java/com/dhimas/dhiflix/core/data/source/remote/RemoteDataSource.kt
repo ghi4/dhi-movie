@@ -45,10 +45,10 @@ class RemoteDataSource(private val retrofitService: RetrofitInterface) {
         }.flowOn(Dispatchers.IO)
     }
 
-    fun getMovieDetail(movie_id: String): Flow<ApiResponse<MovieResponse>> {
+    fun getMovieDetail(movieId: String): Flow<ApiResponse<MovieResponse>> {
         return flow {
             try {
-                val response = retrofitService.getMovieDetail(movie_id)
+                val response = retrofitService.getMovieDetail(movieId)
                 emit(ApiResponse.Success(response))
             } catch (e: Exception) {
                 emit(ApiResponse.Error(noInternet))
@@ -56,10 +56,10 @@ class RemoteDataSource(private val retrofitService: RetrofitInterface) {
         }.flowOn(Dispatchers.IO)
     }
 
-    fun getSeriesDetail(series_id: String): Flow<ApiResponse<SeriesResponse>> {
+    fun getSeriesDetail(seriesId: String): Flow<ApiResponse<SeriesResponse>> {
         return flow {
             try {
-                val response = retrofitService.getSeriesDetail(series_id)
+                val response = retrofitService.getSeriesDetail(seriesId)
                 emit(ApiResponse.Success(response))
             } catch (e: Exception) {
                 emit(ApiResponse.Error(noInternet))
@@ -67,10 +67,10 @@ class RemoteDataSource(private val retrofitService: RetrofitInterface) {
         }.flowOn(Dispatchers.IO)
     }
 
-    fun getSimilarMovieList(movie_id: String): Flow<ApiResponse<List<MovieResponse>>> {
+    fun getSimilarMovieList(movieId: String): Flow<ApiResponse<List<MovieResponse>>> {
         return flow {
             try {
-                val response = retrofitService.getSimilarMovie(movieId = movie_id)
+                val response = retrofitService.getSimilarMovie(movieId = movieId)
                 val data = response.movieList
 
                 if (data.isNotEmpty()) {
@@ -84,10 +84,10 @@ class RemoteDataSource(private val retrofitService: RetrofitInterface) {
         }.flowOn(Dispatchers.IO)
     }
 
-    fun getSimilarSeriesList(series_id: String): Flow<ApiResponse<List<SeriesResponse>>> {
+    fun getSimilarSeriesList(seriesId: String): Flow<ApiResponse<List<SeriesResponse>>> {
         return flow {
             try {
-                val response = retrofitService.getSimilarSeries(series_id)
+                val response = retrofitService.getSimilarSeries(seriesId)
                 val data = response.seriesList
 
                 if (data.isNotEmpty()) {

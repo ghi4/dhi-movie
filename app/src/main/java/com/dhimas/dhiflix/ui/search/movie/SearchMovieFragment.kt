@@ -1,5 +1,6 @@
 package com.dhimas.dhiflix.ui.search.movie
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,20 +10,23 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.databinding.FragmentSearchMovieBinding
 import com.dhimas.dhiflix.core.ui.ShowsAdapter
+import com.dhimas.dhiflix.databinding.FragmentSearchMovieBinding
+import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.koin.android.viewmodel.ext.android.getViewModel
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 class SearchMovieFragment : Fragment() {
-    @ExperimentalCoroutinesApi
-    @FlowPreview
-    private val viewModel: SearchViewModel by lazy { requireParentFragment().getViewModel() }
+
     private lateinit var binding: FragmentSearchMovieBinding
     private lateinit var movieAdapter: ShowsAdapter
+    //Get the same viewModel instance of SearchFragment as the host
+    private val viewModel: SearchViewModel by lazy { requireParentFragment().getViewModel() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,8 +36,6 @@ class SearchMovieFragment : Fragment() {
         return binding.root
     }
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -46,17 +48,16 @@ class SearchMovieFragment : Fragment() {
                 }
 
                 is Resource.Success -> {
-                    movieAdapter.addMovies(movieList.data as ArrayList<Show>)
-                    movieAdapter.notifyDataSetChanged()
+                    movieAdapter.setList(movieList.data as ArrayList<Show>)
 
-                    if (!movieList.data.isNullOrEmpty()) {
-                        setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
-                    } else {
+                    if (movieList.data.isNullOrEmpty()) {
                         setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                         setInfoImageAndMessage(
                             R.drawable.undraw_not_found_60pq,
                             getString(R.string.no_movie_found)
                         )
+                    } else {
+                        setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
                     }
                 }
 
@@ -64,7 +65,7 @@ class SearchMovieFragment : Fragment() {
                     setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                     setInfoImageAndMessage(
                         R.drawable.undraw_signal_searching_bhpc,
-                        movieList.message ?: getString(R.string.unknown_error)
+                        movieList.message
                     )
                 }
             }
@@ -74,6 +75,14 @@ class SearchMovieFragment : Fragment() {
     private fun setupUI() {
         movieAdapter = ShowsAdapter()
 
+        //OnClick go to DetailActivity
+        movieAdapter.onItemClick = { selectedItem ->
+            val intent = Intent(requireContext(), DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedItem.id)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedItem.showType)
+            startActivity(intent)
+        }
+
         with(binding) {
             rvSearchMovie.layoutManager = GridLayoutManager(requireContext(), 3)
             rvSearchMovie.hasFixedSize()
@@ -81,11 +90,7 @@ class SearchMovieFragment : Fragment() {
         }
     }
 
-    private fun setViewVisibility(
-        loading: Boolean,
-        ivInfo: Boolean,
-        tvInfo: Boolean
-    ) {
+    private fun setViewVisibility(loading: Boolean, ivInfo: Boolean, tvInfo: Boolean) {
         with(binding) {
             pbSearchMovie.visibility = if (loading) View.VISIBLE else View.GONE
             ivSearchMovieInfo.visibility = if (ivInfo) View.VISIBLE else View.INVISIBLE
@@ -93,7 +98,7 @@ class SearchMovieFragment : Fragment() {
         }
     }
 
-    private fun setInfoImageAndMessage(image: Int, message: String) {
+    private fun setInfoImageAndMessage(image: Int, message: String? = getString(R.string.unknown_error)) {
         val targetWidth = 1361
         val targetHeight = 938
         Picasso.get()

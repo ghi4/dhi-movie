@@ -44,6 +44,7 @@ class SeriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //Trigger to load data
         viewModel.setPage(currentPage)
 
         setupUI()
@@ -61,18 +62,19 @@ class SeriesFragment : Fragment() {
 
         bannerAdapter = BannerAdapter(requireContext())
         seriesAdapter = ShowsAdapter()
-        seriesAdapter.onItemClick = {selectedShow ->
+
+        //OnClick go to DetailActivity
+        seriesAdapter.onItemClick = { selectedShow ->
             val intent = Intent(requireContext(), DetailActivity::class.java)
             intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedShow.id)
             intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedShow.showType)
             startActivity(intent)
         }
 
-
-
         //Change grid layout spanCount when Landscape/Portrait
         val phoneOrientation = requireActivity().resources.configuration.orientation
         val spanCount = if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
+
         with(binding) {
             rvSeries.layoutManager = GridLayoutManager(context, spanCount)
             rvSeries.hasFixedSize()
@@ -82,6 +84,7 @@ class SeriesFragment : Fragment() {
             vpSeriesBanner.adapter = bannerAdapter
             dotsIndicatorSeries.setViewPager2(vpSeriesBanner)
 
+            //Trigger "Load More" when at bottom and prevent double load request
             nestedScrollSeries.setOnScrollChangeListener(
                 NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
                     val height = (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
@@ -108,9 +111,8 @@ class SeriesFragment : Fragment() {
                 }
 
                 is Resource.Success -> {
-                    if (seriesList.data != null && seriesList.data!!.isNotEmpty()) {
-                        seriesAdapter.addMovies(seriesList.data as ArrayList<Show>)
-                        seriesAdapter.notifyDataSetChanged()
+                    if (seriesList.data != null) {
+                        seriesAdapter.setList(seriesList.data as ArrayList<Show>)
 
                         bannerAdapter.clearBanner()
                         for (i in 0..4)
@@ -120,7 +122,12 @@ class SeriesFragment : Fragment() {
                         stopShimmer()
                     } else {
                         showToast(requireContext(), getString(R.string.no_series_found))
-                        showSnackBar(requireView(), getString(R.string.do_you_want_retry)) {
+                        //Show snackbar for retry load data
+                        showSnackBar(
+                            requireView(),
+                            getString(R.string.do_you_want_retry),
+                            getString(R.string.retry)
+                        ) {
                             viewModel.refresh()
                         }
                     }
@@ -130,7 +137,8 @@ class SeriesFragment : Fragment() {
                 is Resource.Error -> {
                     showSnackBar(
                         bottomNavigationView,
-                        seriesList.message ?: getString(R.string.unknown_error)
+                        seriesList.message ?: getString(R.string.unknown_error),
+                        getString(R.string.retry)
                     ) {
                         viewModel.refresh()
                     }

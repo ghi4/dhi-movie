@@ -9,16 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.ui.ShowsPosterAdapter
 import com.dhimas.dhiflix.favorite.databinding.FragmentFavoriteBinding
 import com.dhimas.dhiflix.favorite.di.favoriteModule
-import com.dhimas.dhiflix.core.ui.ShowsPosterAdapter
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
 class FavoriteFragment : Fragment() {
-    private lateinit var binding: FragmentFavoriteBinding
 
+    private lateinit var binding: FragmentFavoriteBinding
     private lateinit var favoriteMovieAdapter: ShowsPosterAdapter
     private lateinit var favoriteSeriesAdapter: ShowsPosterAdapter
     private val viewModel: FavoriteViewModel by viewModel()
@@ -42,18 +42,18 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun setupUI() {
-        setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
-
+        //Movie
         favoriteMovieAdapter = ShowsPosterAdapter()
-        favoriteMovieAdapter.onItemClick = {selectedShow ->
+        favoriteMovieAdapter.onItemClick = { selectedShow ->
             val intent = Intent(requireContext(), DetailActivity::class.java)
             intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedShow.id)
             intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedShow.showType)
             startActivity(intent)
         }
 
+        //Series
         favoriteSeriesAdapter = ShowsPosterAdapter()
-        favoriteSeriesAdapter.onItemClick = {selectedShow ->
+        favoriteSeriesAdapter.onItemClick = { selectedShow ->
             val intent = Intent(requireContext(), DetailActivity::class.java)
             intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedShow.id)
             intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedShow.showType)
@@ -62,11 +62,13 @@ class FavoriteFragment : Fragment() {
 
 
         with(binding) {
+            //Movie
             rvFavoriteMovie.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             rvFavoriteMovie.hasFixedSize()
             rvFavoriteMovie.adapter = favoriteMovieAdapter
 
+            //Series
             rvFavoriteSeries.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             rvFavoriteSeries.hasFixedSize()
@@ -78,15 +80,18 @@ class FavoriteFragment : Fragment() {
         viewModel.getFavoriteMovies().observe(viewLifecycleOwner, { favoriteMovieList ->
             when (favoriteMovieList) {
                 is Resource.Loading -> {
-                    setViewVisibility(loading = true, ivInfo = true, tvInfo = true)
+                    setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
                 }
                 is Resource.Success -> {
                     favoriteMovieAdapter.setList(favoriteMovieList.data as ArrayList<Show>)
                     favoriteMovieAdapter.setShimmer(false)
-                    favoriteMovieAdapter.notifyDataSetChanged()
 
+                    //Loading gone whenever empty or not
                     binding.pbFavorite.visibility = View.GONE
 
+                    //When data is not null or empty
+                    //Visible : Title and recyclerView
+                    //Gone    : Loading, illustration, message
                     if (!favoriteMovieList.data.isNullOrEmpty()) {
                         setMovieViewVisibility(tvMovie = true, rvMovie = true)
                         setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
@@ -104,15 +109,18 @@ class FavoriteFragment : Fragment() {
         viewModel.getFavoriteSeries().observe(viewLifecycleOwner, { favoriteSeriesList ->
             when (favoriteSeriesList) {
                 is Resource.Loading -> {
-                    setViewVisibility(loading = true, ivInfo = true, tvInfo = true)
+                    setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
                 }
                 is Resource.Success -> {
                     favoriteSeriesAdapter.setList(favoriteSeriesList.data as ArrayList<Show>)
                     favoriteSeriesAdapter.setShimmer(false)
-                    favoriteSeriesAdapter.notifyDataSetChanged()
 
+                    //Loading gone whenever empty or not
                     binding.pbFavorite.visibility = View.GONE
 
+                    //When data is not null or empty
+                    //Visible : Title and recyclerView
+                    //Gone    : Loading, illustration, message
                     if (!favoriteSeriesList.data.isNullOrEmpty()) {
                         setSeriesViewVisibility(tvSeries = true, rvSeries = true)
                         setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
@@ -126,6 +134,7 @@ class FavoriteFragment : Fragment() {
         })
     }
 
+    //Information: Loading, message, illustration
     private fun setViewVisibility(loading: Boolean, ivInfo: Boolean, tvInfo: Boolean) {
         with(binding) {
             pbFavorite.visibility = if (loading) View.VISIBLE else View.GONE
@@ -134,6 +143,7 @@ class FavoriteFragment : Fragment() {
         }
     }
 
+    //Movie: Title and recyclerView
     private fun setMovieViewVisibility(tvMovie: Boolean, rvMovie: Boolean) {
         with(binding) {
             tvFavoriteMovieTitle.visibility = if (tvMovie) View.VISIBLE else View.GONE
@@ -141,6 +151,7 @@ class FavoriteFragment : Fragment() {
         }
     }
 
+    //Series: Title and recyclerView
     private fun setSeriesViewVisibility(tvSeries: Boolean, rvSeries: Boolean) {
         with(binding) {
             tvFavoriteSeriesTitle.visibility = if (tvSeries) View.VISIBLE else View.GONE

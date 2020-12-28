@@ -1,13 +1,11 @@
 package com.dhimas.dhiflix.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.databinding.FragmentSearchBinding
@@ -15,8 +13,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 @ExperimentalCoroutinesApi
@@ -58,23 +54,5 @@ class SearchFragment : Fragment() {
                 return false
             }
         })
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        Log.d("VMPROBLEM", "SEARCH - Resume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        Log.d("VMPROBLEM", "SEARCH - Pause")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Log.d("VMPROBLEM", "SEARCH - Destroy")
     }
 }

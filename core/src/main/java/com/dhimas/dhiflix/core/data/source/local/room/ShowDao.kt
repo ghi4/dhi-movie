@@ -39,7 +39,7 @@ interface ShowDao {
     suspend fun insertShows(shows: List<ShowEntity>)
 
     @Update
-    fun updateShow(show: ShowEntity)
+    suspend fun updateShow(show: ShowEntity)
 
     @Query("DELETE FROM showtable WHERE showType = :showType AND isSimilar = 1 AND isFavorite = 0 AND id NOT IN (:showId)")
     suspend fun deleteSimilarExcept(showId: String, showType: Int)

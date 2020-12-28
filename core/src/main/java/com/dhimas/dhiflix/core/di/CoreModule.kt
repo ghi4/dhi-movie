@@ -6,8 +6,7 @@ import com.dhimas.dhiflix.core.data.source.local.LocalDataSource
 import com.dhimas.dhiflix.core.data.source.local.room.ShowDatabase
 import com.dhimas.dhiflix.core.data.source.remote.RemoteDataSource
 import com.dhimas.dhiflix.core.data.source.remote.retrofit.RetrofitInterface
-import com.dhimas.dhiflix.core.domain.repository.ShowDataSource
-import com.dhimas.dhiflix.core.utils.AppExecutors
+import com.dhimas.dhiflix.core.domain.repository.IShowRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -38,6 +37,5 @@ val networkModule = module {
 val repositoryModule = module {
     single { LocalDataSource(get()) }
     single { RemoteDataSource(get()) }
-    factory { AppExecutors() }
-    single<ShowDataSource> { ShowRepository(get(), get(), get()) }
+    single<IShowRepository> { ShowRepository(get(), get()) }
 }

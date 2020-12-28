@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="my_favorite_movie">My Favorite Movie</string>
+    <string name="my_favorite_series">My Favorite Series</string>
+    <string name="favorite_empty">Favorite Empty</string>
+    <string name="you_have_no_favorite_movie_series">You have no favorite movie/series.</string>
+</resources>

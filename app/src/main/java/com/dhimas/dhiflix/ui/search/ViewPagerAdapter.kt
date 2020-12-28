@@ -6,6 +6,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.dhimas.dhiflix.ui.search.movie.SearchMovieFragment
 import com.dhimas.dhiflix.ui.search.series.SearchSeriesFragment
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
 class ViewPagerAdapter(
     fm: FragmentManager,
@@ -14,6 +16,8 @@ class ViewPagerAdapter(
 
     override fun getItemCount(): Int = 2
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     override fun createFragment(position: Int): Fragment {
         var fragment: Fragment? = null
 

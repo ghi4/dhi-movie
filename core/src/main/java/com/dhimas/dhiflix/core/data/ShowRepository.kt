@@ -7,8 +7,7 @@ import com.dhimas.dhiflix.core.data.source.remote.RemoteDataSource
 import com.dhimas.dhiflix.core.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.core.data.source.remote.response.SeriesResponse
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.domain.repository.ShowDataSource
-import com.dhimas.dhiflix.core.utils.AppExecutors
+import com.dhimas.dhiflix.core.domain.repository.IShowRepository
 import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
@@ -16,9 +15,8 @@ import kotlinx.coroutines.flow.map
 
 class ShowRepository(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource,
-    private val appExecutors: AppExecutors
-) : ShowDataSource {
+    private val localDataSource: LocalDataSource
+) : IShowRepository {
 
     override fun getMovieList(page: Int): Flow<Resource<List<Show>>> {
         return object :
@@ -82,10 +80,10 @@ class ShowRepository(
 
     }
 
-    override fun getMovieDetail(movie_id: String): Flow<Resource<Show>> {
+    override fun getMovieDetail(movieId: String): Flow<Resource<Show>> {
         return object : NetworkBoundResource<Show, MovieResponse>() {
             public override fun loadFromDB(): Flow<Show> {
-                return localDataSource.getShowById(movie_id).map {
+                return localDataSource.getShowById(movieId).map {
                     DataMapper.mapEntityToDomain(it)
                 }
             }
@@ -95,7 +93,7 @@ class ShowRepository(
             }
 
             override suspend fun createCall(): Flow<ApiResponse<MovieResponse>> {
-                return remoteDataSource.getMovieDetail(movie_id)
+                return remoteDataSource.getMovieDetail(movieId)
             }
 
             override suspend fun saveCallResult(data: MovieResponse) {
@@ -105,10 +103,10 @@ class ShowRepository(
         }.asFlow()
     }
 
-    override fun getSeriesDetail(series_id: String): Flow<Resource<Show>> {
+    override fun getSeriesDetail(seriesId: String): Flow<Resource<Show>> {
         return object : NetworkBoundResource<Show, SeriesResponse>() {
             public override fun loadFromDB(): Flow<Show> {
-                return localDataSource.getShowById(series_id).map {
+                return localDataSource.getShowById(seriesId).map {
                     DataMapper.mapEntityToDomain(it)
                 }
             }
@@ -118,7 +116,7 @@ class ShowRepository(
             }
 
             override suspend fun createCall(): Flow<ApiResponse<SeriesResponse>> {
-                return remoteDataSource.getSeriesDetail(series_id)
+                return remoteDataSource.getSeriesDetail(seriesId)
             }
 
             override suspend fun saveCallResult(data: SeriesResponse) {
@@ -171,11 +169,11 @@ class ShowRepository(
         }.asFlow()
     }
 
-    override fun getSimilarMovieList(movie_id: String): Flow<Resource<List<Show>>> {
+    override fun getSimilarMovieList(movieId: String): Flow<Resource<List<Show>>> {
         return object :
             NetworkBoundResource<List<Show>, List<MovieResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
-                return localDataSource.getSimilarMovies(movie_id).map {
+                return localDataSource.getSimilarMovies(movieId).map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
             }
@@ -183,7 +181,7 @@ class ShowRepository(
             override fun shouldFetch(data: List<Show>?): Boolean = true
 
             override suspend fun createCall(): Flow<ApiResponse<List<MovieResponse>>> {
-                return remoteDataSource.getSimilarMovieList(movie_id)
+                return remoteDataSource.getSimilarMovieList(movieId)
             }
 
             override suspend fun saveCallResult(data: List<MovieResponse>) {
@@ -196,7 +194,7 @@ class ShowRepository(
                 }
 
                 //Delete old similar list
-                localDataSource.deleteSimilarExcept(movie_id, Const.MOVIE_TYPE)
+                localDataSource.deleteSimilarExcept(movieId, Const.MOVIE_TYPE)
 
                 //Insert new similar list
                 localDataSource.insertShows(movieList)
@@ -204,12 +202,12 @@ class ShowRepository(
         }.asFlow()
     }
 
-    override fun getSimilarSeriesList(series_id: String): Flow<Resource<List<Show>>> {
+    override fun getSimilarSeriesList(seriesId: String): Flow<Resource<List<Show>>> {
         return object :
             NetworkBoundResource<List<Show>, List<SeriesResponse>>() {
 
             public override fun loadFromDB(): Flow<List<Show>> {
-                return localDataSource.getSimilarSeries(series_id).map {
+                return localDataSource.getSimilarSeries(seriesId).map {
                     DataMapper.mapEntitiesToDomain(it)
                 }
             }
@@ -217,7 +215,7 @@ class ShowRepository(
             override fun shouldFetch(data: List<Show>?): Boolean = true
 
             override suspend fun createCall(): Flow<ApiResponse<List<SeriesResponse>>> {
-                return remoteDataSource.getSimilarSeriesList(series_id)
+                return remoteDataSource.getSimilarSeriesList(seriesId)
             }
 
             override suspend fun saveCallResult(data: List<SeriesResponse>) {
@@ -230,7 +228,7 @@ class ShowRepository(
                 }
 
                 //Delete old similar list
-                localDataSource.deleteSimilarExcept(series_id, Const.SERIES_TYPE)
+                localDataSource.deleteSimilarExcept(seriesId, Const.SERIES_TYPE)
 
                 //Insert new similar list
                 localDataSource.insertShows(seriesList)
@@ -304,9 +302,9 @@ class ShowRepository(
         }.asFlow()
     }
 
-    override fun setFavorite(show: Show) {
+    override suspend fun setFavorite(show: Show) {
         val showEntity = DataMapper.mapDomainToEntity(show)
-        appExecutors.diskIO().execute { localDataSource.setFavorite(showEntity) }
+        localDataSource.setFavorite(showEntity)
     }
 
 }

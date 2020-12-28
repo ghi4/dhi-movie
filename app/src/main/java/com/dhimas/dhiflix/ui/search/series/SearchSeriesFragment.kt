@@ -19,13 +19,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.koin.android.viewmodel.ext.android.getViewModel
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 class SearchSeriesFragment : Fragment() {
-    @ExperimentalCoroutinesApi
-    @FlowPreview
-    private val viewModel: SearchViewModel by lazy { requireParentFragment().getViewModel() }
 
     private lateinit var binding: FragmentSearchSeriesBinding
     private lateinit var seriesAdapter: ShowsAdapter
+    //Get the same viewModel instance of SearchFragment as the host
+    private val viewModel: SearchViewModel by lazy { requireParentFragment().getViewModel() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,8 +36,6 @@ class SearchSeriesFragment : Fragment() {
         return binding.root
     }
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,8 +48,7 @@ class SearchSeriesFragment : Fragment() {
                 }
 
                 is Resource.Success -> {
-                    seriesAdapter.addMovies(seriesList.data as ArrayList<Show>)
-                    seriesAdapter.notifyDataSetChanged()
+                    seriesAdapter.setList(seriesList.data as ArrayList<Show>)
 
                     if (seriesList.data.isNullOrEmpty()) {
                         setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
@@ -67,7 +65,7 @@ class SearchSeriesFragment : Fragment() {
                     setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                     setInfoImageAndMessage(
                         R.drawable.undraw_signal_searching_bhpc,
-                        seriesList.message ?: getString(R.string.unknown_error)
+                        seriesList.message
                     )
                 }
             }
@@ -76,7 +74,9 @@ class SearchSeriesFragment : Fragment() {
 
     private fun setupUI() {
         seriesAdapter = ShowsAdapter()
-        seriesAdapter.onItemClick = {selectedItem ->
+
+        //OnClick go to DetailActivity
+        seriesAdapter.onItemClick = { selectedItem ->
             val intent = Intent(requireContext(), DetailActivity::class.java)
             intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedItem.id)
             intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedItem.showType)
@@ -98,7 +98,7 @@ class SearchSeriesFragment : Fragment() {
         }
     }
 
-    private fun setInfoImageAndMessage(image: Int, message: String) {
+    private fun setInfoImageAndMessage(image: Int, message: String? = getString(R.string.unknown_error)) {
         val targetWidth = 1361
         val targetHeight = 938
         Picasso.get()

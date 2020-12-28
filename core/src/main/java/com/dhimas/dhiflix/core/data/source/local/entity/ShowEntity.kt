@@ -3,6 +3,7 @@ package com.dhimas.dhiflix.core.data.source.local.entity
 import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.dhimas.dhiflix.core.utils.Const
 
 @Entity(tableName = "showtable")
 data class ShowEntity(
@@ -11,15 +12,15 @@ data class ShowEntity(
     @NonNull
     var id: String,
 
-    var title: String? = "Unknown",
+    var title: String? = Const.UNKNOWN_VALUE,
 
-    var releaseDate: String? = "Unknown",
+    var releaseDate: String? = Const.UNKNOWN_VALUE,
 
-    var overview: String? = "Unknown",
+    var overview: String? = Const.UNKNOWN_VALUE,
 
-    var posterPath: String? = "Unknown",
+    var posterPath: String? = Const.UNKNOWN_VALUE,
 
-    var backdropPath: String? = "Unknown",
+    var backdropPath: String? = Const.UNKNOWN_VALUE,
 
     var showType: Int? = 0,
 

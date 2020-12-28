@@ -15,9 +15,10 @@ class ShowsAdapter : RecyclerView.Adapter<ShowsAdapter.MovieViewHolder>() {
     private var showsList = ArrayList<Show>()
     var onItemClick: ((Show) -> Unit)? = null
 
-    fun addMovies(shows: ArrayList<Show>) {
+    fun setList(shows: ArrayList<Show>) {
         showsList.clear()
         showsList.addAll(shows)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -33,12 +34,15 @@ class ShowsAdapter : RecyclerView.Adapter<ShowsAdapter.MovieViewHolder>() {
 
     inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemShowBinding.bind(itemView)
-        fun bind(movie: Show) {
+        fun bind(show: Show) {
             with(binding) {
-                tvTitle.text = movie.title
-                tvReleaseDate.text = Utils.dateParseToMonthAndYear(movie.releaseDate)
+                //Title
+                tvTitle.text = show.title
+                //Release date
+                tvReleaseDate.text = Utils.dateParseToMonthAndYear(show.releaseDate)
+                //Poster
                 Picasso.get()
-                    .load(Const.URL_BASE_IMAGE + movie.posterPath)
+                    .load(Const.URL_BASE_IMAGE + show.posterPath)
                     .resize(Const.POSTER_TARGET_WIDTH, Const.POSTER_TARGET_HEIGHT)
                     .error(R.drawable.poster_error)
                     .placeholder(R.drawable.poster_placeholder)

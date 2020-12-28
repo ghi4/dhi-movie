@@ -3,7 +3,6 @@ package com.dhimas.dhiflix.ui.movie
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +45,7 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //Trigger to load data
         viewModel.setPage(currentPage)
 
         setupUI()
@@ -63,16 +63,19 @@ class MovieFragment : Fragment() {
 
         bannerAdapter = BannerAdapter(requireContext())
         movieAdapter = ShowsAdapter()
-        movieAdapter.onItemClick = {selectedItem ->
+
+        //OnClick go to DetailActivity
+        movieAdapter.onItemClick = { selectedShow ->
             val intent = Intent(requireContext(), DetailActivity::class.java)
-            intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedItem.id)
-            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedItem.showType)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedShow.id)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedShow.showType)
             startActivity(intent)
         }
 
         //Change grid layout spanCount when Landscape/Portrait
         val phoneOrientation = requireActivity().resources.configuration.orientation
         val spanCount = if (phoneOrientation == Configuration.ORIENTATION_PORTRAIT) 3 else 7
+
         with(binding) {
             rvMovie.layoutManager = GridLayoutManager(context, spanCount)
             rvMovie.hasFixedSize()
@@ -82,6 +85,7 @@ class MovieFragment : Fragment() {
             vpMovieBanner.adapter = bannerAdapter
             dotsIndicatorMovie.setViewPager2(vpMovieBanner)
 
+            //Trigger "Load More" when at bottom and prevent double load request
             nestedScrollMovie.setOnScrollChangeListener(
                 NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
                     val height = (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
@@ -109,8 +113,7 @@ class MovieFragment : Fragment() {
 
                 is Resource.Success -> {
                     if (movieList.data != null) {
-                        movieAdapter.addMovies(movieList.data as ArrayList<Show>)
-                        movieAdapter.notifyDataSetChanged()
+                        movieAdapter.setList(movieList.data as ArrayList<Show>)
 
                         bannerAdapter.clearBanner()
                         for (i in 0..4)
@@ -120,7 +123,12 @@ class MovieFragment : Fragment() {
                         stopShimmer()
                     } else {
                         showToast(requireContext(), getString(R.string.no_movie_found))
-                        showSnackBar(requireView(), getString(R.string.do_you_want_retry)) {
+                        //Show snackbar for retry load data
+                        showSnackBar(
+                            requireView(),
+                            getString(R.string.do_you_want_retry),
+                            getString(R.string.retry)
+                        ) {
                             viewModel.refresh()
                         }
                     }
@@ -128,9 +136,11 @@ class MovieFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
+                    //Show snackbar for retry load data
                     showSnackBar(
                         bottomNavigationView,
-                        movieList.message ?: getString(R.string.unknown_error)
+                        movieList.message ?: getString(R.string.unknown_error),
+                        getString(R.string.retry)
                     ) {
                         viewModel.refresh()
                     }
@@ -152,23 +162,5 @@ class MovieFragment : Fragment() {
             shimmerLayoutMovie.visibility = View.GONE
             tvMoviePopularTitle.visibility = View.VISIBLE
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        Log.d("VMPROBLEM", "MOVIE - Resume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        Log.d("VMPROBLEM", "MOVIE - Pause")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Log.d("VMPROBLEM", "MOVIE - Destroy")
     }
 }

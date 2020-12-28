@@ -30,8 +30,6 @@ class LocalDataSource(private val showDao: ShowDao) {
 
     suspend fun deleteAllSearchShow(showType: Int) = showDao.deleteAllSearch(showType)
 
-    fun setFavorite(showEntity: ShowEntity) {
-        showEntity.isFavorite = if (showEntity.isFavorite == 0) 1 else 0
-        showDao.updateShow(showEntity)
-    }
+    suspend fun setFavorite(showEntity: ShowEntity) = showDao.updateShow(showEntity)
+
 }

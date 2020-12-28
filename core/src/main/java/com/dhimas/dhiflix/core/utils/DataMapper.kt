@@ -37,15 +37,15 @@ object DataMapper {
         input.map {
             Show(
                 id = it.id,
-                title = it.title,
-                releaseDate = it.releaseDate,
-                overview = it.overview,
-                posterPath = it.posterPath,
-                backdropPath = it.backdropPath,
-                showType = it.showType,
-                isFavorite = it.isFavorite,
-                isSimilar = it.isSimilar,
-                isSearch = it.isSearch,
+                title = it.title ?: "Unknown",
+                releaseDate = it.releaseDate ?: "Unknown",
+                overview = it.overview ?: "Unknown",
+                posterPath = it.posterPath ?: "Unknown",
+                backdropPath = it.backdropPath ?: "Unknown",
+                showType = it.showType ?: 0,
+                isFavorite = it.isFavorite ?: 0,
+                isSimilar = it.isSimilar ?: 0,
+                isSearch = it.isSearch ?: 0
             )
         }
 

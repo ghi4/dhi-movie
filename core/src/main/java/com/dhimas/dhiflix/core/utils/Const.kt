@@ -5,9 +5,6 @@ class Const {
         //For load image
         const val URL_BASE_IMAGE = "https://image.tmdb.org/t/p/w500"
 
-        //For splash delay time
-        const val SPLASH_TIME = 1000L
-
         //For poster image
         const val POSTER_TARGET_WIDTH = 200
         const val POSTER_TARGET_HEIGHT = 300
@@ -19,5 +16,8 @@ class Const {
         //For knowing the show type (Movie/Series)
         const val MOVIE_TYPE = 0
         const val SERIES_TYPE = 1
+
+        //For null data
+        const val UNKNOWN_VALUE = "Unknown"
     }
 }

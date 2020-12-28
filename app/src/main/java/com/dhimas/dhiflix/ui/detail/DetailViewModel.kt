@@ -1,17 +1,26 @@
 package com.dhimas.dhiflix.ui.detail
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.data.source.local.entity.DoubleTrigger
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
-import com.dhimas.dhiflix.utils.Const
+import com.dhimas.dhiflix.core.utils.Const
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DetailViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
-    var isAlreadyShimmer: Boolean = false
+    //Value if already shimmer or not
+    private var isAlreadyShimmer: Boolean = false
+
+    //Trigger by showId and showType to load detail and similar list
     private var doubleTrigger = MutableLiveData<DoubleTrigger>()
+
+    //Trigger when similar list is empty
     private var listEmptyTrigger = MutableLiveData<Unit>()
 
+    //Get detail show
     private var show = doubleTrigger.switchMap {
         when (it.showType) {
             Const.MOVIE_TYPE ->
@@ -21,6 +30,7 @@ class DetailViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
         }
     }
 
+    //Get similar list
     private var similarList = doubleTrigger.switchMap {
         when (it.showType) {
             Const.MOVIE_TYPE ->
@@ -30,6 +40,8 @@ class DetailViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
         }
     }
 
+    //Get popular list
+    //Triggered when similar list is empty
     private var popularList = listEmptyTrigger.switchMap {
         val showType = doubleTrigger.value?.showType
         val page = 1
@@ -54,14 +66,23 @@ class DetailViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
         listEmptyTrigger.postValue(Unit)
     }
 
+    fun setFavorite(show: Show) {
+        Log.d("GGWP", "VIEWMODEL")
+        viewModelScope.launch(Dispatchers.IO){
+            Log.d("GGWP", "VIEWMODEL - IO")
+            Log.d("GGWP", "VIEWMODEL - IO - ${show.isFavorite}")
+            showUseCase.setFavorite(show)
+        }
+    }
+
+
     fun getShow(): LiveData<Resource<Show>> = show
+
+    fun getIsAlreadyShimmer() = isAlreadyShimmer
 
     fun getSimilarList(): LiveData<Resource<List<Show>>> = similarList
 
     fun getPopularList(): LiveData<Resource<List<Show>>> = popularList
 
-    fun setFavorite(show: Show) {
-        showUseCase.setFavorite(show)
-    }
 
 }

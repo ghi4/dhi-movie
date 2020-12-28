@@ -1,6 +1,5 @@
 package com.dhimas.dhiflix.core.ui
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +14,9 @@ class ShowsPosterAdapter : RecyclerView.Adapter<ShowsPosterAdapter.DetailViewHol
     private var showList = ArrayList<Show>()
     var onItemClick: ((Show) -> Unit)? = null
 
-    fun setList(showList: ArrayList<Show>) {
-        this.showList.clear()
-        this.showList.addAll(showList)
+    fun setList(shows: ArrayList<Show>) {
+        showList.clear()
+        showList.addAll(shows)
         notifyDataSetChanged()
     }
 
@@ -32,8 +31,8 @@ class ShowsPosterAdapter : RecyclerView.Adapter<ShowsPosterAdapter.DetailViewHol
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
-        val movie = showList[position]
-        holder.bind(movie, isAlreadyShimmer)
+        val show = showList[position]
+        holder.bind(show, isAlreadyShimmer)
     }
 
     override fun getItemCount(): Int = showList.size

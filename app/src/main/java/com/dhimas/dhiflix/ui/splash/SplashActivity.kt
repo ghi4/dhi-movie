@@ -7,7 +7,6 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.ui.main.MainActivity
-import com.dhimas.dhiflix.utils.Const
 
 class SplashActivity : AppCompatActivity() {
 
@@ -15,10 +14,13 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        //For splash delay time
+        val splashTime = 1000L
+
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
             finish()
-        }, Const.SPLASH_TIME)
+        }, splashTime)
 
     }
 
