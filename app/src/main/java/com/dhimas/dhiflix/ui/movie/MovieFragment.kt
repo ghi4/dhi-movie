@@ -28,7 +28,7 @@ import org.koin.core.qualifier.named
 class MovieFragment : Fragment() {
 
     private val scopeId = "MovieScope"
-    private val moduleMovie = getKoin().getOrCreateScope(scopeId, named(Const.VIEWMODEL))
+    private val moduleMovie = getKoin().getOrCreateScope(scopeId, named(Const.VIEW_MODEL))
     private val viewModel: MovieViewModel by moduleMovie.viewModel(this)
 
     private lateinit var binding: FragmentMovieBinding
@@ -95,7 +95,6 @@ class MovieFragment : Fragment() {
             nestedScrollMovie.setOnScrollChangeListener(
                 NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
                     val height = (v?.getChildAt(0)?.measuredHeight ?: 0) - (v?.measuredHeight ?: 0)
-
                     if (scrollY == height && scrollY > lastBottomLocation) {
                         if (currentPage < maxPage) {
                             viewModel.setPage(++currentPage)
@@ -113,54 +112,46 @@ class MovieFragment : Fragment() {
         viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
             when (movieList) {
                 is Resource.Loading -> {
-                    if (lastBottomLocation == 0)
-                        startShimmer()
+                    startShimmer()
                 }
 
                 is Resource.Success -> {
                     val data = movieList.data
-                    if (data != null) {
-
-                        val list = data.map { DataMapper.mapDomainToShows(it) }
-                        movieAdapter.setList(list as ArrayList<ShowsModel>)
-
-                        val bannerCount = 5
-                        val bannerList = list.take(bannerCount)
-                        bannerAdapter.setBanner(bannerList as ArrayList<ShowsModel>)
-
+                    if (!data.isNullOrEmpty()) {
+                        val list =
+                            data.map { DataMapper.mapDomainToShows(it) } as ArrayList<ShowsModel>
+                        movieAdapter.setList(list)
+                        bannerAdapter.setBanner(list)
                         stopShimmer()
                     } else {
                         showToast(requireContext(), getString(R.string.no_movie_found))
                         //Show snackbar for retry load data
-                        showSnackBar(
-                            requireView(),
-                            getString(R.string.do_you_want_retry),
-                            getString(R.string.retry)
-                        ) {
-                            viewModel.refresh()
-                        }
+                        snackBarRetry(movieList.message)
                     }
+                    //Prevent re-shimmer
                     viewModel.setAlreadyShimmer()
                 }
 
                 is Resource.Error -> {
                     //Show snackbar for retry load data
-                    showSnackBar(
-                        bottomNavigationView,
-                        movieList.message ?: getString(R.string.unknown_error),
-                        getString(R.string.retry)
-                    ) {
-                        viewModel.refresh()
-                    }
+                    snackBarRetry(movieList.message)
                 }
             }
         })
     }
 
+    private fun snackBarRetry(message: String?) {
+        showSnackBar(requireContext(), bottomNavigationView, message) {
+            viewModel.refresh()
+        }
+    }
+
     private fun startShimmer() {
-        with(binding) {
-            shimmerLayoutMovie.startShimmer()
-            shimmerLayoutMovie.visibility = View.VISIBLE
+        if (lastBottomLocation == 0) {
+            with(binding) {
+                shimmerLayoutMovie.startShimmer()
+                shimmerLayoutMovie.visibility = View.VISIBLE
+            }
         }
     }
 

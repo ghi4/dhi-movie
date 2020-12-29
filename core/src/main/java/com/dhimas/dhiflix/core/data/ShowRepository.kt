@@ -10,7 +10,9 @@ import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.repository.IShowRepository
 import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.utils.DataMapper
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class ShowRepository(
     private val remoteDataSource: RemoteDataSource,

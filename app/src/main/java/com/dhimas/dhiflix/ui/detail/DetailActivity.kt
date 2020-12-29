@@ -23,7 +23,7 @@ import org.koin.core.qualifier.named
 class DetailActivity : AppCompatActivity() {
 
     private val scopeId = "DetailScope"
-    private val moduleDetail = getKoin().getOrCreateScope(scopeId, named(Const.VIEWMODEL))
+    private val moduleDetail = getKoin().getOrCreateScope(scopeId, named(Const.VIEW_MODEL))
     private val viewModel: DetailViewModel by moduleDetail.viewModel(this)
 
     private lateinit var binding: ActivityDetailBinding
@@ -52,7 +52,7 @@ class DetailActivity : AppCompatActivity() {
         showId = intent.getStringExtra(EXTRA_SHOW_ID).toString()
         showType = intent.getIntExtra(EXTRA_SHOW_TYPE, 0)
 
-        //Set showId and showType for triggering load data
+        //Set showId and showType to triggering load data
         viewModel.setShowIdAndType(showId, showType)
 
         setupUI()
@@ -66,6 +66,7 @@ class DetailActivity : AppCompatActivity() {
         startShimmering() //Shimmer for detail show
         startShimmerList() //Shimmer for similar list
 
+        //Initialize adapter for similar shows
         similarShowsAdapter = ShowsPosterAdapter()
         similarShowsAdapter.onItemClick = { selectedShow ->
             val intent = Intent(this, DetailActivity::class.java)
@@ -74,6 +75,7 @@ class DetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        //Setup recyclerView
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         with(binding) {
             rvDetailOtherShows.layoutManager = layoutManager
@@ -125,7 +127,6 @@ class DetailActivity : AppCompatActivity() {
                                 .into(ivDetailPoster)
 
                             btDetailFavorite.setOnClickListener {
-                                data.isFavorite = if (data.isFavorite == 0) 1 else 0
                                 viewModel.setFavorite(data)
                             }
                         }

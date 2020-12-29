@@ -6,9 +6,14 @@ import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
 
 class SeriesViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
+    //Value if already shimmer or not
     private var isAlreadyShimmer: Boolean = false
+
+    //Used for "Load More"
     private var page = MutableLiveData<Int>()
 
+    //Get series list
+    //Triggered when page is set by setPage() or refresh() is called
     private var seriesList = page.switchMap {
         showUseCase.getSeriesList(it).asLiveData()
     }

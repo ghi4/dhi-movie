@@ -67,10 +67,10 @@ class DetailViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
 
     fun setFavorite(show: Show) {
         viewModelScope.launch(Dispatchers.IO) {
+            show.isFavorite = if (show.isFavorite == 0) 1 else 0
             showUseCase.setFavorite(show)
         }
     }
-
 
     fun getShow(): LiveData<Resource<Show>> = show
 

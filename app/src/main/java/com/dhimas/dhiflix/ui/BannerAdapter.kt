@@ -17,8 +17,9 @@ class BannerAdapter(val context: Context) : RecyclerView.Adapter<BannerAdapter.B
     private var bannerList = ArrayList<ShowsModel>()
 
     fun setBanner(shows: ArrayList<ShowsModel>) {
+        val bannerCount = 5
         bannerList.clear()
-        bannerList.addAll(shows)
+        bannerList.addAll(shows.take(bannerCount))
         notifyDataSetChanged()
     }
 

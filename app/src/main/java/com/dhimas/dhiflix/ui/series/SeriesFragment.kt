@@ -28,7 +28,7 @@ import org.koin.core.qualifier.named
 class SeriesFragment : Fragment() {
 
     private val scopeId = "SeriesScope"
-    private val moduleSeries = getKoin().getOrCreateScope(scopeId, named(Const.VIEWMODEL))
+    private val moduleSeries = getKoin().getOrCreateScope(scopeId, named(Const.VIEW_MODEL))
     private val viewModel: SeriesViewModel by moduleSeries.viewModel(this)
 
     private lateinit var binding: FragmentSeriesBinding
@@ -113,53 +113,46 @@ class SeriesFragment : Fragment() {
         viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
             when (seriesList) {
                 is Resource.Loading -> {
-                    if (lastBottomLocation == 0)
-                        startShimmer()
+                    startShimmer()
                 }
 
                 is Resource.Success -> {
                     val data = seriesList.data
                     if (!data.isNullOrEmpty()) {
-                        val list = DataMapper.mapListDomainToArrayShowsModel(data)
+                        val list =
+                            data.map { DataMapper.mapDomainToShows(it) } as ArrayList<ShowsModel>
                         seriesAdapter.setList(list)
-
-                        val bannerCount = 5
-                        val bannerList = list.take(bannerCount)
-                        bannerAdapter.setBanner(bannerList as ArrayList<ShowsModel>)
-
+                        bannerAdapter.setBanner(list)
                         stopShimmer()
                     } else {
                         showToast(requireContext(), getString(R.string.no_series_found))
                         //Show snackbar for retry load data
-                        showSnackBar(
-                            bottomNavigationView,
-                            getString(R.string.do_you_want_retry),
-                            getString(R.string.retry)
-                        ) {
-                            viewModel.refresh()
-                        }
+                        snackBarRetry(seriesList.message)
                     }
-                    //To prevent re-shimmer
+                    //Prevent re-shimmer
                     viewModel.setAlreadyShimmer()
                 }
 
                 is Resource.Error -> {
-                    showSnackBar(
-                        bottomNavigationView,
-                        seriesList.message ?: getString(R.string.unknown_error),
-                        getString(R.string.retry)
-                    ) {
-                        viewModel.refresh()
-                    }
+                    //Show snackbar for retry load data
+                    snackBarRetry(seriesList.message)
                 }
             }
         })
     }
 
     private fun startShimmer() {
-        with(binding) {
-            shimmerLayoutSeries.startShimmer()
-            shimmerLayoutSeries.visibility = View.VISIBLE
+        if (lastBottomLocation == 0) {
+            with(binding) {
+                shimmerLayoutSeries.startShimmer()
+                shimmerLayoutSeries.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun snackBarRetry(message: String?) {
+        showSnackBar(requireContext(), bottomNavigationView, message) {
+            viewModel.refresh()
         }
     }
 

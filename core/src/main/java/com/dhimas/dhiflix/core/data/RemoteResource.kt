@@ -7,7 +7,7 @@ abstract class RemoteResource<ResultType, RequestType> {
 
     private var result: Flow<Resource<ResultType>> = flow {
         emit(Resource.Loading())
-        when(val apiResponse = createCall().first()) {
+        when (val apiResponse = createCall().first()) {
             is ApiResponse.Success -> {
                 val data = convertCallResult(apiResponse.data)
                 emitAll(data.map { Resource.Success(it) })

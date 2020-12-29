@@ -7,7 +7,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val favoriteModule = module {
-    scope(named(Const.VIEWMODEL)) {
+    scope(named(Const.VIEW_MODEL)) {
         viewModel { FavoriteViewModel(get()) }
     }
 }

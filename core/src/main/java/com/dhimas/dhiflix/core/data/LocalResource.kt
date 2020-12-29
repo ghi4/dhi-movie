@@ -1,6 +1,9 @@
 package com.dhimas.dhiflix.core.data
 
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 abstract class LocalResource<ResultType> {
 

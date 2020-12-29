@@ -21,6 +21,6 @@ class Const {
         const val UNKNOWN_VALUE = "Unknown"
 
         //For scope name
-        const val VIEWMODEL = "ViewModel"
+        const val VIEW_MODEL = "ViewModel"
     }
 }

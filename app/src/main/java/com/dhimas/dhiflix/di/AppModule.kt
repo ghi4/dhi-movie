@@ -20,10 +20,14 @@ val useCaseModule = module {
 @ExperimentalCoroutinesApi
 @FlowPreview
 val viewModelModule = module {
-    scope(named(Const.VIEWMODEL)) {
+    scope(named(Const.VIEW_MODEL)) {
         viewModel { MovieViewModel(get()) }
         viewModel { SeriesViewModel(get()) }
         viewModel { DetailViewModel(get()) }
     }
+
+    //Shared viewModel
+    //Outside the scope because unknown problem causing force close
+    //Already see stack overflow and github community but no luck
     viewModel { SearchViewModel(get()) }
 }

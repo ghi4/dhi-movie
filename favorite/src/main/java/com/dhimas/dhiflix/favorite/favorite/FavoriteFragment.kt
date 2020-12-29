@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.core.data.Resource
-import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.presenter.ShowsPosterAdapter
 import com.dhimas.dhiflix.core.presenter.model.ShowsPosterModel
 import com.dhimas.dhiflix.core.utils.Const
@@ -24,7 +23,7 @@ import org.koin.core.qualifier.named
 class FavoriteFragment : Fragment() {
 
     private val scopeId = "FavoriteScope"
-    private val moduleFavorite = getKoin().getOrCreateScope(scopeId, named(Const.VIEWMODEL))
+    private val moduleFavorite = getKoin().getOrCreateScope(scopeId, named(Const.VIEW_MODEL))
     private val viewModel: FavoriteViewModel by moduleFavorite.viewModel(this)
 
     private lateinit var binding: FragmentFavoriteBinding
