@@ -72,6 +72,7 @@ class DetailActivity : AppCompatActivity() {
             intent.putExtra(EXTRA_SHOW_ID, selectedShow.id)
             intent.putExtra(EXTRA_SHOW_TYPE, selectedShow.showType)
             startActivity(intent)
+            finish()
         }
 
         //Setup recyclerView
@@ -150,7 +151,7 @@ class DetailActivity : AppCompatActivity() {
 
                 is Resource.Success -> {
                     val data = movieList.data
-                    if (data == null) {
+                    if (data.isNullOrEmpty()) {
                         showToast(this, getString(R.string.no_similar_list_found))
                         viewModel.setListEmptyTrigger() //Trigger popular list
                     } else {
@@ -177,7 +178,7 @@ class DetailActivity : AppCompatActivity() {
 
                 is Resource.Success -> {
                     val data = movieList.data
-                    if (data == null) {
+                    if (data.isNullOrEmpty()) {
                         binding.tvDetailInterestTitle.visibility = View.GONE
                         showToast(this, getString(R.string.no_popular_list_found))
                     } else {
@@ -239,11 +240,6 @@ class DetailActivity : AppCompatActivity() {
             shimmerLayoutDetailOtherShows.visibility = View.GONE
             shimmerLayoutDetailOtherShows.stopShimmer()
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        finish()
     }
 
     override fun onDestroy() {

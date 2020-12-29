@@ -116,7 +116,7 @@ class SeriesFragment : Fragment() {
                 }
 
                 is Resource.Success -> {
-                    val data = seriesList.data  as ArrayList<Show>
+                    val data = seriesList.data as ArrayList<Show>
                     if (!data.isNullOrEmpty()) {
                         seriesAdapter.setList(data)
                         bannerAdapter.setBanner(data)
