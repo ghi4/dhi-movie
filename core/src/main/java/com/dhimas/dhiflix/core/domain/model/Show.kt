@@ -17,7 +17,5 @@ data class Show(
 
     var isFavorite: Int,
 
-    var isSimilar: Int,
-
     var isSearch: Int
 )

@@ -13,6 +13,7 @@ import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.ui.ShowsAdapter
+import com.dhimas.dhiflix.core.utils.DataMapper
 import com.dhimas.dhiflix.databinding.FragmentSeriesBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
 import com.dhimas.dhiflix.ui.detail.DetailActivity
@@ -111,8 +112,10 @@ class SeriesFragment : Fragment() {
                 }
 
                 is Resource.Success -> {
-                    if (seriesList.data != null) {
-                        seriesAdapter.setList(seriesList.data as ArrayList<Show>)
+                    val data = seriesList.data
+                    if (!data.isNullOrEmpty()) {
+                        val list = DataMapper.mapListDomainToArrayShowsModel(data)
+                        seriesAdapter.setList(list)
 
                         bannerAdapter.clearBanner()
                         for (i in 0..4)

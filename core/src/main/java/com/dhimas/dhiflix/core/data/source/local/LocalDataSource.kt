@@ -14,22 +14,13 @@ class LocalDataSource(private val showDao: ShowDao) {
 
     fun getFavoriteSeries(): Flow<List<ShowEntity>> = showDao.getFavoriteSeries()
 
-    fun getSimilarMovies(movieId: String): Flow<List<ShowEntity>> =
-        showDao.getSimilarMovies(movieId)
+    fun getSearchMovies(keyword: String): Flow<List<ShowEntity>> = showDao.searchMovies(keyword)
 
-    fun getSimilarSeries(seriesId: String): Flow<List<ShowEntity>> =
-        showDao.getSimilarSeries(seriesId)
-
-    fun searchMovies(keyword: String): Flow<List<ShowEntity>> = showDao.searchMovies(keyword)
-
-    fun searchSeries(keyword: String): Flow<List<ShowEntity>> = showDao.searchSeries(keyword)
+    fun getSearchSeries(keyword: String): Flow<List<ShowEntity>> = showDao.searchSeries(keyword)
 
     fun getShowById(showId: String): Flow<ShowEntity> = showDao.getShowById(showId)
 
     suspend fun insertShows(shows: List<ShowEntity>) = showDao.insertShows(shows)
-
-    suspend fun deleteSimilarExcept(showId: String, showType: Int) =
-        showDao.deleteSimilarExcept(showId, showType)
 
     suspend fun deleteAllSearchShow(showType: Int) = showDao.deleteAllSearch(showType)
 

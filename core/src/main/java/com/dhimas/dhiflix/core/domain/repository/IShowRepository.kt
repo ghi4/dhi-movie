@@ -4,7 +4,7 @@ import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import kotlinx.coroutines.flow.Flow
 
-interface IShowRepository {
+interface  IShowRepository {
 
     fun getMovieList(page: Int): Flow<Resource<List<Show>>>
 

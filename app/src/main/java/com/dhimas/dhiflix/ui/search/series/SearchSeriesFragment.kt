@@ -11,6 +11,7 @@ import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.ui.ShowsAdapter
+import com.dhimas.dhiflix.core.utils.DataMapper
 import com.dhimas.dhiflix.databinding.FragmentSearchSeriesBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.ui.search.SearchFragment
@@ -56,15 +57,16 @@ class SearchSeriesFragment : Fragment() {
                 }
 
                 is Resource.Success -> {
-                    seriesAdapter.setList(seriesList.data as ArrayList<Show>)
-
-                    if (seriesList.data.isNullOrEmpty()) {
+                    val data = seriesList.data
+                    if (data.isNullOrEmpty()) {
                         setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                         setInfoImageAndMessage(
                             R.drawable.undraw_not_found_60pq,
                             getString(R.string.no_series_found)
                         )
                     } else {
+                        val list = DataMapper.mapListDomainToArrayShowsModel(data)
+                        seriesAdapter.setList(list)
                         setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
                     }
                 }

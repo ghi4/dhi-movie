@@ -13,6 +13,8 @@ import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.ui.ShowsAdapter
+import com.dhimas.dhiflix.core.ui.model.ShowsModel
+import com.dhimas.dhiflix.core.utils.DataMapper
 import com.dhimas.dhiflix.databinding.FragmentMovieBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
 import com.dhimas.dhiflix.ui.detail.DetailActivity
@@ -21,6 +23,7 @@ import com.dhimas.dhiflix.utils.Utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MovieFragment : Fragment() {
 
@@ -113,7 +116,11 @@ class MovieFragment : Fragment() {
 
                 is Resource.Success -> {
                     if (movieList.data != null) {
-                        movieAdapter.setList(movieList.data as ArrayList<Show>)
+
+                        val list = movieList.data
+                        movieAdapter.setList(list?.map {
+                            DataMapper.mapDomainToShowsModel(it)
+                        } as ArrayList<ShowsModel>)
 
                         bannerAdapter.clearBanner()
                         for (i in 0..4)

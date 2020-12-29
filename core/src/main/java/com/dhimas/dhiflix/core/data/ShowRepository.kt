@@ -10,8 +10,7 @@ import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.domain.repository.IShowRepository
 import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.utils.DataMapper
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 class ShowRepository(
     private val remoteDataSource: RemoteDataSource,
@@ -23,7 +22,7 @@ class ShowRepository(
             NetworkBoundResource<List<Show>, List<MovieResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.getMovies(page * 20).map {
-                    DataMapper.mapEntitiesToDomain(it)
+                    DataMapper.mapListEntityToDomain(it)
                 }
             }
 
@@ -54,7 +53,7 @@ class ShowRepository(
             NetworkBoundResource<List<Show>, List<SeriesResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.getSeries(page * 20).map {
-                    DataMapper.mapEntitiesToDomain(it)
+                    DataMapper.mapListEntityToDomain(it)
                 }
             }
 
@@ -89,7 +88,7 @@ class ShowRepository(
             }
 
             override fun shouldFetch(data: Show?): Boolean {
-                return data == null
+                return data == null || data.id == Const.UNKNOWN_VALUE
             }
 
             override suspend fun createCall(): Flow<ApiResponse<MovieResponse>> {
@@ -101,6 +100,7 @@ class ShowRepository(
                 localDataSource.insertShows(listOf(movie))
             }
         }.asFlow()
+
     }
 
     override fun getSeriesDetail(seriesId: String): Flow<Resource<Show>> {
@@ -112,7 +112,7 @@ class ShowRepository(
             }
 
             override fun shouldFetch(data: Show?): Boolean {
-                return data == null
+                return data == null || data.id == Const.UNKNOWN_VALUE
             }
 
             override suspend fun createCall(): Flow<ApiResponse<SeriesResponse>> {
@@ -127,112 +127,62 @@ class ShowRepository(
     }
 
     override fun getFavoriteMovieList(): Flow<Resource<List<Show>>> {
-        return object :
-            NetworkBoundResource<List<Show>, List<MovieResponse>>() {
-            public override fun loadFromDB(): Flow<List<Show>> {
+        return object : LocalResource<List<Show>>() {
+            override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.getFavoriteMovies().map {
-                    DataMapper.mapEntitiesToDomain(it)
+                    DataMapper.mapListEntityToDomain(it)
                 }
-            }
-
-            override fun shouldFetch(data: List<Show>?): Boolean = false
-
-            override suspend fun createCall(): Flow<ApiResponse<List<MovieResponse>>> {
-                return remoteDataSource.getMovieList(1)
-            }
-
-            override suspend fun saveCallResult(data: List<MovieResponse>) {
-
             }
         }.asFlow()
     }
 
     override fun getFavoriteSeriesList(): Flow<Resource<List<Show>>> {
-        return object :
-            NetworkBoundResource<List<Show>, List<SeriesResponse>>() {
-            public override fun loadFromDB(): Flow<List<Show>> {
+        return object : LocalResource<List<Show>>() {
+            override fun loadFromDB(): Flow<List<Show>> {
                 return localDataSource.getFavoriteSeries().map {
-                    DataMapper.mapEntitiesToDomain(it)
+                    DataMapper.mapListEntityToDomain(it)
                 }
             }
-
-            override fun shouldFetch(data: List<Show>?): Boolean = false
-
-            override suspend fun createCall(): Flow<ApiResponse<List<SeriesResponse>>> {
-                return remoteDataSource.getSeriesList(1)
-            }
-
-            override suspend fun saveCallResult(data: List<SeriesResponse>) {
-
-            }
-
         }.asFlow()
     }
 
     override fun getSimilarMovieList(movieId: String): Flow<Resource<List<Show>>> {
-        return object :
-            NetworkBoundResource<List<Show>, List<MovieResponse>>() {
-            public override fun loadFromDB(): Flow<List<Show>> {
-                return localDataSource.getSimilarMovies(movieId).map {
-                    DataMapper.mapEntitiesToDomain(it)
-                }
-            }
-
-            override fun shouldFetch(data: List<Show>?): Boolean = true
-
-            override suspend fun createCall(): Flow<ApiResponse<List<MovieResponse>>> {
+        return object : RemoteResource<List<Show>, List<MovieResponse>>() {
+            override fun createCall(): Flow<ApiResponse<List<MovieResponse>>> {
                 return remoteDataSource.getSimilarMovieList(movieId)
             }
 
-            override suspend fun saveCallResult(data: List<MovieResponse>) {
-                val movieList = ArrayList<ShowEntity>()
-                val isSimilar = 1
-
-                data.map {
-                    val movie = DataMapper.mapMovieResponseToEntity(it, isSimilar = isSimilar)
-                    movieList.add(movie)
+            override fun convertCallResult(data: List<MovieResponse>): Flow<List<Show>> {
+                val result = data.map {
+                    DataMapper.mapMovieResponseToDomain(it)
                 }
-
-                //Delete old similar list
-                localDataSource.deleteSimilarExcept(movieId, Const.MOVIE_TYPE)
-
-                //Insert new similar list
-                localDataSource.insertShows(movieList)
+                return flow { emit(result) }
             }
+
+            override fun emptyResult(): Flow<List<Show>> {
+                return flow { emit(emptyList<Show>()) }
+            }
+
         }.asFlow()
     }
 
     override fun getSimilarSeriesList(seriesId: String): Flow<Resource<List<Show>>> {
-        return object :
-            NetworkBoundResource<List<Show>, List<SeriesResponse>>() {
-
-            public override fun loadFromDB(): Flow<List<Show>> {
-                return localDataSource.getSimilarSeries(seriesId).map {
-                    DataMapper.mapEntitiesToDomain(it)
-                }
-            }
-
-            override fun shouldFetch(data: List<Show>?): Boolean = true
-
-            override suspend fun createCall(): Flow<ApiResponse<List<SeriesResponse>>> {
+        return object : RemoteResource<List<Show>, List<SeriesResponse>>() {
+            override fun createCall(): Flow<ApiResponse<List<SeriesResponse>>> {
                 return remoteDataSource.getSimilarSeriesList(seriesId)
             }
 
-            override suspend fun saveCallResult(data: List<SeriesResponse>) {
-                val seriesList = ArrayList<ShowEntity>()
-                val isSimilar = 1
-
-                data.map {
-                    val series = DataMapper.mapSeriesResponseToEntity(it, isSimilar = isSimilar)
-                    seriesList.add(series)
+            override fun convertCallResult(data: List<SeriesResponse>): Flow<List<Show>> {
+                val result = data.map {
+                    DataMapper.mapSeriesResponseToDomain(it)
                 }
-
-                //Delete old similar list
-                localDataSource.deleteSimilarExcept(seriesId, Const.SERIES_TYPE)
-
-                //Insert new similar list
-                localDataSource.insertShows(seriesList)
+                return flow { emit(result) }
             }
+
+            override fun emptyResult(): Flow<List<Show>> {
+                return flow { emit(emptyList<Show>()) }
+            }
+
         }.asFlow()
     }
 
@@ -240,8 +190,8 @@ class ShowRepository(
         return object :
             NetworkBoundResource<List<Show>, List<MovieResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
-                return localDataSource.searchMovies("$keyword%").map {
-                    DataMapper.mapEntitiesToDomain(it)
+                return localDataSource.getSearchMovies("$keyword%").map {
+                    DataMapper.mapListEntityToDomain(it)
                 }
             }
 
@@ -273,8 +223,8 @@ class ShowRepository(
         return object :
             NetworkBoundResource<List<Show>, List<SeriesResponse>>() {
             public override fun loadFromDB(): Flow<List<Show>> {
-                return localDataSource.searchSeries("$keyword%").map {
-                    DataMapper.mapEntitiesToDomain(it)
+                return localDataSource.getSearchSeries("$keyword%").map {
+                    DataMapper.mapListEntityToDomain(it)
                 }
             }
 
