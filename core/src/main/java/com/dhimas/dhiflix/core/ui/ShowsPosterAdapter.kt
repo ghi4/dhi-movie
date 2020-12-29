@@ -58,6 +58,7 @@ class ShowsPosterAdapter : RecyclerView.Adapter<ShowsPosterAdapter.DetailViewHol
                 ivPosterHorizontal.stopLoading()
             }
         }
+
         init {
             binding.root.setOnClickListener {
                 onItemClick?.invoke(showList[adapterPosition])

@@ -20,7 +20,7 @@ class SearchViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
     val queryChannel = ConflatedBroadcastChannel<String>()
 
     private val searchQuery = queryChannel.asFlow()
-        .debounce(300L)
+        .debounce(500L)
         .distinctUntilChanged()
         .filter {
             it.trim().isNotEmpty()

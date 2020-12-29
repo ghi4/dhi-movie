@@ -2,7 +2,6 @@ package com.dhimas.dhiflix.ui.detail
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +16,6 @@ import com.dhimas.dhiflix.utils.Utils.showToast
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.ext.scope
 
 class DetailActivity : AppCompatActivity() {
 
@@ -78,7 +76,6 @@ class DetailActivity : AppCompatActivity() {
             rvDetailOtherShows.adapter = similarShowsAdapter
 
             btDetailFavorite.setOnClickListener {
-                Log.d("GGWP", "INSIDE")
                 show.isFavorite = if (show.isFavorite == 0) 1 else 0
                 viewModel.setFavorite(show)
             }

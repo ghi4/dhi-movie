@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.dhimas.dhiflix.ui.main", appContext.packageName)
+        assertEquals("com.dhimas.dhiflix", appContext.packageName)
     }
 }

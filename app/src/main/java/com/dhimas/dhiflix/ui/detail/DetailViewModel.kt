@@ -1,6 +1,5 @@
 package com.dhimas.dhiflix.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.data.source.local.entity.DoubleTrigger
@@ -67,10 +66,7 @@ class DetailViewModel(private val showUseCase: ShowUseCase) : ViewModel() {
     }
 
     fun setFavorite(show: Show) {
-        Log.d("GGWP", "VIEWMODEL")
-        viewModelScope.launch(Dispatchers.IO){
-            Log.d("GGWP", "VIEWMODEL - IO")
-            Log.d("GGWP", "VIEWMODEL - IO - ${show.isFavorite}")
+        viewModelScope.launch(Dispatchers.IO) {
             showUseCase.setFavorite(show)
         }
     }

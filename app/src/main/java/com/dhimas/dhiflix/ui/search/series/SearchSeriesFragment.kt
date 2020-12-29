@@ -25,6 +25,7 @@ class SearchSeriesFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchSeriesBinding
     private lateinit var seriesAdapter: ShowsAdapter
+
     //Get the same viewModel instance of SearchFragment as the host
     private val viewModel: SearchViewModel by lazy { requireParentFragment().getViewModel() }
 
@@ -85,7 +86,6 @@ class SearchSeriesFragment : Fragment() {
 
         with(binding) {
             rvSearchSeries.layoutManager = GridLayoutManager(requireContext(), 3)
-            rvSearchSeries.hasFixedSize()
             rvSearchSeries.adapter = seriesAdapter
         }
     }
@@ -98,7 +98,10 @@ class SearchSeriesFragment : Fragment() {
         }
     }
 
-    private fun setInfoImageAndMessage(image: Int, message: String? = getString(R.string.unknown_error)) {
+    private fun setInfoImageAndMessage(
+        image: Int,
+        message: String? = getString(R.string.unknown_error)
+    ) {
         val targetWidth = 1361
         val targetHeight = 938
         Picasso.get()

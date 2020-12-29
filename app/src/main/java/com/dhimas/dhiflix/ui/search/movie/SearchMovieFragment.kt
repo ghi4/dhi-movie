@@ -25,6 +25,7 @@ class SearchMovieFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchMovieBinding
     private lateinit var movieAdapter: ShowsAdapter
+
     //Get the same viewModel instance of SearchFragment as the host
     private val viewModel: SearchViewModel by lazy { requireParentFragment().getViewModel() }
 
@@ -85,7 +86,6 @@ class SearchMovieFragment : Fragment() {
 
         with(binding) {
             rvSearchMovie.layoutManager = GridLayoutManager(requireContext(), 3)
-//            rvSearchMovie.hasFixedSize()
             rvSearchMovie.adapter = movieAdapter
         }
     }
@@ -98,7 +98,10 @@ class SearchMovieFragment : Fragment() {
         }
     }
 
-    private fun setInfoImageAndMessage(image: Int, message: String? = getString(R.string.unknown_error)) {
+    private fun setInfoImageAndMessage(
+        image: Int,
+        message: String? = getString(R.string.unknown_error)
+    ) {
         val targetWidth = 1361
         val targetHeight = 938
         Picasso.get()
