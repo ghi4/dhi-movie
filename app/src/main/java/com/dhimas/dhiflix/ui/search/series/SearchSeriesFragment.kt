@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
-import com.dhimas.dhiflix.core.presenter.ShowsAdapter
-import com.dhimas.dhiflix.core.utils.DataMapper
+import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.ui.ShowsAdapter
 import com.dhimas.dhiflix.databinding.FragmentSearchSeriesBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.ui.search.SearchViewModel
@@ -57,8 +57,7 @@ class SearchSeriesFragment : Fragment() {
                             getString(R.string.no_series_found)
                         )
                     } else {
-                        val list = DataMapper.mapListDomainToArrayShowsModel(data)
-                        seriesAdapter.setList(list)
+                        seriesAdapter.setList(data as ArrayList<Show>)
                         setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
                     }
                 }

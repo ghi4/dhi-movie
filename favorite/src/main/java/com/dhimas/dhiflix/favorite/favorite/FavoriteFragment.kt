@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.core.data.Resource
-import com.dhimas.dhiflix.core.presenter.ShowsPosterAdapter
-import com.dhimas.dhiflix.core.presenter.model.ShowsPosterModel
+import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.ui.ShowsPosterAdapter
 import com.dhimas.dhiflix.core.utils.Const
-import com.dhimas.dhiflix.core.utils.DataMapper
 import com.dhimas.dhiflix.favorite.databinding.FragmentFavoriteBinding
 import com.dhimas.dhiflix.favorite.di.favoriteModule
 import com.dhimas.dhiflix.ui.detail.DetailActivity
@@ -99,8 +98,7 @@ class FavoriteFragment : Fragment() {
                     //Visible : Title and recyclerView
                     //Gone    : Loading, illustration, message
                     if (!data.isNullOrEmpty()) {
-                        val list = data.map { DataMapper.mapDomainToShowsPoster(it) }
-                        favoriteMovieAdapter.setList(list as ArrayList<ShowsPosterModel>)
+                        favoriteMovieAdapter.setList(data as ArrayList<Show>)
                         favoriteMovieAdapter.setShimmer(false)
 
                         setMovieViewVisibility(tvMovie = true, rvMovie = true)
@@ -132,8 +130,7 @@ class FavoriteFragment : Fragment() {
                     //Visible : Title and recyclerView
                     //Gone    : Loading, illustration, message
                     if (!data.isNullOrEmpty()) {
-                        val list = data.map { DataMapper.mapDomainToShowsPoster(it) }
-                        favoriteSeriesAdapter.setList(list as ArrayList<ShowsPosterModel>)
+                        favoriteSeriesAdapter.setList(data as ArrayList<Show>)
                         favoriteSeriesAdapter.setShimmer(false)
 
                         setSeriesViewVisibility(tvSeries = true, rvSeries = true)

@@ -27,7 +27,7 @@ val viewModelModule = module {
     }
 
     //Shared viewModel
-    //Outside the scope because unknown problem causing force close
+    //Outside the scope, because unknown problem causing not shared with other
     //Already see stack overflow and github community but no luck
     viewModel { SearchViewModel(get()) }
 }

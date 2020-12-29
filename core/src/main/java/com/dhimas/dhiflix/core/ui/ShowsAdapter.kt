@@ -1,4 +1,4 @@
-package com.dhimas.dhiflix.core.presenter
+package com.dhimas.dhiflix.core.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,16 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.core.R
 import com.dhimas.dhiflix.core.databinding.ItemShowBinding
-import com.dhimas.dhiflix.core.presenter.model.ShowsModel
+import com.dhimas.dhiflix.core.domain.model.Show
 import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.utils.Utils
 import com.squareup.picasso.Picasso
 
 class ShowsAdapter : RecyclerView.Adapter<ShowsAdapter.MovieViewHolder>() {
-    private var showsList = ArrayList<ShowsModel>()
-    var onItemClick: ((ShowsModel) -> Unit)? = null
+    private var showsList = ArrayList<Show>()
+    var onItemClick: ((Show) -> Unit)? = null
 
-    fun setList(shows: ArrayList<ShowsModel>) {
+    fun setList(shows: ArrayList<Show>) {
         showsList.clear()
         showsList.addAll(shows)
         notifyDataSetChanged()
@@ -34,7 +34,7 @@ class ShowsAdapter : RecyclerView.Adapter<ShowsAdapter.MovieViewHolder>() {
 
     inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemShowBinding.bind(itemView)
-        fun bind(show: ShowsModel) {
+        fun bind(show: Show) {
             with(binding) {
                 //Title
                 tvTitle.text = show.title

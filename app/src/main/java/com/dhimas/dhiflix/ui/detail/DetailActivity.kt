@@ -7,10 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
-import com.dhimas.dhiflix.core.presenter.ShowsPosterAdapter
-import com.dhimas.dhiflix.core.presenter.model.ShowsPosterModel
+import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.ui.ShowsPosterAdapter
 import com.dhimas.dhiflix.core.utils.Const
-import com.dhimas.dhiflix.core.utils.DataMapper
 import com.dhimas.dhiflix.core.utils.Utils.dateParseToMonthAndYear
 import com.dhimas.dhiflix.databinding.ActivityDetailBinding
 import com.dhimas.dhiflix.utils.Utils.showToast
@@ -93,9 +92,8 @@ class DetailActivity : AppCompatActivity() {
                 }
 
                 is Resource.Success -> {
-                    val data = mShow.data
-                    if (data != null) {
-                        val show = DataMapper.mapDomainToShowsDetail(data)
+                    val show = mShow.data
+                    if (show != null) {
 
                         //Favorite button text value
                         val btFavoriteText =
@@ -127,7 +125,7 @@ class DetailActivity : AppCompatActivity() {
                                 .into(ivDetailPoster)
 
                             btDetailFavorite.setOnClickListener {
-                                viewModel.setFavorite(data)
+                                viewModel.setFavorite(show)
                             }
                         }
                         stopShimmering()
@@ -157,10 +155,7 @@ class DetailActivity : AppCompatActivity() {
                         viewModel.setListEmptyTrigger() //Trigger popular list
                     } else {
                         similarShowsAdapter.setShimmer(viewModel.getIsAlreadyShimmer())
-
-                        val list = data.map { DataMapper.mapDomainToShowsPoster(it) }
-                        similarShowsAdapter.setList(list as ArrayList<ShowsPosterModel>)
-
+                        similarShowsAdapter.setList(data as ArrayList<Show>)
                         stopShimmerList()
                     }
                 }
@@ -187,10 +182,7 @@ class DetailActivity : AppCompatActivity() {
                         showToast(this, getString(R.string.no_popular_list_found))
                     } else {
                         similarShowsAdapter.setShimmer(viewModel.getIsAlreadyShimmer())
-
-                        val list = data.map { DataMapper.mapDomainToShowsPoster(it) }
-                        similarShowsAdapter.setList(list as ArrayList<ShowsPosterModel>)
-
+                        similarShowsAdapter.setList(data as ArrayList<Show>)
                         stopShimmerList()
                     }
                 }

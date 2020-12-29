@@ -11,10 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
-import com.dhimas.dhiflix.core.presenter.ShowsAdapter
-import com.dhimas.dhiflix.core.presenter.model.ShowsModel
+import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.ui.ShowsAdapter
 import com.dhimas.dhiflix.core.utils.Const
-import com.dhimas.dhiflix.core.utils.DataMapper
 import com.dhimas.dhiflix.databinding.FragmentSeriesBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
 import com.dhimas.dhiflix.ui.detail.DetailActivity
@@ -117,12 +116,10 @@ class SeriesFragment : Fragment() {
                 }
 
                 is Resource.Success -> {
-                    val data = seriesList.data
+                    val data = seriesList.data  as ArrayList<Show>
                     if (!data.isNullOrEmpty()) {
-                        val list =
-                            data.map { DataMapper.mapDomainToShows(it) } as ArrayList<ShowsModel>
-                        seriesAdapter.setList(list)
-                        bannerAdapter.setBanner(list)
+                        seriesAdapter.setList(data)
+                        bannerAdapter.setBanner(data)
                         stopShimmer()
                     } else {
                         showToast(requireContext(), getString(R.string.no_series_found))
