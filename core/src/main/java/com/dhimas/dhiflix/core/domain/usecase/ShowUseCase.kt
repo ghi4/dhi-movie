@@ -9,17 +9,17 @@ interface ShowUseCase {
 
     fun getSeriesList(page: Int): Flow<Resource<List<Show>>>
 
-    fun getMovieDetail(movie_id: String): Flow<Resource<Show>>
+    fun getMovieDetail(movieId: String): Flow<Resource<Show>>
 
-    fun getSeriesDetail(series_id: String): Flow<Resource<Show>>
+    fun getSeriesDetail(seriesId: String): Flow<Resource<Show>>
 
     fun getFavoriteMovieList(): Flow<Resource<List<Show>>>
 
     fun getFavoriteSeriesList(): Flow<Resource<List<Show>>>
 
-    fun getSimilarMovieList(movie_id: String): Flow<Resource<List<Show>>>
+    fun getSimilarMovieList(movieId: String): Flow<Resource<List<Show>>>
 
-    fun getSimilarSeriesList(series_id: String): Flow<Resource<List<Show>>>
+    fun getSimilarSeriesList(seriesId: String): Flow<Resource<List<Show>>>
 
     fun searchMovie(keyword: String): Flow<Resource<List<Show>>>
 

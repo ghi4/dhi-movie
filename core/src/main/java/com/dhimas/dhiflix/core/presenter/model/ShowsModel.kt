@@ -1,4 +1,4 @@
-package com.dhimas.dhiflix.core.ui.model
+package com.dhimas.dhiflix.core.presenter.model
 
 data class ShowsModel(
     var id: String,
@@ -8,6 +8,8 @@ data class ShowsModel(
     var releaseDate: String,
 
     var posterPath: String,
+
+    var backdropPath: String,
 
     var showType: Int
 )

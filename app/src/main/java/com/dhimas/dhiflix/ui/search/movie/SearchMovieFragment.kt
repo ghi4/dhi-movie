@@ -9,20 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
-import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.ui.ShowsAdapter
+import com.dhimas.dhiflix.core.presenter.ShowsAdapter
 import com.dhimas.dhiflix.core.utils.DataMapper
 import com.dhimas.dhiflix.databinding.FragmentSearchMovieBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
-import com.dhimas.dhiflix.ui.search.SearchFragment
 import com.dhimas.dhiflix.ui.search.SearchViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.getViewModel
-import org.koin.android.viewmodel.scope.viewModel
-import org.koin.core.qualifier.named
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -32,10 +27,7 @@ class SearchMovieFragment : Fragment() {
     private lateinit var movieAdapter: ShowsAdapter
 
     //Get the same viewModel instance of SearchFragment as the host
-//    private val viewModel: SearchViewModel by lazy { requireParentFragment().getViewModel() }
-
-    private val viewModelScope = getKoin().getScope(SearchFragment.getScopeId())
-    private val viewModel: SearchViewModel by viewModelScope.viewModel(this)
+    private val viewModel: SearchViewModel by lazy { requireParentFragment().getViewModel() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -1,4 +1,4 @@
-package com.dhimas.dhiflix.core.ui
+package com.dhimas.dhiflix.core.presenter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.core.R
 import com.dhimas.dhiflix.core.databinding.ItemShowBinding
-import com.dhimas.dhiflix.core.ui.model.ShowsModel
+import com.dhimas.dhiflix.core.presenter.model.ShowsModel
 import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.utils.Utils
 import com.squareup.picasso.Picasso

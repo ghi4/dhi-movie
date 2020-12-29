@@ -7,23 +7,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
-import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.ui.ShowsPosterAdapter
+import com.dhimas.dhiflix.core.presenter.ShowsPosterAdapter
+import com.dhimas.dhiflix.core.presenter.model.ShowsPosterModel
 import com.dhimas.dhiflix.core.utils.Const
+import com.dhimas.dhiflix.core.utils.DataMapper
 import com.dhimas.dhiflix.core.utils.Utils.dateParseToMonthAndYear
 import com.dhimas.dhiflix.databinding.ActivityDetailBinding
 import com.dhimas.dhiflix.utils.Utils.showToast
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.getKoin
+import org.koin.android.viewmodel.scope.viewModel
+import org.koin.core.qualifier.named
 
 class DetailActivity : AppCompatActivity() {
+
+    private val scopeId = "DetailScope"
+    private val moduleDetail = getKoin().getOrCreateScope(scopeId, named(Const.VIEWMODEL))
+    private val viewModel: DetailViewModel by moduleDetail.viewModel(this)
 
     private lateinit var binding: ActivityDetailBinding
     private lateinit var similarShowsAdapter: ShowsPosterAdapter
     private lateinit var showId: String
-    private lateinit var show: Show
-    private val viewModel: DetailViewModel by viewModel()
     private var showType: Int = 0
 
 
@@ -74,11 +79,6 @@ class DetailActivity : AppCompatActivity() {
             rvDetailOtherShows.layoutManager = layoutManager
             rvDetailOtherShows.hasFixedSize()
             rvDetailOtherShows.adapter = similarShowsAdapter
-
-            btDetailFavorite.setOnClickListener {
-                show.isFavorite = if (show.isFavorite == 0) 1 else 0
-                viewModel.setFavorite(show)
-            }
         }
     }
 
@@ -91,38 +91,46 @@ class DetailActivity : AppCompatActivity() {
                 }
 
                 is Resource.Success -> {
-                    show = mShow.data as Show
+                    val data = mShow.data
+                    if (data != null) {
+                        val show = DataMapper.mapDomainToShowsDetail(data)
 
-                    //Favorite button text value
-                    val btFavoriteText =
-                        if (show.isFavorite == 0)
-                            getString(R.string.add_to_favorite)
-                        else
-                            getString(R.string.remove_from_favorite)
+                        //Favorite button text value
+                        val btFavoriteText =
+                            if (show.isFavorite == 0)
+                                getString(R.string.add_to_favorite)
+                            else
+                                getString(R.string.remove_from_favorite)
 
-                    with(binding) {
-                        tvDetailTitle.text = show.title
-                        tvDetailReleaseDate.text = dateParseToMonthAndYear(show.releaseDate)
-                        tvDetailOverview.text = show.overview
-                        btDetailFavorite.text = btFavoriteText
+                        with(binding) {
+                            tvDetailTitle.text = show.title
+                            tvDetailReleaseDate.text = dateParseToMonthAndYear(show.releaseDate)
+                            tvDetailOverview.text = show.overview
+                            btDetailFavorite.text = btFavoriteText
 
-                        //Backdrop
-                        Picasso.get()
-                            .load(Const.URL_BASE_IMAGE + show.backdropPath)
-                            .placeholder(R.drawable.backdrop_placeholder)
-                            .error(R.drawable.image_error)
-                            .resize(Const.BACKDROP_TARGET_WIDTH, Const.BACKDROP_TARGET_HEIGHT)
-                            .into(ivDetailBackdrop)
+                            //Backdrop
+                            Picasso.get()
+                                .load(Const.URL_BASE_IMAGE + show.backdropPath)
+                                .placeholder(R.drawable.backdrop_placeholder)
+                                .error(R.drawable.image_error)
+                                .resize(Const.BACKDROP_TARGET_WIDTH, Const.BACKDROP_TARGET_HEIGHT)
+                                .into(ivDetailBackdrop)
 
-                        //Poster
-                        Picasso.get()
-                            .load(Const.URL_BASE_IMAGE + show.posterPath)
-                            .placeholder(R.drawable.poster_placeholder)
-                            .error(R.drawable.poster_error)
-                            .resize(Const.POSTER_TARGET_WIDTH, Const.POSTER_TARGET_HEIGHT)
-                            .into(ivDetailPoster)
+                            //Poster
+                            Picasso.get()
+                                .load(Const.URL_BASE_IMAGE + show.posterPath)
+                                .placeholder(R.drawable.poster_placeholder)
+                                .error(R.drawable.poster_error)
+                                .resize(Const.POSTER_TARGET_WIDTH, Const.POSTER_TARGET_HEIGHT)
+                                .into(ivDetailPoster)
+
+                            btDetailFavorite.setOnClickListener {
+                                data.isFavorite = if (data.isFavorite == 0) 1 else 0
+                                viewModel.setFavorite(data)
+                            }
+                        }
+                        stopShimmering()
                     }
-                    stopShimmering()
                 }
 
                 is Resource.Error -> {
@@ -142,12 +150,16 @@ class DetailActivity : AppCompatActivity() {
                 }
 
                 is Resource.Success -> {
-                    if (movieList.data.isNullOrEmpty()) {
+                    val data = movieList.data
+                    if (data == null) {
                         showToast(this, getString(R.string.no_similar_list_found))
                         viewModel.setListEmptyTrigger() //Trigger popular list
                     } else {
                         similarShowsAdapter.setShimmer(viewModel.getIsAlreadyShimmer())
-                        similarShowsAdapter.setList(movieList.data as ArrayList<Show>)
+
+                        val list = data.map { DataMapper.mapDomainToShowsPoster(it) }
+                        similarShowsAdapter.setList(list as ArrayList<ShowsPosterModel>)
+
                         stopShimmerList()
                     }
                 }
@@ -168,12 +180,16 @@ class DetailActivity : AppCompatActivity() {
                 }
 
                 is Resource.Success -> {
-                    if (movieList.data.isNullOrEmpty()) {
+                    val data = movieList.data
+                    if (data == null) {
                         binding.tvDetailInterestTitle.visibility = View.GONE
                         showToast(this, getString(R.string.no_popular_list_found))
                     } else {
                         similarShowsAdapter.setShimmer(viewModel.getIsAlreadyShimmer())
-                        similarShowsAdapter.setList(movieList.data as ArrayList<Show>)
+
+                        val list = data.map { DataMapper.mapDomainToShowsPoster(it) }
+                        similarShowsAdapter.setList(list as ArrayList<ShowsPosterModel>)
+
                         stopShimmerList()
                     }
                 }
@@ -235,6 +251,11 @@ class DetailActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        moduleDetail.close()
     }
 
 }

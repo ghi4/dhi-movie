@@ -9,19 +9,27 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhimas.dhiflix.core.data.Resource
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.ui.ShowsPosterAdapter
+import com.dhimas.dhiflix.core.presenter.ShowsPosterAdapter
+import com.dhimas.dhiflix.core.presenter.model.ShowsPosterModel
+import com.dhimas.dhiflix.core.utils.Const
+import com.dhimas.dhiflix.core.utils.DataMapper
 import com.dhimas.dhiflix.favorite.databinding.FragmentFavoriteBinding
 import com.dhimas.dhiflix.favorite.di.favoriteModule
 import com.dhimas.dhiflix.ui.detail.DetailActivity
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.getKoin
+import org.koin.android.viewmodel.scope.viewModel
 import org.koin.core.context.loadKoinModules
+import org.koin.core.qualifier.named
 
 class FavoriteFragment : Fragment() {
+
+    private val scopeId = "FavoriteScope"
+    private val moduleFavorite = getKoin().getOrCreateScope(scopeId, named(Const.VIEWMODEL))
+    private val viewModel: FavoriteViewModel by moduleFavorite.viewModel(this)
 
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var favoriteMovieAdapter: ShowsPosterAdapter
     private lateinit var favoriteSeriesAdapter: ShowsPosterAdapter
-    private val viewModel: FavoriteViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,8 +91,7 @@ class FavoriteFragment : Fragment() {
                     setViewVisibility(loading = true, ivInfo = true, tvInfo = true)
                 }
                 is Resource.Success -> {
-                    favoriteMovieAdapter.setList(favoriteMovieList.data as ArrayList<Show>)
-                    favoriteMovieAdapter.setShimmer(false)
+                    val data = favoriteMovieList.data
 
                     //Loading gone whenever empty or not
                     binding.pbFavorite.visibility = View.GONE
@@ -92,7 +99,11 @@ class FavoriteFragment : Fragment() {
                     //When data is not null or empty
                     //Visible : Title and recyclerView
                     //Gone    : Loading, illustration, message
-                    if (!favoriteMovieList.data.isNullOrEmpty()) {
+                    if (!data.isNullOrEmpty()) {
+                        val list = data.map { DataMapper.mapDomainToShowsPoster(it) }
+                        favoriteMovieAdapter.setList(list as ArrayList<ShowsPosterModel>)
+                        favoriteMovieAdapter.setShimmer(false)
+
                         setMovieViewVisibility(tvMovie = true, rvMovie = true)
                         setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
                     }
@@ -112,8 +123,8 @@ class FavoriteFragment : Fragment() {
                     setViewVisibility(loading = true, ivInfo = true, tvInfo = true)
                 }
                 is Resource.Success -> {
-                    favoriteSeriesAdapter.setList(favoriteSeriesList.data as ArrayList<Show>)
-                    favoriteSeriesAdapter.setShimmer(false)
+                    val data = favoriteSeriesList.data
+
 
                     //Loading gone whenever empty or not
                     binding.pbFavorite.visibility = View.GONE
@@ -121,7 +132,11 @@ class FavoriteFragment : Fragment() {
                     //When data is not null or empty
                     //Visible : Title and recyclerView
                     //Gone    : Loading, illustration, message
-                    if (!favoriteSeriesList.data.isNullOrEmpty()) {
+                    if (!data.isNullOrEmpty()) {
+                        val list = data.map { DataMapper.mapDomainToShowsPoster(it) }
+                        favoriteSeriesAdapter.setList(list as ArrayList<ShowsPosterModel>)
+                        favoriteSeriesAdapter.setShimmer(false)
+
                         setSeriesViewVisibility(tvSeries = true, rvSeries = true)
                         setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
                     }
@@ -166,6 +181,11 @@ class FavoriteFragment : Fragment() {
         setSeriesViewVisibility(tvSeries = false, rvSeries = false)
         setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
         viewModel.refresh()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        moduleFavorite.close()
     }
 
 }

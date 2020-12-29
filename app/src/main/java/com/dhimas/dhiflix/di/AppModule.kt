@@ -2,6 +2,7 @@ package com.dhimas.dhiflix.di
 
 import com.dhimas.dhiflix.core.domain.usecase.ShowInteractor
 import com.dhimas.dhiflix.core.domain.usecase.ShowUseCase
+import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.ui.detail.DetailViewModel
 import com.dhimas.dhiflix.ui.movie.MovieViewModel
 import com.dhimas.dhiflix.ui.search.SearchViewModel
@@ -19,10 +20,10 @@ val useCaseModule = module {
 @ExperimentalCoroutinesApi
 @FlowPreview
 val viewModelModule = module {
-    viewModel { MovieViewModel(get()) }
-    viewModel { SeriesViewModel(get()) }
-    viewModel { DetailViewModel(get()) }
-    scope(named("SearchViewModel")){
-        viewModel { SearchViewModel(get()) }
+    scope(named(Const.VIEWMODEL)) {
+        viewModel { MovieViewModel(get()) }
+        viewModel { SeriesViewModel(get()) }
+        viewModel { DetailViewModel(get()) }
     }
+    viewModel { SearchViewModel(get()) }
 }

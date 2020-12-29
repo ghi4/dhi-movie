@@ -4,7 +4,9 @@ import com.dhimas.dhiflix.core.data.source.local.entity.ShowEntity
 import com.dhimas.dhiflix.core.data.source.remote.response.MovieResponse
 import com.dhimas.dhiflix.core.data.source.remote.response.SeriesResponse
 import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.ui.model.ShowsModel
+import com.dhimas.dhiflix.core.presenter.model.ShowsDetailModel
+import com.dhimas.dhiflix.core.presenter.model.ShowsModel
+import com.dhimas.dhiflix.core.presenter.model.ShowsPosterModel
 
 object DataMapper {
 
@@ -96,12 +98,28 @@ object DataMapper {
         isSearch = isSearch ?: 0
     )
 
-    fun mapDomainToShowsModel(show: Show): ShowsModel = ShowsModel(
-        show.id,
-        show.title,
-        show.releaseDate,
-        show.posterPath,
-        show.showType
+    fun mapDomainToShows(show: Show): ShowsModel = ShowsModel(
+        id = show.id,
+        title = show.title,
+        releaseDate = show.releaseDate,
+        posterPath = show.posterPath,
+        backdropPath = show.backdropPath,
+        showType = show.showType
+    )
+
+    fun mapDomainToShowsDetail(show: Show): ShowsDetailModel = ShowsDetailModel(
+        title = show.title,
+        releaseDate = show.releaseDate,
+        overview = show.overview,
+        posterPath = show.posterPath,
+        backdropPath = show.backdropPath,
+        isFavorite = show.isFavorite
+    )
+
+    fun mapDomainToShowsPoster(show: Show): ShowsPosterModel = ShowsPosterModel(
+        id = show.id,
+        posterPath = show.posterPath,
+        showType = show.showType
     )
 
 
@@ -114,7 +132,7 @@ object DataMapper {
         val result = ArrayList<ShowsModel>()
 
         input.map {
-            result.add(mapDomainToShowsModel(it))
+            result.add(mapDomainToShows(it))
         }
 
         return result

@@ -19,5 +19,8 @@ class Const {
 
         //For null data
         const val UNKNOWN_VALUE = "Unknown"
+
+        //For scope name
+        const val VIEWMODEL = "ViewModel"
     }
 }

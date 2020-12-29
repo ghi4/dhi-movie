@@ -14,12 +14,12 @@ class ShowInteractor(private val showRepository: IShowRepository) : ShowUseCase 
         return showRepository.getSeriesList(page)
     }
 
-    override fun getMovieDetail(movie_id: String): Flow<Resource<Show>> {
-        return showRepository.getMovieDetail(movie_id)
+    override fun getMovieDetail(movieId: String): Flow<Resource<Show>> {
+        return showRepository.getMovieDetail(movieId)
     }
 
-    override fun getSeriesDetail(series_id: String): Flow<Resource<Show>> {
-        return showRepository.getSeriesDetail(series_id)
+    override fun getSeriesDetail(seriesId: String): Flow<Resource<Show>> {
+        return showRepository.getSeriesDetail(seriesId)
     }
 
     override fun getFavoriteMovieList(): Flow<Resource<List<Show>>> {
@@ -30,12 +30,12 @@ class ShowInteractor(private val showRepository: IShowRepository) : ShowUseCase 
         return showRepository.getFavoriteSeriesList()
     }
 
-    override fun getSimilarMovieList(movie_id: String): Flow<Resource<List<Show>>> {
-        return showRepository.getSimilarMovieList(movie_id)
+    override fun getSimilarMovieList(movieId: String): Flow<Resource<List<Show>>> {
+        return showRepository.getSimilarMovieList(movieId)
     }
 
-    override fun getSimilarSeriesList(series_id: String): Flow<Resource<List<Show>>> {
-        return showRepository.getSimilarSeriesList(series_id)
+    override fun getSimilarSeriesList(seriesId: String): Flow<Resource<List<Show>>> {
+        return showRepository.getSimilarSeriesList(seriesId)
     }
 
     override fun searchMovie(keyword: String): Flow<Resource<List<Show>>> {

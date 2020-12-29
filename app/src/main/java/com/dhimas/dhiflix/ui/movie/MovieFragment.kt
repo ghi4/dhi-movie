@@ -11,9 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
-import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.ui.ShowsAdapter
-import com.dhimas.dhiflix.core.ui.model.ShowsModel
+import com.dhimas.dhiflix.core.presenter.ShowsAdapter
+import com.dhimas.dhiflix.core.presenter.model.ShowsModel
+import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.utils.DataMapper
 import com.dhimas.dhiflix.databinding.FragmentMovieBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
@@ -21,17 +21,20 @@ import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Utils.showSnackBar
 import com.dhimas.dhiflix.utils.Utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.koin.android.viewmodel.ext.android.viewModel
-import java.util.*
-import kotlin.collections.ArrayList
+import org.koin.android.ext.android.getKoin
+import org.koin.android.viewmodel.scope.viewModel
+import org.koin.core.qualifier.named
 
 class MovieFragment : Fragment() {
+
+    private val scopeId = "MovieScope"
+    private val moduleMovie = getKoin().getOrCreateScope(scopeId, named(Const.VIEWMODEL))
+    private val viewModel: MovieViewModel by moduleMovie.viewModel(this)
 
     private lateinit var binding: FragmentMovieBinding
     private lateinit var movieAdapter: ShowsAdapter
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
-    private val viewModel: MovieViewModel by viewModel()
     private var currentPage = 1
     private var maxPage = 6
     private var lastBottomLocation = 0
@@ -115,17 +118,15 @@ class MovieFragment : Fragment() {
                 }
 
                 is Resource.Success -> {
-                    if (movieList.data != null) {
+                    val data = movieList.data
+                    if (data != null) {
 
-                        val list = movieList.data
-                        movieAdapter.setList(list?.map {
-                            DataMapper.mapDomainToShowsModel(it)
-                        } as ArrayList<ShowsModel>)
+                        val list = data.map { DataMapper.mapDomainToShows(it) }
+                        movieAdapter.setList(list as ArrayList<ShowsModel>)
 
-                        bannerAdapter.clearBanner()
-                        for (i in 0..4)
-                            (movieList.data as ArrayList<Show>)[i].let { bannerAdapter.addBanner(it) }
-                        bannerAdapter.notifyDataSetChanged()
+                        val bannerCount = 5
+                        val bannerList = list.take(bannerCount)
+                        bannerAdapter.setBanner(bannerList as ArrayList<ShowsModel>)
 
                         stopShimmer()
                     } else {
@@ -169,5 +170,10 @@ class MovieFragment : Fragment() {
             shimmerLayoutMovie.visibility = View.GONE
             tvMoviePopularTitle.visibility = View.VISIBLE
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        moduleMovie.close()
     }
 }

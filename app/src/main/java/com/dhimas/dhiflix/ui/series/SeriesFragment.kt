@@ -11,8 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhimas.dhiflix.R
 import com.dhimas.dhiflix.core.data.Resource
-import com.dhimas.dhiflix.core.domain.model.Show
-import com.dhimas.dhiflix.core.ui.ShowsAdapter
+import com.dhimas.dhiflix.core.presenter.ShowsAdapter
+import com.dhimas.dhiflix.core.presenter.model.ShowsModel
+import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.core.utils.DataMapper
 import com.dhimas.dhiflix.databinding.FragmentSeriesBinding
 import com.dhimas.dhiflix.ui.BannerAdapter
@@ -20,15 +21,20 @@ import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.dhimas.dhiflix.utils.Utils.showSnackBar
 import com.dhimas.dhiflix.utils.Utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.getKoin
+import org.koin.android.viewmodel.scope.viewModel
+import org.koin.core.qualifier.named
 
 class SeriesFragment : Fragment() {
+
+    private val scopeId = "SeriesScope"
+    private val moduleSeries = getKoin().getOrCreateScope(scopeId, named(Const.VIEWMODEL))
+    private val viewModel: SeriesViewModel by moduleSeries.viewModel(this)
 
     private lateinit var binding: FragmentSeriesBinding
     private lateinit var seriesAdapter: ShowsAdapter
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
-    private val viewModel: SeriesViewModel by viewModel()
     private var currentPage = 1
     private var maxPage = 6
     private var lastBottomLocation = 0
@@ -117,23 +123,23 @@ class SeriesFragment : Fragment() {
                         val list = DataMapper.mapListDomainToArrayShowsModel(data)
                         seriesAdapter.setList(list)
 
-                        bannerAdapter.clearBanner()
-                        for (i in 0..4)
-                            (seriesList.data as ArrayList<Show>)[i].let { bannerAdapter.addBanner(it) }
-                        bannerAdapter.notifyDataSetChanged()
+                        val bannerCount = 5
+                        val bannerList = list.take(bannerCount)
+                        bannerAdapter.setBanner(bannerList as ArrayList<ShowsModel>)
 
                         stopShimmer()
                     } else {
                         showToast(requireContext(), getString(R.string.no_series_found))
                         //Show snackbar for retry load data
                         showSnackBar(
-                            requireView(),
+                            bottomNavigationView,
                             getString(R.string.do_you_want_retry),
                             getString(R.string.retry)
                         ) {
                             viewModel.refresh()
                         }
                     }
+                    //To prevent re-shimmer
                     viewModel.setAlreadyShimmer()
                 }
 
@@ -163,6 +169,12 @@ class SeriesFragment : Fragment() {
             shimmerLayoutSeries.visibility = View.GONE
             tvSeriesPopularTitle.visibility = View.VISIBLE
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        moduleSeries.close()
     }
 
 }

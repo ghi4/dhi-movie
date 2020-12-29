@@ -7,21 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.R
-import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.presenter.model.ShowsModel
 import com.dhimas.dhiflix.core.utils.Const
 import com.dhimas.dhiflix.databinding.ItemBannerBinding
 import com.dhimas.dhiflix.ui.detail.DetailActivity
 import com.squareup.picasso.Picasso
 
 class BannerAdapter(val context: Context) : RecyclerView.Adapter<BannerAdapter.BannerViewHolder>() {
-    private var bannerEntities = ArrayList<Show>()
+    private var bannerList = ArrayList<ShowsModel>()
 
-    fun addBanner(show: Show) {
-        this.bannerEntities.add(show)
-    }
-
-    fun clearBanner() {
-        this.bannerEntities.clear()
+    fun setBanner(shows: ArrayList<ShowsModel>) {
+        bannerList.clear()
+        bannerList.addAll(shows)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BannerViewHolder {
@@ -30,14 +28,14 @@ class BannerAdapter(val context: Context) : RecyclerView.Adapter<BannerAdapter.B
     }
 
     override fun onBindViewHolder(holder: BannerViewHolder, position: Int) {
-        holder.bind(bannerEntities[position])
+        holder.bind(bannerList[position])
     }
 
-    override fun getItemCount(): Int = bannerEntities.size
+    override fun getItemCount(): Int = bannerList.size
 
     class BannerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemBannerBinding.bind(itemView)
-        fun bind(show: Show) {
+        fun bind(show: ShowsModel) {
             with(binding) {
                 Picasso.get()
                     .load(Const.URL_BASE_IMAGE + show.backdropPath)

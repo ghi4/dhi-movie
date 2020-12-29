@@ -1,4 +1,4 @@
-package com.dhimas.dhiflix.core.ui
+package com.dhimas.dhiflix.core.presenter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,15 +6,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dhimas.dhiflix.core.R
 import com.dhimas.dhiflix.core.databinding.ItemShowHorizontalBinding
-import com.dhimas.dhiflix.core.domain.model.Show
+import com.dhimas.dhiflix.core.presenter.model.ShowsPosterModel
 import com.dhimas.dhiflix.core.utils.Const
 
 class ShowsPosterAdapter : RecyclerView.Adapter<ShowsPosterAdapter.DetailViewHolder>() {
     private var isAlreadyShimmer: Boolean = false
-    private var showList = ArrayList<Show>()
-    var onItemClick: ((Show) -> Unit)? = null
+    private var showList = ArrayList<ShowsPosterModel>()
+    var onItemClick: ((ShowsPosterModel) -> Unit)? = null
 
-    fun setList(shows: ArrayList<Show>) {
+    fun setList(shows: ArrayList<ShowsPosterModel>) {
         showList.clear()
         showList.addAll(shows)
         notifyDataSetChanged()
@@ -39,7 +39,7 @@ class ShowsPosterAdapter : RecyclerView.Adapter<ShowsPosterAdapter.DetailViewHol
 
     inner class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemShowHorizontalBinding.bind(itemView)
-        fun bind(show: Show, isAlreadyShimmer: Boolean) {
+        fun bind(show: ShowsPosterModel, isAlreadyShimmer: Boolean) {
             with(binding) {
 
                 //Start shimmer
