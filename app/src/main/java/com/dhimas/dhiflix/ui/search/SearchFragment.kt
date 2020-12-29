@@ -13,13 +13,25 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.getKoin
+import org.koin.android.viewmodel.scope.viewModel
+import org.koin.core.qualifier.named
 
 @ExperimentalCoroutinesApi
 @FlowPreview
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
-    private val viewModel: SearchViewModel by viewModel()
+    private val viewModelScope = getKoin().getOrCreateScope(getScopeId(), named(getScopeName()))
+    private val viewModel: SearchViewModel by viewModelScope.viewModel(this)
+
+    companion object {
+        private const val SCOPE_ID = "Search"
+        private const val SCOPE_NAME = "SearchViewModel"
+
+        fun getScopeId() = SCOPE_ID
+
+        fun getScopeName() = SCOPE_NAME
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

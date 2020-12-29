@@ -9,6 +9,7 @@ import com.dhimas.dhiflix.ui.series.SeriesViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -21,5 +22,7 @@ val viewModelModule = module {
     viewModel { MovieViewModel(get()) }
     viewModel { SeriesViewModel(get()) }
     viewModel { DetailViewModel(get()) }
-    viewModel { SearchViewModel(get()) }
+    scope(named("SearchViewModel")){
+        viewModel { SearchViewModel(get()) }
+    }
 }
