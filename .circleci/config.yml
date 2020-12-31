@@ -35,3 +35,5 @@ jobs:
       - store_artifacts:  
           path: app/build/outputs/apk/debug/
           destination: artifact-file
+          
+          version: 2.1
