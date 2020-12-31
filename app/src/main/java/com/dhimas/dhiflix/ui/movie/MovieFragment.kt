@@ -164,16 +164,6 @@ class MovieFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.dotsIndicatorMovie.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener{
-            override fun onViewAttachedToWindow(v: View?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onViewDetachedFromWindow(v: View?) {
-                TODO("Not yet implemented")
-            }
-
-        })
         binding.root.removeAllViewsInLayout()
         binding.vpMovieBanner.adapter = null
         binding.vpMovieBanner.removeAllViews()
