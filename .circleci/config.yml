@@ -35,3 +35,12 @@ jobs:
       - store_artifacts:  
           path: app/build/outputs/apk/debug/
           destination: artifact-file
+          
+          version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.2
+jobs:
+  build:
+    steps:
+      - codecov/upload:
+          file:
