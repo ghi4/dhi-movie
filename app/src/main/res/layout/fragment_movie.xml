@@ -1,109 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nestedScroll_movie"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".ui.movie.MovieFragment">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScroll_movie"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout_movie"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shimmer_duration="800">
 
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmerLayout_movie"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shimmer_duration="800">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <include layout="@layout/shimmer_banner" />
-
-                    <include layout="@layout/shimmer_item_show_grid3" />
-
-                    <include layout="@layout/shimmer_item_show_grid3" />
-
-                    <include layout="@layout/shimmer_item_show_grid3" />
-
-                    <include layout="@layout/shimmer_item_show_grid3" />
-
-                </LinearLayout>
-
-            </com.facebook.shimmer.ShimmerFrameLayout>
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/vp_movie_banner"
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:orientation="vertical">
 
-            <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
-                android:id="@+id/dotsIndicator_movie"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:dotsColor="@color/black"
-                app:dotsCornerRadius="@dimen/dots_corner_radius_8dp"
-                app:dotsSize="@dimen/dots_size"
-                app:dotsSpacing="@dimen/dots_spacing"
-                app:dotsStrokeColor="@color/black"
-                app:dotsStrokeWidth="@dimen/dots_stroke_width"
-                app:layout_constraintBottom_toBottomOf="@id/vp_movie_banner"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                <include layout="@layout/shimmer_banner" />
 
-            <TextView
-                android:id="@+id/tv_movie_popular_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/trending_now"
-                android:textSize="24sp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/vp_movie_banner" />
+                <include layout="@layout/shimmer_item_show_grid3" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_movie"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_movie_popular_title"
-                app:spanCount="3"
-                tools:listitem="@layout/item_show" />
+                <include layout="@layout/shimmer_item_show_grid3" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+                <include layout="@layout/shimmer_item_show_grid3" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <include layout="@layout/shimmer_item_show_grid3" />
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_movie_banner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+            android:id="@+id/dotsIndicator_movie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:dotsColor="@color/black"
+            app:dotsCornerRadius="@dimen/dots_corner_radius_8dp"
+            app:dotsSize="@dimen/dots_size"
+            app:dotsSpacing="@dimen/dots_spacing"
+            app:dotsStrokeColor="@color/black"
+            app:dotsStrokeWidth="@dimen/dots_stroke_width"
+            app:layout_constraintBottom_toBottomOf="@id/vp_movie_banner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_movie_popular_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/trending_now"
+            android:textSize="24sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vp_movie_banner" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_movie"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_popular_title"
+            app:spanCount="3"
+            tools:listitem="@layout/item_show" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

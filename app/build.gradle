@@ -50,5 +50,5 @@ dependencies {
     //Dots Indicator
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
 
-
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
 }

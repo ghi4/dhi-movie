@@ -30,7 +30,9 @@ class MovieFragment : Fragment() {
     private val moduleMovie = getKoin().getOrCreateScope(scopeId, named(Const.VIEW_MODEL))
     private val viewModel: MovieViewModel by moduleMovie.viewModel(this)
 
-    private lateinit var binding: FragmentMovieBinding
+    private var _binding: FragmentMovieBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var movieAdapter: ShowsAdapter
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -43,7 +45,7 @@ class MovieFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMovieBinding.inflate(inflater, container, false)
+        _binding = FragmentMovieBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -158,6 +160,24 @@ class MovieFragment : Fragment() {
             shimmerLayoutMovie.visibility = View.GONE
             tvMoviePopularTitle.visibility = View.VISIBLE
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.dotsIndicatorMovie.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener{
+            override fun onViewAttachedToWindow(v: View?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onViewDetachedFromWindow(v: View?) {
+                TODO("Not yet implemented")
+            }
+
+        })
+        binding.root.removeAllViewsInLayout()
+        binding.vpMovieBanner.adapter = null
+        binding.vpMovieBanner.removeAllViews()
+        _binding = null
     }
 
     override fun onDestroy() {
