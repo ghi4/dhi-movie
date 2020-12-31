@@ -54,6 +54,7 @@ val networkModule = module {
             .client(get())
             .build()
         retrofit.create(RetrofitInterface::class.java)
+
     }
 }
 
