@@ -30,7 +30,9 @@ class SeriesFragment : Fragment() {
     private val moduleSeries = getKoin().getOrCreateScope(scopeId, named(Const.VIEW_MODEL))
     private val viewModel: SeriesViewModel by moduleSeries.viewModel(this)
 
-    private lateinit var binding: FragmentSeriesBinding
+    private var _binding: FragmentSeriesBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var seriesAdapter: ShowsAdapter
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -43,7 +45,7 @@ class SeriesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSeriesBinding.inflate(inflater, container, false)
+        _binding = FragmentSeriesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -133,6 +135,7 @@ class SeriesFragment : Fragment() {
                 is Resource.Error -> {
                     //Show snackbar for retry load data
                     snackBarRetry(seriesList.message)
+                    binding.shimmerLayoutSeries.stopShimmer()
                 }
             }
         })
@@ -165,6 +168,8 @@ class SeriesFragment : Fragment() {
         super.onDestroy()
 
         moduleSeries.close()
+        binding.root.removeAllViewsInLayout()
+        _binding = null
     }
 
 }

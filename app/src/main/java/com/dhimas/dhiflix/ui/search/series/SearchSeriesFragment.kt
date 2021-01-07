@@ -50,6 +50,7 @@ class SearchSeriesFragment : Fragment() {
 
                 is Resource.Success -> {
                     val data = seriesList.data
+                    seriesAdapter.setList(data as ArrayList<Show>)
                     if (data.isNullOrEmpty()) {
                         setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                         setInfoImageAndMessage(
@@ -57,7 +58,6 @@ class SearchSeriesFragment : Fragment() {
                             getString(R.string.no_series_found)
                         )
                     } else {
-                        seriesAdapter.setList(data as ArrayList<Show>)
                         setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
                     }
                 }

@@ -135,6 +135,7 @@ class DetailActivity : AppCompatActivity() {
 
                 is Resource.Error -> {
                     showSnackBar(mShow.message) //Show snackbar for retry load data
+                    stopShimmering()
                 }
             }
         })
@@ -164,6 +165,7 @@ class DetailActivity : AppCompatActivity() {
                 is Resource.Error -> {
                     showToast(this, getString(R.string.list_failed_to_load))
                     showSnackBar(movieList.message) //Show snackbar for retry load data
+                    stopShimmerList()
                 }
             }
         })
@@ -191,6 +193,7 @@ class DetailActivity : AppCompatActivity() {
                 is Resource.Error -> {
                     showToast(this, getString(R.string.list_failed_to_load))
                     showSnackBar(movieList.message) //Show snackbar for retry load data
+                    stopShimmerList()
                 }
             }
         })
@@ -245,6 +248,7 @@ class DetailActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         moduleDetail.close()
+        binding.root.removeAllViewsInLayout()
     }
 
 }

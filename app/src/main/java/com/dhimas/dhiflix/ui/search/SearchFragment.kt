@@ -19,7 +19,9 @@ import org.koin.android.viewmodel.ext.android.viewModel
 @FlowPreview
 class SearchFragment : Fragment() {
 
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel: SearchViewModel by viewModel()
 
     override fun onCreateView(
@@ -27,7 +29,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -55,5 +57,12 @@ class SearchFragment : Fragment() {
                 return false
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        binding.root.removeAllViewsInLayout()
+        _binding = null
     }
 }

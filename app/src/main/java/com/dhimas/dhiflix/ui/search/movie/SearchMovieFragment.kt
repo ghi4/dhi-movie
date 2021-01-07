@@ -50,6 +50,7 @@ class SearchMovieFragment : Fragment() {
 
                 is Resource.Success -> {
                     val data = movieList.data
+                    movieAdapter.setList(data as ArrayList<Show>)
                     if (data.isNullOrEmpty()) {
                         setViewVisibility(loading = false, ivInfo = true, tvInfo = true)
                         setInfoImageAndMessage(
@@ -57,7 +58,6 @@ class SearchMovieFragment : Fragment() {
                             getString(R.string.no_movie_found)
                         )
                     } else {
-                        movieAdapter.setList(data as ArrayList<Show>)
                         setViewVisibility(loading = false, ivInfo = false, tvInfo = false)
                     }
                 }

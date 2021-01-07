@@ -134,6 +134,7 @@ class MovieFragment : Fragment() {
                 is Resource.Error -> {
                     //Show snackbar for retry load data
                     snackBarRetry(movieList.message)
+                    binding.shimmerLayoutMovie.stopShimmer()
                 }
             }
         })
@@ -165,8 +166,6 @@ class MovieFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding.root.removeAllViewsInLayout()
-        binding.vpMovieBanner.adapter = null
-        binding.vpMovieBanner.removeAllViews()
         _binding = null
     }
 
