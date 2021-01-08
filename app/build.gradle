@@ -2,6 +2,9 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.firebase.firebase-perf'
 }
 
 android {
@@ -52,8 +55,16 @@ dependencies {
 
     implementation project(':core')
 
+    //Firebase Crashlytics
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.3.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:18.0.0'
+
+    //Firebase Performance Monitor
+    implementation 'com.google.firebase:firebase-perf-ktx:19.0.11'
+
     //Dots Indicator
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
 
+    //Leak Canary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
 }

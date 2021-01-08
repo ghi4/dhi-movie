@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "884421376009",
+    "project_id": "dhiflix-1d722",
+    "storage_bucket": "dhiflix-1d722.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884421376009:android:e301b17ca348a806b820d8",
+        "android_client_info": {
+          "package_name": "com.dhimas.dhiflix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884421376009-csvtp2f3ngltjgoivu1d7ag8dcpjblm1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc4RkbekyUg_wQna1TBQ4oXSEZHNqzb1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884421376009-csvtp2f3ngltjgoivu1d7ag8dcpjblm1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
