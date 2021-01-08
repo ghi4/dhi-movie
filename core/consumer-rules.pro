@@ -66,7 +66,3 @@
 ##---------------Begin: proguard configuration for Picasso  ----------
 -dontwarn com.squareup.okhttp.**
 
-
-##---------------Begin: proguard configuration for RxJava  ----------
-# Uncomment if you use RxJava
-#-dontwarn java.util.concurrent.Flow*
