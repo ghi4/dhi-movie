@@ -30,7 +30,6 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var showId: String
     private var showType: Int = 0
 
-
     companion object {
         //For sending Show ID
         const val EXTRA_SHOW_ID = "extra_show_id"
