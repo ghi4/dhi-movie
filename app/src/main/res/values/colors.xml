@@ -6,8 +6,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="black_little">#222222</color>
-    <color name="dark_blue">#212121</color>
+    <color name="black_little">#212121</color>
     <color name="grey_light">#A9A9A9</color>
     <color name="grey_lighter">#C0C0C0</color>
 
