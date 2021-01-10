@@ -20,7 +20,3 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-#-dontwarn okhttp3.internal.platform.ConscryptPlatform
-
-##---------------Begin: proguard configuration for FavoriteFragment  ----------
--keepnames class com.dhimas.dhiflix.favorite.favorite.FavoriteFragment
