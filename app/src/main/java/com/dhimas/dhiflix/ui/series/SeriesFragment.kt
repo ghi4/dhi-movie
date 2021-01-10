@@ -139,7 +139,6 @@ class SeriesFragment : Fragment() {
                 is Resource.Error -> {
                     //Show snackbar for retry load data
                     snackBarRetry(seriesList.message)
-                    binding.shimmerLayoutSeries.stopShimmer()
                 }
             }
         })

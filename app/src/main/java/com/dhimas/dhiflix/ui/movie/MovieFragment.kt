@@ -138,7 +138,6 @@ class MovieFragment : Fragment() {
                 is Resource.Error -> {
                     //Show snackbar for retry load data
                     snackBarRetry(movieList.message)
-                    binding.shimmerLayoutMovie.stopShimmer()
                 }
             }
         })
