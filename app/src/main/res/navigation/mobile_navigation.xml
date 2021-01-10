@@ -20,6 +20,7 @@
         tools:layout="@layout/fragment_search" />
 
     <fragment
+        app:moduleName="favorite"
         android:id="@+id/navigation_favorite"
         android:name="com.dhimas.dhiflix.favorite.favorite.FavoriteFragment"
         tools:layout="@layout/fragment_favorite" />
