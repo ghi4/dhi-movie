@@ -62,7 +62,11 @@
 
 -dontwarn kotlinx.**
 
-
 ##---------------Begin: proguard configuration for Picasso  ----------
 -dontwarn com.squareup.okhttp.**
 
+# Consrypt
+-dontwarn org.conscrypt.ConscryptHostnameVerifier
+
+##---------------Begin: proguard configuration for FavoriteFragment  ----------
+-keep class com.dhimas.dhiflix.favorite.favorite.FavoriteFragment { *; }
