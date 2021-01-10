@@ -56,8 +56,8 @@ dependencies {
     implementation "androidx.sqlite:sqlite-ktx:2.1.0"
 
     //Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2-native-mt"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
 
     //Room
     implementation "androidx.room:room-ktx:2.2.6"
