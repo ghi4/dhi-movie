@@ -23,17 +23,22 @@ import org.koin.android.viewmodel.ext.android.getViewModel
 @ExperimentalCoroutinesApi
 class SearchSeriesFragment : Fragment() {
 
-    private lateinit var binding: FragmentSearchSeriesBinding
-    private lateinit var seriesAdapter: ShowsAdapter
-
+    //Shared ViewModel
     //Get the same viewModel instance of SearchFragment as the host
     private val viewModel: SearchViewModel by lazy { requireParentFragment().getViewModel() }
+
+    //Binding
+    private var _binding: FragmentSearchSeriesBinding? = null
+    private val binding get() = _binding!!
+
+    //Adapter
+    private lateinit var seriesAdapter: ShowsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchSeriesBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchSeriesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -41,7 +46,27 @@ class SearchSeriesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupUI()
+        viewModelObserver() //Load search result of series list
+    }
 
+    private fun setupUI() {
+        seriesAdapter = ShowsAdapter()
+
+        //OnClick go to DetailActivity
+        seriesAdapter.onItemClick = { selectedItem ->
+            val intent = Intent(requireContext(), DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedItem.id)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedItem.showType)
+            startActivity(intent)
+        }
+
+        with(binding) {
+            rvSearchSeries.layoutManager = GridLayoutManager(requireContext(), 3)
+            rvSearchSeries.adapter = seriesAdapter
+        }
+    }
+
+    private fun viewModelObserver() {
         viewModel.getSeries().observe(viewLifecycleOwner, { seriesList ->
             when (seriesList) {
                 is Resource.Loading -> {
@@ -73,23 +98,6 @@ class SearchSeriesFragment : Fragment() {
         })
     }
 
-    private fun setupUI() {
-        seriesAdapter = ShowsAdapter()
-
-        //OnClick go to DetailActivity
-        seriesAdapter.onItemClick = { selectedItem ->
-            val intent = Intent(requireContext(), DetailActivity::class.java)
-            intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedItem.id)
-            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedItem.showType)
-            startActivity(intent)
-        }
-
-        with(binding) {
-            rvSearchSeries.layoutManager = GridLayoutManager(requireContext(), 3)
-            rvSearchSeries.adapter = seriesAdapter
-        }
-    }
-
     private fun setViewVisibility(loading: Boolean, ivInfo: Boolean, tvInfo: Boolean) {
         with(binding) {
             pbSearchSeries.visibility = if (loading) View.VISIBLE else View.GONE
@@ -111,6 +119,12 @@ class SearchSeriesFragment : Fragment() {
             .resize(targetWidth, targetHeight)
             .into(binding.ivSearchSeriesInfo)
         binding.tvSearchSeriesInfo.text = message
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.root.removeAllViewsInLayout()
+        _binding = null
     }
 
 }

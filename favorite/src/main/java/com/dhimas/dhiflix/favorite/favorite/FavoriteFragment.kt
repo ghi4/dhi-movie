@@ -21,11 +21,16 @@ import org.koin.core.qualifier.named
 
 class FavoriteFragment : Fragment() {
 
+    //Scope and Koin DI for ViewModel
     private val scopeId = "FavoriteScope"
     private val moduleFavorite = getKoin().getOrCreateScope(scopeId, named(Const.VIEW_MODEL))
     private val viewModel: FavoriteViewModel by moduleFavorite.viewModel(this)
 
-    private lateinit var binding: FragmentFavoriteBinding
+    //Binding
+    private var _binding: FragmentFavoriteBinding? = null
+    private val binding get() = _binding!!
+
+    //Adapter
     private lateinit var favoriteMovieAdapter: ShowsPosterAdapter
     private lateinit var favoriteSeriesAdapter: ShowsPosterAdapter
 
@@ -33,7 +38,7 @@ class FavoriteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFavoriteBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -43,8 +48,8 @@ class FavoriteFragment : Fragment() {
         loadKoinModules(favoriteModule)
 
         setupUI()
-        viewModelObserveMovies()
-        viewModelObserveSeries()
+        viewModelObserveMovies() //Load favorite movie list
+        viewModelObserveSeries() //Load favorite series list
     }
 
     private fun setupUI() {
@@ -177,6 +182,12 @@ class FavoriteFragment : Fragment() {
         setSeriesViewVisibility(tvSeries = false, rvSeries = false)
         setViewVisibility(loading = true, ivInfo = false, tvInfo = false)
         viewModel.refresh()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.root.removeAllViewsInLayout()
+        _binding = null
     }
 
     override fun onDestroy() {

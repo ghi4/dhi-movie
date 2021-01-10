@@ -26,15 +26,19 @@ import org.koin.core.qualifier.named
 
 class SeriesFragment : Fragment() {
 
+    //Scope and Koin DI for ViewModel
     private val scopeId = "SeriesScope"
     private val moduleSeries = getKoin().getOrCreateScope(scopeId, named(Const.VIEW_MODEL))
     private val viewModel: SeriesViewModel by moduleSeries.viewModel(this)
 
+    //Binding
     private var _binding: FragmentSeriesBinding? = null
     private val binding get() = _binding!!
 
+    //Adapter
     private lateinit var seriesAdapter: ShowsAdapter
     private lateinit var bannerAdapter: BannerAdapter
+
     private lateinit var bottomNavigationView: BottomNavigationView
     private var currentPage = 1
     private var maxPage = 6
@@ -56,7 +60,7 @@ class SeriesFragment : Fragment() {
         viewModel.setPage(currentPage)
 
         setupUI()
-        viewModelObserver()
+        viewModelObserver() //Load series list
     }
 
     private fun setupUI() {
@@ -164,12 +168,15 @@ class SeriesFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        moduleSeries.close()
+    override fun onDestroyView() {
+        super.onDestroyView()
         binding.root.removeAllViewsInLayout()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        moduleSeries.close()
     }
 
 }

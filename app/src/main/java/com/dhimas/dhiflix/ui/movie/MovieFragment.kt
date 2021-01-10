@@ -26,15 +26,19 @@ import org.koin.core.qualifier.named
 
 class MovieFragment : Fragment() {
 
+    //Scope and Koin DI for ViewModel
     private val scopeId = "MovieScope"
     private val moduleMovie = getKoin().getOrCreateScope(scopeId, named(Const.VIEW_MODEL))
     private val viewModel: MovieViewModel by moduleMovie.viewModel(this)
 
+    //Binding
     private var _binding: FragmentMovieBinding? = null
     private val binding get() = _binding!!
 
+    //Adapter
     private lateinit var movieAdapter: ShowsAdapter
     private lateinit var bannerAdapter: BannerAdapter
+
     private lateinit var bottomNavigationView: BottomNavigationView
     private var currentPage = 1
     private var maxPage = 6
@@ -56,7 +60,7 @@ class MovieFragment : Fragment() {
         viewModel.setPage(currentPage)
 
         setupUI()
-        viewModelObserver()
+        viewModelObserver() //Load movie list
     }
 
     private fun setupUI() {

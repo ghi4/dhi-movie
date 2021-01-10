@@ -19,10 +19,14 @@ import org.koin.android.viewmodel.ext.android.viewModel
 @FlowPreview
 class SearchFragment : Fragment() {
 
+    //Shared ViewModel
+    //Not using scope because child fragment can't get the same instance, unknown reason
+    //Koin DI for ViewModel
+    private val viewModel: SearchViewModel by viewModel()
+
+    //Binding
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: SearchViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,9 +63,8 @@ class SearchFragment : Fragment() {
         })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
+    override fun onDestroyView() {
+        super.onDestroyView()
         binding.root.removeAllViewsInLayout()
         _binding = null
     }

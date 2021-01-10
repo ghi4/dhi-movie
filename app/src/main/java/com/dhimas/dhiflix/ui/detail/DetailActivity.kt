@@ -21,12 +21,17 @@ import org.koin.core.qualifier.named
 
 class DetailActivity : AppCompatActivity() {
 
+    //Scope and Koin DI for ViewModel
     private val scopeId = "DetailScope"
     private val moduleDetail = getKoin().getOrCreateScope(scopeId, named(Const.VIEW_MODEL))
     private val viewModel: DetailViewModel by moduleDetail.viewModel(this)
 
+    //Binding
     private lateinit var binding: ActivityDetailBinding
+
+    //Adapter
     private lateinit var similarShowsAdapter: ShowsPosterAdapter
+
     private lateinit var showId: String
     private var showType: Int = 0
 
@@ -55,9 +60,9 @@ class DetailActivity : AppCompatActivity() {
 
         setupUI()
 
-        viewModelObserveDetail() //Load data for detail show
-        viewModelObserveSimilarList() //Load data for similar show
-        viewModelObservePopularList() //Backup data when similar list is empty or failed
+        viewModelObserveDetail() //Load detail show
+        viewModelObserveSimilarList() //Load similar list
+        viewModelObservePopularList() //Load backup data when similar list is empty
     }
 
     private fun setupUI() {

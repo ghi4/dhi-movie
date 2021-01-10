@@ -23,17 +23,22 @@ import org.koin.android.viewmodel.ext.android.getViewModel
 @ExperimentalCoroutinesApi
 class SearchMovieFragment : Fragment() {
 
-    private lateinit var binding: FragmentSearchMovieBinding
-    private lateinit var movieAdapter: ShowsAdapter
-
+    //Shared ViewModel
     //Get the same viewModel instance of SearchFragment as the host
     private val viewModel: SearchViewModel by lazy { requireParentFragment().getViewModel() }
+
+    //Binding
+    private var _binding: FragmentSearchMovieBinding? = null
+    private val binding get() = _binding!!
+
+    //Adapter
+    private lateinit var movieAdapter: ShowsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchMovieBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchMovieBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -41,7 +46,27 @@ class SearchMovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupUI()
+        viewModelObserver() //Load search result of movie list
+    }
 
+    private fun setupUI() {
+        movieAdapter = ShowsAdapter()
+
+        //OnClick go to DetailActivity
+        movieAdapter.onItemClick = { selectedItem ->
+            val intent = Intent(requireContext(), DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedItem.id)
+            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedItem.showType)
+            startActivity(intent)
+        }
+
+        with(binding) {
+            rvSearchMovie.layoutManager = GridLayoutManager(requireContext(), 3)
+            rvSearchMovie.adapter = movieAdapter
+        }
+    }
+
+    private fun viewModelObserver() {
         viewModel.getMovies().observe(viewLifecycleOwner, { movieList ->
             when (movieList) {
                 is Resource.Loading -> {
@@ -73,23 +98,6 @@ class SearchMovieFragment : Fragment() {
         })
     }
 
-    private fun setupUI() {
-        movieAdapter = ShowsAdapter()
-
-        //OnClick go to DetailActivity
-        movieAdapter.onItemClick = { selectedItem ->
-            val intent = Intent(requireContext(), DetailActivity::class.java)
-            intent.putExtra(DetailActivity.EXTRA_SHOW_ID, selectedItem.id)
-            intent.putExtra(DetailActivity.EXTRA_SHOW_TYPE, selectedItem.showType)
-            startActivity(intent)
-        }
-
-        with(binding) {
-            rvSearchMovie.layoutManager = GridLayoutManager(requireContext(), 3)
-            rvSearchMovie.adapter = movieAdapter
-        }
-    }
-
     private fun setViewVisibility(loading: Boolean, ivInfo: Boolean, tvInfo: Boolean) {
         with(binding) {
             pbSearchMovie.visibility = if (loading) View.VISIBLE else View.GONE
@@ -111,6 +119,12 @@ class SearchMovieFragment : Fragment() {
             .resize(targetWidth, targetHeight)
             .into(binding.ivSearchMovieInfo)
         binding.tvSearchMovieInfo.text = message
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.root.removeAllViewsInLayout()
+        _binding = null
     }
 
 }
