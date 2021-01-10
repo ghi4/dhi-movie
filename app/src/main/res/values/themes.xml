@@ -29,7 +29,12 @@
 
     <!-- Detail Page - ScrollView -->
     <style name="ScrollViewDetailPage">
-        <item name="android:background">@color/dark_blue</item>
+        <item name="android:background">@color/black_little</item>
+    </style>
+
+    <!-- ProgressBar and SearchView -->
+    <style name="BlackAccent" parent="Theme.DhiFlix">
+        <item name="colorAccent">@color/black_little</item>
     </style>
 
 </resources>
