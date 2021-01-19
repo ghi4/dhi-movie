@@ -10,6 +10,20 @@ I'm so happy because I received 5 stars on this submission. I hope this project 
        width="600"/>
 </p>
 
+## Features
+- MVVM Architecture + Clean Architecture
+- Modularization
+  - Module [:core](https://github.com/ghi4/dhi-movie/tree/master/core) as library module
+  - Module [:favorite](https://github.com/ghi4/dhi-movie/tree/master/favorite) as dynamic-feature module
+- Koin for dependency injection
+- Kotlin Coroutines for handling data flow
+- Shimmer for loading animation
+- Leak Canary for memory leak detection
+
+## Security
+- SQLCipher for local database encryption
+- Obfuscation
+- Certificate Pinning
 
 ## Screenshots
 <h3 align="center"> Movie List and Series List </h3>
@@ -43,18 +57,3 @@ I'm so happy because I received 5 stars on this submission. I hope this project 
   <img src="screenshot/detailPage.jpg"
        width="210"/>
 </p>
-
-## Features
-- MVVM Architecture + Clean Architecture
-- Modularization
-  - Module :core as library module
-  - Module :favorite as dynamic-feature module
-- Koin for dependency injection
-- Kotlin Coroutines for handling data flow
-- Shimmer for loading animation
-- Leak Canary for memory leak detection
-
-## Security
-- SQLCipher for local database encryption
-- Obfuscation
-- Certificate Pinning
