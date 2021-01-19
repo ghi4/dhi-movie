@@ -46,7 +46,9 @@ I'm so happy because I received 5 stars on this submission. I hope this project 
 
 ## Features
 - MVVM Architecture + Clean Architecture
-- Modularization (:core and :favorite)
+- Modularization
+  - Module :core as library module
+  - Module :favorite as dynamic-feature module
 - Koin for dependency injection
 - Kotlin Coroutines for handling data flow
 - Shimmer for loading animation
