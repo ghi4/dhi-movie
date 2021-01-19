@@ -11,9 +11,35 @@ I'm so happy because I received 5 stars on this submission. I hope this project 
 <h3 align="center"> Movie List and Series List </h3>
 <p align="center">
   <img src="screenshot/movieList.jpg"
-       width="150"/>
+       width="210"/>
   <img src="screenshot/seriesList.jpg"
-       width="150"/>
+       width="210"/>
+</p>
+
+<h3 align="center"> Search Page </h3>
+<p align="center">
+  <img src="screenshot/search_first.jpg"
+       width="210"/>
+  <img src="screenshot/search_movie_thor.jpg"
+       width="210"/>
+  <img src="screenshot/search_series_thor.jpg"
+       width="210"/>
+  <img src="screenshot/search_empty.jpg"
+       width="210"/>
+</p>
+
+<h3 align="center"> Favorite Page </h3>
+<p align="center">
+  <img src="screenshot/favorite_empty.jpg"
+       width="210"/>
+  <img src="screenshot/favorite_fill.jpg"
+       width="210"/>
+</p>
+
+<h3 align="center"> Detail Page </h3>
+<p align="center">
+  <img src="screenshot/detailPage.jpg"
+       width="210"/>
 </p>
 
 ## Features
