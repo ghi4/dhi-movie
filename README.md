@@ -7,7 +7,7 @@ This project is about a movie catalog that I done on my final submission from [D
 I'm so happy because I received 5 stars on this submission. I hope this project can be useful for you as a learning reference.
 <p align="center">
   <img src="screenshot/dicoding_made_mystar.png"
-       width="480"/>
+       width="600"/>
 </p>
 
 
