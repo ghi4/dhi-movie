@@ -7,3 +7,9 @@ This project is about a film catalog that I worked on from my final project code
 I hope this project can be useful for friends as a learning reference.
 
 
+## Screenshots
+<h3 align="center"> Movie List and Series List </h3>
+<p align="center">
+  <img src="screenshot/movieList.jpg />
+  <img src="screenshot/seriesList.jpg />
+</p>
