@@ -10,8 +10,8 @@ I'm so happy because I received 5 stars on this submission. I hope this project 
 ## Screenshots
 <h3 align="center"> Movie List and Series List </h3>
 <p align="center">
-  <img src="screenshot/movieList.jpg />
-  <img src="screenshot/seriesList.jpg />
+  <img src="screenshot/movieList.jpg"/>
+  <img src="screenshot/seriesList.jpg"/>
 </p>
 
 ## Features
