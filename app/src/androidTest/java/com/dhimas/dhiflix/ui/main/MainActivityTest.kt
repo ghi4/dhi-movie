@@ -122,4 +122,5 @@ class MainActivityTest {
         onView(withId(R.id.tv_search_series_info)).check(matches(isDisplayed()))
         onView(isRoot()).perform(swipeLeft()) //To movie tab
     }
+
 }
