@@ -55,11 +55,11 @@ dependencies {
     implementation project(':core')
 
     //Firebase Crashlytics
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.3.0'
-    implementation 'com.google.firebase:firebase-analytics-ktx:18.0.1'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.3.1'
+    implementation 'com.google.firebase:firebase-analytics-ktx:18.0.2'
 
     //Firebase Performance Monitor
-    implementation 'com.google.firebase:firebase-perf-ktx:19.1.0'
+    implementation 'com.google.firebase:firebase-perf-ktx:19.1.1'
 
     //Dots Indicator
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
