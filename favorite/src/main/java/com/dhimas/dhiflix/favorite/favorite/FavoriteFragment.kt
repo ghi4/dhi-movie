@@ -19,7 +19,7 @@ import org.koin.android.viewmodel.scope.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.qualifier.named
 
-class FavoriteFragment : Fragment() {
+class  FavoriteFragment : Fragment() {
 
     //Scope and Koin DI for ViewModel
     private val scopeId = "FavoriteScope"

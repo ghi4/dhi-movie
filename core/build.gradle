@@ -42,9 +42,9 @@ android {
 apply from: '../shared_dependencies.gradle'
 
 dependencies {
-    api "androidx.navigation:navigation-fragment-ktx:2.3.2"
-    api "androidx.navigation:navigation-ui-ktx:2.3.2"
-    api "androidx.navigation:navigation-dynamic-features-fragment:2.3.2"
+    api "androidx.navigation:navigation-fragment-ktx:2.3.3"
+    api "androidx.navigation:navigation-ui-ktx:2.3.3"
+    api "androidx.navigation:navigation-dynamic-features-fragment:2.3.3"
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
@@ -65,7 +65,7 @@ dependencies {
     kapt "androidx.room:room-compiler:2.2.6"
 
     //Convert Flow to LiveData
-    api "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+    api "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
 
     //Picasso
     api 'com.squareup.picasso:picasso:2.71828'
@@ -73,5 +73,9 @@ dependencies {
     //Shimmering
     api 'com.facebook.shimmer:shimmer:0.5.0' //Facebook
     api 'com.github.AgnaldoNP:AGSkeletonLoading:1.1' //Skeleton: auto placeholder
+
+    //Mockito
+    testImplementation "org.mockito:mockito-core:3.6.28"
+    testImplementation "org.mockito:mockito-inline:3.6.28"
 
 }
