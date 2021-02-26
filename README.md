@@ -10,7 +10,7 @@ This project is about a movie catalog that I done on my final submission from [D
 </p>
 
 ## Features
-- MVVM Architecture + Clean Architecture
+- MVVM + Clean Architecture
 - Modularization
   - Module [:core](https://github.com/ghi4/dhi-movie/tree/master/core) as library module
   - Module [:favorite](https://github.com/ghi4/dhi-movie/tree/master/favorite) as dynamic-feature module
