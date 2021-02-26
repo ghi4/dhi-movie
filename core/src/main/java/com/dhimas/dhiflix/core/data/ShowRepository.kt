@@ -47,7 +47,6 @@ class ShowRepository(
                 localDataSource.insertShows(movieList)
             }
         }.asFlow()
-
     }
 
     override fun getSeriesList(page: Int): Flow<Resource<List<Show>>> {
@@ -78,7 +77,6 @@ class ShowRepository(
                 localDataSource.insertShows(seriesList)
             }
         }.asFlow()
-
     }
 
     override fun getMovieDetail(movieId: String): Flow<Resource<Show>> {
@@ -102,7 +100,6 @@ class ShowRepository(
                 localDataSource.insertShows(listOf(movie))
             }
         }.asFlow()
-
     }
 
     override fun getSeriesDetail(seriesId: String): Flow<Resource<Show>> {
